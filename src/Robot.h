@@ -1,9 +1,9 @@
 /**
  * Contributors:
- *  - Kyle
-  * - Oliver
-  * - Andrew
-  **/
+ * - Kyle
+ * - Oliver
+ * - Andrew
+ **/
 
 #pragma once
 

@@ -1,5 +1,5 @@
 /*
- * Drive.h
+ * Claw.h
  *
  *  Created on: January 7, 2018
  *      Author: Kyle
@@ -11,7 +11,6 @@
 #include "lib/managers/CoopTask.h"
 #include "lib/logging/LogSpreadsheet.h"
 #include "src/RobotInfo.h"
-#include "lib/bases/DriveBase.h"
 
 using namespace frc;
 
@@ -19,10 +18,10 @@ namespace frc973 {
 class TaskMgr;
 class LogSpreadsheet;
 
-class Elevator : public CoopTask {
+class Claw : public CoopTask {
     public:
-        Elevator(TaskMgr *scheduler, LogSpreadsheet *logger);
-        virtual ~Elevator();
+        Claw(TaskMgr *scheduler, LogSpreadsheet *logger);
+        virtual ~Claw();
 
         void TaskPeriodic(RobotMode mode);
     private:
