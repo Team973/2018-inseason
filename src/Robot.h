@@ -1,3 +1,10 @@
+/**
+ * Contributors:
+ *  - Kyle
+  * - Oliver
+  * - Andrew
+  **/
+
 #pragma once
 
 #include <WPILib.h>

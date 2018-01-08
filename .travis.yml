@@ -1,0 +1,15 @@
+sudo: required
+
+language: cpp
+
+services:
+  - docker
+
+before_install:
+ - docker build -t team973/frc-bazel .
+
+script:
+ - docker run team973/frc-bazel /bin/sh -c "bazel build //src:robot --cpu=roborio"
+
+notifications:
+  slack: greybotsfrc973:dwVtOBBSTIHn2Th9zIUGfpCX
