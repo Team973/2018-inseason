@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+import sys, socket, threading, ctypes, ctypes.util
+
+_getifaddrs = ctypes.CDLL(ctypes.util.find_library('c')).getifaddrs
+_freeifaddrs = ctypes.CDLL(ctypes.util.find_library('c')).freeifaddrs
+_inet_ntoa = ctypes.CDLL(ctypes.util.find_library('c')).inet_ntoa
+_inet_ntoa.restype = ctypes.c_char_p
+
+in_addr_t = ctypes.c_uint32
+
+class struct_in_addr(ctypes.Structure):
+    _fields_ = [('s_addr', in_addr_t)]
+
+if sys.platform == 'darwin':
+    sa_family_t = ctypes.c_uint8
+    
+    class struct_sockaddr(ctypes.Structure):
+        _fields_ = [('sa_len', ctypes.c_uint8),
+                    ('sa_family', sa_family_t),
+                    ('sa_data', ctypes.c_byte * 14),]
+
+    class struct_sockaddr_in(ctypes.Structure):
+        _fields_ = [('sin_len', ctypes.c_uint8),
+                    ('sin_family', sa_family_t),
+                    ('sin_port', ctypes.c_uint16),
+                    ('sin_addr', struct_in_addr),
+                    ('sin_zero', ctypes.c_char * 8)]
+
+else:
+    sa_family_t = ctypes.c_ushort
+    
+    class struct_sockaddr(ctypes.Structure):
+        _fields_ = [('sa_family', ctypes.c_ushort),
+                    ('sa_data', ctypes.c_byte * 14),]
+
+    class struct_sockaddr_in(ctypes.Structure):
+        _fields_ = [('sin_family', sa_family_t),
+                    ('sin_port', ctypes.c_uint16),
+                    ('sin_addr', struct_in_addr)]
+
+class struct_ifaddrs(ctypes.Structure):
+    pass
+struct_ifaddrs._fields_ = [('ifa_next', ctypes.POINTER(struct_ifaddrs)),
+                           ('ifa_name', ctypes.c_char_p),
+                           ('ifa_flags', ctypes.c_uint),
+                           ('ifa_addr', ctypes.POINTER(struct_sockaddr)),
+                           ('ifa_netmask', ctypes.POINTER(struct_sockaddr)),
+                           ('ifa_dstaddr', ctypes.POINTER(struct_sockaddr)),
+                           ('ifa_data', ctypes.c_void_p),]
+
+def get_broadcast_addrs():
+    struct_ifaddrs_p = ctypes.POINTER(struct_ifaddrs)
+    ifa = struct_ifaddrs(None)
+    ifap = ctypes.cast(ctypes.addressof(ifa),
+                       struct_ifaddrs_p)
+    _getifaddrs(ctypes.pointer(ifap))
+    ifa = ifap
+    ret = []
+    while ifa:
+        if ifa.contents.ifa_addr.contents.sa_family == socket.AF_INET and \
+           (ifa.contents.ifa_flags & 0x2) == 0x2:
+            sa_in = ctypes.cast(ifa.contents.ifa_dstaddr,
+                                ctypes.POINTER(struct_sockaddr_in)).contents
+            ret.append(_inet_ntoa(sa_in.sin_addr.s_addr).decode('ascii'))
+        ifa = ifa.contents.ifa_next
+    _freeifaddrs(ifap)
+    return ret
+
+def rx_thread():
+    rx = socket.socket(socket.AF_INET,
+                       socket.SOCK_DGRAM)
+    rx.bind((socket.gethostname(), 6666))
+    while True:
+        sys.stdout.write(rx.recv(1024))
+
+def tx_thread():
+    tx = socket.socket(socket.AF_INET,
+                       socket.SOCK_DGRAM)
+    tx.setsockopt(socket.SOL_SOCKET,
+                  socket.SO_BROADCAST,
+                  1)
+    broadcast_addrs = get_broadcast_addrs()
+    while True:
+        for addr in broadcast_addrs:
+            tx.sendto(sys.stdin.readline().encode('ascii'),
+                      (addr, 6667))
+            
+t = threading.Thread(target=rx_thread, daemon=True)
+t.start()
+threading.Thread(target=tx_thread, daemon=True).start()
+t.join()

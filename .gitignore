@@ -1,0 +1,5 @@
+*.swp
+build/*
+test/build/*
+.DS_Store
+bazel-*
