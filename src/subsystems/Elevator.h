@@ -25,15 +25,20 @@ class Elevator : public CoopTask {
             zero,
             vault,
             switch,
-            scale,
+            scaleLow,
+            scaleMid,
+            scaleHigh,
             manual
         };
 
         Elevator(TaskMgr *scheduler, LogSpreadsheet *logger);
         virtual ~Elevator();
 
+        void SetControlMode(ControlMode mode);
         void SetPosition(double position);
         void SetPower(double power);
+        void SetMotionMagic(double position);
+        void SetLevel(Level level);
 
         void Reset();
 
@@ -45,6 +50,8 @@ class Elevator : public CoopTask {
 
         double m_position;
         Level m_currLevel;
+        motorcontrol::ControlMode m_talonMode;
 
+        LogCell *m_positionCell;
 }
 }
