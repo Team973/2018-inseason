@@ -21,12 +21,30 @@ class LogSpreadsheet;
 
 class Elevator : public CoopTask {
     public:
+        enum Level {
+            zero,
+            vault,
+            switch,
+            scale,
+            manual
+        };
+
         Elevator(TaskMgr *scheduler, LogSpreadsheet *logger);
         virtual ~Elevator();
+
+        void SetPosition(double position);
+        void SetPower(double power);
+
+        void Reset();
 
         void TaskPeriodic(RobotMode mode);
     private:
         TaskMgr *m_scheduler;
-        LogCell *m
+
+        CANTalon *m_elevatorMotor;
+
+        double m_position;
+        Level m_currLevel;
+
 }
 }
