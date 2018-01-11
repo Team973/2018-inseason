@@ -1,7 +1,7 @@
 #include "src/controllers/StateSpaceController.h"
-#include "src/lib/util/Matrix.h"
+#include "lib/util/Matrix.h"
 #include "src/controllers/StateSpaceGains.h"
-#include "src/lib/util/Util.h"
+#include "lib/util/Util.h"
 
 namespace frc973 {
 

@@ -2,7 +2,7 @@
 
 #include "WPILib.h"
 #include <iostream>
-#include "src/RobotInfo.h"
+#include "src/info/RobotInfo.h"
 #include "lib/helpers/JoystickHelper.h"
 #include "src/Robot.h"
 #include "src/AutonomousMode.h"

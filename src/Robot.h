@@ -9,7 +9,7 @@
 
 #include <WPILib.h>
 #include <iostream>
-#include "src/RobotInfo.h"
+#include "src/info/RobotInfo.h"
 #include "src/DisabledMode.h"
 #include "src/AutonomousMode.h"
 #include "src/TeleopMode.h"

@@ -10,7 +10,7 @@
 #include "Phoenix.h"
 #include "lib/managers/CoopTask.h"
 #include "lib/logging/LogSpreadsheet.h"
-#include "src/RobotInfo.h"
+#include "src/info/RobotInfo.h"
 #include "lib/bases/DriveBase.h"
 
 using namespace frc;
