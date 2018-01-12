@@ -15,7 +15,7 @@ Start by cloning the repo by running the command:
 ### Make a Branch
 Create and checkout a new branch. 
 
-`git checkout -b <your_branch_name>`
+`git checkout -b <your_branch_name> dev`
 
 where `<your_branch_name>` is a descriptive name for your branch. Use dashes in the branch name, not underscores. Do not create a new branch unless a same branch has already been made. Make whatever code changes you want/need to make. Be sure to write tests for your changes! Commit your work locally. Try to make your commits as small as possible. Follow the conventions for commit messages.
 
