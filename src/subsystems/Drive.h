@@ -19,13 +19,13 @@ namespace frc973 {
 class TaskMgr;
 class LogSpreadsheet;
 
-class Elevator : public CoopTask {
+class Drive : public CoopTask {
     public:
-        Elevator(TaskMgr *scheduler, LogSpreadsheet *logger);
-        virtual ~Elevator();
+        Drive(TaskMgr *scheduler, LogSpreadsheet *logger);
+        virtual ~Drive();
 
         void TaskPeriodic(RobotMode mode);
     private:
         TaskMgr *m_scheduler;
-}
+};
 }

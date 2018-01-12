@@ -24,7 +24,7 @@ class Elevator : public CoopTask {
         enum Level {
             zero,
             vault,
-            switch,
+            lowGoal,
             scaleLow,
             scaleMid,
             scaleHigh,
@@ -80,12 +80,12 @@ class Elevator : public CoopTask {
     private:
         TaskMgr *m_scheduler;
 
-        CANTalon *m_elevatorMotor;
+        TalonSRX *m_elevatorMotor;
 
         double m_position;
         Level m_currLevel;
         motorcontrol::ControlMode m_talonMode;
 
         LogCell *m_positionCell;
-}
+};
 }

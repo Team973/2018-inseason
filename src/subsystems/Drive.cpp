@@ -3,16 +3,16 @@
 using namespace frc;
 
 namespace frc973 {
-    Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger)
-    : m_scheduler(scheduler)
-    {
-        this->m_scheduler->RegisterTask("Drive", this, TASK_PERIODIC);
-    }
+Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger)
+: m_scheduler(scheduler)
+{
+    this->m_scheduler->RegisterTask("Drive", this, TASK_PERIODIC);
+}
 
-    virtual Drive::~Drive() {
-        m_scheduler->UnregisterTask(this);
-    }
+Drive::~Drive() {
+    m_scheduler->UnregisterTask(this);
+}
 
-    void Drive::TaskPeriodic(RobotMode mode) {
-    }
+void Drive::TaskPeriodic(RobotMode mode) {
+}
 }

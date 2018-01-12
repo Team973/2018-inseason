@@ -26,5 +26,5 @@ class Claw : public CoopTask {
         void TaskPeriodic(RobotMode mode);
     private:
         TaskMgr *m_scheduler;
-}
+};
 }
