@@ -39,7 +39,7 @@ class Elevator : public CoopTask {
          *
          * @param mode: the control mode being set to for the talon.
          **/
-        void SetControlMode(ControlMode mode);
+        void SetControlMode(ControlMode mode, double value);
         /**
          * Sets Elevator Position
          *

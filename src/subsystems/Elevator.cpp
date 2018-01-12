@@ -6,25 +6,25 @@ using namespace frc;
 namespace frc973 {
 Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger)
 : m_scheduler(scheduler)
-, m_elevatorMotor(new WPI_TalonSRX(ELEVATOR_CAN_ID))
+, m_elevatorMotor(new TalonSRX(ELEVATOR_CAN_ID))
 , m_position(0.0)
 , m_currLevel(Level::zero)
 , m_talonMode(motorcontrol::ControlMode::PercentOutput)
 {
     this->m_scheduler->RegisterTask("Elevator", this, TASK_PERIODIC);
 
-    m_elevatorMotor->ConfigSelectedFeedbackSensor(CtreMagEncoder_Relative);
+    m_elevatorMotor->ConfigSelectedFeedbackSensor(ctre::phoenix::motorcontrol::FeedbackDevice::QuadEncoder, 0, 10); //0 = Not cascaded PID Loop; 10 = in constructor, not in a loop
     m_elevatorMotor->SetSensorPhase(false);
-    m_elevatorMotor->configPeakOutputForward(0.0, 0.0);
-    m_elevatorMotor->configPeakOutputReverse(-1.0, 1.0);
+    m_elevatorMotor->ConfigPeakOutputForward(0.0, 0);
+    m_elevatorMotor->ConfigPeakOutputReverse(-1.0, 1.0);
 
-    m_elevatorMotor->config_kP(0.05,20);
-    m_elevatorMotor->config_kI(0.0,20);
-    m_elevatorMotor->config_kD(0.0,20);
-    m_elevatorMotor->config_kF(0.005,20);
-    m_elevatorMotor->configMotionCruiseVelocity(100.0);
-    m_elevatorMotor->configMotionAcceleration(50.0);
-    m_elevatorMotor->changeControlMode(ControlMode::PercentOutput);
+    m_elevatorMotor->Config_kP(0, 0.05, 10);
+    m_elevatorMotor->Config_kI(0, 0.0, 10);
+    m_elevatorMotor->Config_kD(0, 0.0, 10);
+    m_elevatorMotor->Config_kF(0, 0.005,10);
+    m_elevatorMotor->ConfigMotionCruiseVelocity(100.0, 10);
+    m_elevatorMotor->ConfigMotionAcceleration(50.0, 10);
+    m_elevatorMotor->Set(ControlMode::PercentOutput, 0.0);
     m_positionCell = new LogCell("Elevator Position", 32, true);
     logger->RegisterCell(m_positionCell);
 }
@@ -33,24 +33,21 @@ Elevator::~Elevator() {
     m_scheduler->UnregisterTask(this);
 }
 
-void Elevator::SetControlMode(ControlMode mode) {
-    m_elevatorMotor->motorcontrol::changeControlMode(mode);
+void Elevator::SetControlMode(ControlMode mode, double value) {
+    m_elevatorMotor->Set(mode, value);
     m_talonMode = mode;
 }
 
 void Elevator::SetPosition(double position) {
-    Elevator::SetControlMode(ControlMode::Position);
-    m_elevatorMotor->setSelectedSensorPosition(position);
+    this->SetControlMode(ControlMode::Position, position);
 }
 
 void Elevator::SetPower(double power) {
-    Elevator::SetControlMode(ControlMode::PercentOutput);
-    m_elevatorMotor->Set(power);
+    Elevator::SetControlMode(ControlMode::PercentOutput, power);
 }
 
 void Elevator::SetMotionMagic(double position) {
-    Elevator::SetControlMode(ControlMode::MotionMagic);
-    m_elevatorMotor->setSelectedSensorPosition(position);
+    Elevator::SetControlMode(ControlMode::MotionMagic, position);
 }
 
 void Elevator::SetLevel(Level level) {
@@ -63,7 +60,7 @@ void Elevator::Reset() {
 }
 
 void Elevator::TaskPeriodic(RobotMode mode) {
-    m_positionCell->LogDouble(m_elevatorMotor->getSelectedSensorPosition());
+    m_positionCell->LogDouble(m_elevatorMotor->GetSelectedSensorPosition(0));
     switch (m_currLevel) {
       case zero:
           this->SetMotionMagic(0.0);
