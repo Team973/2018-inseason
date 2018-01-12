@@ -24,7 +24,7 @@ git checkout -b <YOUR BRANCH NAME> <WHAT YOU'RE BRANCHING OFF OF>
 Ohh but there's a few restrictions to keep in mind...
  - Your branch name cannot have spaces in it
  - Your branch name should be descriptive of what you're gonna do with it
- - At 973 we prefer that your branch names use dashes instead of underscores.  It doesn't *really* matter but it kinda does tbh
+ - At 973 we prefer that your branch names use dashes instead of underscores
 
 In general, you're going to be branching off of dev.  This means that when your PR is done, your changes are going to be merged into the dev branch.  Dev is branched off of master.  Every once in a while, we'll take a look at what's in dev and test it a whole bunch.  Once it's been tested we'll announce "this is stable and we are confident in this version" and we'll merge it into master (we don't close dev after we merge it though).  
 
@@ -35,7 +35,7 @@ Edit the file `src/Robot.h`.  Do you have a favorite text editor?
  - If Chris L has been within 5 feet of your computer, you probably have atom installed so you might as well use that.  I have no idea how to use atom so you're on your own for that one... 
  - If you don't have atom installed, you can edit the file by typing `nano src/Robot.h`.  nano is a super simple text editor; you can use it to edit any text file.  When you're done making your changes, type control-O followed by enter to save the changes then type control x to exit nano.
 
-At the top of Robot.h there's a list of Contributors.  Add your name to the list.  Every space matters... make sure the `*` lines up with all the other `*`'s an dmake sure the `-` lines up with all the other `-`.  If it's not exactly right, Kyle is going to reject your PR.  
+At the top of Robot.h there's a list of Contributors.  Add your name to the list.  Every space matters... make sure the `*` lines up with all the other `*`'s and make sure the `-` lines up with all the other `-`.  If it's not exactly right, Kyle is going to reject your PR.  
 
 ## Compiling
 Alright you just changed the source code.  Did you break the world?  Let's check.  This step may take up to 5 minutes the first time you do it.  After you do it the first time it should be almost instantaneous.  Bazel is good stuff.
@@ -73,7 +73,7 @@ Just out of curiosity, type `git status`.  What does it say?  I bet it says some
 
 Good stuff.  Now type `git diff`.  What does it say?  You can see exactly what you changed, every detail down to the last space.  Is this diff what you would expect it to be?  How many lines did you change?  If you just added your name, it should only be one line.  Looking at the output of `git diff` is a good habit to get into because it'll tell you if you accidentally made other changes and it'll remind you what you did.  
 
-Are you satisfied with your diff?  You can always go back and make more changes.  Let's commit this.  Type `git add src/Robot.h`.  Now type `git status`.  OMG THE OUTPUT CHANGED.  Now git says "blah blah blah changes to be committed blah blah blah".  Good stuff.  This is git's way of telling us that next time you type commit, it's going to include these changes in that commit.
+Are you satisfied with your diff?  You can always go back and make more changes.  Let's commit this.  Type `git add src/Robot.h`.  Now type `git status`.  HARK! THE OUTPUT CHANGED!  Now git says "blah blah blah changes to be committed blah blah blah".  Good stuff.  This is git's way of telling us that next time you type commit, it's going to include these changes in that commit.
 
 Let's commit!  Type `git commit`.  The first time you do this it might ask you to do some configuring on your machine... read the instructions git gives you and do what it says.  It's likely that you'll see a nano session after a second or two.  This is where you write your changelog.  What changes are in this commit?  Describe what you did in traditional-tweet-form (225 characters or less).  When you're done, save like you would any other nano session.  Type control-o then enter to save and type control x to exit nano.
 
@@ -100,3 +100,5 @@ Andrew, Kyle, or Oliver may request that you make changes before your branch get
 Once everything is good and free of errors :fire:, Andrew, Kyle, or Oliver will approve your pull request.  When this happens you get to click the big green `MERGE` button.  If you're done with your branch (you are probably done with your branch), delete it.  
 
 Questions? Slack Andrew, Kyle, or Oliver
+
+Want to learn more?  Check out this article for a great explanation of all the steps we did.  https://medium.com/@ashk3l/a-visual-introduction-to-git-9fdca5d3b43a  This article has a lot of helpful diagrams in it - especially for understanding the difference between "staging" and "commiting".
