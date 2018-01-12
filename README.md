@@ -1,4 +1,4 @@
-# 2018-inseason 
+# 2018-inseason
 ## Power Up code of FRC Team 973: The Greybots
 
 [![Build Status](https://travis-ci.com/Team973/2018-inseason.svg?token=9qRQZ4Pb162wPMEfroVb&branch=master)](https://travis-ci.com/Team973/2018-inseason)
