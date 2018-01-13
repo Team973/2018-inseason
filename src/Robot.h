@@ -1,11 +1,12 @@
 /**
  * Contributors:
- *  - Kyle
-  * - Oliver
-  * - Andrew
-  * - Allen
-  * - Chris L
-  **/
+ * - Natalie
+ * - Kyle
+ * - Oliver
+ * - Andrew
+ * - Allen
+ * - Chris L
+ **/
 
 #pragma once
 
