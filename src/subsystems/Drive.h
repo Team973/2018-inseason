@@ -1,6 +1,7 @@
-#include <TalonSRX.h>
-#include <VictorSPX.h>
-#include <ADXRS450_Gyro.h>
+
+#include "Pheonix.h"
+#include "ADXRS450_Gyro.h"
+
 using namespace ctre::phoenix::motorcontrol::can;
 using namespace frc;
 
@@ -13,3 +14,4 @@ class Drive {
          Drive(TalonSRX *leftTalon, TalonSRX *rightTalon, VictorSPX *slaveLeftone,
                VictorSPX *slaveLefttwo, VictorSPX *slaveRightone, VictorSPX *slaveRighttwo, ADXRS450_Gyro *driveGyro);
 
+}
