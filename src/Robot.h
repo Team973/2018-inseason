@@ -10,6 +10,7 @@
 #pragma once
 
 #include <WPILib.h>
+#include <networktables/NetworkTableInstance.h>
 #include <iostream>
 #include "src/RobotInfo.h"
 #include "src/DisabledMode.h"
@@ -50,5 +51,7 @@ class Robot : public IterativeRobot, public JoystickObserver {
         Autonomous *m_autonomous;
         Teleop *m_teleop;
         Test *m_test;
+
+        NetworkTableInstance *m_dashboard;
     };
 };

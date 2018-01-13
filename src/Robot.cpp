@@ -1,4 +1,5 @@
 #include <WPILib.h>
+#include <networktables/NetworkTableInstance.h>
 #include <iostream>
 #include "src/RobotInfo.h"
 #include "src/DisabledMode.h"
@@ -13,6 +14,7 @@ Robot::Robot()
     , m_autonomous(new Autonomous(m_disabled))
     , m_teleop(new Teleop())
     , m_test(new Test())
+    , m_dashboard(new NetworkTableInstance())
 {
     std::cout << "Constructed a Robot!" << std::endl;
 }
