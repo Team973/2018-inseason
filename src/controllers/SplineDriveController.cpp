@@ -1,7 +1,7 @@
 #include "src/controllers/SplineDriveController.h"
-#include "src/lib/profiles/TrapProfile.h"
-#include "src/RobotInfo.h"
-#include "src/lib/util/Util.h"
+#include "lib/profiles/TrapProfile.h"
+#include "src/info/RobotInfo.h"
+#include "lib/util/Util.h"
 
 namespace frc973 {
 

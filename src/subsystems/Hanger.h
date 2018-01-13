@@ -1,5 +1,5 @@
 /*
- * Drive.h
+ * Hanger.h
  *
  *  Created on: January 7, 2018
  *      Author: Kyle
@@ -11,7 +11,6 @@
 #include "lib/managers/CoopTask.h"
 #include "lib/logging/LogSpreadsheet.h"
 #include "src/info/RobotInfo.h"
-#include "lib/bases/DriveBase.h"
 
 using namespace frc;
 
@@ -19,10 +18,10 @@ namespace frc973 {
 class TaskMgr;
 class LogSpreadsheet;
 
-class Drive : public CoopTask {
+class Hanger : public CoopTask {
     public:
-        Drive(TaskMgr *scheduler, LogSpreadsheet *logger);
-        virtual ~Drive();
+        Hanger(TaskMgr *scheduler, LogSpreadsheet *logger);
+        virtual ~Hanger();
 
         void TaskPeriodic(RobotMode mode);
     private:

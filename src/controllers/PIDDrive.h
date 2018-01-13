@@ -9,7 +9,7 @@
 #define SRC_CONTROLLERS_PIDDRIVECONTROLLER_H_
 
 
-#include "src/lib/bases/DriveBase.h"
+#include "lib/bases/DriveBase.h"
 
 namespace frc973 {
 

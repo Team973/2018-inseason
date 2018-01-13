@@ -1,16 +1,14 @@
 
 cc_library(
-    name = "profiles",
+    name = "info",
     srcs = glob([
-        "*.cpp",
     ]),
     hdrs = glob([
-        "*.h",
+        "RobotInfo.h",
     ]),
     deps = [
         "//third_party/wpilibsuite:wpilib",
         "//third_party/ctre:ctre",
-        "//lib/util:util",
     ],
     visibility = ["//visibility:public"],
 )

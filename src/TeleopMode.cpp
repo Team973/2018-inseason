@@ -4,7 +4,11 @@
 using namespace frc;
 
 namespace frc973 {
-Teleop::Teleop()
+Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
+                  ObservableJoystick *tuning)
+    : m_driverJoystick(driver)
+    , m_operatorJoystick(codriver)
+    , m_tuningJoystick(tuning)
 {
 }
 

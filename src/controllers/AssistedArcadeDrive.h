@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "src/lib/bases/DriveBase.h"
+#include "lib/bases/DriveBase.h"
 #include <stdio.h>
 
 using namespace frc;

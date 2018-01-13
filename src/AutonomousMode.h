@@ -2,7 +2,7 @@
 
 #include <WPILib.h>
 #include <iostream>
-#include "src/RobotInfo.h"
+#include "src/info/RobotInfo.h"
 #include "src/auto/AutoRoutine.h"
 #include "src/auto/NoAuto.h"
 #include "src/auto/ForwardAuto.h"
