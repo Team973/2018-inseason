@@ -2,7 +2,7 @@
 
 #include "WPILib.h"
 #include <iostream>
-#include "src/RobotInfo.h"
+#include "src/info/RobotInfo.h"
 #include "lib/helpers/JoystickHelper.h"
 #include "src/Robot.h"
 #include "src/AutonomousMode.h"
@@ -17,7 +17,8 @@ class Disabled {
             forward
         } SelectedAutoRoutine;
 
-        Disabled();
+        Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
+                          ObservableJoystick *tuning);
         virtual ~Disabled();
 
         void DisabledInit();
@@ -31,5 +32,9 @@ class Disabled {
         SelectedAutoRoutine GetRoutine();
     private:
         SelectedAutoRoutine m_routine;
+        
+        ObservableJoystick *m_driverJoystick;
+        ObservableJoystick *m_operatorJoystick;
+        ObservableJoystick *m_tuningJoystick;
     };
 };
