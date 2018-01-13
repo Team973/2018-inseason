@@ -1,10 +1,10 @@
 /**
  * Contributors:
- * -Natalie
- *  - Kyle
-  * - Oliver
-  * - Andrew
-  **/
+ * - Natalie
+ * - Kyle
+ * - Oliver
+ * - Andrew
+ **/
 
 #pragma once
 
