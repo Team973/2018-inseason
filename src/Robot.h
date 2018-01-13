@@ -59,16 +59,16 @@ class Robot : public CoopMTRobot, public JoystickObserver {
         ObservableJoystick *m_operatorJoystick;
         ObservableJoystick *m_tuningJoystick;
 
-        Disabled *m_disabled;
-        Autonomous *m_autonomous;
-        Teleop *m_teleop;
-        Test *m_test;
-
         LogSpreadsheet *m_logger;
 
         Elevator *m_elevator;
         Claw *m_claw;
         Drive *m_drive;
         Hanger *m_hanger;
+
+        Disabled *m_disabled;
+        Autonomous *m_autonomous;
+        Teleop *m_teleop;
+        Test *m_test;
     };
 };
