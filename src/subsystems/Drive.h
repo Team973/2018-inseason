@@ -1,5 +1,4 @@
-
-#include "Pheonix.h"
+#include "Phoenix.h"
 #include "ADXRS450_Gyro.h"
 
 using namespace ctre::phoenix::motorcontrol::can;
@@ -13,5 +12,4 @@ class Drive {
     public:
          Drive(TalonSRX *leftTalon, TalonSRX *rightTalon, VictorSPX *slaveLeftone,
                VictorSPX *slaveLefttwo, VictorSPX *slaveRightone, VictorSPX *slaveRighttwo, ADXRS450_Gyro *driveGyro);
-
-}
+};
