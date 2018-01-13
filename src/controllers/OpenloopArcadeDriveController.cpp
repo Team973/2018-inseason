@@ -6,10 +6,10 @@
  */
 
 #include "src/controllers/OpenloopArcadeDriveController.h"
-#include "src/lib/util/Util.h"
+#include "lib/util/Util.h"
 #include <stdio.h>
-#include "src/lib/util/WrapDash.h"
-#include "src/RobotInfo.h"
+#include "lib/util/WrapDash.h"
+#include "src/info/RobotInfo.h"
 
 namespace frc973 {
 

@@ -6,9 +6,9 @@
  */
 
 #include "src/controllers/PIDDrive.h"
-#include "src/lib/helpers/PID.h"
+#include "lib/helpers/PID.h"
 #include <stdio.h>
-#include "src/lib/util/WrapDash.h"
+#include "lib/util/WrapDash.h"
 
 namespace frc973 {
 

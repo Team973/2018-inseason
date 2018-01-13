@@ -1,8 +1,8 @@
 #pragma once
 
-#include "src/lib/bases/DriveBase.h"
-#include "src/lib/helpers/PID.h"
-#include "src/lib/logging/LogSpreadsheet.h"
+#include "lib/bases/DriveBase.h"
+#include "lib/helpers/PID.h"
+#include "lib/logging/LogSpreadsheet.h"
 #include <stdio.h>
 
 using namespace frc;

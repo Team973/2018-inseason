@@ -15,6 +15,7 @@ cc_binary(
         "//lib/helpers:helpers",
         "//src/auto:auto",
         "//src/subsystems:subsystems",
+        "//src/info:info",
     ],
     visibility = ["//visibility:public"],
 )
