@@ -11,7 +11,8 @@
 
 #pragma once
 
-#include <WPILib.h>
+#include "WPILib.h"
+#include "Phoenix.h"
 #include <iostream>
 #include "src/info/RobotInfo.h"
 #include "src/DisabledMode.h"
@@ -26,6 +27,9 @@
 #include "lib/logging/LogSpreadsheet.h"
 #include "lib/helpers/JoystickHelper.h"
 #include "lib/bases/CoopMTRobot.h"
+
+using namespace frc;
+using namespace ctre;
 
 namespace frc973{
 class Disabled;
@@ -62,6 +66,15 @@ class Robot : public CoopMTRobot, public JoystickObserver {
         ObservableJoystick *m_driverJoystick;
         ObservableJoystick *m_operatorJoystick;
         ObservableJoystick *m_tuningJoystick;
+
+        phoenix::motorcontrol::can::TalonSRX *m_leftTalonA;
+        phoenix::motorcontrol::can::VictorSPX *m_leftVictorB;
+        phoenix::motorcontrol::can::VictorSPX *m_leftVictorC;
+        phoenix::motorcontrol::can::TalonSRX *m_rightTalonA;
+        phoenix::motorcontrol::can::VictorSPX *m_rightVictorB;
+        phoenix::motorcontrol::can::VictorSPX *m_rightVictorC;
+
+        ADXRS450_Gyro *m_driveGyro;
 
         LogSpreadsheet *m_logger;
 
