@@ -11,8 +11,8 @@
 
 #pragma once
 
-#include <WPILib.h>
-#include <networktables/NetworkTableInstance.h>
+#include "WPILib.h"
+#include "networktables/NetworkTableInstance.h"
 #include <iostream>
 #include "src/info/RobotInfo.h"
 #include "src/DisabledMode.h"
@@ -27,6 +27,7 @@
 #include "lib/logging/LogSpreadsheet.h"
 #include "lib/helpers/JoystickHelper.h"
 #include "lib/bases/CoopMTRobot.h"
+#include "ctre/Phoenix.h"
 
 namespace frc973{
 class Disabled;
@@ -58,8 +59,6 @@ class Robot : public CoopMTRobot, public JoystickObserver {
         void ObserveJoystickStateChange(uint32_t port, uint32_t button,
                                         bool pressedP) override;
     private:
-        PowerDistributionPanel *m_pdp;
-
         ObservableJoystick *m_driverJoystick;
         ObservableJoystick *m_operatorJoystick;
         ObservableJoystick *m_tuningJoystick;

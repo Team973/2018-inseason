@@ -1,5 +1,5 @@
-#include <WPILib.h>
-#include <networktables/NetworkTableInstance.h>
+#include "WPILib.h"
+#include "networktables/NetworkTableInstance.h"
 #include <iostream>
 #include "src/info/RobotInfo.h"
 #include "src/DisabledMode.h"
@@ -7,15 +7,15 @@
 #include "src/TeleopMode.h"
 #include "src/TestMode.h"
 #include "src/Robot.h"
+#include "ctre/Phoenix.h"
 
 namespace frc973 {
 Robot::Robot()
-    : m_pdp(new PowerDistributionPanel)
-    , m_driverJoystick(new ObservableJoystick(DRIVER_JOYSTICK_PORT, this, this))
+    : m_driverJoystick(new ObservableJoystick(DRIVER_JOYSTICK_PORT, this, this))
     , m_operatorJoystick(new ObservableJoystick(OPERATOR_JOYSTICK_PORT, this, this))
     , m_tuningJoystick(new ObservableJoystick(TUNING_JOYSTICK_PORT, this, this))
     , m_logger(new LogSpreadsheet(this))
-    , m_elevator(new Elevator(this, m_logger))
+    , m_elevator(new Elevator(this, m_logger, m_driverJoystick))
     , m_claw(new Claw(this, m_logger))
     , m_drive(new Drive(this, m_logger))
     , m_hanger(new Hanger(this, m_logger))
@@ -32,7 +32,6 @@ Robot::~Robot(){
 }
 
 void Robot::Initialize() {
-
 }
 
 void Robot::DisabledStart() {
@@ -65,6 +64,9 @@ void Robot::TeleopStart() {
 
 void Robot::TeleopPeriodic() {
     m_teleop->TeleopPeriodic();
+    if (m_driverJoystick->GetRawButton(2)) {
+        m_elevator->SetPower(0.25);
+    }
 }
 
 void Robot::TeleopStop() {
@@ -84,7 +86,7 @@ void Robot::TestStop() {
 }
 
 void Robot::ObserveJoystickStateChange(uint32_t port, uint32_t button,
-                                       bool pressedP){
+                                       bool pressedP) {
     if (this->IsOperatorControl()){
         m_teleop->HandleTeleopButton(port, button, pressedP);
     }
