@@ -5,9 +5,10 @@
 using namespace frc;
 
 namespace frc973 {
-Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, ObservableJoystick *driver)
+Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, ObservableJoystick *driver,
+                   TalonSRX *motor)
     : m_scheduler(scheduler)
-    , m_elevatorMotor(new TalonSRX(ELEVATOR_CAN_ID))
+    , m_elevatorMotor(motor)
     , m_position(0.0)
     , m_currLevel(Level::zero)
     , m_talonMode(motorcontrol::ControlMode::PercentOutput)
@@ -17,6 +18,7 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, ObservableJoystic
 
     m_elevatorMotor->ConfigSelectedFeedbackSensor(ctre::phoenix::motorcontrol::FeedbackDevice::QuadEncoder, 0, 10); //0 = Not cascaded PID Loop; 10 = in constructor, not in a loop
     m_elevatorMotor->SetSensorPhase(false);
+    m_elevatorMotor->SetNeutralMode(NeutralMode::Brake);
 
     m_elevatorMotor->ConfigNominalOutputForward(0.0, 10);
     m_elevatorMotor->ConfigNominalOutputReverse(0.0, 10);
@@ -67,7 +69,7 @@ void Elevator::Reset() {
 
 void Elevator::TaskPeriodic(RobotMode mode) {
     m_positionCell->LogDouble(m_elevatorMotor->GetSelectedSensorPosition(0));
-    switch (m_currLevel) {
+    /*switch (m_currLevel) {
       case zero:
           this->SetMotionMagic(0.0);
           break;
@@ -92,6 +94,6 @@ void Elevator::TaskPeriodic(RobotMode mode) {
       default:
           this->Reset();
           break;
-    }
+    }*/
 }
 }

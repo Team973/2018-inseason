@@ -10,11 +10,14 @@
 
 namespace frc973 {
 Robot::Robot()
-    : m_driverJoystick(new ObservableJoystick(DRIVER_JOYSTICK_PORT, this, this))
+    : CoopMTRobot()
+    , JoystickObserver()
+    , m_driverJoystick(new ObservableJoystick(DRIVER_JOYSTICK_PORT, this, this))
     , m_operatorJoystick(new ObservableJoystick(OPERATOR_JOYSTICK_PORT, this, this))
     , m_tuningJoystick(new ObservableJoystick(TUNING_JOYSTICK_PORT, this, this))
     , m_logger(new LogSpreadsheet(this))
-    , m_elevator(new Elevator(this, m_logger, m_driverJoystick))
+    , m_elevatorMotor(new TalonSRX(ELEVATOR_CAN_ID))
+    , m_elevator(new Elevator(this, m_logger, m_driverJoystick, m_elevatorMotor))
     , m_claw(new Claw(this, m_logger))
     , m_drive(new Drive(this, m_logger))
     , m_hanger(new Hanger(this, m_logger))
@@ -36,7 +39,7 @@ void Robot::DisabledStart() {
     m_disabled->DisabledInit();
 }
 
-void Robot::DisabledPeriodic() {
+void Robot::DisabledContinuous() {
     m_disabled->DisabledPeriodic();
 }
 
@@ -48,7 +51,7 @@ void Robot::AutonomousStart() {
     m_autonomous->AutonomousInit();
 }
 
-void Robot::AutonomousPeriodic() {
+void Robot::AutonomousContinuous() {
     m_autonomous->AutonomousPeriodic();
 }
 
@@ -60,10 +63,11 @@ void Robot::TeleopStart() {
     m_teleop->TeleopInit();
 }
 
-void Robot::TeleopPeriodic() {
+void Robot::TeleopContinuous() {
     m_teleop->TeleopPeriodic();
     if (m_driverJoystick->GetRawButton(2)) {
-        m_elevator->SetPower(0.25);
+        printf("Pressed A");
+        m_elevatorMotor->Set(ControlMode::PercentOutput, 0.25);
     }
 }
 
@@ -75,7 +79,7 @@ void Robot::TestStart() {
     m_test->TestInit();
 }
 
-void Robot::TestPeriodic(){
+void Robot::TestContinuous(){
     m_test->TestPeriodic();
 }
 
@@ -83,8 +87,12 @@ void Robot::TestStop() {
     m_test->TestStop();
 }
 
+void Robot::RobotPeriodic() {
+}
+
 void Robot::ObserveJoystickStateChange(uint32_t port, uint32_t button,
                                        bool pressedP) {
+    printf("Button Pressed");
     if (this->IsOperatorControl()){
         m_teleop->HandleTeleopButton(port, button, pressedP);
     }
