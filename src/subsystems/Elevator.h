@@ -8,10 +8,11 @@
 #pragma once
 
 #include "WPILib.h"
-#include "Phoenix.h"
+#include "ctre/Phoenix.h"
 #include "lib/managers/CoopTask.h"
 #include "lib/logging/LogSpreadsheet.h"
 #include "src/info/RobotInfo.h"
+#include "lib/helpers/JoystickHelper.h"
 
 using namespace frc;
 
@@ -31,7 +32,7 @@ class Elevator : public CoopTask {
             manual
         };
 
-        Elevator(TaskMgr *scheduler, LogSpreadsheet *logger);
+        Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, ObservableJoystick *driver);
         virtual ~Elevator();
 
         /**
@@ -85,7 +86,7 @@ class Elevator : public CoopTask {
         double m_position;
         Level m_currLevel;
         motorcontrol::ControlMode m_talonMode;
-
+        ObservableJoystick *m_joystick;
         LogCell *m_positionCell;
 };
 }

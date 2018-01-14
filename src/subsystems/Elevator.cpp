@@ -1,22 +1,27 @@
 #include "src/subsystems/Elevator.h"
 #include "WPILib.h"
+#include "ctre/Phoenix.h"
 
 using namespace frc;
 
 namespace frc973 {
-Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger)
-: m_scheduler(scheduler)
-, m_elevatorMotor(new TalonSRX(ELEVATOR_CAN_ID))
-, m_position(0.0)
-, m_currLevel(Level::zero)
-, m_talonMode(motorcontrol::ControlMode::PercentOutput)
+Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, ObservableJoystick *driver)
+    : m_scheduler(scheduler)
+    , m_elevatorMotor(new TalonSRX(ELEVATOR_CAN_ID))
+    , m_position(0.0)
+    , m_currLevel(Level::zero)
+    , m_talonMode(motorcontrol::ControlMode::PercentOutput)
+    , m_joystick(driver)
 {
     this->m_scheduler->RegisterTask("Elevator", this, TASK_PERIODIC);
 
     m_elevatorMotor->ConfigSelectedFeedbackSensor(ctre::phoenix::motorcontrol::FeedbackDevice::QuadEncoder, 0, 10); //0 = Not cascaded PID Loop; 10 = in constructor, not in a loop
     m_elevatorMotor->SetSensorPhase(false);
-    m_elevatorMotor->ConfigPeakOutputForward(0.0, 0);
-    m_elevatorMotor->ConfigPeakOutputReverse(-1.0, 1.0);
+
+    m_elevatorMotor->ConfigNominalOutputForward(0.0, 10);
+    m_elevatorMotor->ConfigNominalOutputReverse(0.0, 10);
+    m_elevatorMotor->ConfigPeakOutputForward(1.0, 10);
+    m_elevatorMotor->ConfigPeakOutputReverse(-1.0, 10);
 
     m_elevatorMotor->Config_kP(0, 0.05, 10);
     m_elevatorMotor->Config_kI(0, 0.0, 10);
@@ -24,6 +29,7 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger)
     m_elevatorMotor->Config_kF(0, 0.005,10);
     m_elevatorMotor->ConfigMotionCruiseVelocity(100.0, 10);
     m_elevatorMotor->ConfigMotionAcceleration(50.0, 10);
+
     m_elevatorMotor->Set(ControlMode::PercentOutput, 0.0);
     m_positionCell = new LogCell("Elevator Position", 32, true);
     logger->RegisterCell(m_positionCell);
@@ -43,7 +49,7 @@ void Elevator::SetPosition(double position) {
 }
 
 void Elevator::SetPower(double power) {
-    Elevator::SetControlMode(ControlMode::PercentOutput, power);
+    m_elevatorMotor->Set(ControlMode::PercentOutput, power);
 }
 
 void Elevator::SetMotionMagic(double position) {

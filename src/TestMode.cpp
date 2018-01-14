@@ -29,11 +29,11 @@ void Test::TestPeriodic(){
         m_elevatorPosition = 0.0; //does not allow value to be under 0.0
     }
 
-    double y = m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
+    //double y = m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
     m_elevatorPosition += 1.5 * Util::bound(m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightYAxis), 0.0, 100.0); //Adds on 1.5 every call (20ms) to position while bounding it 10
 
     if (m_elevatorMode == ElevatorMode::percentOutput) {
-        m_elevator->SetPower(y);
+        m_elevator->SetPower(0.25);
     }
     else if (m_elevatorMode == ElevatorMode::motionMagic) {
         m_elevator->SetMotionMagic(m_elevatorPosition);
@@ -52,7 +52,6 @@ void Test::HandleTestButton(uint32_t port, uint32_t button,
         switch (button) {
             case DualAction::DPadUpVirtBtn:
                if (pressedP) {
-                   m_elevatorMode = ElevatorMode::percentOutput;
                }
                break;
             case DualAction::DPadDownVirtBtn:
@@ -91,6 +90,7 @@ void Test::HandleTestButton(uint32_t port, uint32_t button,
                break;
             case DualAction::BtnA:
                if (pressedP) {
+                   m_elevatorMode = ElevatorMode::percentOutput;
                }
                break;
             case DualAction::BtnB:

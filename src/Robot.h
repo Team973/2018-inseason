@@ -27,6 +27,7 @@
 #include "lib/logging/LogSpreadsheet.h"
 #include "lib/helpers/JoystickHelper.h"
 #include "lib/bases/CoopMTRobot.h"
+#include "ctre/Phoenix.h"
 
 using namespace frc;
 using namespace ctre;
@@ -62,8 +63,6 @@ class Robot : public CoopMTRobot, public JoystickObserver {
         void ObserveJoystickStateChange(uint32_t port, uint32_t button, bool pressedP) override;
 
     private:
-        PowerDistributionPanel *m_pdp;
-
         ObservableJoystick *m_driverJoystick;
         ObservableJoystick *m_operatorJoystick;
         ObservableJoystick *m_tuningJoystick;

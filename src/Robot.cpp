@@ -7,14 +7,14 @@
 #include "src/TeleopMode.h"
 #include "src/TestMode.h"
 #include "src/Robot.h"
+#include "ctre/Phoenix.h"
 
 using namespace frc;
 using namespace ctre;
 
 namespace frc973 {
 Robot::Robot()
-    : m_pdp(new PowerDistributionPanel)
-    , m_driverJoystick(new ObservableJoystick(DRIVER_JOYSTICK_PORT, this, this))
+    : m_driverJoystick(new ObservableJoystick(DRIVER_JOYSTICK_PORT, this, this))
     , m_operatorJoystick(new ObservableJoystick(OPERATOR_JOYSTICK_PORT, this, this))
     , m_tuningJoystick(new ObservableJoystick(TUNING_JOYSTICK_PORT, this, this))
     , m_leftDriveTalonA(new TalonSRX(LEFT_DRIVE_A_CAN_ID))
@@ -25,7 +25,7 @@ Robot::Robot()
     , m_rightDriveVictorC(new VictorSPX(RIGHT_DRIVE_C_VICTOR_ID))
     , m_gyro(new ADXRS450_Gyro())
     , m_logger(new LogSpreadsheet(this))
-    , m_elevator(new Elevator(this, m_logger))
+    , m_elevator(new Elevator(this, m_logger, m_driverJoystick))
     , m_claw(new Claw(this, m_logger))
     , m_drive(new Drive(this, m_logger, m_leftDriveTalonA, m_rightDriveTalonA, m_gyro))
     , m_hanger(new Hanger(this, m_logger))
@@ -54,7 +54,6 @@ Robot::~Robot(){
 }
 
 void Robot::Initialize() {
-
 }
 
 void Robot::DisabledStart() {
@@ -105,6 +104,10 @@ void Robot::TeleopPeriodic() {
             m_drive->AssistedArcadeDrive(y, x);
         }
     }
+  
+    if (m_driverJoystick->GetRawButton(2)) {
+        m_elevator->SetPower(0.25);
+    }
 }
 
 void Robot::TeleopStop() {
@@ -124,7 +127,7 @@ void Robot::TestStop() {
 }
 
 void Robot::ObserveJoystickStateChange(uint32_t port, uint32_t button,
-                                       bool pressedP){
+                                       bool pressedP) {
     if (this->IsOperatorControl()){
         m_teleop->HandleTeleopButton(port, button, pressedP);
     }
