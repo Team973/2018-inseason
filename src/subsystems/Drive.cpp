@@ -102,8 +102,8 @@ void Drive::OpenloopArcadeDrive(double throttle, double turn) {
  * @param turn      Right joystick x-axis value
  */
 void Drive::AssistedArcadeDrive(double throttle, double turn) {
-  this->SetDriveController(m_assistedArcadeDriveController);
-  m_assistedArcadeDriveController->SetJoysticks(throttle, turn);
+    this->SetDriveController(m_assistedArcadeDriveController);
+    m_assistedArcadeDriveController->SetJoysticks(throttle, turn);
 }
 
 /**
@@ -238,26 +238,26 @@ double Drive::GetAngularRate() const {
  * @param right desired right Output
  */
 void Drive::SetDriveOutput(double left, double right) {
-	m_leftDriveOutput = left;
-	m_rightDriveOutput = right;
+    m_leftDriveOutput = left;
+    m_rightDriveOutput = right;
 
-  if (m_controlMode == phoenix::motorcontrol::ControlMode::Velocity) {
-      m_leftDriveOutput /= DRIVE_IPS_FROM_RPM;
-      m_rightDriveOutput /= DRIVE_IPS_FROM_RPM;
-  }
-  else if (m_controlMode == phoenix::motorcontrol::ControlMode::Position) {
-      m_leftDriveOutput /= DRIVE_DIST_PER_REVOLUTION;
-      m_rightDriveOutput /= DRIVE_DIST_PER_REVOLUTION;
-  }
+    if (m_controlMode == phoenix::motorcontrol::ControlMode::Velocity) {
+        m_leftDriveOutput /= DRIVE_IPS_FROM_RPM;
+        m_rightDriveOutput /= DRIVE_IPS_FROM_RPM;
+    }
+    else if (m_controlMode == phoenix::motorcontrol::ControlMode::Position) {
+        m_leftDriveOutput /= DRIVE_DIST_PER_REVOLUTION;
+        m_rightDriveOutput /= DRIVE_DIST_PER_REVOLUTION;
+    }
 
-	if (std::isnan(m_leftDriveOutput) || std::isnan(m_rightDriveOutput)) {
-		m_leftDriveTalonA->Set(m_controlMode, 0.0);
-		m_rightDriveTalonA->Set(m_controlMode, 0.0);
-	}
-	else {
-		m_leftDriveTalonA->Set(m_controlMode, m_leftDriveOutput);
-		m_rightDriveTalonA->Set(m_controlMode, -m_rightDriveOutput);
-	}
+    if (std::isnan(m_leftDriveOutput) || std::isnan(m_rightDriveOutput)) {
+        m_leftDriveTalonA->Set(m_controlMode, 0.0);
+        m_rightDriveTalonA->Set(m_controlMode, 0.0);
+    }
+    else {
+        m_leftDriveTalonA->Set(m_controlMode, m_leftDriveOutput);
+        m_rightDriveTalonA->Set(m_controlMode, -m_rightDriveOutput);
+    }
 }
 
 /**

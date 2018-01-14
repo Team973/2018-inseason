@@ -36,8 +36,7 @@ class LogSpreadsheet;
  *
  *  * DriveBase... calls on the active controller to calculate motor output
  *  * DriveStateProvider... provides the controller with position/angle/speed etc
- *  * DrivecontrolSignalReceiver... translates controller output signal to motor
- *  		input signal
+ *  * DrivecontrolSignalReceiver... translates controller output signal to motor input signal
  */
 
 class Drive :
