@@ -23,7 +23,7 @@ class LogSpreadsheet;
 
 class Drive : public CoopTask {
     public:
-        Drive(TaskMgr *scheduler, LogSpreadsheet *logger, phoenix::motorcontrol::can::TalonSRX *leftTalonA, phoenix::motorcontrol::can::VictorSPX *leftVictorB, phoenix::motorcontrol::can::VictorSPX *leftVictorC, phoenix::motorcontrol::can::TalonSRX *rightTalonA, phoenix::motorcontrol::can::VictorSPX *rightVictorB, phoenix::motorcontrol::can::VictorSPX *rightVictorC, ADXRS450_Gyro *driveGyro);
+        Drive(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *leftDriveTalonA, VictorSPX *leftDriveVictorB, VictorSPX *leftDriveVictorC, TalonSRX *rightDriveTalonA, VictorSPX *rightDriveVictorB, VictorSPX *rightDriveVictorC, ADXRS450_Gyro *driveGyro);
         virtual ~Drive();
 
         void TaskPeriodic(RobotMode mode);
@@ -31,12 +31,12 @@ class Drive : public CoopTask {
         TaskMgr *m_scheduler;
         LogSpreadsheet *m_logger;
 
-        phoenix::motorcontrol::can::TalonSRX *m_leftTalonA;
-        phoenix::motorcontrol::can::VictorSPX *m_leftVictorB;
-        phoenix::motorcontrol::can::VictorSPX *m_leftVictorC;
-        phoenix::motorcontrol::can::TalonSRX *m_rightTalonA;
-        phoenix::motorcontrol::can::VictorSPX *m_rightVictorB;
-        phoenix::motorcontrol::can::VictorSPX *m_rightVictorC;
+        TalonSRX *m_leftDriveTalonA;
+        VictorSPX *m_leftDriveVictorB;
+        VictorSPX *m_leftDriveVictorC;
+        TalonSRX *m_rightDriveTalonA;
+        VictorSPX *m_rightDriveVictorB;
+        VictorSPX *m_rightDriveVictorC;
 
         ADXRS450_Gyro *m_driveGyro;
 };

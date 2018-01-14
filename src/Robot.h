@@ -67,12 +67,12 @@ class Robot : public CoopMTRobot, public JoystickObserver {
         ObservableJoystick *m_operatorJoystick;
         ObservableJoystick *m_tuningJoystick;
 
-        phoenix::motorcontrol::can::TalonSRX *m_leftTalonA;
-        phoenix::motorcontrol::can::VictorSPX *m_leftVictorB;
-        phoenix::motorcontrol::can::VictorSPX *m_leftVictorC;
-        phoenix::motorcontrol::can::TalonSRX *m_rightTalonA;
-        phoenix::motorcontrol::can::VictorSPX *m_rightVictorB;
-        phoenix::motorcontrol::can::VictorSPX *m_rightVictorC;
+        TalonSRX *m_leftDriveTalonA;
+        VictorSPX *m_leftDriveVictorB;
+        VictorSPX *m_leftDriveVictorC;
+        TalonSRX *m_rightDriveTalonA;
+        VictorSPX *m_rightDriveVictorB;
+        VictorSPX *m_rightDriveVictorC;
 
         ADXRS450_Gyro *m_driveGyro;
 

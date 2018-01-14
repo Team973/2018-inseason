@@ -17,17 +17,17 @@ Robot::Robot()
     , m_driverJoystick(new ObservableJoystick(DRIVER_JOYSTICK_PORT, this, this))
     , m_operatorJoystick(new ObservableJoystick(OPERATOR_JOYSTICK_PORT, this, this))
     , m_tuningJoystick(new ObservableJoystick(TUNING_JOYSTICK_PORT, this, this))
-    , m_leftTalonA(new phoenix::motorcontrol::can::TalonSRX(LEFT_DRIVE_A_CAN_ID))
-    , m_leftVictorB(new phoenix::motorcontrol::can::VictorSPX(LEFT_DRIVE_B_VICTOR_ID))
-    , m_leftVictorC(new phoenix::motorcontrol::can::VictorSPX(LEFT_DRIVE_C_VICTOR_ID))
-    , m_rightTalonA(new phoenix::motorcontrol::can::TalonSRX(RIGHT_DRIVE_A_CAN_ID))
-    , m_rightVictorB(new phoenix::motorcontrol::can::VictorSPX(RIGHT_DRIVE_B_VICTOR_ID))
-    , m_rightVictorC(new phoenix::motorcontrol::can::VictorSPX(RIGHT_DRIVE_C_VICTOR_ID))
+    , m_leftDriveTalonA(new TalonSRX(LEFT_DRIVE_A_CAN_ID))
+    , m_leftDriveVictorB(new VictorSPX(LEFT_DRIVE_B_VICTOR_ID))
+    , m_leftDriveVictorC(new VictorSPX(LEFT_DRIVE_C_VICTOR_ID))
+    , m_rightDriveTalonA(new TalonSRX(RIGHT_DRIVE_A_CAN_ID))
+    , m_rightDriveVictorB(new VictorSPX(RIGHT_DRIVE_B_VICTOR_ID))
+    , m_rightDriveVictorC(new VictorSPX(RIGHT_DRIVE_C_VICTOR_ID))
     , m_driveGyro(new ADXRS450_Gyro())
     , m_logger(new LogSpreadsheet(this))
     , m_elevator(new Elevator(this, m_logger))
     , m_claw(new Claw(this, m_logger))
-    , m_drive(new Drive(this, m_logger, m_leftTalonA, m_leftVictorB, m_leftVictorC, m_rightTalonA, m_rightVictorB, m_rightVictorC, m_driveGyro))
+    , m_drive(new Drive(this, m_logger, m_leftDriveTalonA, m_leftDriveVictorB, m_leftDriveVictorC, m_rightDriveTalonA, m_rightDriveVictorB, m_rightDriveVictorC, m_driveGyro))
     , m_hanger(new Hanger(this, m_logger))
     , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick, m_tuningJoystick))
     , m_autonomous(new Autonomous(m_disabled))
@@ -35,6 +35,10 @@ Robot::Robot()
     , m_test(new Test(m_driverJoystick, m_operatorJoystick, m_tuningJoystick, m_elevator))
 {
     std::cout << "Constructed a Robot!" << std::endl;
+
+    m_leftDriveTalonA->SetNeutralMode(Coast);
+
+    m_rightDriveTalonA->SetNeutralMode(Coast);
 }
 
 Robot::~Robot(){
