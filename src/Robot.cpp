@@ -9,6 +9,9 @@
 #include "src/Robot.h"
 #include "ctre/Phoenix.h"
 
+using namespace frc;
+using namespace nt;
+
 namespace frc973 {
 Robot::Robot()
     : m_driverJoystick(new ObservableJoystick(DRIVER_JOYSTICK_PORT, this, this))
@@ -23,9 +26,12 @@ Robot::Robot()
     , m_autonomous(new Autonomous(m_disabled))
     , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick, m_tuningJoystick))
     , m_test(new Test(m_driverJoystick, m_operatorJoystick, m_tuningJoystick, m_elevator))
-    , m_dashboard(new NetworkTableInstance())
+    , m_nt(new NetworkTableInstance())
 {
     std::cout << "Constructed a Robot!" << std::endl;
+    m_nt->StartServer("roborio-frc-973.local");
+    m_dashboard = m_nt->GetTable("SmartDashboard");
+    m_dashboard->PutNumber("test", 1234);
 }
 
 Robot::~Robot(){

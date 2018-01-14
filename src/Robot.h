@@ -13,6 +13,7 @@
 
 #include "WPILib.h"
 #include "networktables/NetworkTableInstance.h"
+#include "networktables/NetworkTableEntry.h"
 #include <iostream>
 #include "src/info/RobotInfo.h"
 #include "src/DisabledMode.h"
@@ -28,6 +29,9 @@
 #include "lib/helpers/JoystickHelper.h"
 #include "lib/bases/CoopMTRobot.h"
 #include "ctre/Phoenix.h"
+
+using namespace frc;
+using namespace nt;
 
 namespace frc973{
 class Disabled;
@@ -75,6 +79,7 @@ class Robot : public CoopMTRobot, public JoystickObserver {
         Teleop *m_teleop;
         Test *m_test;
 
-        NetworkTableInstance *m_dashboard;
+        NetworkTableInstance *m_nt;
+        std::shared_ptr<nt::NetworkTable> m_dashboard;
     };
 };
