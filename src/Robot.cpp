@@ -83,10 +83,28 @@ void Robot::AutonomousStop() {
 
 void Robot::TeleopStart() {
     m_teleop->TeleopInit();
+    m_drive->ArcadeDrive(0.0, 0.0);
 }
 
 void Robot::TeleopPeriodic() {
     m_teleop->TeleopPeriodic();
+    double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
+    double x = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis) + -m_tuningJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
+    static bool g_manualDriveControl = true;
+
+    if(g_manualDriveControl) {
+        if(m_driverJoystick->GetRawButton(DualAction::RightBumper)) {
+            x /= 3.0;
+            y /= 3.0;
+        }
+
+        if(m_driveMode == DriveMode::OpenLoop){
+            m_drive->OpenloopArcadeDrive(y, x);
+        }
+        else if(m_driveMode == DriveMode::AssistedArcade){
+            m_drive->AssistedArcadeDrive(y, x);
+        }
+    }
 }
 
 void Robot::TeleopStop() {

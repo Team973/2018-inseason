@@ -62,7 +62,6 @@ class Robot : public CoopMTRobot, public JoystickObserver {
         void ObserveJoystickStateChange(uint32_t port, uint32_t button, bool pressedP) override;
 
     private:
-
         PowerDistributionPanel *m_pdp;
 
         ObservableJoystick *m_driverJoystick;
@@ -90,6 +89,8 @@ class Robot : public CoopMTRobot, public JoystickObserver {
             AssistedArcade
         };
         DriveMode m_driveMode;
+
+        static bool g_manualDriveControl;
 
         Disabled *m_disabled;
         Autonomous *m_autonomous;
