@@ -23,11 +23,11 @@ Robot::Robot()
     , m_rightDriveTalonA(new TalonSRX(RIGHT_DRIVE_A_CAN_ID))
     , m_rightDriveVictorB(new VictorSPX(RIGHT_DRIVE_B_VICTOR_ID))
     , m_rightDriveVictorC(new VictorSPX(RIGHT_DRIVE_C_VICTOR_ID))
-    , m_driveGyro(new ADXRS450_Gyro())
+    , m_gyro(new ADXRS450_Gyro())
     , m_logger(new LogSpreadsheet(this))
     , m_elevator(new Elevator(this, m_logger))
     , m_claw(new Claw(this, m_logger))
-    , m_drive(new Drive(this, m_logger, m_leftDriveTalonA, m_leftDriveVictorB, m_leftDriveVictorC, m_rightDriveTalonA, m_rightDriveVictorB, m_rightDriveVictorC, m_driveGyro))
+    , m_drive(new Drive(this, m_logger, m_leftDriveTalonA, m_rightDriveTalonA, m_gyro))
     , m_hanger(new Hanger(this, m_logger))
     , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick, m_tuningJoystick))
     , m_autonomous(new Autonomous(m_disabled))
@@ -38,7 +38,16 @@ Robot::Robot()
 
     m_leftDriveTalonA->SetNeutralMode(Coast);
 
+    // m_leftDriveVictorB->Follow(m_leftDriveTalonA);
+
+    // m_leftDriveVictorC->Follow(m_leftDriveTalonA);
+
     m_rightDriveTalonA->SetNeutralMode(Coast);
+
+    // m_rightDriveVictorB->Follow(m_rightDriveTalonA);
+
+    // m_rightDriveVictorC->Follow(m_rightDriveTalonA);
+
 }
 
 Robot::~Robot(){

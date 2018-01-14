@@ -14,8 +14,9 @@ cc_binary(
         "//third_party/ctre:ctre",
         "//lib/helpers:helpers",
         "//src/auto:auto",
-        "//src/subsystems:subsystems",
+        "//src/controllers:controllers",
         "//src/info:info",
+        "//src/subsystems:subsystems",
     ],
     visibility = ["//visibility:public"],
 )

@@ -5,8 +5,10 @@
  */
 #pragma once
 
+#include "lib/util/Util.h"
+
 using namespace frc;
-namespace frc973{
+namespace frc973 {
     //Talons
     static const int LEFT_DRIVE_A_CAN_ID = 1;
     static const int ELEVATOR_CAN_ID = 4;
@@ -37,5 +39,8 @@ namespace frc973{
     static const int TUNING_JOYSTICK_PORT = 2;
 
     //Misc
+    static const double DRIVE_WHEEL_DIAMETER = 3.25;
+    static const double DRIVE_DIST_PER_REVOLUTION = DRIVE_WHEEL_DIAMETER * Constants::PI;
     static const double DRIVE_WIDTH = 5.0;
+    static const double DRIVE_IPS_FROM_RPM = DRIVE_DIST_PER_REVOLUTION / 60.0;
 };
