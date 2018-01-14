@@ -58,16 +58,18 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *leftDriveTalo
     this->SetDriveControlMode(m_controlMode);
 
     m_leftDriveTalonA->SetNeutralMode(Coast);
+    m_leftDriveTalonA->ConfigSelectedFeedbackSensor(QuadEncoder, 0, 10);
 
-    m_leftDriveVictorB->Follow(*m_leftDriveTalonA);
+    //m_leftDriveVictorB->Follow(*m_leftDriveTalonA);
 
-    m_leftDriveVictorC->Follow(*m_leftDriveTalonA);
+    //m_leftDriveVictorC->Follow(*m_leftDriveTalonA);
 
     m_rightDriveTalonA->SetNeutralMode(Coast);
+    m_rightDriveTalonA->ConfigSelectedFeedbackSensor(QuadEncoder, 0, 10);
 
-    m_rightDriveVictorB->Follow(*m_rightDriveTalonA);
+    //m_rightDriveVictorB->Follow(*m_rightDriveTalonA);
 
-    m_rightDriveVictorC->Follow(*m_rightDriveTalonA);
+    //m_rightDriveVictorC->Follow(*m_rightDriveTalonA);
 }
 
 Drive::~Drive() {};
