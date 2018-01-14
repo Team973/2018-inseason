@@ -17,11 +17,15 @@ using namespace frc;
 using namespace ctre;
 
 namespace frc973 {
-Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *leftDriveTalon, TalonSRX *rightDriveTalon, ADXRS450_Gyro *gyro)
+Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *leftDriveTalonA, VictorSPX *leftDriveVictorB, VictorSPX *leftDriveVictorC, TalonSRX *rightDriveTalonA, VictorSPX *rightDriveVictorB, VictorSPX *rightDriveVictorC, ADXRS450_Gyro *gyro)
              : DriveBase(scheduler, this, this, nullptr)
              , m_logger(logger)
-             , m_leftDriveTalon(leftDriveTalon)
-             , m_rightDriveTalon(rightDriveTalon)
+             , m_leftDriveTalonA(leftDriveTalonA)
+             , m_leftDriveVictorB(leftDriveVictorB)
+             , m_leftDriveVictorC(leftDriveVictorC)
+             , m_rightDriveTalonA(rightDriveTalonA)
+             , m_rightDriveVictorB(rightDriveVictorB)
+             , m_rightDriveVictorC(rightDriveVictorC)
              , m_controlMode(phoenix::motorcontrol::ControlMode::PercentOutput)
              , m_leftDriveOutput(0.0)
              , m_rightDriveOutput(0.0)
@@ -52,6 +56,18 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *leftDriveTalo
 {
     this->SetDriveController(m_arcadeDriveController);
     this->SetDriveControlMode(m_controlMode);
+
+    m_leftDriveTalonA->SetNeutralMode(Coast);
+
+    m_leftDriveVictorB->Follow(*m_leftDriveTalonA);
+
+    m_leftDriveVictorC->Follow(*m_leftDriveTalonA);
+
+    m_rightDriveTalonA->SetNeutralMode(Coast);
+
+    m_rightDriveVictorB->Follow(*m_rightDriveTalonA);
+
+    m_rightDriveVictorC->Follow(*m_rightDriveTalonA);
 }
 
 Drive::~Drive() {};
@@ -137,7 +153,7 @@ PIDDriveController *Drive::PIDTurn(double turn, RelativeTo relativity,
  * @return  Left Drive Distance reported in inches
  */
 double Drive::GetLeftDist() const {
-    return m_leftDriveTalon->GetSelectedSensorPosition(0) * DRIVE_DIST_PER_REVOLUTION -
+    return m_leftDriveTalonA->GetSelectedSensorPosition(0) * DRIVE_DIST_PER_REVOLUTION -
         m_leftPosZero;
 }
 
@@ -147,7 +163,7 @@ double Drive::GetLeftDist() const {
  * @return  Right Drive Distance reported in inches
  */
 double Drive::GetRightDist() const {
-    return -m_rightDriveTalon->GetSelectedSensorPosition(0) * DRIVE_DIST_PER_REVOLUTION -
+    return -m_rightDriveTalonA->GetSelectedSensorPosition(0) * DRIVE_DIST_PER_REVOLUTION -
         m_rightPosZero;
 }
 
@@ -157,7 +173,7 @@ double Drive::GetRightDist() const {
  * @return  Left Drive Rate or Speed reported in inches Reported in inches per second; As per manual 17.2.1, GetSpeed reports RPM
  */
 double Drive::GetLeftRate() const {
-    return m_leftDriveTalon->GetSelectedSensorVelocity(0) * DRIVE_IPS_FROM_RPM;
+    return m_leftDriveTalonA->GetSelectedSensorVelocity(0) * DRIVE_IPS_FROM_RPM;
 }
 
 /**
@@ -166,7 +182,7 @@ double Drive::GetLeftRate() const {
  * @return  Right Drive Rate or Speed reported in inches Reported in inches per second; As per manual 17.2.1, GetSpeed reports RPM
  */
 double Drive::GetRightRate() const {
-    return -m_rightDriveTalon->GetSelectedSensorVelocity(0) * DRIVE_IPS_FROM_RPM;
+    return -m_rightDriveTalonA->GetSelectedSensorVelocity(0) * DRIVE_IPS_FROM_RPM;
 }
 
 /**
@@ -193,8 +209,8 @@ double Drive::GetRate() const {
  * @return  Avergage current reported in amperes
  */
 double Drive::GetDriveCurrent() const {
-    return (Util::abs(m_rightDriveTalon->GetOutputCurrent()) +
-            Util::abs(m_leftDriveTalon->GetOutputCurrent())) / 2.0;
+    return (Util::abs(m_rightDriveTalonA->GetOutputCurrent()) +
+            Util::abs(m_leftDriveTalonA->GetOutputCurrent())) / 2.0;
 }
 
 /**
@@ -235,12 +251,12 @@ void Drive::SetDriveOutput(double left, double right) {
   }
 
 	if (std::isnan(m_leftDriveOutput) || std::isnan(m_rightDriveOutput)) {
-		m_leftDriveTalon->Set(m_controlMode, 0.0);
-		m_rightDriveTalon->Set(m_controlMode, 0.0);
+		m_leftDriveTalonA->Set(m_controlMode, 0.0);
+		m_rightDriveTalonA->Set(m_controlMode, 0.0);
 	}
 	else {
-		m_leftDriveTalon->Set(m_controlMode, m_leftDriveOutput);
-		m_rightDriveTalon->Set(m_controlMode, -m_rightDriveOutput);
+		m_leftDriveTalonA->Set(m_controlMode, m_leftDriveOutput);
+		m_rightDriveTalonA->Set(m_controlMode, -m_rightDriveOutput);
 	}
 }
 
@@ -289,8 +305,8 @@ void Drive::TaskPeriodic(RobotMode mode) {
         m_rightDriveOutputLog->LogDouble(m_rightDriveOutput);
     }
 
-    m_leftVoltageLog->LogDouble(m_leftDriveTalon->GetMotorOutputVoltage());
-    m_rightVoltageLog->LogDouble(m_rightDriveTalon->GetMotorOutputVoltage());
+    m_leftVoltageLog->LogDouble(m_leftDriveTalonA->GetMotorOutputVoltage());
+    m_rightVoltageLog->LogDouble(m_rightDriveTalonA->GetMotorOutputVoltage());
 
     m_currentLog->LogDouble(GetDriveCurrent());
 }

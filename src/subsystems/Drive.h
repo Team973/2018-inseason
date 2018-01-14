@@ -45,7 +45,7 @@ class Drive :
         public DriveStateProvider,
         public DriveControlSignalReceiver {
     public:
-        Drive(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *leftDriveTalonA, TalonSRX *rightDriveTalonA, ADXRS450_Gyro *gyro);
+        Drive(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *leftDriveTalonA, VictorSPX *leftDriveVictorB, VictorSPX *leftDriveVictorC, TalonSRX *rightDriveTalonA, VictorSPX *rightDriveVictorB, VictorSPX *rightDriveVictorC, ADXRS450_Gyro *gyro);
         virtual ~Drive();
 
         /**
@@ -193,8 +193,12 @@ class Drive :
     private:
         LogSpreadsheet *m_logger;
 
-        TalonSRX *m_leftDriveTalon;
-        TalonSRX *m_rightDriveTalon;
+        TalonSRX *m_leftDriveTalonA;
+        VictorSPX *m_leftDriveVictorB;
+        VictorSPX *m_leftDriveVictorC;
+        TalonSRX *m_rightDriveTalonA;
+        VictorSPX *m_rightDriveVictorB;
+        VictorSPX *m_rightDriveVictorC;
 
         phoenix::motorcontrol::ControlMode m_controlMode;
 

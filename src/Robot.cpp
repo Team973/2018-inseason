@@ -27,7 +27,7 @@ Robot::Robot()
     , m_logger(new LogSpreadsheet(this))
     , m_elevator(new Elevator(this, m_logger, m_driverJoystick))
     , m_claw(new Claw(this, m_logger))
-    , m_drive(new Drive(this, m_logger, m_leftDriveTalonA, m_rightDriveTalonA, m_gyro))
+    , m_drive(new Drive(this, m_logger, m_leftDriveTalonA, m_leftDriveVictorB, m_leftDriveVictorC, m_rightDriveTalonA, m_rightDriveVictorB, m_rightDriveVictorC, m_gyro))
     , m_hanger(new Hanger(this, m_logger))
     , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick, m_tuningJoystick))
     , m_autonomous(new Autonomous(m_disabled))
@@ -35,19 +35,6 @@ Robot::Robot()
     , m_test(new Test(m_driverJoystick, m_operatorJoystick, m_tuningJoystick, m_elevator))
 {
     std::cout << "Constructed a Robot!" << std::endl;
-
-    m_leftDriveTalonA->SetNeutralMode(Coast);
-
-    // m_leftDriveVictorB->Follow(m_leftDriveTalonA);
-
-    // m_leftDriveVictorC->Follow(m_leftDriveTalonA);
-
-    m_rightDriveTalonA->SetNeutralMode(Coast);
-
-    // m_rightDriveVictorB->Follow(m_rightDriveTalonA);
-
-    // m_rightDriveVictorC->Follow(m_rightDriveTalonA);
-
 }
 
 Robot::~Robot(){
@@ -104,7 +91,7 @@ void Robot::TeleopPeriodic() {
             m_drive->AssistedArcadeDrive(y, x);
         }
     }
-  
+
     if (m_driverJoystick->GetRawButton(2)) {
         m_elevator->SetPower(0.25);
     }
