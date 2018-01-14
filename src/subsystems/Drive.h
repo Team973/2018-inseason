@@ -15,19 +15,14 @@ using namespace frc;
 using namespace ctre;
 
 namespace frc973 {
-class FilterBase;
 class ArcadeDriveController;
 class CheesyDriveController;
 class PIDDriveController;
-class RampPIDDriveController;
-class BoilerPixyVisionDriveController;
-class GearPixyVisionDriveController;
 class OpenloopArcadeDriveController;
 class AssistedArcadeDriveController;
 class StraightDriveController;
 class TrapDriveController;
 class SplineDriveController;
-class VelocityTurnPID;
 class LogSpreadsheet;
 
 /*
@@ -147,13 +142,17 @@ class Drive :
          * @param dist Distance in inches to go
          * @param angle Angle in degrees to go
          */
-
         SplineDriveController *SplineDrive(RelativeTo relativity, double dist, double angle);
 
         const SplineDriveController *GetSplineDriveController(){
             return m_splineDriveController;
         }
 
+        /**
+         * Set the drive control mode of the Talons
+         *
+         * @param mode The ControlMode of the Talons
+         */
         void SetDriveControlMode(phoenix::motorcontrol::ControlMode mode) override;
 
         /**
@@ -182,11 +181,11 @@ class Drive :
          * The unit of this command depends on the mode of the controller...
          * If in PercentOutput mode (default), command is from -1.0 to 1.0 and
          *      scales to voltage sent to motors
-         * If in Velocity mode, the command is the speed setpoint in in/sec
+         * If in Velocity mode, the command is the velocity setpoint in in/sec
          * If in Positon mode, the command is the position setpoint in inches
          *
-         * @param left Command to send to left motor
-         * @param right Command to send to right motor
+         * @param left Output to send to leftDriveTalon
+         * @param right Output to send to rightDriveTalon
          */
         void SetDriveOutput(double left, double right) override;
 
