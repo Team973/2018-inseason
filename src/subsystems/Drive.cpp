@@ -257,8 +257,8 @@ void Drive::SetDriveOutput(double left, double right) {
         m_rightDriveTalonA->Set(m_controlMode, 0.0);
     }
     else {
-        m_leftDriveTalonA->Set(m_controlMode, m_leftDriveOutput);
-        m_rightDriveTalonA->Set(m_controlMode, -m_rightDriveOutput);
+        m_leftDriveTalonA->Set(m_controlMode, -m_leftDriveOutput);
+        m_rightDriveTalonA->Set(m_controlMode, m_rightDriveOutput);
     }
 }
 
