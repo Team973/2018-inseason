@@ -52,6 +52,7 @@ void Elevator::SetPosition(double position) {
 
 void Elevator::SetPower(double power) {
     m_elevatorMotor->Set(ControlMode::PercentOutput, power);
+    SetLevel(Level::manual);
 }
 
 void Elevator::SetMotionMagic(double position) {
@@ -64,36 +65,36 @@ void Elevator::SetLevel(Level level) {
 
 void Elevator::Reset() {
     SetLevel(Level::zero);
-    m_talonMode = ControlMode::PercentOutput;
 }
 
 void Elevator::TaskPeriodic(RobotMode mode) {
     m_positionCell->LogDouble(m_elevatorMotor->GetSelectedSensorPosition(0));
-    /*switch (m_currLevel) {
-      case zero:
-          this->SetMotionMagic(0.0);
-          break;
-      case vault:
-          this->SetMotionMagic(3.0);
-          break;
-      case lowGoal:
-          this->SetMotionMagic(30.0);
-          break;
-      case scaleLow:
-          this->SetMotionMagic(50.0);
-          break;
-      case scaleMid:
-          this->SetMotionMagic(60.0);
-          break;
-      case scaleHigh:
-          this->SetMotionMagic(70.0);
-          break;
-      case manual:
-          this->Reset();
-          break;
-      default:
-          this->Reset();
-          break;
-    }*/
+    printf("Elevator Task Periodic\n");
+    switch (m_currLevel) {
+        case zero:
+            this->SetMotionMagic(0.0);
+            break;
+        case vault:
+            this->SetMotionMagic(3.0);
+            break;
+        case lowGoal:
+            this->SetMotionMagic(30.0);
+            break;
+        case scaleLow:
+            this->SetMotionMagic(50.0);
+            break;
+        case scaleMid:
+            this->SetMotionMagic(60.0);
+            break;
+        case scaleHigh:
+            this->SetMotionMagic(70.0);
+            break;
+        case manual:
+            this->SetPower(0.0);
+            break;
+        default:
+            this->Reset();
+            break;
+    }
 }
 }

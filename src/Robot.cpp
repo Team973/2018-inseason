@@ -65,10 +65,6 @@ void Robot::TeleopStart() {
 
 void Robot::TeleopContinuous() {
     m_teleop->TeleopPeriodic();
-    if (m_driverJoystick->GetRawButton(2)) {
-        printf("Pressed A");
-        m_elevatorMotor->Set(ControlMode::PercentOutput, 0.25);
-    }
 }
 
 void Robot::TeleopStop() {
@@ -92,7 +88,7 @@ void Robot::RobotPeriodic() {
 
 void Robot::ObserveJoystickStateChange(uint32_t port, uint32_t button,
                                        bool pressedP) {
-    printf("Button Pressed");
+    printf("Button Pressed\n");
     if (this->IsOperatorControl()){
         m_teleop->HandleTeleopButton(port, button, pressedP);
     }
