@@ -14,7 +14,9 @@ using namespace ctre;
 
 namespace frc973 {
 Robot::Robot()
-    : m_driverJoystick(new ObservableJoystick(DRIVER_JOYSTICK_PORT, this, this))
+    : CoopMTRobot()
+    , JoystickObserver()
+    , m_driverJoystick(new ObservableJoystick(DRIVER_JOYSTICK_PORT, this, this))
     , m_operatorJoystick(new ObservableJoystick(OPERATOR_JOYSTICK_PORT, this, this))
     , m_tuningJoystick(new ObservableJoystick(TUNING_JOYSTICK_PORT, this, this))
     , m_leftDriveTalonA(new TalonSRX(LEFT_DRIVE_A_CAN_ID))
@@ -25,7 +27,8 @@ Robot::Robot()
     , m_rightDriveVictorC(new VictorSPX(RIGHT_DRIVE_C_VICTOR_ID))
     , m_gyro(new ADXRS450_Gyro())
     , m_logger(new LogSpreadsheet(this))
-    , m_elevator(new Elevator(this, m_logger, m_driverJoystick))
+    , m_elevatorMotor(new TalonSRX(ELEVATOR_CAN_ID))
+    , m_elevator(new Elevator(this, m_logger, m_driverJoystick, m_elevatorMotor))
     , m_claw(new Claw(this, m_logger))
     , m_drive(new Drive(this, m_logger, m_leftDriveTalonA, m_leftDriveVictorB, m_leftDriveVictorC, m_rightDriveTalonA, m_rightDriveVictorB, m_rightDriveVictorC, m_gyro))
     , m_hanger(new Hanger(this, m_logger))
@@ -47,7 +50,7 @@ void Robot::DisabledStart() {
     m_disabled->DisabledInit();
 }
 
-void Robot::DisabledPeriodic() {
+void Robot::DisabledContinuous() {
     m_disabled->DisabledPeriodic();
 }
 
@@ -59,7 +62,7 @@ void Robot::AutonomousStart() {
     m_autonomous->AutonomousInit();
 }
 
-void Robot::AutonomousPeriodic() {
+void Robot::AutonomousContinuous() {
     m_autonomous->AutonomousPeriodic();
 }
 
@@ -72,7 +75,7 @@ void Robot::TeleopStart() {
     m_drive->ArcadeDrive(0.0, 0.0);
 }
 
-void Robot::TeleopPeriodic() {
+void Robot::TeleopContinuous() {
     m_teleop->TeleopPeriodic();
     double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
     double x = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis) + -m_tuningJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
@@ -105,7 +108,7 @@ void Robot::TestStart() {
     m_test->TestInit();
 }
 
-void Robot::TestPeriodic(){
+void Robot::TestContinuous(){
     m_test->TestPeriodic();
 }
 
@@ -113,8 +116,12 @@ void Robot::TestStop() {
     m_test->TestStop();
 }
 
+void Robot::RobotPeriodic() {
+}
+
 void Robot::ObserveJoystickStateChange(uint32_t port, uint32_t button,
                                        bool pressedP) {
+    printf("Button Pressed\n");
     if (this->IsOperatorControl()){
         m_teleop->HandleTeleopButton(port, button, pressedP);
     }

@@ -32,7 +32,7 @@ class Elevator : public CoopTask {
             manual
         };
 
-        Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, ObservableJoystick *driver);
+        Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, ObservableJoystick *driver, TalonSRX *motor);
         virtual ~Elevator();
 
         /**
