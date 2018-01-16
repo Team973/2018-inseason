@@ -18,7 +18,11 @@ using namespace frc;
 using namespace ctre;
 
 namespace frc973 {
-Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *leftDriveTalonA, VictorSPX *leftDriveVictorB, VictorSPX *leftDriveVictorC, TalonSRX *rightDriveTalonA, VictorSPX *rightDriveVictorB, VictorSPX *rightDriveVictorC, ADXRS450_Gyro *gyro)
+Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
+             TalonSRX *leftDriveTalonA, VictorSPX *leftDriveVictorB,
+             VictorSPX *leftDriveVictorC, TalonSRX *rightDriveTalonA,
+             VictorSPX *rightDriveVictorB, VictorSPX *rightDriveVictorC,
+             ADXRS450_Gyro *gyro)
              : DriveBase(scheduler, this, this, nullptr)
              , m_logger(logger)
              , m_leftDriveTalonA(leftDriveTalonA)
@@ -40,8 +44,10 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *leftDriveTalo
              , m_gyroZero(0.0)
              , m_arcadeDriveController(new ArcadeDriveController())
              , m_cheesyDriveController(new CheesyDriveController())
-             , m_openloopArcadeDriveController(new OpenloopArcadeDriveController())
-             , m_assistedArcadeDriveController(new AssistedArcadeDriveController())
+             , m_openloopArcadeDriveController(new
+                                               OpenloopArcadeDriveController())
+             , m_assistedArcadeDriveController(new
+                                               AssistedArcadeDriveController())
              , m_pidDriveController(new PIDDriveController())
              , m_trapDriveController(new TrapDriveController(this, logger))
              , m_straightDriveController(new StraightDriveController())
@@ -98,7 +104,8 @@ void Drive::ArcadeDrive(double throttle, double turn) {
 void Drive::CheesyDrive(double throttle, double turn, bool isQuickTurn,
                         bool isHighGear) {
     this->SetDriveController(m_cheesyDriveController);
-    m_cheesyDriveController->SetJoysticks(throttle, turn, isQuickTurn, isHighGear);
+    m_cheesyDriveController->SetJoysticks(throttle, turn, isQuickTurn,
+                                          isHighGear);
 }
 
 /**
@@ -128,7 +135,8 @@ void Drive::AssistedArcadeDrive(double throttle, double turn) {
  *
  * @param dist        Desired drive distance
  * @param turn        Desired turn angle
- * @param relativity  Calculates relativity of drive distance and current position
+ * @param relativity  Calculates relativity of drive distance and current
+ *  position
  * @param powerCap    Percentage of drive power; 1.0 = full power
  *
  * @return            the PID Drive contoller
@@ -148,7 +156,8 @@ PIDDriveController *Drive::PIDDrive(double dist, double turn,
  * Sets Drive mode to PIDTurn
  *
  * @param turn        Desired turn angle
- * @param relativity  Calculates relativity of drive distance and current position
+ * @param relativity  Calculates relativity of drive distance and current
+ *  position
  * @param powerCap    Percentage of drive power; 1.0 = full power
  *
  * @return            the PID Drive contoller
@@ -170,8 +179,8 @@ PIDDriveController *Drive::PIDTurn(double turn, RelativeTo relativity,
  * @return  Left Drive Distance reported in inches
  */
 double Drive::GetLeftDist() const {
-    return m_leftDriveTalonA->GetSelectedSensorPosition(0) * DRIVE_DIST_PER_REVOLUTION -
-        m_leftPosZero;
+    return m_leftDriveTalonA->GetSelectedSensorPosition(0) *
+                              DRIVE_DIST_PER_REVOLUTION - m_leftPosZero;
 }
 
 /**
@@ -180,14 +189,15 @@ double Drive::GetLeftDist() const {
  * @return  Right Drive Distance reported in inches
  */
 double Drive::GetRightDist() const {
-    return -m_rightDriveTalonA->GetSelectedSensorPosition(0) * DRIVE_DIST_PER_REVOLUTION -
-        m_rightPosZero;
+    return -m_rightDriveTalonA->GetSelectedSensorPosition(0) *
+                                DRIVE_DIST_PER_REVOLUTION - m_rightPosZero;
 }
 
 /**
  * Returns Left Drive Rate or speed thorugh encoder translation
  *
- * @return  Left Drive Rate or Speed reported in inches Reported in inches per second; As per manual 17.2.1, GetSpeed reports RPM
+ * @return  Left Drive Rate or Speed reported in inches Reported in inches per
+ *  second; As per manual 17.2.1, GetSpeed reports RPM
  */
 double Drive::GetLeftRate() const {
     return m_leftDriveTalonA->GetSelectedSensorVelocity(0) * DRIVE_IPS_FROM_RPM;
@@ -196,10 +206,12 @@ double Drive::GetLeftRate() const {
 /**
  * Returns Right Drive Rate or speed thorugh encoder translation
  *
- * @return  Right Drive Rate or Speed reported in inches Reported in inches per second; As per manual 17.2.1, GetSpeed reports RPM
+ * @return  Right Drive Rate or Speed reported in inches Reported in inches per
+ *  second; As per manual 17.2.1, GetSpeed reports RPM
  */
 double Drive::GetRightRate() const {
-    return -m_rightDriveTalonA->GetSelectedSensorVelocity(0) * DRIVE_IPS_FROM_RPM;
+    return -m_rightDriveTalonA->GetSelectedSensorVelocity(0) *
+                                DRIVE_IPS_FROM_RPM;
 }
 
 /**
@@ -214,7 +226,8 @@ double Drive::GetDist() const {
 /**
  * Returns Average Drive Rate or speed thorugh encoder translation
  *
- * @return  Average Drive Rate or Speed reported in inches Reported in inches per second; As per manual 17.2.1, GetSpeed reports RPM
+ * @return  Average Drive Rate or Speed reported in inches Reported in inches
+ *  per second; As per manual 17.2.1, GetSpeed reports RPM
  */
 double Drive::GetRate() const {
     return (GetLeftRate() + GetRightRate()) / 2.0;
@@ -254,7 +267,8 @@ double Drive::GetAngularRate() const {
  * @param left  desired left Output
  * @param right desired right Output
  */
-void Drive::SetDriveOutput(phoenix::motorcontrol::ControlMode controlMode, double left, double right) {
+void Drive::SetDriveOutput(phoenix::motorcontrol::ControlMode controlMode,
+                           double left, double right) {
     m_leftDriveOutput = left;
     m_rightDriveOutput = right;
 
@@ -303,12 +317,16 @@ void Drive::TaskPeriodic(RobotMode mode) {
     m_rightDistRateLog->LogDouble(GetRightRate());
 
     if (m_controlMode == phoenix::motorcontrol::ControlMode::Velocity) {
-        m_leftDriveOutputLog->LogDouble(m_leftDriveOutput * DRIVE_IPS_FROM_RPM);
-        m_rightDriveOutputLog->LogDouble(m_rightDriveOutput * DRIVE_IPS_FROM_RPM);
+        m_leftDriveOutputLog->LogDouble(m_leftDriveOutput *
+                                        DRIVE_IPS_FROM_RPM);
+        m_rightDriveOutputLog->LogDouble(m_rightDriveOutput *
+                                         DRIVE_IPS_FROM_RPM);
     }
     else if (m_controlMode == phoenix::motorcontrol::ControlMode::Position) {
-        m_leftDriveOutputLog->LogDouble(m_leftDriveOutput * DRIVE_DIST_PER_REVOLUTION);
-        m_rightDriveOutputLog->LogDouble(m_rightDriveOutput * DRIVE_DIST_PER_REVOLUTION);
+        m_leftDriveOutputLog->LogDouble(m_leftDriveOutput *
+                                        DRIVE_DIST_PER_REVOLUTION);
+        m_rightDriveOutputLog->LogDouble(m_rightDriveOutput *
+                                         DRIVE_DIST_PER_REVOLUTION);
     }
     else {
         m_leftDriveOutputLog->LogDouble(m_leftDriveOutput);

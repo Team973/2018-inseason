@@ -35,8 +35,10 @@ class LogSpreadsheet;
  * the "active" controller.
  *
  *  * DriveBase... calls on the active controller to calculate motor output
- *  * DriveStateProvider... provides the controller with position/angle/speed etc
- *  * DrivecontrolSignalReceiver... translates controller output signal to motor input signal
+ *  * DriveStateProvider... provides the controller with position/angle/speed
+       etc
+ *  * DrivecontrolSignalReceiver... translates controller output signal to motor
+       input signal
  */
 
 class Drive :
@@ -44,7 +46,12 @@ class Drive :
         public DriveStateProvider,
         public DriveControlSignalReceiver {
     public:
-        Drive(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *leftDriveTalonA, VictorSPX *leftDriveVictorB, VictorSPX *leftDriveVictorC, TalonSRX *rightDriveTalonA, VictorSPX *rightDriveVictorB, VictorSPX *rightDriveVictorC, ADXRS450_Gyro *gyro);
+        Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
+              TalonSRX *leftDriveTalonA, VictorSPX *leftDriveVictorB,
+              VictorSPX *leftDriveVictorC, TalonSRX *rightDriveTalonA,
+              VictorSPX *rightDriveVictorB, VictorSPX *rightDriveVictorC,
+              ADXRS450_Gyro *gyro);
+
         virtual ~Drive();
 
         /**
@@ -65,7 +72,8 @@ class Drive :
                          bool isHighGear);
 
         /*
-         * Sets drive to use standard arcade drive controller if it doesn't already
+         * Sets drive to use standard arcade drive controller if it doesn't
+         *  already
          * Also sets the input for the arcade drive controller.
          *
          * @param throttle Forward-backwards-ness to drive with
@@ -74,7 +82,8 @@ class Drive :
         void ArcadeDrive(double throttle, double turn);
 
         /**
-         * Set drive to use the open loop arcade drive controller and sets powers
+         * Set drive to use the open loop arcade drive controller and sets
+         *  powers
          *
          * @param throttle Forward-backwards-ness to drive with
          * @param turn Turn value to drive with
@@ -98,7 +107,8 @@ class Drive :
          * @param relativity What is that distance metric relative to?
          * @param powerCap
          */
-        PIDDriveController *PIDDrive(double dist, double turn, RelativeTo relativity, double powerCap);
+        PIDDriveController *PIDDrive(double dist, double turn,
+                                     RelativeTo relativity, double powerCap);
 
         /**
          * Set a target turn to be achieved by pid
@@ -106,7 +116,8 @@ class Drive :
          * @param angle Angle in degrees to go
          * @param relativity What is that angle metric relative to?
          */
-        PIDDriveController *PIDTurn(double angle, RelativeTo relativity, double powerCap);
+        PIDDriveController *PIDTurn(double angle, RelativeTo relativity,
+                                    double powerCap);
 
         /**
          * Set a drive to drive straight
@@ -115,7 +126,8 @@ class Drive :
          * @param throttle Forward-backwards-ness to drive with
          * @param angle Angle in degrees to go
          */
-        void DriveStraight(RelativeTo relativity, double throttle, double angle);
+        void DriveStraight(RelativeTo relativity, double throttle,
+                           double angle);
 
         /**
          * Set a drive to use trap profile drive controller
@@ -124,7 +136,8 @@ class Drive :
          * @param dist Distance in inches to go
          * @param angle Angle in degrees to go
          */
-        TrapDriveController *TrapDrive(RelativeTo relativity, double dist, double angle);
+        TrapDriveController *TrapDrive(RelativeTo relativity, double dist,
+                                       double angle);
 
         const TrapDriveController *GetTrapDriveController() {
             return m_trapDriveController;
@@ -137,7 +150,8 @@ class Drive :
          * @param dist Distance in inches to go
          * @param angle Angle in degrees to go
          */
-        SplineDriveController *SplineDrive(RelativeTo relativity, double dist, double angle);
+        SplineDriveController *SplineDrive(RelativeTo relativity, double dist,
+                                           double angle);
 
         const SplineDriveController *GetSplineDriveController(){
             return m_splineDriveController;
@@ -176,7 +190,8 @@ class Drive :
          * @param left Output to send to leftDriveTalon
          * @param right Output to send to rightDriveTalon
          */
-        void SetDriveOutput(phoenix::motorcontrol::ControlMode mode, double left, double right);
+        void SetDriveOutput(phoenix::motorcontrol::ControlMode controlMode,
+                            double left, double right);
 
         void TaskPeriodic(RobotMode mode);
     private:
