@@ -7,6 +7,7 @@
 
 #include "lib/helpers/RampedOutput.h"
 #include "lib/util/Util.h"
+#include <math.h>
 
 namespace frc973 {
 
@@ -30,7 +31,7 @@ double RampedOutput::Update(double input) {
 			Constants::SEC_PER_MSEC;
 
 	double maxOutputDiff = timeDiffSec * m_rampRate;
-	double requestedOutputDiff = Util::abs(input - m_prevOutput);
+	double requestedOutputDiff = fabs(input - m_prevOutput);
 
 	if (m_prevTimeMs != 0) {
 		m_rampFinished = requestedOutputDiff < maxOutputDiff;
@@ -55,7 +56,7 @@ bool RampedOutput::IsRampFinished(void) {
 }
 
 void RampedOutput::SetRampRate(double rampRate) {
-	m_rampRate = Util::abs(rampRate);
+	m_rampRate = fabs(rampRate);
 }
 
 double RampedOutput::GetRampRate(void) {
