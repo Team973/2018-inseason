@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "WPILib.h"
 #include "src/controllers/ArcadeDriveController.h"
+#include "src/controllers/CheesyDriveController.h"
 #include "src/controllers/OpenloopArcadeDriveController.h"
 #include "src/controllers/AssistedArcadeDrive.h"
 #include "src/controllers/PIDDrive.h"
@@ -38,6 +39,7 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *leftDriveTalo
              , m_gyro(gyro)
              , m_gyroZero(0.0)
              , m_arcadeDriveController(new ArcadeDriveController())
+             , m_cheesyDriveController(new CheesyDriveController())
              , m_openloopArcadeDriveController(new OpenloopArcadeDriveController())
              , m_assistedArcadeDriveController(new AssistedArcadeDriveController())
              , m_pidDriveController(new PIDDriveController())
