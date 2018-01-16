@@ -58,15 +58,11 @@ class Drive :
          *
          * @param throttle Forward-backwards-ness to drive cheesy with
          * @param turn Turn value to drive cheesy with
+         * @param isQuickturn Whether quickturn is active
+         * @param isHighGear Whether high gear is active
          */
-        void CheesyDrive(double throttle, double turn);
-
-        /*
-         * Sets the state of quickturn in the cheesy controller to the value given
-         *
-         * @param quickturn Whether quickturn is active
-         */
-        void SetCheesyQuickTurn(bool quickturn);
+        void CheesyDrive(double throttle, double turn, bool isQuickTurn,
+                         bool isHighGear);
 
         /*
          * Sets drive to use standard arcade drive controller if it doesn't already

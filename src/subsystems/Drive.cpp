@@ -88,6 +88,20 @@ void Drive::ArcadeDrive(double throttle, double turn) {
 }
 
 /**
+ * Sets Drive controller to CheesyDrive
+ *
+ * @param throttle  Left joystick y-axis value
+ * @param turn      Right joystick x-axis value
+ * @param isQuickturn Whether quickturn is active
+ * @param isHighGear Whether high gear is active
+ */
+void Drive::CheesyDrive(double throttle, double turn, bool isQuickTurn,
+                        bool isHighGear) {
+    this->SetDriveController(m_cheesyDriveController);
+    m_cheesyDriveController->SetJoysticks(throttle, turn, isQuickTurn, isHighGear);
+}
+
+/**
  * Sets Drive controller to OpenLoopArcadeDrive
  *
  * @param throttle  Left joystick y-axis value
