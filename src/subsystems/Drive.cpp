@@ -277,7 +277,7 @@ void Drive::TaskPeriodic(RobotMode mode) {
     if(currRate == 0){
     }
     else{
-      m_angleRate = currRate;
+        m_angleRate = currRate;
     }
 
     DBStringPrintf(DB_LINE9, "l %2.1lf r %2.1lf g %2.1lf",
