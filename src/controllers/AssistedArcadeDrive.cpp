@@ -11,6 +11,9 @@
 #include "lib/util/WrapDash.h"
 #include "src/info/RobotInfo.h"
 
+using namespace frc;
+using namespace ctre;
+
 namespace frc973 {
 
 AssistedArcadeDriveController::AssistedArcadeDriveController():
@@ -27,7 +30,7 @@ AssistedArcadeDriveController::~AssistedArcadeDriveController() {
 void AssistedArcadeDriveController::CalcDriveOutput(DriveStateProvider *state,
 		DriveControlSignalReceiver *out) {
 	if(m_needSetControlMode == true){
-		out->SetDriveControlMode(ctre::phoenix::motorcontrol::ControlMode::PercentOutput);
+		m_controlMode = phoenix::motorcontrol::ControlMode::PercentOutput;
 		m_needSetControlMode = false;
 	}
 
@@ -51,7 +54,7 @@ void AssistedArcadeDriveController::CalcDriveOutput(DriveStateProvider *state,
       rightOutput = rightOutput * (1.0 / maxSpeed);
 	}
 
-	out->SetDriveOutput(-leftOutput, -rightOutput);
+	out->SetDriveOutput(m_controlMode, -leftOutput, -rightOutput);
 	DBStringPrintf(DBStringPos::DB_LINE4,
 				"arcade l=%1.2lf r=%1.2lf", leftOutput, rightOutput);
 	//printf("arcade l=%1.2lf r=%1.2lf\n", leftOutput, rightOutput);

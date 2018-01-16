@@ -6,31 +6,32 @@
 #include <stdio.h>
 
 using namespace frc;
+using namespace ctre;
 
 namespace frc973 {
 
 class SplineDriveController: public DriveController {
 public:
-	SplineDriveController(DriveStateProvider *state, LogSpreadsheet *logger);
-	virtual ~SplineDriveController();
+    SplineDriveController(DriveStateProvider *state, LogSpreadsheet *logger);
+    virtual ~SplineDriveController();
 
-  void SetTarget(DriveBase::RelativeTo relativeTo,
-          double dist, double angle);
+    void SetTarget(DriveBase::RelativeTo relativeTo,
+                   double dist, double angle);
 
-  SplineDriveController *SetHalt(bool start_halt, bool end_halt);
-  SplineDriveController *SetConstraints(double max_vel, double max_acc);
+    SplineDriveController *SetHalt(bool start_halt, bool end_halt);
+    SplineDriveController *SetConstraints(double max_vel, double max_acc);
 
-	void CalcDriveOutput(DriveStateProvider *state,
-			DriveControlSignalReceiver *out) override;
+    void CalcDriveOutput(DriveStateProvider *state,
+            DriveControlSignalReceiver *out) override;
 
-	bool OnTarget() override { return m_done; }
+    bool OnTarget() override { return m_done; }
 
-	void Start() override;
+    void Start() override;
 
-	void Stop() override;
+    void Stop() override;
 
-  double DistFromStart() const;
-  double AngleFromStart() const;
+    double DistFromStart() const;
+    double AngleFromStart() const;
 private:
     DriveStateProvider *m_state;
     double m_dist, m_angle;
@@ -46,6 +47,7 @@ private:
 
     bool m_done;
     bool m_needSetControlMode;
+    phoenix::motorcontrol::ControlMode m_controlMode;
 
     static constexpr double MAX_VELOCITY = 130;     //in/sec
     static constexpr double MAX_ACCELERATION = 10.0; //in/sec^2

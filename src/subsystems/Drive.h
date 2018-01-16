@@ -148,13 +148,6 @@ class Drive :
         }
 
         /**
-         * Set the drive control mode of the Talons
-         *
-         * @param mode The ControlMode of the Talons
-         */
-        void SetDriveControlMode(phoenix::motorcontrol::ControlMode mode) override;
-
-        /**
          * All distances given in inches
          * All velocities given in inches/second
          */
@@ -183,10 +176,11 @@ class Drive :
          * If in Velocity mode, the command is the velocity setpoint in in/sec
          * If in Positon mode, the command is the position setpoint in inches
          *
+         * @param mode The ControlMode of the Talons
          * @param left Output to send to leftDriveTalon
          * @param right Output to send to rightDriveTalon
          */
-        void SetDriveOutput(double left, double right) override;
+        void SetDriveOutput(phoenix::motorcontrol::ControlMode mode, double left, double right);
 
         void TaskPeriodic(RobotMode mode);
     private:
@@ -216,6 +210,7 @@ class Drive :
         double m_gyroZero;
 
         ArcadeDriveController *m_arcadeDriveController;
+        CheesyDriveController *m_cheesyDriveController;
         OpenloopArcadeDriveController *m_openloopArcadeDriveController;
         AssistedArcadeDriveController *m_assistedArcadeDriveController;
         PIDDriveController *m_pidDriveController;

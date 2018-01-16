@@ -14,39 +14,39 @@ class StateSpaceGains;
 
 class StateSpaceController {
 public:
-	int m_numInputs;
-	int m_numOutputs;
-	int m_numStates;
+    int m_numInputs;
+    int m_numOutputs;
+    int m_numStates;
 
-	bool m_initP;
+    bool m_initP;
 
-	StateSpaceGains *m_gains;
+    StateSpaceGains *m_gains;
 
-	double m_period;
+    double m_period;
 
-	Matrix *A;
-	Matrix *B;
-	Matrix *C;
-	Matrix *D;
-	Matrix *L;
-	Matrix *K;
+    Matrix *A;
+    Matrix *B;
+    Matrix *C;
+    Matrix *D;
+    Matrix *L;
+    Matrix *K;
 
-	Matrix *X;
-	Matrix *XHat;
-	Matrix *U;
-	Matrix *Uuncapped;
-	Matrix *UMin;
-	Matrix *UMax;
+    Matrix *X;
+    Matrix *XHat;
+    Matrix *U;
+    Matrix *Uuncapped;
+    Matrix *UMin;
+    Matrix *UMax;
 
-	StateSpaceController(int nIn, int nOut, int nStates,
-			StateSpaceGains *gains, double period);
+    StateSpaceController(int nIn, int nOut, int nStates,
+            StateSpaceGains *gains, double period);
 
-	void UpdateCont(Matrix *R, Matrix *Y);
+    void UpdateCont(Matrix *R, Matrix *Y);
 
 private:
-	void UpdateGains();
+    void UpdateGains();
 
-	void CapU();
+    void CapU();
 };
 
 }

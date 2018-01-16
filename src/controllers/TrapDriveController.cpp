@@ -6,6 +6,8 @@
 namespace frc973 {
 
 using namespace Constants;
+using namespace frc;
+using namespace ctre;
 
 TrapDriveController::TrapDriveController(DriveStateProvider *state,
         LogSpreadsheet *logger):
@@ -106,10 +108,10 @@ TrapDriveController *TrapDriveController::SetConstraints(
 
 void TrapDriveController::CalcDriveOutput(DriveStateProvider *state,
         DriveControlSignalReceiver *out) {
-	if(m_needSetControlMode == true){
-		out->SetDriveControlMode(ctre::phoenix::motorcontrol::ControlMode::Velocity);
-		m_needSetControlMode = false;
-	}
+    if(m_needSetControlMode == true){
+        m_controlMode = phoenix::motorcontrol::ControlMode::Velocity;
+        m_needSetControlMode = false;
+    }
 
 
     double time = GetSecTime() - m_time_offset;
@@ -124,7 +126,7 @@ void TrapDriveController::CalcDriveOutput(DriveStateProvider *state,
 
     if (goal.error) {
         printf("trap drive error\n");
-        out->SetDriveOutput(1.0, -1.0);
+        out->SetDriveOutput(m_controlMode, 1.0, -1.0);
         return;
     }
 
@@ -158,7 +160,7 @@ void TrapDriveController::CalcDriveOutput(DriveStateProvider *state,
          + linear_dist_term + linear_vel_term
          - angular_dist_term - angular_vel_term;
 
-    out->SetDriveOutput(left_output, right_output);
+    out->SetDriveOutput(m_controlMode, left_output, right_output);
 
     m_done = goal.done;
 

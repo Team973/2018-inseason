@@ -3,6 +3,9 @@
 #include "src/info/RobotInfo.h"
 #include "lib/util/Util.h"
 
+using namespace frc;
+using namespace ctre;
+
 namespace frc973 {
 
 using namespace Constants;
@@ -107,7 +110,7 @@ SplineDriveController *SplineDriveController::SetConstraints(
 void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
         DriveControlSignalReceiver *out) {
 	if(m_needSetControlMode == true){
-		out->SetDriveControlMode(ctre::phoenix::motorcontrol::ControlMode::Velocity);
+		m_controlMode = phoenix::motorcontrol::ControlMode::Velocity;
 		m_needSetControlMode = false;
 	}
 
@@ -124,7 +127,7 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
 
     if (goal.error) {
         printf("trap drive error\n");
-        out->SetDriveOutput(1.0, -1.0);
+        out->SetDriveOutput(m_controlMode, 1.0, -1.0);
         return;
     }
 
@@ -158,7 +161,7 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
          + linear_dist_term + linear_vel_term
          - angular_dist_term - angular_vel_term;
 
-    out->SetDriveOutput(left_output, right_output);
+    out->SetDriveOutput(m_controlMode, left_output, right_output);
 
     m_done = goal.done;
 
