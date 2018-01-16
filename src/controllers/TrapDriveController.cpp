@@ -26,7 +26,6 @@ TrapDriveController::TrapDriveController(DriveStateProvider *state,
     m_a_pos_pid(1.9, 0.0, 0.0),
     m_a_vel_pid(0.2, 0.0, 0.0),
     m_done(false),
-    m_needSetControlMode(false),
     m_l_pos_setpt_log(new LogCell("linear pos incr goal")),
     m_l_pos_real_log(new LogCell("linear pos incr actual")),
     m_l_vel_setpt_log(new LogCell("linear vel incr goal")),
@@ -108,11 +107,6 @@ TrapDriveController *TrapDriveController::SetConstraints(
 
 void TrapDriveController::CalcDriveOutput(DriveStateProvider *state,
         DriveControlSignalReceiver *out) {
-    if(m_needSetControlMode == true){
-        m_controlMode = phoenix::motorcontrol::ControlMode::Velocity;
-        m_needSetControlMode = false;
-    }
-
 
     double time = GetSecTime() - m_time_offset;
 
@@ -126,7 +120,8 @@ void TrapDriveController::CalcDriveOutput(DriveStateProvider *state,
 
     if (goal.error) {
         printf("trap drive error\n");
-        out->SetDriveOutput(m_controlMode, 1.0, -1.0);
+        out->SetDriveOutput(phoenix::motorcontrol::ControlMode::Velocity, 1.0,
+                            -1.0);
         return;
     }
 
@@ -160,7 +155,8 @@ void TrapDriveController::CalcDriveOutput(DriveStateProvider *state,
          + linear_dist_term + linear_vel_term
          - angular_dist_term - angular_vel_term;
 
-    out->SetDriveOutput(m_controlMode, left_output, right_output);
+    out->SetDriveOutput(phoenix::motorcontrol::ControlMode::Velocity,
+                        left_output, right_output);
 
     m_done = goal.done;
 
@@ -178,13 +174,6 @@ void TrapDriveController::CalcDriveOutput(DriveStateProvider *state,
 
     printf("TrapDriveController active time %lf pos %lf\n",
             time, goal.linear_dist);
-}
-
-void TrapDriveController::Start() {
-    m_needSetControlMode = true;
-}
-
-void TrapDriveController::Stop() {
 }
 
 double TrapDriveController::DistFromStart() const {

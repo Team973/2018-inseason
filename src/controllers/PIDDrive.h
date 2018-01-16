@@ -31,10 +31,6 @@ public:
     void CalcDriveOutput(DriveStateProvider *state,
             DriveControlSignalReceiver *out) override;
 
-    void Start() override {
-        m_needSetControlMode = true;
-    }
-
     /*
      * On CalcDriveOutput, the robot sets the internal m_onTarget flag if it
      * is within tolerance of the target.  This method returns whether we are
@@ -45,8 +41,8 @@ public:
     /*
      * Set the target position/heading relative to absolute world
      */
-    void SetTarget(double dist, double heading, DriveBase::RelativeTo relativity,
-            DriveStateProvider *state);
+    void SetTarget(double dist, double heading, DriveBase::RelativeTo
+                   relativity, DriveStateProvider *state);
 
     /*
      * Enable distance pid, do angle and dist together.
@@ -104,9 +100,15 @@ public:
         m_targetAngle = 0.0;
         m_onTarget = false;
     }
+
+    void Start() override {
+        printf("Turning on PID Mode\n");
+    }
+
+    void Stop() override {
+        printf("Turning off PID Mode\n");
+    }
 private:
-    bool m_needSetControlMode = true;
-    phoenix::motorcontrol::ControlMode m_controlMode;
     bool m_quickExit = false;
     double m_prevDist;
     double m_prevAngle;

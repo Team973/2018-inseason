@@ -18,23 +18,18 @@ namespace frc973 {
 
 ArcadeDriveController::ArcadeDriveController():
     m_leftOutput(0.0),
-    m_rightOutput(0.0),
-    m_needSetControlMode(true)
+    m_rightOutput(0.0)
 {
 }
 
 ArcadeDriveController::~ArcadeDriveController() {
-
 }
 
 void ArcadeDriveController::CalcDriveOutput(DriveStateProvider *state,
         DriveControlSignalReceiver *out) {
-    if(m_needSetControlMode == true){
-        m_controlMode = phoenix::motorcontrol::ControlMode::Velocity;
-        m_needSetControlMode = false;
-    }
 
-    out->SetDriveOutput(m_controlMode, m_leftOutput, m_rightOutput);
+    out->SetDriveOutput(phoenix::motorcontrol::ControlMode::Velocity,
+                        m_leftOutput, m_rightOutput);
     DBStringPrintf(DBStringPos::DB_LINE4,
                 "arcade l=%1.2lf r=%1.2lf", m_leftOutput, m_rightOutput);
     //printf("arcade l=%1.2lf r=%1.2lf\n", m_leftOutput, m_rightOutput);

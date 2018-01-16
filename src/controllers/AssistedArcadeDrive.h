@@ -39,18 +39,15 @@ public:
     void SetJoysticks(double throttle, double turn);
 
     void Start() override {
-        m_needSetControlMode = true;
-        printf("Turning on Arcade Mode\n");
+        printf("Turning on Assisted Arcade Mode\n");
     }
 
     void Stop() override {
-        printf("Turning off arcade Mode\n");
+        printf("Turning off Assisted Arcade Mode\n");
     }
 private:
     double m_throttle;
     double m_turn;
-    bool m_needSetControlMode;
-    phoenix::motorcontrol::ControlMode m_controlMode;
 };
 
 }

@@ -29,17 +29,17 @@ public:
     bool OnTarget() override { return false; }
 
     void Start() override {
-        m_needSetControlMode = true;
+        printf("Turning on Straight Mode\n");
     }
 
-    void Stop() override {}
+    void Stop() override {
+        printf("Turning off Straight Mode\n");
+    }
 
 private:
     double m_throttle;
     double m_targetAngle;
     double m_prevAngle;
-    bool m_needSetControlMode;
-    phoenix::motorcontrol::ControlMode m_controlMode;
 
     PID *m_turnPID;
 };

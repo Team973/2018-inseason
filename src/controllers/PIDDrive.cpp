@@ -52,10 +52,6 @@ PIDDriveController::~PIDDriveController() {
 
 void PIDDriveController::CalcDriveOutput(DriveStateProvider *state,
         DriveControlSignalReceiver *out) {
-    if(m_needSetControlMode == true){
-        m_controlMode = phoenix::motorcontrol::ControlMode::Velocity;
-        m_needSetControlMode = false;
-    }
 
     m_prevDist = state->GetDist();
     m_prevAngle = state->GetAngle();
@@ -90,7 +86,7 @@ void PIDDriveController::CalcDriveOutput(DriveStateProvider *state,
             m_prevDist - m_targetDist,
             m_prevAngle - m_targetAngle);
 
-    out->SetDriveOutput(m_controlMode,
+    out->SetDriveOutput(phoenix::motorcontrol::ControlMode::Velocity,
                         MAX_SPEED * m_speedCap * (throttle - turn),
                         MAX_SPEED * m_speedCap * (throttle + turn));
 

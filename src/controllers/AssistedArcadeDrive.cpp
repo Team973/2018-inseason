@@ -18,21 +18,15 @@ namespace frc973 {
 
 AssistedArcadeDriveController::AssistedArcadeDriveController():
 	m_throttle(0.0),
-	m_turn(0.0),
-	m_needSetControlMode(true)
+	m_turn(0.0)
 {
 }
 
 AssistedArcadeDriveController::~AssistedArcadeDriveController() {
-
 }
 
 void AssistedArcadeDriveController::CalcDriveOutput(DriveStateProvider *state,
 		DriveControlSignalReceiver *out) {
-	if(m_needSetControlMode == true){
-		m_controlMode = phoenix::motorcontrol::ControlMode::PercentOutput;
-		m_needSetControlMode = false;
-	}
 
 	double currAngRate = state->GetAngularRate();
 	double leftOutput;
@@ -54,7 +48,8 @@ void AssistedArcadeDriveController::CalcDriveOutput(DriveStateProvider *state,
       rightOutput = rightOutput * (1.0 / maxSpeed);
 	}
 
-	out->SetDriveOutput(m_controlMode, -leftOutput, -rightOutput);
+	out->SetDriveOutput(phoenix::motorcontrol::ControlMode::PercentOutput,
+								      -leftOutput, -rightOutput);
 	DBStringPrintf(DBStringPos::DB_LINE4,
 				"arcade l=%1.2lf r=%1.2lf", leftOutput, rightOutput);
 	//printf("arcade l=%1.2lf r=%1.2lf\n", leftOutput, rightOutput);

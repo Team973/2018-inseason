@@ -39,21 +39,18 @@ public:
     void SetJoysticks(double throttle, double turn);
 
     void Start() override {
-    m_needSetControlMode = true;
     printf("Turning on Arcade Mode\n");
     }
 
     void Stop() override {
-    printf("Turning off arcade Mode\n");
+    printf("Turning off Arcade Mode\n");
     }
 private:
     double m_leftOutput;
     double m_rightOutput;
-    bool m_needSetControlMode;
-    phoenix::motorcontrol::ControlMode m_controlMode;
 
     static constexpr double THROTTLE_MAX = 130;  //in inches/sec
-    static constexpr double TURN_MAX = 4.0; //in radians/sec... 6.3radians ~= 360degrees
+    static constexpr double TURN_MAX = 4.0; //in radians/sec 6.3radians ~= 360°
 };
 
 }

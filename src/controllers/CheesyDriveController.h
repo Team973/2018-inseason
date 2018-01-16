@@ -45,25 +45,24 @@ public:
     double limit(double x, double maxMagnitude);
 
     void Start() override {
-    m_needSetControlMode = true;
-    printf("Turning on Cheesy Mode\n");
+        printf("Turning on Cheesy Mode\n");
     }
 
     void Stop() override {
-    printf("Turning off Cheesy Mode\n");
+        printf("Turning off Cheesy Mode\n");
     }
 private:
     double m_leftOutput;
     double m_rightOutput;
 
-    bool m_needSetControlMode;
-    phoenix::motorcontrol::ControlMode m_controlMode;
-
     double m_oldWheel;
     double m_quickStopAccumulator;
     double m_negInertiaAccumulator;
 
-    // These factor determine how fast the turn traverses the "non linear" sine curve.
+    /*
+    * These factor determine how fast the turn traverses the "non linear" sine
+    *  curve.
+    */
     const double kHighWheelNonLinearity = 0.65;
     const double kLowWheelNonLinearity = 0.5;
     const double kHighNegInertiaScalar = 4.0;

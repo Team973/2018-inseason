@@ -32,16 +32,13 @@ StraightDriveController::~StraightDriveController() {
 
 void StraightDriveController::CalcDriveOutput(DriveStateProvider *state,
         DriveControlSignalReceiver *out) {
-    if(m_needSetControlMode == true){
-        m_controlMode = phoenix::motorcontrol::ControlMode::PercentOutput;
-        m_needSetControlMode = false;
-    }
 
     m_prevAngle = state->GetAngle();
     double turn = Util::bound(m_turnPID->CalcOutput(m_prevAngle), -0.5, 0.5);
     double throttle = m_throttle;
 
-    out->SetDriveOutput(m_controlMode, -throttle + turn, -throttle - turn);
+    out->SetDriveOutput(phoenix::motorcontrol::ControlMode::PercentOutput,
+                        -throttle + turn, -throttle - turn);
 }
 
 /*
