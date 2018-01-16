@@ -71,7 +71,7 @@ void CheesyDriveController::SetJoysticks(double throttle, double turn,
             m_negInertiaScalar = kLowNegInertiaTurnScalar;
         } else {
             // Otherwise, we are attempting to go back to 0.0.
-            if (fabs(turn) > kLowNegInertiaThreshold) {
+            if (Util::abs(turn) > kLowNegInertiaThreshold) {
                 m_negInertiaScalar = kLowNegInertiaFarScalar;
             } else {
                 m_negInertiaScalar = kLowNegInertiaCloseScalar;
@@ -82,7 +82,7 @@ void CheesyDriveController::SetJoysticks(double throttle, double turn,
     m_negInertiaPower = m_negInertia * m_negInertiaScalar;
     m_negInertiaAccumulator += m_negInertiaPower;
 
-    turn = turn + m_negInertiaAccumulator;
+    turn += m_negInertiaAccumulator;
     if (m_negInertiaAccumulator > 1) {
         m_negInertiaAccumulator -= 1;
     } else if (m_negInertiaAccumulator < -1) {
@@ -96,14 +96,14 @@ void CheesyDriveController::SetJoysticks(double throttle, double turn,
     if (isQuickTurn) {
         if (fabs(m_linearPower) < kQuickStopDeadband) {
             m_alpha = kQuickStopWeight;
-            m_quickStopAccumulator = (1 - m_alpha) * m_quickStopAccumulator
-                + m_alpha * limit(turn, 1.0) * kQuickStopScalar;
+            m_quickStopAccumulator *= (1 - m_alpha) * m_quickStopAccumulator
+                + m_alpha * Util::limit(turn, 1.0) * kQuickStopScalar;
         }
         m_overPower = 1.0;
         m_angularPower = turn;
     } else {
         m_overPower = 0.0;
-        m_angularPower = fabs(throttle) * turn * m_sensitivity -
+        m_angularPower = Util::abs(throttle) * turn * m_sensitivity -
                                                  m_quickStopAccumulator;
         if (m_quickStopAccumulator > 1) {
             m_quickStopAccumulator -= 1;
@@ -134,10 +134,6 @@ void CheesyDriveController::SetJoysticks(double throttle, double turn,
 
     m_leftOutput = m_leftPwm;
     m_rightOutput = m_rightPwm;
-}
-
-double CheesyDriveController::limit(double x, double maxMagnitude) {
-    return fmin(maxMagnitude, fmax(-maxMagnitude, x));
 }
 
 }

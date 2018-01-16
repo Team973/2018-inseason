@@ -39,11 +39,6 @@ public:
     void SetJoysticks(double throttle, double turn, bool isQuickTurn,
                           bool isHighGear);
 
-    /*
-    *
-    */
-    double limit(double x, double maxMagnitude);
-
     void Start() override {
         printf("Turning on Cheesy Mode\n");
     }
