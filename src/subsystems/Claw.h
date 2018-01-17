@@ -25,6 +25,10 @@ class Claw : public CoopTask {
              DigitalInput *cubeSensor);
         virtual ~Claw();
 
+        void Intake();
+        void Eject();
+        void Stop();
+
         void TaskPeriodic(RobotMode mode);
     private:
         TaskMgr *m_scheduler;
