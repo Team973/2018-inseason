@@ -38,49 +38,57 @@ void CheesyDriveController::CalcDriveOutput(DriveStateProvider *state,
 
 void CheesyDriveController::SetJoysticks(double throttle, double turn,
                                          bool isQuickTurn, bool isHighGear) {
-    m_negInertia = turn - m_oldWheel;
+    double negInertia = turn - m_oldWheel;
     m_oldWheel = turn;
 
+    double turnNonLinearity;
     if (isHighGear) {
-        m_turnNonLinearity = kHighWheelNonLinearity;
-        m_denominator = sin(Constants::PI / 2.0 * m_turnNonLinearity);
+        turnNonLinearity = kHighWheelNonLinearity;
+        double denominator = sin(Constants::PI / 2.0 * turnNonLinearity);
         // Apply a sin function that's scaled to make it feel better.
-        turn = sin(Constants::PI / 2.0 * m_turnNonLinearity * turn) /
-               m_denominator;
-        turn = sin(Constants::PI / 2.0 * m_turnNonLinearity * turn) /
-               m_denominator;
+        turn = sin(Constants::PI / 2.0 * turnNonLinearity * turn) /
+               denominator;
+        turn = sin(Constants::PI / 2.0 * turnNonLinearity * turn) /
+               denominator;
     } else {
-        m_turnNonLinearity = kLowWheelNonLinearity;
-        m_denominator = sin(Constants::PI / 2.0 * m_turnNonLinearity);
+        turnNonLinearity = kLowWheelNonLinearity;
+        double denominator = sin(Constants::PI / 2.0 * turnNonLinearity);
         // Apply a sin function that's scaled to make it feel better.
-        turn = sin(Constants::PI / 2.0 * m_turnNonLinearity * turn) /
-               m_denominator;
-        turn = sin(Constants::PI / 2.0 * m_turnNonLinearity * turn) /
-               m_denominator;
-        turn = sin(Constants::PI / 2.0 * m_turnNonLinearity * turn) /
-               m_denominator;
+        turn = sin(Constants::PI / 2.0 * turnNonLinearity * turn) /
+               denominator;
+        turn = sin(Constants::PI / 2.0 * turnNonLinearity * turn) /
+               denominator;
+        turn = sin(Constants::PI / 2.0 * turnNonLinearity * turn) /
+               denominator;
     }
 
+    double leftPwm, rightPwm, overPower;
+    double sensitivity;
+
+    double angularPower;
+    double linearPower;
+
     // Negative inertia!
+    double negInertiaScalar;
     if (isHighGear) {
-        m_negInertiaScalar = kHighNegInertiaScalar;
-        m_sensitivity = kHighSensitivity;
+        negInertiaScalar = kHighNegInertiaScalar;
+        sensitivity = kHighSensitivity;
     } else {
-        if (turn * m_negInertia > 0) {
+        if (turn * negInertia > 0) {
             // If we are moving away from 0.0, aka, trying to get more turn.
-            m_negInertiaScalar = kLowNegInertiaTurnScalar;
+            negInertiaScalar = kLowNegInertiaTurnScalar;
         } else {
             // Otherwise, we are attempting to go back to 0.0.
-            if (Util::abs(turn) > kLowNegInertiaThreshold) {
-                m_negInertiaScalar = kLowNegInertiaFarScalar;
+            if (fabs(turn) > kLowNegInertiaThreshold) {
+                negInertiaScalar = kLowNegInertiaFarScalar;
             } else {
-                m_negInertiaScalar = kLowNegInertiaCloseScalar;
+                negInertiaScalar = kLowNegInertiaCloseScalar;
             }
         }
-        m_sensitivity = kLowSensitivity;
+        sensitivity = kLowSensitivity;
     }
-    m_negInertiaPower = m_negInertia * m_negInertiaScalar;
-    m_negInertiaAccumulator += m_negInertiaPower;
+    double negInertiaPower = negInertia * negInertiaScalar;
+    m_negInertiaAccumulator += negInertiaPower;
 
     turn += m_negInertiaAccumulator;
     if (m_negInertiaAccumulator > 1) {
@@ -90,20 +98,20 @@ void CheesyDriveController::SetJoysticks(double throttle, double turn,
     } else {
         m_negInertiaAccumulator = 0;
     }
-    m_linearPower = throttle;
+    linearPower = throttle;
 
     // Quickturn!
     if (isQuickTurn) {
-        if (fabs(m_linearPower) < kQuickStopDeadband) {
-            m_alpha = kQuickStopWeight;
-            m_quickStopAccumulator *= (1 - m_alpha) * m_quickStopAccumulator
-                + m_alpha * Util::limit(turn, 1.0) * kQuickStopScalar;
+        if (fabs(linearPower) < kQuickStopDeadband) {
+            double alpha = kQuickStopWeight;
+            m_quickStopAccumulator = (1 - alpha) * m_quickStopAccumulator
+                + alpha * Util::limit(turn, 1.0) * kQuickStopScalar;
         }
-        m_overPower = 1.0;
-        m_angularPower = turn;
+        overPower = 1.0;
+        angularPower = turn;
     } else {
-        m_overPower = 0.0;
-        m_angularPower = Util::abs(throttle) * turn * m_sensitivity -
+        overPower = 0.0;
+        angularPower = fabs(throttle) * turn * sensitivity -
                                                  m_quickStopAccumulator;
         if (m_quickStopAccumulator > 1) {
             m_quickStopAccumulator -= 1;
@@ -114,26 +122,26 @@ void CheesyDriveController::SetJoysticks(double throttle, double turn,
         }
     }
 
-    m_rightPwm = m_leftPwm = m_linearPower;
-    m_leftPwm += m_angularPower;
-    m_rightPwm -= m_angularPower;
+    rightPwm = leftPwm = linearPower;
+    leftPwm += angularPower;
+    rightPwm -= angularPower;
 
-    if (m_leftPwm > 1.0) {
-        m_rightPwm -= m_overPower * (m_leftPwm - 1.0);
-        m_leftPwm = 1.0;
-    } else if (m_rightPwm > 1.0) {
-        m_leftPwm -= m_overPower * (m_rightPwm - 1.0);
-        m_rightPwm = 1.0;
-    } else if (m_leftPwm < -1.0) {
-        m_rightPwm += m_overPower * (-1.0 - m_leftPwm);
-        m_leftPwm = -1.0;
-    } else if (m_rightPwm < -1.0) {
-        m_leftPwm += m_overPower * (-1.0 - m_rightPwm);
-        m_rightPwm = -1.0;
+    if (leftPwm > 1.0) {
+        rightPwm -= overPower * (leftPwm - 1.0);
+        leftPwm = 1.0;
+    } else if (rightPwm > 1.0) {
+        leftPwm -= overPower * (rightPwm - 1.0);
+        rightPwm = 1.0;
+    } else if (leftPwm < -1.0) {
+        rightPwm += overPower * (-1.0 - leftPwm);
+        leftPwm = -1.0;
+    } else if (rightPwm < -1.0) {
+        leftPwm += overPower * (-1.0 - rightPwm);
+        rightPwm = -1.0;
     }
 
-    m_leftOutput = m_leftPwm;
-    m_rightOutput = m_rightPwm;
+    m_leftOutput = leftPwm;
+    m_rightOutput = rightPwm;
 }
 
 }

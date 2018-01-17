@@ -134,7 +134,7 @@ namespace Util {
 
   /* Return the limit of the two given numbers */
 	inline double limit(double x, double maxMagnitude) {
-      return fmin(maxMagnitude, fmax(-maxMagnitude, x));
+        return fmin(maxMagnitude, fmax(-maxMagnitude, x));
 	}
 
 	/* Return the absolute of the given number */

@@ -25,7 +25,7 @@ public:
     * In this case just return the most recent joystick commands.
     */
     void CalcDriveOutput(DriveStateProvider *state,
-      DriveControlSignalReceiver *out);
+                         DriveControlSignalReceiver *out);
 
     /*
     * This controller is open-loop so OnTarget doesn't make sense here...
@@ -37,7 +37,7 @@ public:
     *  Set the joystick values
     */
     void SetJoysticks(double throttle, double turn, bool isQuickTurn,
-                          bool isHighGear);
+                      bool isHighGear);
 
     void Start() override {
         printf("Turning on Cheesy Mode\n");
@@ -49,7 +49,6 @@ public:
 private:
     double m_leftOutput;
     double m_rightOutput;
-
     double m_oldWheel;
     double m_quickStopAccumulator;
     double m_negInertiaAccumulator;
@@ -70,24 +69,6 @@ private:
     const double kQuickStopDeadband = 0.2;
     const double kQuickStopWeight = 0.1;
     const double kQuickStopScalar = 5.0;
-
-    double m_negInertia;
-    double m_turnNonLinearity;
-
-    double m_denominator;
-
-    double m_leftPwm;
-    double m_rightPwm;
-    double m_overPower;
-    double m_sensitivity;
-
-    double m_angularPower;
-    double m_linearPower;
-
-    double m_negInertiaScalar;
-    double m_negInertiaPower;
-
-    double m_alpha;
 };
 
 }
