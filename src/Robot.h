@@ -86,8 +86,14 @@ class Robot : public CoopMTRobot, public JoystickObserver {
         Hanger *m_hanger;
 
         enum DriveMode{
-            OpenLoop,
-            AssistedArcade
+            Arcade,
+            Cheesy,
+            Openloop,
+            AssistedArcade,
+            PID,
+            Trap,
+            Straight,
+            Spline
         };
         DriveMode m_driveMode;
 

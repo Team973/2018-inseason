@@ -38,6 +38,7 @@ Robot::Robot()
     , m_test(new Test(m_driverJoystick, m_operatorJoystick, m_tuningJoystick, m_elevator))
 {
     std::cout << "Constructed a Robot!" << std::endl;
+    m_driveMode = DriveMode::Cheesy;
 }
 
 Robot::~Robot(){
@@ -79,6 +80,7 @@ void Robot::TeleopContinuous() {
     m_teleop->TeleopPeriodic();
     double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
     double x = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis) + -m_tuningJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
+    bool quickturn = m_driverJoystick->GetRawButton(DualAction::LeftBumper);
     static bool g_manualDriveControl = true;
 
     if(g_manualDriveControl) {
@@ -87,10 +89,16 @@ void Robot::TeleopContinuous() {
             y /= 3.0;
         }
 
-        if(m_driveMode == DriveMode::OpenLoop){
+        if(m_driveMode == DriveMode::Arcade) {
+            m_drive->ArcadeDrive(y, x);
+        }
+        else if(m_driveMode == DriveMode::Cheesy) {
+            m_drive->CheesyDrive(y, x, quickturn, false); // gear set to false until solenoids get set up
+        }
+        else if(m_driveMode == DriveMode::Openloop) {
             m_drive->OpenloopArcadeDrive(y, x);
         }
-        else if(m_driveMode == DriveMode::AssistedArcade){
+        else if(m_driveMode == DriveMode::AssistedArcade) {
             m_drive->AssistedArcadeDrive(y, x);
         }
     }
