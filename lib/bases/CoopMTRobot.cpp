@@ -88,6 +88,7 @@ void CoopMTRobot::TestInit(void) {
 
 void CoopMTRobot::DisabledPeriodic(void) {
     uint64_t startTime = GetUsecTime();
+
 	this->TaskPrePeriodicAll(this->m_prevMode);
     if (ENABLE_PROFILING) {
         printf("DisabledPrePeriodic toook %llu us\n",

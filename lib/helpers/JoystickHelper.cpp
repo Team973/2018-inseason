@@ -179,6 +179,7 @@ uint32_t ObservableJoystick::GetAllButtons() {
  */
 void ObservableJoystick::TaskPrePeriodic(RobotMode mode) {
 	uint32_t currBtn = GetAllButtons();
+
 	if (m_observer != nullptr) {
 		uint32_t changedBtn = m_prevBtn^currBtn;
 		uint32_t btnMask, btn;
