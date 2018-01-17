@@ -9,7 +9,7 @@ using namespace frc;
 namespace frc973{
     //Talons
     static const int LEFT_DRIVE_A_CAN_ID = 1;
-    static const int ELEVATOR_CAN_ID = 4;
+    static const int ELEVATOR_CAN_ID = 60;
     static const int CLAW_LEFT_ROLLER_CAN_ID = 5;
     static const int CLAW_RIGHT_ROLLER_CAN_ID = 6;
     static const int RIGHT_DRIVE_A_CAN_ID = 14;

@@ -1,3 +1,28 @@
+Phoenix Framework 5.2.1 Installer (Jan 11 2018):
+	Class Libraries (FRC C++ 2018_v12/
+			 FRC Java 2018_v15/
+			 FRC LabVIEW 2018_v13/
+			 FRC CCI 2018_v12): Individual Trajectory Point timeDur options changed.
+						0ms is now an option.  15ms is no longer an option.
+	Talon SRX/Victor SPX Firmware (3.3): Changed to accomodate new Trajectory Point timeDur options.
+Phoenix Framework 5.2.0 Installer (Jan 10 2018):
+	Class Libraries (FRC C++ 2018_v11/
+			 FRC Java 2018_v14/
+			 FRC LabVIEW 2018_v12): Motion Profiling support added.
+					      : Added getClosedLoopTarget
+	Class Library (FRC CCI 2018_v12): Added motion profiling support.
+	Class Library (FRC CCI 2018_v12): Fixed issue when setting deadband where value was doubled.
+	Class Library (FRC Java 2018_v14): Fixed issue where getStickyFaults was returning normal Faults.
+	Class Library (FRC LabVIEW 2018_v12): Fixed issue where getGeneralStatus caused code crash.
+	Talon SRX/Victor SPX Firmware (3.2): Motion Profiling now usable.
+Phoenix Framework 5.1.3 Installer (Jan 04 2018):
+	Class Libraries (FRC C++ 2018_v10/Java 2018_v13): Updated Documentation
+	Class Libraries (FRC C++ 2018_v10/Java 2018_v13): Removed Framework (Drive/Mechanical/Motion) classes from library to prevent confusion.
+					      These will be re-added in a mid-season update.
+	Class Library (FRC LabVIEW 2018_v11): Removed Framework (Drive/Mechanical/Motion) VIs from the installation to prevent confusion.  
+					      These will be re-added in a mid-season update.
+	Class Library (FRC LabVIEW 2018_v11): Fixed CANifier GetPWMInput VI.
+	Class Library (FRC LabVIEW 2018_v11): Current Control Mode set changed from milliAmps to Amps to match C++/Java and examples.
 Phoenix Framework 5.1.2 Installer (Jan 04 2018):
 	Class Library (FRC Java 2018_v12): Fixed issue where getInverted/setInverted in WPI_TalonSRX/VictorSPX were recursing.
 Phoenix Framework 5.1.1 Installer (Jan 04 2018)
