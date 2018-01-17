@@ -89,17 +89,17 @@ protected:
 	 * For internal use only.  Children of this object should not try to
 	 * override these (if they do, they *WILL NOT GET RUN*).
 	 */
-	void RobotInit(void);
+	void RobotInit(void) override;
 
-	void DisabledInit(void);
-	void AutonomousInit(void);
-	void TeleopInit(void);
-	void TestInit(void);
+	void DisabledInit(void) override;
+	void AutonomousInit(void) override;
+	void TeleopInit(void) override;
+	void TestInit(void) override;
 
-	void DisabledPeriodic(void);
-	void AutonomousPeriodic(void);
-	void TeleopPeriodic(void);
-	void TestPeriodic(void);
+	void DisabledPeriodic(void) override;
+	void AutonomousPeriodic(void) override;
+	void TeleopPeriodic(void) override;
+	void TestPeriodic(void) override;
 
 	void ModeStop(RobotMode toStop);
 	void ModeStart(RobotMode toStart);

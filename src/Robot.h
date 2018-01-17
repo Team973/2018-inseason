@@ -26,6 +26,7 @@
 #include "lib/logging/LogSpreadsheet.h"
 #include "lib/helpers/JoystickHelper.h"
 #include "lib/bases/CoopMTRobot.h"
+#include "ctre/Phoenix.h"
 
 namespace frc973{
 class Disabled;
@@ -39,31 +40,33 @@ class Robot : public CoopMTRobot, public JoystickObserver {
         void Initialize();
 
         void DisabledStart();
-        void DisabledPeriodic();
+        void DisabledContinuous();
         void DisabledStop();
 
         void AutonomousStart();
-        void AutonomousPeriodic();
+        void AutonomousContinuous();
         void AutonomousStop();
 
         void TeleopStart();
-        void TeleopPeriodic();
+        void TeleopContinuous();
         void TeleopStop();
 
         void TestStart();
-        void TestPeriodic();
+        void TestContinuous();
         void TestStop();
+
+        void RobotPeriodic() override;
 
         void ObserveJoystickStateChange(uint32_t port, uint32_t button,
                                         bool pressedP) override;
     private:
-        PowerDistributionPanel *m_pdp;
-
         ObservableJoystick *m_driverJoystick;
         ObservableJoystick *m_operatorJoystick;
         ObservableJoystick *m_tuningJoystick;
 
         LogSpreadsheet *m_logger;
+
+        TalonSRX *m_elevatorMotor;
 
         Elevator *m_elevator;
         Claw *m_claw;
