@@ -4,8 +4,7 @@ using namespace frc;
 
 namespace frc973 {
 Claw::Claw(TaskMgr *scheduler, LogSpreadsheet *logger)
-: m_scheduler(scheduler)
-{
+        : m_scheduler(scheduler) {
     this->m_scheduler->RegisterTask("Claw", this, TASK_PERIODIC);
 }
 

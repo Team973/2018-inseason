@@ -5,18 +5,19 @@
 using namespace frc;
 
 namespace frc973 {
-Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, ObservableJoystick *driver,
-                   TalonSRX *motor)
-    : m_scheduler(scheduler)
-    , m_elevatorMotor(motor)
-    , m_position(0.0)
-    , m_currLevel(Level::zero)
-    , m_talonMode(motorcontrol::ControlMode::PercentOutput)
-    , m_joystick(driver)
-{
+Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
+                   ObservableJoystick *driver, TalonSRX *motor)
+        : m_scheduler(scheduler)
+        , m_elevatorMotor(motor)
+        , m_position(0.0)
+        , m_currLevel(Level::zero)
+        , m_talonMode(motorcontrol::ControlMode::PercentOutput)
+        , m_joystick(driver) {
     this->m_scheduler->RegisterTask("Elevator", this, TASK_PERIODIC);
 
-    m_elevatorMotor->ConfigSelectedFeedbackSensor(ctre::phoenix::motorcontrol::FeedbackDevice::QuadEncoder, 0, 10); //0 = Not cascaded PID Loop; 10 = in constructor, not in a loop
+    m_elevatorMotor->ConfigSelectedFeedbackSensor(
+        ctre::phoenix::motorcontrol::FeedbackDevice::QuadEncoder, 0,
+        10);  // 0 = Not cascaded PID Loop; 10 = in constructor, not in a loop
     m_elevatorMotor->SetSensorPhase(false);
     m_elevatorMotor->SetNeutralMode(NeutralMode::Brake);
 
@@ -28,7 +29,7 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, ObservableJoystic
     m_elevatorMotor->Config_kP(0, 0.05, 10);
     m_elevatorMotor->Config_kI(0, 0.0, 10);
     m_elevatorMotor->Config_kD(0, 0.0, 10);
-    m_elevatorMotor->Config_kF(0, 0.005,10);
+    m_elevatorMotor->Config_kF(0, 0.005, 10);
     m_elevatorMotor->ConfigMotionCruiseVelocity(100.0, 10);
     m_elevatorMotor->ConfigMotionAcceleration(50.0, 10);
 

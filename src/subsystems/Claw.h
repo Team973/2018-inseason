@@ -19,12 +19,13 @@ class TaskMgr;
 class LogSpreadsheet;
 
 class Claw : public CoopTask {
-    public:
-        Claw(TaskMgr *scheduler, LogSpreadsheet *logger);
-        virtual ~Claw();
+public:
+    Claw(TaskMgr *scheduler, LogSpreadsheet *logger);
+    virtual ~Claw();
 
-        void TaskPeriodic(RobotMode mode);
-    private:
-        TaskMgr *m_scheduler;
+    void TaskPeriodic(RobotMode mode);
+
+private:
+    TaskMgr *m_scheduler;
 };
 }

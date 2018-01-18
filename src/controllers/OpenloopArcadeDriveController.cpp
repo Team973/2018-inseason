@@ -13,33 +13,30 @@
 
 namespace frc973 {
 
-OpenloopArcadeDriveController::OpenloopArcadeDriveController():
-	m_leftOutput(0.0),
-	m_rightOutput(0.0),
-	m_needSetControlMode(true)
-{
+OpenloopArcadeDriveController::OpenloopArcadeDriveController()
+        : m_leftOutput(0.0), m_rightOutput(0.0), m_needSetControlMode(true) {
 }
 
 OpenloopArcadeDriveController::~OpenloopArcadeDriveController() {
-
 }
 
-void OpenloopArcadeDriveController::CalcDriveOutput(DriveStateProvider *state,
-		DriveControlSignalReceiver *out) {
-	if(m_needSetControlMode == true){
-		out->SetDriveControlMode(ctre::phoenix::motorcontrol::ControlMode::PercentOutput);
-		m_needSetControlMode = false;
-	}
+void OpenloopArcadeDriveController::CalcDriveOutput(
+    DriveStateProvider *state, DriveControlSignalReceiver *out) {
+    if (m_needSetControlMode == true) {
+        out->SetDriveControlMode(
+            ctre::phoenix::motorcontrol::ControlMode::PercentOutput);
+        m_needSetControlMode = false;
+    }
 
-	out->SetDriveOutput(-m_leftOutput, -m_rightOutput);
-	DBStringPrintf(DBStringPos::DB_LINE4,
-				"arcade l=%1.2lf r=%1.2lf", m_leftOutput, m_rightOutput);
-	//printf("arcade l=%1.2lf r=%1.2lf\n", m_leftOutput, m_rightOutput);
+    out->SetDriveOutput(-m_leftOutput, -m_rightOutput);
+    DBStringPrintf(DBStringPos::DB_LINE4, "arcade l=%1.2lf r=%1.2lf",
+                   m_leftOutput, m_rightOutput);
+    // printf("arcade l=%1.2lf r=%1.2lf\n", m_leftOutput, m_rightOutput);
 }
 
 void OpenloopArcadeDriveController::SetJoysticks(double throttle, double turn) {
-	throttle = Util::bound(throttle, -1.0, 1.0);
-	turn = Util::bound(turn, -1.0, 1.0);
+    throttle = Util::bound(throttle, -1.0, 1.0);
+    turn = Util::bound(turn, -1.0, 1.0);
 
     m_leftOutput = throttle - turn;
     m_rightOutput = throttle + turn;
@@ -50,7 +47,6 @@ void OpenloopArcadeDriveController::SetJoysticks(double throttle, double turn) {
         m_rightOutput = m_rightOutput * (1.0 / maxSpeed);
     }
 
-	//printf("left %lf  right %lf\n", m_leftOutput, m_rightOutput);
+    // printf("left %lf  right %lf\n", m_leftOutput, m_rightOutput);
 }
-
 }

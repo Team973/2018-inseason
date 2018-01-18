@@ -11,30 +11,27 @@ using namespace frc;
 
 namespace frc973 {
 class Disabled {
-    public:
-        typedef enum routine {
-            none,
-            forward
-        } SelectedAutoRoutine;
+public:
+    typedef enum routine { none, forward } SelectedAutoRoutine;
 
-        Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
-                          ObservableJoystick *tuning);
-        virtual ~Disabled();
+    Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
+             ObservableJoystick *tuning);
+    virtual ~Disabled();
 
-        void DisabledInit();
-        void DisabledPeriodic();
-        void DisabledStop();
+    void DisabledInit();
+    void DisabledPeriodic();
+    void DisabledStop();
 
-        void HandleDisabledButton(uint32_t port, uint32_t button,
-                                  bool pressedP);
+    void HandleDisabledButton(uint32_t port, uint32_t button, bool pressedP);
 
-        const char *GetRoutineName();
-        SelectedAutoRoutine GetRoutine();
-    private:
-        SelectedAutoRoutine m_routine;
-        
-        ObservableJoystick *m_driverJoystick;
-        ObservableJoystick *m_operatorJoystick;
-        ObservableJoystick *m_tuningJoystick;
-    };
+    const char *GetRoutineName();
+    SelectedAutoRoutine GetRoutine();
+
+private:
+    SelectedAutoRoutine m_routine;
+
+    ObservableJoystick *m_driverJoystick;
+    ObservableJoystick *m_operatorJoystick;
+    ObservableJoystick *m_tuningJoystick;
+};
 };

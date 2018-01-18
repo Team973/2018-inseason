@@ -1,7 +1,14 @@
 #!/bin/bash
 
 exec < /dev/tty
-FormatCmd="clang-format-5.0 -style=file"
+
+UnameOut=$(uname -s)
+case "${UnameOut}" in
+    Linux*)   FormatCmd="clang-format-5.0 -style=file";;
+    Darwin*)  FormatCmd="clang-format -style=file";;
+    *)        FormatCmd="clang-format -style-file"
+esac
+
 Staged=$(git diff --cached --name-only --diff-filter=ACMRT src | egrep "\.(h|cpp)$" | paste -s -)
 
 echo "Files staged for commit: $Staged"
