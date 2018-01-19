@@ -9,7 +9,7 @@ case "${UnameOut}" in
     *)        FormatCmd="clang-format -style-file"
 esac
 
-Staged=$(git diff --cached --name-only --diff-filter=ACMRT src | egrep "\.(h|cpp)$" | paste -s -)
+Staged=$(git diff --cached --name-only --diff-filter=ACMRT lib src | egrep "\.(h|cpp)$" | paste -s -)
 
 echo "Files staged for commit: $Staged"
 

@@ -15,5 +15,5 @@ case "${UnameOut}" in
     *)        FormatCmd="clang-format -style-file"
 esac
 
-FormattableFiles=$(find src | egrep "\.(h|cpp)$" | paste -s -)
+FormattableFiles=$(find src lib | egrep "\.(h|cpp)$" | paste -s -)
 $FormatCmd -i $FormattableFiles
