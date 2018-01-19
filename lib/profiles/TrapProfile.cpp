@@ -1,4 +1,5 @@
 #include "lib/profiles/TrapProfile.h"
+#include <math.h>
 
 namespace frc973 {
 
@@ -18,32 +19,32 @@ Waypoint TrapProfileUnsafe(double time,
         // start with zero velocity
         if (end_halt) {
             // end with zero velocity
-            if (Util::abs(2 * dist_ramp) < Util::abs(distance)) {
+            if (fabs(2 * dist_ramp) < fabs(distance)) {
                 // the move is long enough to get up to speed
                 t_1 = max_velocity / max_acceleration;
                 double dist_during_const_vel = distance - (2 * dist_ramp);
-                t_2 = Util::abs(dist_during_const_vel) / max_velocity + t_1;
+                t_2 = fabs(dist_during_const_vel) / max_velocity + t_1;
                 t_3 = t_2 + t_1;
             }
             else {
                 // the move is not long enough so do a triangle
-                t_1 = sqrt(Util::abs(distance / max_acceleration));
+                t_1 = sqrt(fabs(distance / max_acceleration));
                 t_2 = t_1;
                 t_3 = 2.0 * t_1;
             }
         }
         else {
             // don't slow down at end of move
-            if (Util::abs(dist_ramp) < Util::abs(distance)) {
+            if (fabs(dist_ramp) < fabs(distance)) {
                 // we have enough time to get up to speed
                 t_1 = max_velocity / max_acceleration;
                 double dist_during_const_vel = distance - dist_ramp;
-                t_2 = Util::abs(dist_during_const_vel) / max_velocity + t_1;
+                t_2 = fabs(dist_during_const_vel) / max_velocity + t_1;
                 t_3 = t_2;
             }
             else {
                 // we don't have enough time to get to speed so just left tri
-                t_1 = sqrt(Util::abs(2.0 * distance / max_acceleration));
+                t_1 = sqrt(fabs(2.0 * distance / max_acceleration));
                 t_2 = t_1;
                 t_3 = t_1;
             }
@@ -55,20 +56,20 @@ Waypoint TrapProfileUnsafe(double time,
             // end with zero velocity
             // this is the case were an impossible profile could occur but
             // we already checked for that statically
-            if (Util::abs(dist_ramp) > Util::abs(distance)) {
+            if (fabs(dist_ramp) > fabs(distance)) {
                 return Waypoint(time, 0.0, 0.0, 0.0, 0.0, false, true);
             }
 
             t_1 = 0.0;
             double dist_during_const_vel = distance - dist_ramp;
-            t_2 = Util::abs(dist_during_const_vel) / max_velocity;
+            t_2 = fabs(dist_during_const_vel) / max_velocity;
             t_3 = t_2 + max_velocity / max_acceleration;
         }
         else {
             // we end with max velocity
             // i.e. maintain max velocity the entire time
             t_1 = 0.0;
-            t_2 = Util::abs(distance / max_velocity);
+            t_2 = fabs(distance / max_velocity);
             t_3 = t_2;
         }
     }
@@ -107,7 +108,7 @@ Waypoint TrapProfileUnsafe(double time,
         double dist_in_phase = time_in_phase * velocity_now;
         double dist_now;
         if (start_halt) {
-            dist_now = Util::abs(dist_ramp) + dist_in_phase;
+            dist_now = fabs(dist_ramp) + dist_in_phase;
         }
         else {
             dist_now = dist_in_phase;
@@ -131,11 +132,11 @@ Waypoint TrapProfileUnsafe(double time,
         double time_till_end = t_3 - time;
         double velocity_now = max_acceleration * time_till_end;
         double dist_till_end = 0.5 * time_till_end * velocity_now;
-        double dist_now = Util::abs(distance) - dist_till_end;
+        double dist_now = fabs(distance) - dist_till_end;
 
-        double doneness = Util::abs(dist_now / distance);
-        double angle_now = Util::abs(angle * doneness);
-        double angle_vel_now = Util::abs(velocity_now * angle / distance);
+        double doneness = fabs(dist_now / distance);
+        double angle_now = fabs(angle * doneness);
+        double angle_vel_now = fabs(velocity_now * angle / distance);
 
         return Waypoint(time,
                         velocity_now * Util::signum(distance),

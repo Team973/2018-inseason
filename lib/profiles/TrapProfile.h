@@ -78,7 +78,7 @@ Waypoint TrapProfile(double time) {
 
     static_assert(
             !(!START_HALT && END_HALT) ||
-            dist_ramp < Util::abs(DISTANCE::value),
+            dist_ramp < fabs(DISTANCE::value),
             "Profile is over-constrained");
 
     return TrapProfileUnsafe(time,

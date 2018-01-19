@@ -8,6 +8,7 @@
 #include "src/controllers/ArcadeDriveController.h"
 #include "lib/util/Util.h"
 #include <stdio.h>
+#include <math.h>
 #include "lib/util/WrapDash.h"
 #include "src/info/RobotInfo.h"
 
@@ -43,9 +44,9 @@ void ArcadeDriveController::SetJoysticks(double throttle, double turn) {
 
     double TURN_RAMPUP = 0.25;
     m_leftOutput = throttle -
-        0.5 * DRIVE_WIDTH * (TURN_RAMPUP * Util::abs(throttle) * turn + turn);
+        0.5 * DRIVE_WIDTH * (TURN_RAMPUP * fabs(throttle) * turn + turn);
     m_rightOutput = throttle +
-        0.5 * DRIVE_WIDTH * (TURN_RAMPUP * Util::abs(throttle) * turn + turn);
+        0.5 * DRIVE_WIDTH * (TURN_RAMPUP * fabs(throttle) * turn + turn);
 
     double maxSpeed = Util::max(m_leftOutput, m_rightOutput);
     if (maxSpeed > THROTTLE_MAX) {
