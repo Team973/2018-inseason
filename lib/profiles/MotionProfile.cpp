@@ -28,31 +28,28 @@ NewWaypoint TrapezoidProfileUnsafe(double time, double distance, double angle,
     }
     else {
         t0 = 0.0;
-        t1 = (Util::abs(max_velocity) - Util::abs(start_velocity)) /
-             acceleration;
-        d1 = ((Util::abs(max_velocity) + Util::abs(start_velocity)) / 2.0) * t1;
+        t1 = (fabs(max_velocity) - fabs(start_velocity)) / acceleration;
+        d1 = ((fabs(max_velocity) + fabs(start_velocity)) / 2.0) * t1;
         d3 = (Util::square(max_velocity) - Util::square(end_velocity)) /
              (2.0 * acceleration);
-        d2 = Util::abs(distance) - d1 - d3;
-        t2 = Util::abs(d2 / max_velocity) + t1;
-        t3 = (Util::abs(end_velocity) - Util::abs(max_velocity)) /
-                 -acceleration +
-             t2;
+        d2 = fabs(distance) - d1 - d3;
+        t2 = fabs(d2 / max_velocity) + t1;
+        t3 = (fabs(end_velocity) - fabs(max_velocity)) / -acceleration + t2;
     }
 
     if (time < t1 && time >= t0) {
         // ramping
-        velocity_now = Util::abs(start_velocity) + acceleration * time;
+        velocity_now = fabs(start_velocity) + acceleration * time;
         dist_now = (0.5 * velocity_now * time);
     }
     else if (time >= t1 && time <= t2) {
         // coasting
-        velocity_now = Util::abs(max_velocity);
+        velocity_now = fabs(max_velocity);
         dist_now = d1 + (max_velocity * (time - t1));
     }
     else if (time > t2 && time <= t3) {
         // halting
-        velocity_now = Util::abs(max_velocity) - acceleration * (time - t2);
+        velocity_now = fabs(max_velocity) - acceleration * (time - t2);
         dist_now = d1 + (max_velocity * (t2 - t1)) +
                    ((Util::square(velocity_now) - Util::square(max_velocity)) /
                     (2.0 * -acceleration));
@@ -102,9 +99,9 @@ NewWaypoint TrapezoidProfileUnsafe(double time, double distance, double angle,
     }
     else if (t2 <= time && time < t3) {
         // halting
-        double doneness = Util::abs(dist_now / distance);
-        double angle_now = Util::abs(angle * doneness);
-        double angle_vel_now = Util::abs(velocity_now * angle / distance);
+        double doneness = fabs(dist_now / distance);
+        double angle_now = fabs(angle * doneness);
+        double angle_vel_now = fabs(velocity_now * angle / distance);
 
         return NewWaypoint(time, velocity_now * Util::signum(distance),
                            dist_now * Util::signum(distance),
@@ -131,28 +128,26 @@ NewWaypoint TriProfileUnsafe(double time, double distance, double angle,
                              double max_velocity, double acceleration,
                              double start_velocity, double end_velocity) {
     double cap_velocity =
-        sqrt(Util::abs(acceleration * distance) +
+        sqrt(fabs(acceleration * distance) +
              (Util::square(start_velocity) + Util::square(end_velocity)) / 2.0);
     double t0 = 0.0;
-    double t_half =
-        (Util::abs(cap_velocity) - Util::abs(start_velocity)) / acceleration;
-    double t1 = Util::abs((Util::abs(end_velocity) - Util::abs(cap_velocity))) /
-                    acceleration +
-                t_half;
+    double t_half = (fabs(cap_velocity) - fabs(start_velocity)) / acceleration;
+    double t1 =
+        fabs((fabs(end_velocity) - fabs(cap_velocity))) / acceleration + t_half;
 
     double velocity_now = 0;
     double dist_now = 0;
 
     if (time == t_half) {
-        velocity_now = acceleration * t_half + Util::abs(start_velocity);
+        velocity_now = acceleration * t_half + fabs(start_velocity);
         dist_now = (velocity_now * t_half);
     }
     else if (time < t_half && time >= t0) {
-        velocity_now = acceleration * time + Util::abs(start_velocity);
+        velocity_now = acceleration * time + fabs(start_velocity);
         dist_now = (0.5 * velocity_now * time);
     }
     else if (time > t_half && time <= t1) {
-        velocity_now = Util::abs(cap_velocity) - acceleration * (time - t_half);
+        velocity_now = fabs(cap_velocity) - acceleration * (time - t_half);
         dist_now = (cap_velocity * t_half) / 2.0 +
                    (cap_velocity + velocity_now) / 2.0 * (time - t_half);
     }
@@ -195,9 +190,9 @@ NewWaypoint TriProfileUnsafe(double time, double distance, double angle,
     }
     else if (t_half <= time && time < t1) {
         // halting
-        double doneness = Util::abs(dist_now / distance);
-        double angle_now = Util::abs(angle * doneness);
-        double angle_vel_now = Util::abs(velocity_now * angle / distance);
+        double doneness = fabs(dist_now / distance);
+        double angle_now = fabs(angle * doneness);
+        double angle_vel_now = fabs(velocity_now * angle / distance);
 
         return NewWaypoint(time, velocity_now * Util::signum(distance),
                            dist_now * Util::signum(distance),

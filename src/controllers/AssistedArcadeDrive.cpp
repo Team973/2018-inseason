@@ -8,6 +8,7 @@
 #include "src/controllers/AssistedArcadeDrive.h"
 #include "lib/util/Util.h"
 #include <stdio.h>
+#include <math.h>
 #include "lib/util/WrapDash.h"
 #include "src/info/RobotInfo.h"
 
@@ -42,7 +43,7 @@ void AssistedArcadeDriveController::CalcDriveOutput(
     leftOutput = m_throttle - m_turn - turnCorrection;
     rightOutput = m_throttle + m_turn + turnCorrection;
 
-    double maxSpeed = Util::max(Util::abs(leftOutput), Util::abs(rightOutput));
+    double maxSpeed = Util::max(fabs(leftOutput), fabs(rightOutput));
     if (maxSpeed > 1.0) {
         leftOutput = leftOutput * (1.0 / maxSpeed);
         rightOutput = rightOutput * (1.0 / maxSpeed);
