@@ -9,11 +9,18 @@ case "${UnameOut}" in
     *)        FormatCmd="clang-format -style-file"
 esac
 
-Staged=$(git diff --cached --name-only --diff-filter=ACMRT lib src | egrep "\.(h|cpp)$" | paste -s -)
+Staged=$(git diff --cached --name-only | paste -s -)
+StagedFormattable=$(git diff --cached --name-only --diff-filter=ACMRT lib src | egrep "\.(h|cpp)$" | paste -s -)
 
-echo "Files staged for commit: $Staged"
+echo "Files staged for commit: $StagedFormattable"
 
-diff -u <(cat $Staged) <($FormatCmd $Staged) > /dev/null
+if [ -z "$Staged" ]
+then
+    echo "No file staged for commit."
+    exit 1
+fi
+
+diff -u <(cat $StagedFormattable) <($FormatCmd $StagedFormattable) > /dev/null
 
 if [ $? -ne 0 ]
 then
@@ -38,13 +45,13 @@ then
 
         if [ "$UserResponse" == "d" ]
         then
-            diff -u <(cat $Staged) <($FormatCmd $Staged) | less
+            diff -u <(cat $StagedFormattable) <($FormatCmd $StagedFormattable) | less
         fi
 
         if [ "$UserResponse" == "a" ]
         then
-            $FormatCmd -i $Staged
-            git add $Staged
+            $FormatCmd -i $StagedFormattable
+            git add $StagedFormattable
             echo "Files edited inline and re-added.  Proceeding with commit."
             exit 0
         fi
