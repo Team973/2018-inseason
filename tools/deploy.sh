@@ -33,9 +33,9 @@ deploy
 TEAM_NUMBER=$(printf "%04d" "$TEAM_NUMBER")
 P1=${TEAM_NUMBER:0:2}
 P2=${TEAM_NUMBER:2:2}
-TARGET="10.$P1.$P2.2"
+TARGET="10.$((10#$P1)).$P2.2"
 echo "Not found - probing for $TARGET..."
-ssh "$USER@$TARGET" true > /dev/null 2>&1
+ssh "$TARGET_USER@$TARGET" true > /dev/null 2>&1
 deploy
 
 echo "Not found - giving up."
