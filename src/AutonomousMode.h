@@ -40,7 +40,7 @@ private:
 
     Disabled *m_disabled;
 
-    std::string m_randomMessage;
+    std::string m_scoringLocations;
     SwitchScalePosition m_switchScalePosition;
     SelectedAutoRoutine m_routine;
 };

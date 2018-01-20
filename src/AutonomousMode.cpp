@@ -11,7 +11,7 @@ Autonomous::Autonomous(Disabled *disabled)
         : m_noAuto(new NoAuto())
         , m_forwardAuto(new ForwardAuto())
         , m_disabled(disabled)
-        , m_randomMessage("")
+        , m_scoringLocations("")
         , m_switchScalePosition(SwitchScalePosition::LL)
         , m_routine(SelectedAutoRoutine::noAuto) {
 }
@@ -23,12 +23,12 @@ void Autonomous::AutonomousInit() {
     // Remember to zero all sensors here
     std::cout << "Autonomous Start" << std::endl;
 
-    m_randomMessage = DriverStation::GetInstance().GetGameSpecificMessage();
-    DBStringPrintf(DB_LINE1, "%s", m_randomMessage.c_str());
+    m_scoringLocations = DriverStation::GetInstance().GetGameSpecificMessage();
+    DBStringPrintf(DB_LINE1, "%s", m_scoringLocations.c_str());
 
     switch (m_disabled->GetStartPosition()) {
         case 1:  // left
-            switch (GetSwitchScalePosition(m_randomMessage)) {
+            switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case LL:
                     m_switchAuto->Reset();
                     m_routine = SelectedAutoRoutine::lowGoal;
@@ -50,7 +50,7 @@ void Autonomous::AutonomousInit() {
             }
             break;
         case 2:  // center
-            switch (GetSwitchScalePosition(m_randomMessage)) {
+            switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case LL:
                     m_switchAuto->Reset();
                     m_routine = SelectedAutoRoutine::lowGoal;
@@ -72,7 +72,7 @@ void Autonomous::AutonomousInit() {
             }
             break;
         case 3:  // right
-            switch (GetSwitchScalePosition(m_randomMessage)) {
+            switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case LL:
                     m_scaleAuto->Reset();
                     m_routine = SelectedAutoRoutine::highGoal;
