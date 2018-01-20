@@ -27,7 +27,7 @@ void Autonomous::AutonomousInit() {
     DBStringPrintf(DB_LINE1, "%s", m_scoringLocations.c_str());
 
     switch (m_disabled->GetStartPosition()) {
-        case 1:  // left
+        case Disabled::RobotStartPosition::Left:
             switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case LL:
                     m_switchAuto->Reset();
@@ -49,7 +49,7 @@ void Autonomous::AutonomousInit() {
                     break;
             }
             break;
-        case 2:  // center
+        case Disabled::RobotStartPosition::Center:
             switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case LL:
                     m_switchAuto->Reset();
@@ -71,7 +71,7 @@ void Autonomous::AutonomousInit() {
                     break;
             }
             break;
-        case 3:  // right
+        case Disabled::RobotStartPosition::Right:
             switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case LL:
                     m_scaleAuto->Reset();

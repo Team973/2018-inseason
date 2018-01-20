@@ -9,7 +9,7 @@ Disabled::Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_tuningJoystick(tuning)
-        , m_startPos(2) {
+        , m_startPos(RobotStartPosition::Center) {
 }
 
 Disabled::~Disabled() {
@@ -72,21 +72,21 @@ void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,
                 break;
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
-                    m_startPos = 1;
+                    m_startPos = RobotStartPosition::Center;
                 }
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
-                    m_startPos = 2;
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
-                    m_startPos = 3;
+                    m_startPos = RobotStartPosition::Left;
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
+                    m_startPos = RobotStartPosition::Right;
                 }
                 break;
             default:
@@ -97,9 +97,9 @@ void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,
 
 /**
  * @return m_startPos: The starting position of the robot selected
- * by the driver: 1 = left, 2 = center, 3 = right
+ * by the driver
  **/
-int Disabled::GetStartPosition() {
+Disabled::RobotStartPosition Disabled::GetStartPosition() {
     return m_startPos;
 }
 };

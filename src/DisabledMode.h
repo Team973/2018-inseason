@@ -13,6 +13,8 @@ using namespace frc;
 namespace frc973 {
 class Disabled {
 public:
+    enum RobotStartPosition {Left, Center, Right};
+
     Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
              ObservableJoystick *tuning);
     virtual ~Disabled();
@@ -23,13 +25,13 @@ public:
 
     void HandleDisabledButton(uint32_t port, uint32_t button, bool pressedP);
 
-    int GetStartPosition();
+    RobotStartPosition GetStartPosition();
 
 private:
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
     ObservableJoystick *m_tuningJoystick;
 
-    int m_startPos;
+    RobotStartPosition m_startPos;
 };
 };
