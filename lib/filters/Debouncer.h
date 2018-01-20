@@ -18,35 +18,35 @@ namespace frc973 {
 
 class Debouncer {
 public:
-	/**
-	 * Create a Debouncer object with the given period in seconds.
-	 *
-	 * @param period in seconds to check for falses
-	 */
-	Debouncer(double period) {
-		m_timeStart = 0.0;
-		m_period = period;
-		m_first = false;
-	}
+    /**
+     * Create a Debouncer object with the given period in seconds.
+     *
+     * @param period in seconds to check for falses
+     */
+    Debouncer(double period) {
+        m_timeStart = 0.0;
+        m_period = period;
+        m_first = false;
+    }
 
-	virtual ~Debouncer() {
-		;
-	}
+    virtual ~Debouncer() {
+        ;
+    }
 
-	bool Update(bool val) {
-		if (m_first) {
-			m_first = false;
-			m_timeStart = GetSecTime();
-		}
-		if (!val) {
-			m_timeStart = GetSecTime();
-		}
-		return (GetSecTime() - m_timeStart) > m_period;
-	}
+    bool Update(bool val) {
+        if (m_first) {
+            m_first = false;
+            m_timeStart = GetSecTime();
+        }
+        if (!val) {
+            m_timeStart = GetSecTime();
+        }
+        return (GetSecTime() - m_timeStart) > m_period;
+    }
+
 private:
-	double m_timeStart;
-	double m_period;
-	bool m_first;
+    double m_timeStart;
+    double m_period;
+    bool m_first;
 };
-
 }

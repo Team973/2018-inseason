@@ -41,5 +41,4 @@ private:
     double min_x;
     double max_x;
 };
-
 }

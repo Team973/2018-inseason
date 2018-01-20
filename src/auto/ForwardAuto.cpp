@@ -3,8 +3,7 @@
 using namespace frc;
 
 namespace frc973 {
-ForwardAuto::ForwardAuto(void)
-{
+ForwardAuto::ForwardAuto(void) {
 }
 
 ForwardAuto::~ForwardAuto(void) {

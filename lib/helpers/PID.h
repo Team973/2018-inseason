@@ -20,34 +20,33 @@ namespace frc973 {
 
 constexpr uint32_t PID_SPEED_CTRL = 0x00000001;
 
-class PID
-{
+class PID {
 public:
-	/**
-	 * Initialize a pid object by passing P, I, and D constants
-	 *
-	 * @param Kp P constant
-	 * @param Ki I constant
-	 * @param Kd D constant
-	 * @param flags 32-bitstring representing any flags (defined above)
-	 */
-    PID(double Kp=0.0, double Ki=0.0, double Kd=0.0, uint32_t flags = 0);
+    /**
+     * Initialize a pid object by passing P, I, and D constants
+     *
+     * @param Kp P constant
+     * @param Ki I constant
+     * @param Kd D constant
+     * @param flags 32-bitstring representing any flags (defined above)
+     */
+    PID(double Kp = 0.0, double Ki = 0.0, double Kd = 0.0, uint32_t flags = 0);
 
     /**
      * Initialize a pid object by passing an array of 3 elements;
      * the first element holds Kp, the second element holds Ki,
      * and the third element holds Kd.
      *
-	 * @param gains array of 3 doubles where each element represents
-	 * 		Kp, Ki, and Kd
-	 * @param flags 32-bitstring representing any flags (defined above)
+     * @param gains array of 3 doubles where each element represents
+     * 		Kp, Ki, and Kd
+     * @param flags 32-bitstring representing any flags (defined above)
      */
     PID(double gains[3], uint32_t flags = 0);
 
     /**
      * Update the PID gains by passing P, I, and D constants
      */
-    void SetGains(double Kp=0.0, double Ki=0.0, double Kd=0.0);
+    void SetGains(double Kp = 0.0, double Ki = 0.0, double Kd = 0.0);
 
     /**
      * Update pid constants by passing an array of 3 elements;
@@ -140,7 +139,7 @@ private:
     double m_Kp;
     double m_Ki;
     double m_Kd;
-    
+
     double m_target;
     double m_min;
     double m_max;
@@ -153,5 +152,4 @@ private:
     uint32_t m_flags;
     double m_lastOutput;
 };
-
 }

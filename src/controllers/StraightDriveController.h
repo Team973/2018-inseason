@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include "src/lib/bases/DriveBase.h"
-#include "src/lib/helpers/PID.h"
-#include "src/lib/logging/LogSpreadsheet.h"
+#include "lib/bases/DriveBase.h"
+#include "lib/helpers/PID.h"
+#include "lib/logging/LogSpreadsheet.h"
 #include <stdio.h>
 
 using namespace frc;
@@ -15,23 +15,25 @@ namespace frc973 {
 
 class StraightDriveController : public DriveController {
 public:
-	StraightDriveController();
-	virtual ~StraightDriveController();
+    StraightDriveController();
+    virtual ~StraightDriveController();
 
-    void SetTarget(DriveBase::RelativeTo relativeTo,
-            double throttle, double angle,
-            DriveStateProvider *state);
+    void SetTarget(DriveBase::RelativeTo relativeTo, double throttle,
+                   double angle, DriveStateProvider *state);
 
-	void CalcDriveOutput(DriveStateProvider *state,
-			DriveControlSignalReceiver *out) override;
+    void CalcDriveOutput(DriveStateProvider *state,
+                         DriveControlSignalReceiver *out) override;
 
-	bool OnTarget() override { return false; }
+    bool OnTarget() override {
+        return false;
+    }
 
-	void Start() override {
+    void Start() override {
         m_needSetControlMode = true;
     }
 
-	void Stop() override {}
+    void Stop() override {
+    }
 
 private:
     double m_throttle;
@@ -41,5 +43,4 @@ private:
 
     PID *m_turnPID;
 };
-
 }

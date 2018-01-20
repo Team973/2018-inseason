@@ -33,89 +33,102 @@ namespace frc973 {
 
 static constexpr int MAXHOSTNAMELEN = 128;
 
-class CoopMTRobot:
-	public IterativeRobot,
-	public TaskMgr,
-	public frc::RobotStateInterface
-{
+class CoopMTRobot
+        : public IterativeRobot
+        , public TaskMgr
+        , public frc::RobotStateInterface {
 public:
-	CoopMTRobot();
-	virtual ~CoopMTRobot();
+    CoopMTRobot();
+    virtual ~CoopMTRobot();
 
-	/**
-	 * Similar to RobotInit in the IterativeRobot class, override Initialize
-	 * to do any post-constructor initialization.
-	 */
-	virtual void Initialize(void) {}
+    /**
+     * Similar to RobotInit in the IterativeRobot class, override Initialize
+     * to do any post-constructor initialization.
+     */
+    virtual void Initialize(void) {
+    }
 
-	/**
-	 * The following {Disabled,Autonomous,Teleop,Test}{Start,Stop,Continuous}
-	 * should be overridden to get behavior similar to overriding those functions
-	 * in Iterative Robot.
-	 *
-	 * <Mode>Start is called when robot first changes into this mode
-	 * 		(like <Mode>Init in IterativeRobot)
-	 * <Mode>Stop is called when robot moves to another mode from Mode
-	 * <Mode>Continuous is called repeatedly every 20ms
-	 * 		(like <Mode>Periodic in IterativeRobot)
-	 *
-	 * <Mode>Start is garaunteed to be called before <Mode>Continuous
-	 * <Mode>Stop for the previous mode is garaunteed to be called before
-	 * 		<Mode>Start from the prevous mode
-	 */
-	virtual void DisabledStart(void) {}
-	virtual void DisabledStop(void) {}
-	virtual void DisabledContinuous(void) {}
+    /**
+     * The following {Disabled,Autonomous,Teleop,Test}{Start,Stop,Continuous}
+     * should be overridden to get behavior similar to overriding those
+     * functions in Iterative Robot.
+     *
+     * <Mode>Start is called when robot first changes into this mode
+     * 		(like <Mode>Init in IterativeRobot)
+     * <Mode>Stop is called when robot moves to another mode from Mode
+     * <Mode>Continuous is called repeatedly every 20ms
+     * 		(like <Mode>Periodic in IterativeRobot)
+     *
+     * <Mode>Start is garaunteed to be called before <Mode>Continuous
+     * <Mode>Stop for the previous mode is garaunteed to be called before
+     * 		<Mode>Start from the prevous mode
+     */
+    virtual void DisabledStart(void) {
+    }
+    virtual void DisabledStop(void) {
+    }
+    virtual void DisabledContinuous(void) {
+    }
 
-	virtual void AutonomousStart(void) {}
-	virtual void AutonomousStop(void) {}
-	virtual void AutonomousContinuous(void) {}
+    virtual void AutonomousStart(void) {
+    }
+    virtual void AutonomousStop(void) {
+    }
+    virtual void AutonomousContinuous(void) {
+    }
 
-	virtual void TeleopStart(void) {}
-	virtual void TeleopStop(void) {}
-	virtual void TeleopContinuous(void) {}
+    virtual void TeleopStart(void) {
+    }
+    virtual void TeleopStop(void) {
+    }
+    virtual void TeleopContinuous(void) {
+    }
 
-	virtual void TestStart(void) {}
-	virtual void TestStop(void) {}
-	virtual void TestContinuous(void) {}
+    virtual void TestStart(void) {
+    }
+    virtual void TestStop(void) {
+    }
+    virtual void TestContinuous(void) {
+    }
 
-	/**
-	 * Called continuously during all robot stages
-	 */
-	virtual void AllStateContinuous(void) {}
+    /**
+     * Called continuously during all robot stages
+     */
+    virtual void AllStateContinuous(void) {
+    }
 
 protected:
-	/**
-	 * For internal use only.  Children of this object should not try to
-	 * override these (if they do, they *WILL NOT GET RUN*).
-	 */
-	void RobotInit(void);
+    /**
+     * For internal use only.  Children of this object should not try to
+     * override these (if they do, they *WILL NOT GET RUN*).
+     */
+    void RobotInit(void) override;
 
-	void DisabledInit(void);
-	void AutonomousInit(void);
-	void TeleopInit(void);
-	void TestInit(void);
+    void DisabledInit(void) override;
+    void AutonomousInit(void) override;
+    void TeleopInit(void) override;
+    void TestInit(void) override;
 
-	void DisabledPeriodic(void);
-	void AutonomousPeriodic(void);
-	void TeleopPeriodic(void);
-	void TestPeriodic(void);
+    void DisabledPeriodic(void) override;
+    void AutonomousPeriodic(void) override;
+    void TeleopPeriodic(void) override;
+    void TestPeriodic(void) override;
 
-	void ModeStop(RobotMode toStop);
-	void ModeStart(RobotMode toStart);
+    void ModeStop(RobotMode toStop);
+    void ModeStart(RobotMode toStart);
 
-	/**
-	 * Implement the RobotStateInterface interface so that we may
-	 * cache robor mode.
-	 */
-	bool IsDisabled() const override;
-	bool IsEnabled() const override;
-	bool IsOperatorControl() const override;
-	bool IsAutonomous() const override;
-	bool IsTest() const override;
+    /**
+     * Implement the RobotStateInterface interface so that we may
+     * cache robor mode.
+     */
+    bool IsDisabled() const override;
+    bool IsEnabled() const override;
+    bool IsOperatorControl() const override;
+    bool IsAutonomous() const override;
+    bool IsTest() const override;
+
 private:
-	RobotMode m_prevMode;
-	mutable pthread_mutex_t m_robotModeMutex;
+    RobotMode m_prevMode;
+    mutable pthread_mutex_t m_robotModeMutex;
 };
-
 }

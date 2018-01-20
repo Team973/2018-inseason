@@ -10,10 +10,12 @@ cc_binary(
         "-lpthread",
     ],
     deps = [
-        "//third_party/wpilibsuite:wpilib",
         "//third_party/ctre:ctre",
+        "//third_party/wpilibsuite:wpilib",
         "//lib/helpers:helpers",
         "//src/auto:auto",
+        "//src/subsystems:subsystems",
+        "//src/info:info",
     ],
     visibility = ["//visibility:public"],
 )
