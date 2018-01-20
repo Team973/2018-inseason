@@ -10,12 +10,10 @@
 namespace frc973 {
 
 CoopTask::CoopTask() {
-	// TODO Auto-generated constructor stub
-
+    // TODO Auto-generated constructor stub
 }
 
 CoopTask::~CoopTask() {
-	// TODO Auto-generated destructor stub
+    // TODO Auto-generated destructor stub
 }
-
 }

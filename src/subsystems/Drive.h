@@ -20,12 +20,13 @@ class TaskMgr;
 class LogSpreadsheet;
 
 class Drive : public CoopTask {
-    public:
-        Drive(TaskMgr *scheduler, LogSpreadsheet *logger);
-        virtual ~Drive();
+public:
+    Drive(TaskMgr *scheduler, LogSpreadsheet *logger);
+    virtual ~Drive();
 
-        void TaskPeriodic(RobotMode mode);
-    private:
-        TaskMgr *m_scheduler;
+    void TaskPeriodic(RobotMode mode);
+
+private:
+    TaskMgr *m_scheduler;
 };
 }

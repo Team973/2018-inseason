@@ -3,14 +3,12 @@
 using namespace frc;
 
 namespace frc973 {
-Claw::Claw(TaskMgr *scheduler, LogSpreadsheet *logger,
-           TalonSRX *leftRoller, TalonSRX *rightRoller,
-           DigitalInput *cubeSensor)
-    : m_scheduler(scheduler)
-    , m_leftRoller(leftRoller)
-    , m_rightRoller(rightRoller)
-    , m_cubeSensor(cubeSensor)
-{
+Claw::Claw(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *leftRoller,
+           TalonSRX *rightRoller, DigitalInput *cubeSensor)
+        : m_scheduler(scheduler)
+        , m_leftRoller(leftRoller)
+        , m_rightRoller(rightRoller)
+        , m_cubeSensor(cubeSensor) {
     this->m_scheduler->RegisterTask("Claw", this, TASK_PERIODIC);
     m_leftRoller->SetNeutralMode(NeutralMode::Brake);
 
@@ -35,14 +33,14 @@ Claw::~Claw() {
 }
 
 void Claw::Intake() {
-  if (m_cubeSensor->Get() == false) {
-      m_leftRoller->Set(ControlMode::PercentOutput, 1.0);
-      m_rightRoller->Set(ControlMode::PercentOutput, -1.0);
-  }
-  else {
-      m_leftRoller->Set(ControlMode::PercentOutput, 0.0);
-      m_rightRoller->Set(ControlMode::PercentOutput, 0.0);
-  }
+    if (m_cubeSensor->Get() == false) {
+        m_leftRoller->Set(ControlMode::PercentOutput, 1.0);
+        m_rightRoller->Set(ControlMode::PercentOutput, -1.0);
+    }
+    else {
+        m_leftRoller->Set(ControlMode::PercentOutput, 0.0);
+        m_rightRoller->Set(ControlMode::PercentOutput, 0.0);
+    }
 }
 
 void Claw::Eject() {

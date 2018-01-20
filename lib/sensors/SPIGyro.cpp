@@ -11,17 +11,18 @@
 namespace frc973 {
 
 uint32_t swapTheBytes(uint32_t dword) {
-   return ((dword>>24)&0x000000FF) | ((dword>>8)&0x0000FF00) | ((dword<<8)&0x00FF0000) | ((dword<<24)&0xFF000000);
+    return ((dword >> 24) & 0x000000FF) | ((dword >> 8) & 0x0000FF00) |
+           ((dword << 8) & 0x00FF0000) | ((dword << 24) & 0xFF000000);
 }
 
 /*
  * Constructor initializes gyroscope, starts a thread to continually
  * update values, and then returns.
  */
-SPIGyro::SPIGyro(): mutex(PTHREAD_MUTEX_INITIALIZER),
-    gyro(new SPI(SPI::kOnboardCS0)),
-    timer()
-{
+SPIGyro::SPIGyro()
+        : mutex(PTHREAD_MUTEX_INITIALIZER)
+        , gyro(new SPI(SPI::kOnboardCS0))
+        , timer() {
     run_ = true;
 
     // The gyro goes up to 8.08MHz.
@@ -35,7 +36,6 @@ SPIGyro::SPIGyro(): mutex(PTHREAD_MUTEX_INITIALIZER),
     zeroing_points_collected = 0;
     zero_offset = 0;
 
-
     fprintf(stderr, "Starting gyro thread\n");
     pthread_t updateThread;
     pthread_create(&updateThread, NULL, Run, this);
@@ -45,8 +45,7 @@ SPIGyro::SPIGyro(): mutex(PTHREAD_MUTEX_INITIALIZER),
 /*
  * Returns the latest angle reading from the gyro.
  */
-double SPIGyro::GetDegrees()
-{
+double SPIGyro::GetDegrees() {
     pthread_mutex_lock(&mutex);
     double ret = angle;
     pthread_mutex_unlock(&mutex);
@@ -56,8 +55,7 @@ double SPIGyro::GetDegrees()
 /*
  * Returns the the latest angular momentum reading from the gyro.
  */
-double SPIGyro::GetDegreesPerSec()
-{
+double SPIGyro::GetDegreesPerSec() {
     pthread_mutex_lock(&mutex);
     double ret = angularMomentum;
     pthread_mutex_unlock(&mutex);
@@ -67,36 +65,33 @@ double SPIGyro::GetDegreesPerSec()
 /*
  * Sets the current gyro heading to zero
  */
-void SPIGyro::Reset()
-{
+void SPIGyro::Reset() {
     pthread_mutex_lock(&mutex);
     angle = 0;
     pthread_mutex_unlock(&mutex);
 }
-
 
 /*
  * Zero the gyroscope by averaging all readings over 2 seconds.
  * If a lot of those ended up in error, at least make sure we have ~.5
  * seconds worth of data before continuing.
  */
-void SPIGyro::ZeroAngle()
-{
-	unsigned int num_samples = zeroing_points_collected;
-	if (zeroing_points_collected > zero_data_buffer_size)
-		num_samples = zero_data_buffer_size;
+void SPIGyro::ZeroAngle() {
+    unsigned int num_samples = zeroing_points_collected;
+    if (zeroing_points_collected > zero_data_buffer_size)
+        num_samples = zero_data_buffer_size;
 
-	zero_offset = 0;
-	for (unsigned int i = 0; i < num_samples; i++) {
-		zero_offset -= zeroing_data[i];
-	}
-	zero_offset /= static_cast<double>(num_samples);
+    zero_offset = 0;
+    for (unsigned int i = 0; i < num_samples; i++) {
+        zero_offset -= zeroing_data[i];
+    }
+    zero_offset /= static_cast<double>(num_samples);
 
-	pthread_mutex_lock(&mutex);
-	angle = 0;
-	pthread_mutex_unlock(&mutex);
+    pthread_mutex_lock(&mutex);
+    angle = 0;
+    pthread_mutex_unlock(&mutex);
 
-	printf("Total zero offset: %f\n", zero_offset);
+    printf("Total zero offset: %f\n", zero_offset);
 }
 
 /*
@@ -111,9 +106,8 @@ void SPIGyro::Quit() {
  * they can be returned by GetDegrees.  Should be run in its own thread
  * (started by constructor).  Doesn't stop until someone calls Quit.
  */
-void* SPIGyro::Run(void *p)
-{
-	SPIGyro *inst = (SPIGyro *) p;
+void *SPIGyro::Run(void *p) {
+    SPIGyro *inst = (SPIGyro *)p;
 
     inst->timer.Reset();
     inst->timer.Start();
@@ -137,40 +131,40 @@ void* SPIGyro::Run(void *p)
         inst->CollectZeroData();
 
         if (inst->zeroing_points_collected == inst->zero_data_buffer_size)
-        	inst->ZeroAngle();
+            inst->ZeroAngle();
 
         inst->UpdateReading();
 
-		if (cyc++ == 50) {
-			cyc = 0;
-		    //SmartDashboard::PutNumber("Gyro angle: ", inst->GetDegrees());
-			//printf("angle is %f, momentum is %f\n", inst->GetDegrees(), inst->GetDegreesPerSec());
-		}
+        if (cyc++ == 50) {
+            cyc = 0;
+            // SmartDashboard::PutNumber("Gyro angle: ", inst->GetDegrees());
+            // printf("angle is %f, momentum is %f\n", inst->GetDegrees(),
+            // inst->GetDegreesPerSec());
+        }
 
-        //Wait till the next 1/kReadingRate us period to make next reading
-        usleep((unsigned int)
-				(((static_cast<double>(1.0) / static_cast<double>(inst->kReadingRate))
-						 - inst->timer.Get())
-				 * static_cast<double>(1e6)));
+        // Wait till the next 1/kReadingRate us period to make next reading
+        usleep((unsigned int)(((static_cast<double>(1.0) /
+                                static_cast<double>(inst->kReadingRate)) -
+                               inst->timer.Get()) *
+                              static_cast<double>(1e6)));
     }
     return NULL;
 }
 
 /*
-* Runs the recommended gyro startup procedure including checking all
-* of the self-test bits.
-* Returns true on success.
-*/
-bool SPIGyro::InitializeGyro()
-{
+ * Runs the recommended gyro startup procedure including checking all
+ * of the self-test bits.
+ * Returns true on success.
+ */
+bool SPIGyro::InitializeGyro() {
     uint32_t result;
     if (!DoTransaction(0x20000003, &result)) {
         printf("Failed to communicate with gyro (pre-self-check)\n");
         return false;
     }
     if (result != 1) {
-        // We might have hit a parity error or something and are now retrying, so
-        // this isn't a very big deal.
+        // We might have hit a parity error or something and are now retrying,
+        // so this isn't a very big deal.
         printf("gyro unexpected initial response 0x%X\n", result);
     }
 
@@ -192,20 +186,17 @@ bool SPIGyro::InitializeGyro()
         return false;
     }
     if (ExtractErrors(result) != 0x7F) {
-        printf("gyro first value 0x%X does not have all errors\n",
-            result);
+        printf("gyro first value 0x%X does not have all errors\n", result);
         return false;
     }
     printf("Value was test data yay!\n");
-
 
     if (!DoTransaction(0x20000000, &result)) {
         printf("failed to clear latched self-test data\n");
         return false;
     }
     if (ExtractStatus(result) != 2) {
-        printf("gyro second value 0x%X not self-test data\n",
-            result);
+        printf("gyro second value 0x%X not self-test data\n", result);
         return false;
     }
     printf("Second value was test data again yay!\n");
@@ -230,7 +221,7 @@ void SPIGyro::CollectZeroData() {
     }
 
     if (++zeroing_index > zero_data_buffer_size)
-    	zeroing_index = 0;
+        zeroing_index = 0;
 }
 
 /*
@@ -238,30 +229,29 @@ void SPIGyro::CollectZeroData() {
  * updates this object to serve out that data.
  */
 void SPIGyro::UpdateReading() {
-	static int startup_cycles_left = 2 * kReadingRate;
-	//static uint64_t lastCall;
+    static int startup_cycles_left = 2 * kReadingRate;
+    // static uint64_t lastCall;
 
     const uint32_t result = GetReading();
     if (startup_cycles_left > 0) {
-    	startup_cycles_left--;
-    	//lastCall = GetUsecTime();
-    	return;
+        startup_cycles_left--;
+        // lastCall = GetUsecTime();
+        return;
     }
     if (CheckErrors(result) == false) {
-    	//uint64_t now = GetUsecTime();
-    	//uint64_t diff = now - lastCall;
-    	//double diffSec = ((double) (diff / 1000)) / 1000.0;
+        // uint64_t now = GetUsecTime();
+        // uint64_t diff = now - lastCall;
+        // double diffSec = ((double) (diff / 1000)) / 1000.0;
 
-		double new_angle =
-			ExtractAngle(result) / (double) kReadingRate;
-		new_angle += zero_offset;
+        double new_angle = ExtractAngle(result) / (double)kReadingRate;
+        new_angle += zero_offset;
 
-		pthread_mutex_lock(&mutex);
-		angle += new_angle;
-		angularMomentum = new_angle;
+        pthread_mutex_lock(&mutex);
+        angle += new_angle;
+        angularMomentum = new_angle;
 
-		//lastCall = now;
-		pthread_mutex_unlock(&mutex);
+        // lastCall = now;
+        pthread_mutex_unlock(&mutex);
     }
 }
 
@@ -272,7 +262,7 @@ void SPIGyro::UpdateReading() {
 uint32_t SPIGyro::GetReading() {
     uint32_t result;
     if (!DoTransaction(0x20000000, &result)) {
-    	printf("Lost comm while trying to get reading\n");
+        printf("Lost comm while trying to get reading\n");
         return 0;
     }
     return result;
@@ -292,7 +282,7 @@ uint16_t SPIGyro::DoRead(uint8_t address) {
         }
         if ((response & 0xEFE00000) != 0x4E000000) {
             printf("gyro read from 0x%X gave unexpected response 0x%X\n",
-                address, response);
+                   address, response);
             continue;
         }
         return (response >> 5) & 0xFFFF;
@@ -312,13 +302,13 @@ bool SPIGyro::CheckErrors(uint32_t result) {
     }
     switch (ExtractStatus(result)) {
         case 0:
-            printf("gyro says data is bad: 0x%X -> 0x%X from %f\n", result, ExtractStatus(result), ExtractAngle(result));
+            printf("gyro says data is bad: 0x%X -> 0x%X from %f\n", result,
+                   ExtractStatus(result), ExtractAngle(result));
             return true;
         case 1:
             break;
         default:
-            printf("gyro gave weird status 0x%X\n",
-            ExtractStatus(result));
+            printf("gyro gave weird status 0x%X\n", ExtractStatus(result));
             return true;
     }
     if (ExtractErrors(result) != 0) {
@@ -345,7 +335,6 @@ bool SPIGyro::CheckErrors(uint32_t result) {
             printf("gyro gave unexpected self-test mode\n");
         }
         return true;
-
     }
     return false;
 }
@@ -355,8 +344,8 @@ bool SPIGyro::CheckErrors(uint32_t result) {
  * unit degrees per sec
  */
 double SPIGyro::ExtractAngle(uint32_t value) {
-  const int16_t reading = -(int16_t)(value >> 10 & 0xFFFF);
-  return static_cast<double>(reading) / 80.0;
+    const int16_t reading = -(int16_t)(value >> 10 & 0xFFFF);
+    return static_cast<double>(reading) / 80.0;
 }
 
 /*
@@ -369,7 +358,7 @@ double SPIGyro::ExtractAngle(uint32_t value) {
 bool SPIGyro::DoTransaction(uint32_t to_write, uint32_t *result) {
     static const uint8_t kBytes = 4;
     static_assert(kBytes == sizeof(to_write),
-        "need the same number of bytes as sizeof(the data)");
+                  "need the same number of bytes as sizeof(the data)");
 
     if (__builtin_parity(to_write & ~1) == 0)
         to_write |= 1;
@@ -408,9 +397,8 @@ bool SPIGyro::DoTransaction(uint32_t to_write, uint32_t *result) {
  * Retries until it succeeds.
  */
 uint32_t SPIGyro::ReadPartID() {
-  return (DoRead(0x0E) << 16) | DoRead(0x10);
+    return (DoRead(0x0E) << 16) | DoRead(0x10);
 }
-
 }
 
 #endif

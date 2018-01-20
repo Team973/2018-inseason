@@ -5,13 +5,11 @@ namespace frc973 {
 
 namespace Profiler {
 
-Waypoint TrapProfileUnsafe(double time,
-        double distance, double angle,
-        double max_velocity, double max_acceleration,
-        bool start_halt, bool end_halt)
-{
-    double dist_ramp = 0.5 * max_velocity *
-        max_velocity / max_acceleration * Util::signum(distance);
+Waypoint TrapProfileUnsafe(double time, double distance, double angle,
+                           double max_velocity, double max_acceleration,
+                           bool start_halt, bool end_halt) {
+    double dist_ramp = 0.5 * max_velocity * max_velocity / max_acceleration *
+                       Util::signum(distance);
 
     double t_0 = 0.0, t_1, t_2, t_3;
 
@@ -88,18 +86,16 @@ Waypoint TrapProfileUnsafe(double time,
         double velocity_now = max_acceleration * time;
         double dist_now = 0.5 * time * velocity_now;
 
-        double doneness = dist_now / distance
-            * Util::signum(distance) * Util::signum(angle);
+        double doneness =
+            dist_now / distance * Util::signum(distance) * Util::signum(angle);
         double angle_now = angle * doneness;
-        double angle_vel_now = velocity_now * angle / distance
-             * Util::signum(distance) * Util::signum(angle);
+        double angle_vel_now = velocity_now * angle / distance *
+                               Util::signum(distance) * Util::signum(angle);
 
-        return Waypoint(time,
-                        velocity_now * Util::signum(distance),
+        return Waypoint(time, velocity_now * Util::signum(distance),
                         dist_now * Util::signum(distance),
                         angle_vel_now * Util::signum(angle),
-                        angle_now * Util::signum(angle),
-                        false, false);
+                        angle_now * Util::signum(angle), false, false);
     }
     else if (t_1 <= time && time < t_2) {
         // coasting
@@ -114,18 +110,16 @@ Waypoint TrapProfileUnsafe(double time,
             dist_now = dist_in_phase;
         }
 
-        double doneness = dist_now / distance
-			 * Util::signum(distance) * Util::signum(angle);
+        double doneness =
+            dist_now / distance * Util::signum(distance) * Util::signum(angle);
         double angle_now = angle * doneness;
-        double angle_vel_now = velocity_now * angle / distance
-			 * Util::signum(distance) * Util::signum(angle);
+        double angle_vel_now = velocity_now * angle / distance *
+                               Util::signum(distance) * Util::signum(angle);
 
-        return Waypoint(time,
-                        velocity_now * Util::signum(distance),
+        return Waypoint(time, velocity_now * Util::signum(distance),
                         dist_now * Util::signum(distance),
                         angle_vel_now * Util::signum(angle),
-                        angle_now * Util::signum(angle),
-                        false, false);
+                        angle_now * Util::signum(angle), false, false);
     }
     else if (t_2 <= time && time < t_3) {
         // halting
@@ -138,12 +132,10 @@ Waypoint TrapProfileUnsafe(double time,
         double angle_now = fabs(angle * doneness);
         double angle_vel_now = fabs(velocity_now * angle / distance);
 
-        return Waypoint(time,
-                        velocity_now * Util::signum(distance),
+        return Waypoint(time, velocity_now * Util::signum(distance),
                         dist_now * Util::signum(distance),
                         angle_vel_now * Util::signum(angle),
-                        angle_now * Util::signum(angle),
-                        false, false);
+                        angle_now * Util::signum(angle), false, false);
     }
     else {
         // t_3 <= time
@@ -152,27 +144,22 @@ Waypoint TrapProfileUnsafe(double time,
             return Waypoint(time, 0.0, distance, 0.0, angle, true, false);
         }
         else {
-          double velocity_now;
-          if (start_halt) {
-              velocity_now = Util::min(max_velocity, max_acceleration * t_3);
-          }
-          else {
-              velocity_now = max_velocity;
-          }
+            double velocity_now;
+            if (start_halt) {
+                velocity_now = Util::min(max_velocity, max_acceleration * t_3);
+            }
+            else {
+                velocity_now = max_velocity;
+            }
 
-          double angle_vel_now = velocity_now * angle / distance
-               * Util::signum(distance) * Util::signum(angle);
+            double angle_vel_now = velocity_now * angle / distance *
+                                   Util::signum(distance) * Util::signum(angle);
 
-          return Waypoint(time,
-                          velocity_now * Util::signum(distance),
-                          distance,
-                          angle_vel_now * Util::signum(angle),
-                          angle,
-                          true, false);
+            return Waypoint(time, velocity_now * Util::signum(distance),
+                            distance, angle_vel_now * Util::signum(angle),
+                            angle, true, false);
         }
     }
 }
-
 }
-
 }
