@@ -39,9 +39,6 @@ void Test::TestPeriodic(){
     else if (m_elevatorMode == ElevatorMode::motionMagic) {
         m_elevator->SetMotionMagic(m_elevatorPosition);
     }
-    else if (m_elevatorMode == ElevatorMode::position) {
-        m_elevator->SetPosition(m_elevatorPosition);
-    }
 }
 
 void Test::TestStop(){
@@ -63,7 +60,6 @@ void Test::HandleTestButton(uint32_t port, uint32_t button,
                break;
             case DualAction::DPadRightVirtBtn:
                if (pressedP) {
-                   m_elevatorMode = ElevatorMode::position;
                }
                break;
             case DualAction::DPadLeftVirtBtn:
@@ -92,7 +88,6 @@ void Test::HandleTestButton(uint32_t port, uint32_t button,
                break;
             case DualAction::BtnA:
                if (pressedP) {
-                   m_elevatorMode = ElevatorMode::percentOutput;
                }
                break;
             case DualAction::BtnB:

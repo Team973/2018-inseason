@@ -11,7 +11,7 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, ObservableJoystic
     , m_elevatorMotor(motor)
     , m_position(0.0)
     , m_currLevel(Level::zero)
-    , m_talonMode(motorcontrol::ControlMode::PercentOutput)
+    , m_talonMode(TalonMode::manual)
     , m_joystick(driver)
 {
     this->m_scheduler->RegisterTask("Elevator", this, TASK_PERIODIC);
@@ -43,24 +43,21 @@ Elevator::~Elevator() {
 
 void Elevator::SetControlMode(ControlMode mode, double value) {
     m_elevatorMotor->Set(mode, value);
-    m_talonMode = mode;
-}
-
-void Elevator::SetPosition(double position) {
-    this->SetControlMode(ControlMode::Position, position);
 }
 
 void Elevator::SetPower(double power) {
     m_elevatorMotor->Set(ControlMode::PercentOutput, power);
-    SetLevel(Level::manual);
+    m_talonMode = TalonMode::manual;
 }
 
 void Elevator::SetMotionMagic(double position) {
     Elevator::SetControlMode(ControlMode::MotionMagic, position);
+    m_talonMode = TalonMode::motionMagic;
 }
 
 void Elevator::SetLevel(Level level) {
     m_currLevel = level;
+    m_talonMode = TalonMode::motionMagic;
 }
 
 void Elevator::Reset() {
@@ -69,32 +66,33 @@ void Elevator::Reset() {
 
 void Elevator::TaskPeriodic(RobotMode mode) {
     m_positionCell->LogDouble(m_elevatorMotor->GetSelectedSensorPosition(0));
-    printf("Elevator Task Periodic\n");
-    switch (m_currLevel) {
-        case zero:
-            this->SetMotionMagic(0.0);
-            break;
-        case vault:
-            this->SetMotionMagic(3.0);
-            break;
-        case lowGoal:
-            this->SetMotionMagic(30.0);
-            break;
-        case scaleLow:
-            this->SetMotionMagic(50.0);
-            break;
-        case scaleMid:
-            this->SetMotionMagic(60.0);
-            break;
-        case scaleHigh:
-            this->SetMotionMagic(70.0);
-            break;
+    switch (m_talonMode) {
         case manual:
-            this->SetPower(0.0);
             break;
-        default:
-            this->Reset();
-            break;
+        case motionMagic:
+            switch (m_currLevel) {
+                case zero:
+                    this->SetMotionMagic(0.0);
+                    break;
+                case lowGoal:
+                    this->SetMotionMagic(30.0);
+                    break;
+                case scaleLow:
+                    this->SetMotionMagic(50.0);
+                    break;
+                case scaleMid:
+                    this->SetMotionMagic(60.0);
+                    break;
+                case scaleHigh:
+                    this->SetMotionMagic(70.0);
+                    break;
+                default:
+                    this->Reset();
+                    break;
+            }
+          break;
+      default:
+          break;
     }
 }
 }

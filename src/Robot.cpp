@@ -40,6 +40,7 @@ void Robot::DisabledStart() {
 }
 
 void Robot::DisabledContinuous() {
+    printf("Disabled Periodic\n");
     m_disabled->DisabledPeriodic();
 }
 
@@ -76,6 +77,7 @@ void Robot::TestStart() {
 }
 
 void Robot::TestContinuous(){
+    printf("Test Periodic\n");
     m_test->TestPeriodic();
 }
 

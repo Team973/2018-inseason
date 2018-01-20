@@ -24,12 +24,15 @@ class Elevator : public CoopTask {
     public:
         enum Level {
             zero,
-            vault,
             lowGoal,
             scaleLow,
             scaleMid,
-            scaleHigh,
-            manual
+            scaleHigh
+        };
+
+        enum TalonMode {
+            manual,
+            motionMagic
         };
 
         Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, ObservableJoystick *driver, TalonSRX *motor);
@@ -41,12 +44,6 @@ class Elevator : public CoopTask {
          * @param mode: the control mode being set to for the talon.
          **/
         void SetControlMode(ControlMode mode, double value);
-        /**
-         * Sets Elevator Position
-         *
-         * @param position: the position goal
-         **/
-        void SetPosition(double position);
         /**
          * Sets Elevator Power
          *
@@ -85,7 +82,7 @@ class Elevator : public CoopTask {
 
         double m_position;
         Level m_currLevel;
-        motorcontrol::ControlMode m_talonMode;
+        TalonMode m_talonMode;
         ObservableJoystick *m_joystick;
         LogCell *m_positionCell;
 };
