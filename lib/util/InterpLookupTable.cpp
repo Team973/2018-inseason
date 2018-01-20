@@ -4,11 +4,10 @@
 
 namespace frc973 {
 
-InterpLookupTable::InterpLookupTable():
-       points(),
-       min_x(std::numeric_limits<double>::max()),
-       max_x(std::numeric_limits<double>::min())
-{
+InterpLookupTable::InterpLookupTable()
+        : points()
+        , min_x(std::numeric_limits<double>::max())
+        , max_x(std::numeric_limits<double>::min()) {
 }
 
 InterpLookupTable::~InterpLookupTable() {
@@ -36,8 +35,7 @@ double InterpLookupTable::LookupPoint(double x) {
         return points[0].y;
     }
     else if (x > max_x) {
-        Point a = points[points.size() - 1],
-              b = points[points.size() - 2];
+        Point a = points[points.size() - 1], b = points[points.size() - 2];
         return InterpolatePoints(a, b, x);
     }
     else if (x < min_x) {
@@ -45,8 +43,7 @@ double InterpLookupTable::LookupPoint(double x) {
         return InterpolatePoints(a, b, x);
     }
     else {
-        Point lesser = points[0],
-              greater = points[points.size() - 1];
+        Point lesser = points[0], greater = points[points.size() - 1];
 
         for (auto it = points.begin(); it < points.end(); it++) {
             if (it->x == x) {
@@ -65,8 +62,7 @@ double InterpLookupTable::LookupPoint(double x) {
 }
 
 double InterpLookupTable::InterpolatePoints(const Point &a, const Point &b,
-        const double x) {
+                                            const double x) {
     return a.y + (x - a.x) * (b.y - a.y) / (b.x - a.x);
 }
-
 }

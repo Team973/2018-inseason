@@ -25,14 +25,18 @@ class TaskMgr;
 
 class CoopTask {
 public:
-	CoopTask();
-	virtual ~CoopTask();
+    CoopTask();
+    virtual ~CoopTask();
 
-	virtual void TaskStartMode(RobotMode mode) {}
-	virtual void TaskStopMode(RobotMode mode) {}
-	virtual void TaskPrePeriodic(RobotMode mode) {}
-	virtual void TaskPeriodic(RobotMode mode) {}
-	virtual void TaskPostPeriodic(RobotMode mode) {}
+    virtual void TaskStartMode(RobotMode mode) {
+    }
+    virtual void TaskStopMode(RobotMode mode) {
+    }
+    virtual void TaskPrePeriodic(RobotMode mode) {
+    }
+    virtual void TaskPeriodic(RobotMode mode) {
+    }
+    virtual void TaskPostPeriodic(RobotMode mode) {
+    }
 };
-
 }

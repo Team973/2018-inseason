@@ -16,17 +16,18 @@ class AutoRoutine;
 class Disabled;
 
 class Autonomous {
-    public:
-        Autonomous(Disabled *disabled);
-        virtual ~Autonomous();
+public:
+    Autonomous(Disabled *disabled);
+    virtual ~Autonomous();
 
-        void AutonomousInit();
-        void AutonomousPeriodic();
-        void AutonomousStop();
-    private:
-        NoAuto *m_noAuto;
-        ForwardAuto *m_forwardAuto;
+    void AutonomousInit();
+    void AutonomousPeriodic();
+    void AutonomousStop();
 
-        Disabled *m_disabled;
-    };
+private:
+    NoAuto *m_noAuto;
+    ForwardAuto *m_forwardAuto;
+
+    Disabled *m_disabled;
+};
 };

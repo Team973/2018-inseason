@@ -1,18 +1,51 @@
-## The Official C++ Style Guide of FRC Team 973: The Greybots
+# The Official C++ Style Guide of FRC Team 973: The Greybots
 This is derived from Google's C++ [Style Guide](https://google.github.io/styleguide/cppguide.html).
 
 Note: We are strictly implementing this style guide on all code written starting on the 2018 Season. Pull requests will be declined once your code does not follow any of the rules defined in this document. :+1:
 
+## Automated tooling
+We have automated tooling to help folks format their code correctly.  This tooling depends on clang-format-5.0 or greater.  It is highly recommended that users install the pre-commit hook so that their commits can be checked for style.
+
+The configuration for clang-format is stored in src/.clang-format
+
+### Installing clang-format
+The default version of clang-format included with most distributions is too old for our purposes and does not support our style.  You can install a more recent version by running one of the following commands:
+
+#### Ubuntu
+
+These instructions were tested in ubuntu xenial and artful
+```
+sudo apt install clang-format-5.0
+```
+
+#### Mac with Homebrew
+
+These instructions were not tested.  Good luck.
+```
+brew install clang-format
+```
+
+### Installing the pre-commit hook
+cd into the WORKSPACE directory and type
+
+```
+./tools/style/install_style_check_hook.sh
+```
+
+Check that there were no errors in the output.  If all was successful, then next time you commit the script will automatically check your changed files for style violations.  
+
+## Style Rules
+
 ### Rule #1: Indentions
-Instead of using the `tab` key in doing indentions for both the header and source files, use **four spaces** when organizing classes and functions. For organizing inherited classes, use one space for each parent class. `Public`, `private`, and ` protected` should also be indented along with its variables and methods. 
+Instead of using the `tab` character in doing indentions for both the header and source files, use **four spaces**. For parent classes, use 8 spaces.  `Public`, `private`, and ` protected` should not be indented.  
 ```c++
 class Foo
-    : public Parent1
-    , public Parent2 {
-    public:
-        void function();
-    private:
-        void doSomething();
+        : public Parent1
+        , public Parent2 {
+public:
+    void function();
+private:
+    void doSomething();
 };
 ```
 
@@ -21,8 +54,8 @@ Member, static, and global variables should be named starting with `m_`, `s_`, o
 ```c++
 int g_value = 10
 class MyClass() {
-    private:
-        int m_value;
+private:
+    int m_value;
 };
 ```
 
@@ -46,8 +79,8 @@ Instead of using the #ifndef and #define directives, use `#pragma once` in the b
 #pragma once
 
 class MyClass {
-    public:
-        void Foo();
+public:
+    void Foo();
 };
 ```
 
@@ -57,8 +90,8 @@ All inheritance should be public. If you want to do private inheritance, you sho
 #pragma once
 
 class ParentClass : public ChildClass {
-    private:
-        int m_value;
+private:
+    int m_value;
 };
 ```
 
@@ -71,9 +104,9 @@ struct MyStruct {
 };
 
 class MyClass {
-    public:
-        double Divide(double x, double y);
-        double Round(double n);
+public:
+    double Divide(double x, double y);
+    double Round(double n);
 };
 ```
 
@@ -100,12 +133,12 @@ Do not put large method definitions inline in the class definition.
 
 ```c++
 class Foo {
-    public:
-        void function();
-    protected:
-        static constexpr double CONSTANT = 0;
-    private:
-        void doSomething();
+public:
+    void function();
+protected:
+    static constexpr double CONSTANT = 0;
+private:
+    void doSomething();
 };
 ```
 
@@ -132,9 +165,9 @@ You may write a function that takes a const string& and overload it with another
 
 ```c++
 class MyClass {
-    public:
-        void Analyze(const string &text);
-        void Analyze(const char *text, size_t textlen);
+public:
+    void Analyze(const string &text);
+    void Analyze(const char *text, size_t textlen);
 };
 ```
 
@@ -169,9 +202,9 @@ When using `#include`, standard libraries should be included in brackets i.e. `#
 #include "src/RobotInfo.h"
 
 namespace frc {
-    void printMessage() {
-        printf("Hello World!");
-    }
+void printMessage() {
+    printf("Hello World!");
+}
 }
 ```
 
@@ -185,14 +218,13 @@ double Foo(int a, int b, bool status
 ```
 
 ### Rule #16: Initializer Lists
-If the initializer list spans multiple lines, then there should be one initialization per line. The opening bracket should be on the following line. Initializers should be in the order that the member variables appear in the class definition (besides, gcc will warn you if you violate the last rule here).
+If the initializer list spans multiple lines, then there should be one initialization per line.  Each initialization should be indented with 8 spaces. The opening bracket should be on the line of the last initializer. Initializers should be in the order that the member variables appear in the class definition (gcc will warn you if you violate the last rule here).
 
 ``` c++
 Autonomous::Autonomous(Disabled *disabled)
-    : m_noAuto(new NoAuto())
-    , m_forwardAuto(new ForwardAuto())
-    , m_disabled(disabled)
-{
+        : m_noAuto(new NoAuto())
+        , m_forwardAuto(new ForwardAuto())
+        , m_disabled(disabled) {
     // constructor body
 }
 ```

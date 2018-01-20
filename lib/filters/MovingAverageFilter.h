@@ -16,35 +16,34 @@ namespace frc973 {
 
 class MovingAverageFilter : public FilterBase {
 public:
-	/**
-	 * Create a data filter by the moving average method.
-	 *
-	 * @param weight weight of the previous value when determining the
-	 * filtered value
-	 * @param initial value to consider as the previous value
-	 */
-	MovingAverageFilter(double weight, double initial = 0.0);
-	virtual ~MovingAverageFilter();
+    /**
+     * Create a data filter by the moving average method.
+     *
+     * @param weight weight of the previous value when determining the
+     * filtered value
+     * @param initial value to consider as the previous value
+     */
+    MovingAverageFilter(double weight, double initial = 0.0);
+    virtual ~MovingAverageFilter();
 
-	/**
-	 * Calculate the filtered value given the original datapoint.
-	 *
-	 * @parm currentValue  the current data point that needs to be filtered
-	 *
-	 * @return result of filtering calculation.
-	 */
-	double Update(double input);
+    /**
+     * Calculate the filtered value given the original datapoint.
+     *
+     * @parm currentValue  the current data point that needs to be filtered
+     *
+     * @return result of filtering calculation.
+     */
+    double Update(double input);
 
-	/**
-	 * Remember the latest value calculated by filtering
-	 *
-	 * @return result of previous filtering calcuation
-	 */
-	double GetLast(void);
+    /**
+     * Remember the latest value calculated by filtering
+     *
+     * @return result of previous filtering calcuation
+     */
+    double GetLast(void);
 
 private:
-	double m_weight;
-	double m_prevValue;
+    double m_weight;
+    double m_prevValue;
 };
-
 }

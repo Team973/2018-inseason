@@ -77,53 +77,49 @@ void PID::SetBounds(double min, double max) {
 }
 
 double PID::CalcOutput(double actual) {
-	return CalcOutput(actual, GetMsecTime());
+    return CalcOutput(actual, GetMsecTime());
 }
 
 double PID::CalcOutput(double actual, uint32_t time) {
-	double error = m_target - actual;
-	double derivative = 0;
-	double output;
+    double error = m_target - actual;
+    double derivative = 0;
+    double output;
 
-	/**
-	 * m_timeLastUpdate will be zero if this is the first call ever or first
-	 * call since a reset.  In this case there aren't enough samples to
-	 * integrate or differentiate.
-	 */
-	if (m_timeLastUpdateSec != 0.0) {
-		double deltaTimeSec = GetSecTime() - m_timeLastUpdateSec;
+    /**
+     * m_timeLastUpdate will be zero if this is the first call ever or first
+     * call since a reset.  In this case there aren't enough samples to
+     * integrate or differentiate.
+     */
+    if (m_timeLastUpdateSec != 0.0) {
+        double deltaTimeSec = GetSecTime() - m_timeLastUpdateSec;
 
-		m_integral += error * deltaTimeSec;
+        m_integral += error * deltaTimeSec;
 
-		if (m_prevPos != NAN) {
-			derivative = (m_prevPos - actual) / deltaTimeSec;
-		}
-	}
-	m_timeLastUpdateSec = GetSecTime();
-	m_prevPos = actual;
+        if (m_prevPos != NAN) {
+            derivative = (m_prevPos - actual) / deltaTimeSec;
+        }
+    }
+    m_timeLastUpdateSec = GetSecTime();
+    m_prevPos = actual;
 
-	output =
-    		m_Kp * error +
-			Util::bound(m_Ki * m_integral, -m_icap, m_icap) +
-			m_Kd * derivative;
+    output = m_Kp * error + Util::bound(m_Ki * m_integral, -m_icap, m_icap) +
+             m_Kd * derivative;
 
+    if (m_flags & PID_SPEED_CTRL) {
+        output += m_lastOutput;
+    }
 
-	if (m_flags & PID_SPEED_CTRL) {
-		output += m_lastOutput;
-	}
+    output = Util::bound(output, m_min, m_max);
+    m_lastOutput = output;
 
-	output = Util::bound(output, m_min, m_max);
-	m_lastOutput = output;
-
-	return output;
+    return output;
 }
 
 double PID::GetPrevOutput() {
-	return m_lastOutput;
+    return m_lastOutput;
 }
 
 void PID::SetPrevOutput(double prev) {
-	m_lastOutput = Util::bound(prev, m_min, m_max);
+    m_lastOutput = Util::bound(prev, m_min, m_max);
 }
-
 }

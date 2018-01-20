@@ -10,11 +10,12 @@ namespace frc973 {
 /**
  * Used internally to represent the state of the robot
  */
-enum RobotMode {
+enum RobotMode
+{
     MODE_DISABLED,
     MODE_AUTO,
     MODE_TELEOP,
-	MODE_TEST
+    MODE_TEST
 };
 extern const char *robotModes[];
 
@@ -44,40 +45,39 @@ RobotMode GetRobotMode();
  */
 RobotMode GetRobotMode(RobotStateInterface &stateProvider);
 
-
 /**
  * Constants
  */
 namespace Constants {
-    constexpr double PI = 3.141592653589793;
-    constexpr double FEET_PER_METER = 3.280839895;
-    constexpr double METERS_PER_FOOT = 1.0 / FEET_PER_METER;
-    constexpr double GRAVITY_CONSTANT = 9.80665; // meter/sq(sec)
-    constexpr double GRAVITY_CONSTANT_INCHES =
-        GRAVITY_CONSTANT * FEET_PER_METER * 12.0;
+constexpr double PI = 3.141592653589793;
+constexpr double FEET_PER_METER = 3.280839895;
+constexpr double METERS_PER_FOOT = 1.0 / FEET_PER_METER;
+constexpr double GRAVITY_CONSTANT = 9.80665;  // meter/sq(sec)
+constexpr double GRAVITY_CONSTANT_INCHES =
+    GRAVITY_CONSTANT * FEET_PER_METER * 12.0;
 
-    constexpr double USEC_PER_MSEC = 1000.0;
-    constexpr double MSEC_PER_USEC = 1.0 / USEC_PER_MSEC;
+constexpr double USEC_PER_MSEC = 1000.0;
+constexpr double MSEC_PER_USEC = 1.0 / USEC_PER_MSEC;
 
-    constexpr double MSEC_PER_SEC = 1000.0;
-    constexpr double SEC_PER_MSEC = 1.0 / MSEC_PER_SEC;
+constexpr double MSEC_PER_SEC = 1000.0;
+constexpr double SEC_PER_MSEC = 1.0 / MSEC_PER_SEC;
 
-    constexpr double USEC_PER_SEC = USEC_PER_MSEC * MSEC_PER_SEC;
-    constexpr double SEC_PER_USEC = 1.0 / USEC_PER_SEC;
+constexpr double USEC_PER_SEC = USEC_PER_MSEC * MSEC_PER_SEC;
+constexpr double SEC_PER_USEC = 1.0 / USEC_PER_SEC;
 
-    constexpr double MIN_PER_SEC = 1.0 / 60.0;
-    constexpr double SEC_PER_MIN = 60.0;
+constexpr double MIN_PER_SEC = 1.0 / 60.0;
+constexpr double SEC_PER_MIN = 60.0;
 
-    constexpr double RAD_PER_DEG = 2 * PI / 360.0;
-    constexpr double DEG_PER_RAD = 1.0 / RAD_PER_DEG;
+constexpr double RAD_PER_DEG = 2 * PI / 360.0;
+constexpr double DEG_PER_RAD = 1.0 / RAD_PER_DEG;
 }
 
 /**
  * Macros
  */
-#define ARRAYSIZE(a)            (sizeof(a)/sizeof((a)[0]))
+#define ARRAYSIZE(a) (sizeof(a) / sizeof((a)[0]))
 
-inline double magnitude(double x,double y) {
+inline double magnitude(double x, double y) {
     return sqrt(pow(x, 2.0) + pow(y, 2.0));
 }
 
@@ -88,7 +88,7 @@ inline uint64_t GetUsecTime() {
 
 /* Get the current time in milliseconds */
 inline uint32_t GetMsecTime() {
-	return GetUsecTime() * Constants::MSEC_PER_USEC;
+    return GetUsecTime() * Constants::MSEC_PER_USEC;
 }
 
 /* Get the current time in seconds */
@@ -190,7 +190,7 @@ inline double signSquare(double n) {
     }
 }
 
-inline double square(double n){
+inline double square(double n) {
     return n * n;
 }
 
@@ -203,8 +203,7 @@ inline bool close(double a, double b, double epsilon = 0.00001) {
  * transforms a value (n) in the range between (sl) and
  * (sh) to the range between (tl) and (th).
  */
-inline double normalize(double n, double sl, double sh,
-        double tl, double th) {
+inline double normalize(double n, double sl, double sh, double tl, double th) {
     return (n - sl) * (th - tl) / (sh - sl) + tl;
 }
 
@@ -212,9 +211,8 @@ inline double normalize(double n, double sl, double sh,
  * Return a unit scalar with the same sign as the argument
  */
 constexpr inline double signum(double x) {
-    return (x < 0) ? -1 :
-        (x > 0) ? 1 : 0;
+    return (x < 0) ? -1 : (x > 0) ? 1 : 0;
 }
-} // Util
+}  // Util
 
-} // frc973
+}  // frc973

@@ -17,17 +17,18 @@ namespace frc973 {
 
 class CascadingFilter : FilterBase {
 public:
-	CascadingFilter();
-	virtual ~CascadingFilter();
+    CascadingFilter();
+    virtual ~CascadingFilter();
 
-	void PushFilter(FilterBase *newFilt);
+    void PushFilter(FilterBase *newFilt);
 
-	double Update(double in) override;
+    double Update(double in) override;
 
-	double GetLast() override;
+    double GetLast() override;
+
 private:
-	double m_last;
-	std::vector<FilterBase*> m_children;
+    double m_last;
+    std::vector<FilterBase *> m_children;
 };
 
 } /* namespace frc973 */
