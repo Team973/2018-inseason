@@ -6,6 +6,7 @@
 #include "lib/helpers/JoystickHelper.h"
 #include "src/Robot.h"
 #include "src/AutonomousMode.h"
+#include "lib/util/WrapDash.h"
 
 using namespace frc;
 
@@ -33,5 +34,7 @@ private:
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
     ObservableJoystick *m_tuningJoystick;
+
+    int m_startPos;
 };
 };

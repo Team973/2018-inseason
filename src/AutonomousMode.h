@@ -29,5 +29,7 @@ private:
     ForwardAuto *m_forwardAuto;
 
     Disabled *m_disabled;
+
+    std::string m_randomMessage;
 };
 };

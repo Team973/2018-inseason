@@ -10,7 +10,8 @@ Disabled::Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
         : m_routine(SelectedAutoRoutine::none)
         , m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
-        , m_tuningJoystick(tuning) {
+        , m_tuningJoystick(tuning)
+        , m_startPos(2) {
 }
 
 Disabled::~Disabled() {
@@ -21,6 +22,7 @@ void Disabled::DisabledInit() {
 }
 
 void Disabled::DisabledPeriodic() {
+    DBStringPrintf(DB_LINE0, "Start %d", m_startPos);
 }
 
 void Disabled::DisabledStop() {
@@ -74,16 +76,17 @@ void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,
                 break;
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
-                }
-                else {
+                    m_startPos = 1;
                 }
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
+                    m_startPos = 2;
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
+                    m_startPos = 3;
                 }
                 break;
             case DualAction::DPadRightVirtBtn:

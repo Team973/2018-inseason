@@ -10,7 +10,8 @@ namespace frc973 {
 Autonomous::Autonomous(Disabled *disabled)
         : m_noAuto(new NoAuto())
         , m_forwardAuto(new ForwardAuto())
-        , m_disabled(disabled) {
+        , m_disabled(disabled)
+        , m_randomMessage("") {
 }
 
 Autonomous::~Autonomous() {
@@ -18,6 +19,7 @@ Autonomous::~Autonomous() {
 
 void Autonomous::AutonomousInit() {
     // Remember to zero all sensors here
+    m_randomMessage = DriverStation::GetInstance().GetGameSpecificMessage();
     std::cout << "Autonomous Start" << std::endl;
     switch (m_disabled->GetRoutine()) {
         case Disabled::SelectedAutoRoutine::none:
