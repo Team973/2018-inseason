@@ -116,4 +116,12 @@ const char *Disabled::GetRoutineName() {
 Disabled::SelectedAutoRoutine Disabled::GetRoutine() {
     return m_routine;
 }
+
+/**
+  * @return m_startPos: The starting position of the robot selected
+  * by the driver: 1 = left, 2 = center, 3 = right
+  **/
+int Disabled::GetStartPosition() {
+    return m_startPos;
+}
 };

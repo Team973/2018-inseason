@@ -8,6 +8,7 @@
 #include "src/auto/ForwardAuto.h"
 #include "src/DisabledMode.h"
 #include "src/Robot.h"
+#include "lib/util/WrapDash.h"
 
 using namespace frc;
 
@@ -17,6 +18,8 @@ class Disabled;
 
 class Autonomous {
 public:
+    typedef enum position { LL, LR, RR, RL} SwitchScalePosition;
+
     Autonomous(Disabled *disabled);
     virtual ~Autonomous();
 
@@ -31,5 +34,6 @@ private:
     Disabled *m_disabled;
 
     std::string m_randomMessage;
+    SwitchScalePosition m_switchScalePosition;
 };
 };

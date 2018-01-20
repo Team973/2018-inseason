@@ -27,6 +27,7 @@ public:
 
     const char *GetRoutineName();
     SelectedAutoRoutine GetRoutine();
+    int GetStartPosition();
 
 private:
     SelectedAutoRoutine m_routine;
