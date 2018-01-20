@@ -38,7 +38,7 @@ Robot::Robot()
     , m_test(new Test(m_driverJoystick, m_operatorJoystick, m_tuningJoystick, m_elevator))
 {
     std::cout << "Constructed a Robot!" << std::endl;
-    m_driveMode = DriveMode::Cheesy;
+    m_driveMode = DriveMode::Arcade;
 }
 
 Robot::~Robot(){
@@ -80,32 +80,28 @@ void Robot::TeleopContinuous() {
     m_teleop->TeleopPeriodic();
     double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
     double x = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis) + -m_tuningJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
-    bool quickturn = m_driverJoystick->GetRawButton(DualAction::LeftBumper);
-    static bool g_manualDriveControl = true;
-
-    if(g_manualDriveControl) {
-        if(m_driverJoystick->GetRawButton(DualAction::RightBumper)) {
-            x /= 3.0;
-            y /= 3.0;
-        }
-
-        if(m_driveMode == DriveMode::Arcade) {
-            m_drive->ArcadeDrive(y, x);
-        }
-        else if(m_driveMode == DriveMode::Cheesy) {
-            m_drive->CheesyDrive(y, x, quickturn, false); // gear set to false until solenoids get set up
-        }
-        else if(m_driveMode == DriveMode::Openloop) {
-            m_drive->OpenloopArcadeDrive(y, x);
-        }
-        else if(m_driveMode == DriveMode::AssistedArcade) {
-            m_drive->AssistedArcadeDrive(y, x);
-        }
+    // bool quickturn = m_driverJoystick->GetRawButton(DualAction::LeftBumper);
+    if(m_driverJoystick->GetRawButton(DualAction::RightBumper)) {
+        x /= 3.0;
+        y /= 3.0;
     }
 
-    if (m_driverJoystick->GetRawButton(2)) {
-        m_elevator->SetPower(0.25);
-    }
+    printf("%f\n", y);
+
+    m_drive->ArcadeDrive(y, x);
+
+    // if(m_driveMode == DriveMode::Arcade) {
+    //     m_drive->ArcadeDrive(y, x);
+    // }
+    // else if(m_driveMode == DriveMode::Cheesy) {
+    //     m_drive->CheesyDrive(y, x, quickturn, false); // gear set to false until solenoids get set up
+    // }
+    // else if(m_driveMode == DriveMode::Openloop) {
+    //     m_drive->OpenloopArcadeDrive(y, x);
+    // }
+    // else if(m_driveMode == DriveMode::AssistedArcade) {
+    //     m_drive->AssistedArcadeDrive(y, x);
+    // }
 }
 
 void Robot::TeleopStop() {
