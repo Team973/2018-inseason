@@ -32,12 +32,9 @@ Robot::Robot()
     , m_autonomous(new Autonomous(m_disabled))
     , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick, m_tuningJoystick))
     , m_test(new Test(m_driverJoystick, m_operatorJoystick, m_tuningJoystick, m_elevator))
-    , m_nt(new NetworkTableInstance())
+    , m_dashboard(NetworkTableInstance::GetDefault())
 {
     std::cout << "Constructed a Robot!" << std::endl;
-    m_nt->StartServer("roborio-frc-973.local");
-    m_dashboard = m_nt->GetTable("SmartDashboard");
-    m_dashboard->PutNumber("test", 1234);
 }
 
 Robot::~Robot(){

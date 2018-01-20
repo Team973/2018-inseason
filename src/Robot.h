@@ -86,7 +86,6 @@ class Robot : public CoopMTRobot, public JoystickObserver {
         Teleop *m_teleop;
         Test *m_test;
 
-        NetworkTableInstance *m_nt;
-        std::shared_ptr<nt::NetworkTable> m_dashboard;
+        NetworkTableInstance m_dashboard;
     };
 };
