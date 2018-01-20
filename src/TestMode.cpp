@@ -4,10 +4,11 @@ using namespace frc;
 
 namespace frc973 {
 Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-                  ObservableJoystick *tuning, Elevator *elevator)
+                  ObservableJoystick *tuning, Drive *drive, Elevator *elevator)
     : m_driverJoystick(driver)
     , m_operatorJoystick(codriver)
     , m_tuningJoystick(tuning)
+    , m_drive(drive)
     , m_elevator(elevator)
     , m_elevatorMode(ElevatorMode::percentOutput)
     , m_elevatorPosition(0.0)
@@ -19,29 +20,50 @@ Test::~Test() {
 
 void Test::TestInit() {
     std::cout << "Test Start" << std::endl;
+    m_driveMode = DriveMode::Cheesy;
 }
 
 void Test::TestPeriodic(){
-    if (m_elevatorPosition > 100.0) {
-        m_elevatorPosition = 100.0; //does not allow value to exceed 100.0
-    }
-    else if (m_elevatorPosition < 0.0) {
-        m_elevatorPosition = 0.0; //does not allow value to be under 0.0
+    double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
+    double x = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis) + -m_tuningJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
+    bool quickturn = m_driverJoystick->GetRawButton(DualAction::LeftBumper);
+    if(m_driverJoystick->GetRawButton(DualAction::RightBumper)) {
+        x /= 3.0;
+        y /= 3.0;
     }
 
-    double y = m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
-    printf("%1.3lf\n", y);
-    m_elevatorPosition += 1.5 * Util::bound(m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightYAxis), 0.0, 100.0); //Adds on 1.5 every call (20ms) to position while bounding it 10
+    if (m_driveMode == DriveMode::Arcade) {
+        m_drive->ArcadeDrive(y, x);
+    }
+    else if (m_driveMode == DriveMode::Cheesy) {
+        m_drive->CheesyDrive(y, x, quickturn, false); // gear set to false until solenoids get set up
+    }
+    else if (m_driveMode == DriveMode::Openloop) {
+        m_drive->OpenloopArcadeDrive(y, x);
+    }
+    else if (m_driveMode == DriveMode::AssistedArcade) {
+        m_drive->AssistedArcadeDrive(y, x);
+    }
 
-    if (m_elevatorMode == ElevatorMode::percentOutput) {
-        m_elevator->SetPower(y);
-    }
-    else if (m_elevatorMode == ElevatorMode::motionMagic) {
-        m_elevator->SetMotionMagic(m_elevatorPosition);
-    }
-    else if (m_elevatorMode == ElevatorMode::position) {
-        m_elevator->SetPosition(m_elevatorPosition);
-    }
+    // if (m_elevatorPosition > 100.0) {
+    //     m_elevatorPosition = 100.0; //does not allow value to exceed 100.0
+    // }
+    // else if (m_elevatorPosition < 0.0) {
+    //     m_elevatorPosition = 0.0; //does not allow value to be under 0.0
+    // }
+    //
+    // printf("%1.3lf\n", y);
+    // m_elevatorPosition += 1.5 * Util::bound(m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightYAxis), 0.0, 100.0); //Adds on 1.5 every call (20ms) to position while bounding it 10
+    //
+    // if (m_elevatorMode == ElevatorMode::percentOutput) {
+    //     m_elevator->SetPower(y);
+    // }
+    // else if (m_elevatorMode == ElevatorMode::motionMagic) {
+    //     m_elevator->SetMotionMagic(m_elevatorPosition);
+    // }
+    // else if (m_elevatorMode == ElevatorMode::position) {
+    //     m_elevator->SetPosition(m_elevatorPosition);
+    // }
 }
 
 void Test::TestStop(){

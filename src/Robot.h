@@ -85,20 +85,6 @@ class Robot : public CoopMTRobot, public JoystickObserver {
         Drive *m_drive;
         Hanger *m_hanger;
 
-        enum DriveMode{
-            Arcade,
-            Cheesy,
-            Openloop,
-            AssistedArcade,
-            PID,
-            Trap,
-            Straight,
-            Spline
-        };
-        DriveMode m_driveMode;
-
-        static bool g_manualDriveControl;
-
         Disabled *m_disabled;
         Autonomous *m_autonomous;
         Teleop *m_teleop;

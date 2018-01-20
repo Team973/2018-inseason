@@ -5,6 +5,7 @@
 #include "src/info/RobotInfo.h"
 #include "lib/helpers/JoystickHelper.h"
 #include "lib/util/Util.h"
+#include "src/subsystems/Drive.h"
 #include "src/subsystems/Elevator.h"
 
 using namespace frc;
@@ -18,7 +19,7 @@ class Test {
             position
         };
         Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-                          ObservableJoystick *tuning, Elevator *elevator);
+                          ObservableJoystick *tuning, Drive *drive, Elevator *elevator);
         virtual ~Test();
 
         void TestInit();
@@ -31,6 +32,19 @@ class Test {
         ObservableJoystick *m_driverJoystick;
         ObservableJoystick *m_operatorJoystick;
         ObservableJoystick *m_tuningJoystick;
+
+        Drive *m_drive;
+        enum DriveMode{
+            Arcade,
+            Cheesy,
+            Openloop,
+            AssistedArcade,
+            PID,
+            Trap,
+            Straight,
+            Spline
+        };
+        DriveMode m_driveMode;
 
         Elevator *m_elevator;
 
