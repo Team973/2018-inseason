@@ -31,8 +31,3 @@ sh_binary(
             number_location = 0,
             )),
 )
-
-sh_binary(
-    name = "netconsole",
-    srcs = ["netconsole_command"],
-)

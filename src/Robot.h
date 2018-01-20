@@ -69,6 +69,9 @@ private:
 
     LogSpreadsheet *m_logger;
 
+    TalonSRX *m_clawLeftRoller;
+    TalonSRX *m_clawRightRoller;
+    DigitalInput *m_clawCubeSensor;
     TalonSRX *m_elevatorMotor;
 
     Elevator *m_elevator;
