@@ -12,11 +12,13 @@ esac
 Staged=$(git diff --cached --name-only | paste -s -)
 StagedFormattable=$(git diff --cached --name-only --diff-filter=ACMRT lib src | egrep "\.(h|cpp)$" | paste -s -)
 
-echo "Formattable files staged for commit: $StagedFormattable"
 
 if [ -z "$StagedFormattable" ]
 then
+    echo "None of the files staged for commit need formatting"
     exit 0
+else
+    echo "The following formattable files are staged for commit: $StagedFormattable"
 fi
 
 diff -u <(cat $StagedFormattable) <($FormatCmd $StagedFormattable) > /dev/null
