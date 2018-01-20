@@ -190,7 +190,7 @@ class Drive :
          * @param left Output to send to leftDriveTalon
          * @param right Output to send to rightDriveTalon
          */
-        void SetDriveOutput(phoenix::motorcontrol::ControlMode controlMode,
+        void SetDriveOutput(ControlMode controlMode,
                             double left, double right);
 
         void TaskPeriodic(RobotMode mode);
@@ -204,7 +204,7 @@ class Drive :
         VictorSPX *m_rightDriveVictorB;
         VictorSPX *m_rightDriveVictorC;
 
-        phoenix::motorcontrol::ControlMode m_controlMode;
+        ControlMode m_controlMode;
 
         double m_leftDriveOutput;
         double m_rightDriveOutput;

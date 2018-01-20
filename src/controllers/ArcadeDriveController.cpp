@@ -28,7 +28,7 @@ ArcadeDriveController::~ArcadeDriveController() {
 void ArcadeDriveController::CalcDriveOutput(DriveStateProvider *state,
         DriveControlSignalReceiver *out) {
 
-    out->SetDriveOutput(phoenix::motorcontrol::ControlMode::Velocity,
+    out->SetDriveOutput(ControlMode::PercentOutput,
                         m_leftOutput, m_rightOutput);
     DBStringPrintf(DBStringPos::DB_LINE4,
                 "arcade l=%1.2lf r=%1.2lf", m_leftOutput, m_rightOutput);
@@ -41,9 +41,9 @@ void ArcadeDriveController::SetJoysticks(double throttle, double turn) {
 
     double TURN_RAMPUP = 0.25;
     m_leftOutput = throttle -
-        0.5 * DRIVE_WIDTH * (TURN_RAMPUP * Util::abs(throttle) * turn + turn);
+        0.5 * DRIVE_WIDTH * (TURN_RAMPUP * fabs(throttle) * turn + turn);
     m_rightOutput = throttle +
-        0.5 * DRIVE_WIDTH * (TURN_RAMPUP * Util::abs(throttle) * turn + turn);
+        0.5 * DRIVE_WIDTH * (TURN_RAMPUP * fabs(throttle) * turn + turn);
 
     double maxSpeed = Util::max(m_leftOutput, m_rightOutput);
     if (maxSpeed > THROTTLE_MAX) {

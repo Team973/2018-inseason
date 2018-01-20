@@ -86,16 +86,16 @@ void PIDDriveController::CalcDriveOutput(DriveStateProvider *state,
             m_prevDist - m_targetDist,
             m_prevAngle - m_targetAngle);
 
-    out->SetDriveOutput(phoenix::motorcontrol::ControlMode::Velocity,
+    out->SetDriveOutput(ControlMode::Velocity,
                         MAX_SPEED * m_speedCap * (throttle - turn),
                         MAX_SPEED * m_speedCap * (throttle + turn));
 
     if (m_quickExit == false) {
         if ((m_distEnabled == false ||
-                    (Util::abs(m_targetDist - m_prevDist) < m_distTolerance &&
-                     Util::abs(state->GetRate()) < m_distRateTolerance)) &&
-                Util::abs(m_targetAngle - m_prevAngle) < m_angleTolerance &&
-                Util::abs(state->GetAngularRate()) < m_angleRateTolerance) {
+                    (fabs(m_targetDist - m_prevDist) < m_distTolerance &&
+                     fabs(state->GetRate()) < m_distRateTolerance)) &&
+                fabs(m_targetAngle - m_prevAngle) < m_angleTolerance &&
+                fabs(state->GetAngularRate()) < m_angleRateTolerance) {
             m_onTarget = true;
         }
         else {
@@ -103,7 +103,7 @@ void PIDDriveController::CalcDriveOutput(DriveStateProvider *state,
         }
     }
     else {
-        if (Util::abs(m_targetDist - m_prevDist) < m_distTolerance) {
+        if (fabs(m_targetDist - m_prevDist) < m_distTolerance) {
             m_onTarget = true;
         }
         else {

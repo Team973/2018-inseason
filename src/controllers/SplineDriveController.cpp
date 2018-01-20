@@ -121,7 +121,7 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
 
     if (goal.error) {
         printf("trap drive error\n");
-        out->SetDriveOutput(phoenix::motorcontrol::ControlMode::Velocity, 1.0,
+        out->SetDriveOutput(ControlMode::Velocity, 1.0,
                             -1.0);
         return;
     }
@@ -156,7 +156,7 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
          + linear_dist_term + linear_vel_term
          - angular_dist_term - angular_vel_term;
 
-    out->SetDriveOutput(phoenix::motorcontrol::ControlMode::Velocity,
+    out->SetDriveOutput(ControlMode::Velocity,
                         left_output, right_output);
 
     m_done = goal.done;

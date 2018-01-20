@@ -31,7 +31,7 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
              , m_rightDriveTalonA(rightDriveTalonA)
              , m_rightDriveVictorB(rightDriveVictorB)
              , m_rightDriveVictorC(rightDriveVictorC)
-             , m_controlMode(phoenix::motorcontrol::ControlMode::PercentOutput)
+             , m_controlMode(ControlMode::PercentOutput)
              , m_leftDriveOutput(0.0)
              , m_rightDriveOutput(0.0)
              , m_leftDriveOutputLog(new LogCell("Left motor signal (pow or vel)"))
@@ -69,14 +69,14 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
 
     m_leftDriveVictorB->Follow(*m_leftDriveTalonA);
 
-    //m_leftDriveVictorC->Follow(*m_leftDriveTalonA);
+    m_leftDriveVictorC->Follow(*m_leftDriveTalonA);
 
-    // m_rightDriveTalonA->SetNeutralMode(Coast);
-    // m_rightDriveTalonA->ConfigSelectedFeedbackSensor(QuadEncoder, 0, 10);
+    m_rightDriveTalonA->SetNeutralMode(Coast);
+    m_rightDriveTalonA->ConfigSelectedFeedbackSensor(QuadEncoder, 0, 10);
 
-    //m_rightDriveVictorB->Follow(*m_rightDriveTalonA);
+    m_rightDriveVictorB->Follow(*m_rightDriveTalonA);
 
-    //m_rightDriveVictorC->Follow(*m_rightDriveTalonA);
+    m_rightDriveVictorC->Follow(*m_rightDriveTalonA);
 }
 
 Drive::~Drive() {};
@@ -239,8 +239,8 @@ double Drive::GetRate() const {
  * @return  Avergage current reported in amperes
  */
 double Drive::GetDriveCurrent() const {
-    return (Util::abs(m_rightDriveTalonA->GetOutputCurrent()) +
-            Util::abs(m_leftDriveTalonA->GetOutputCurrent())) / 2.0;
+    return (fabs(m_rightDriveTalonA->GetOutputCurrent()) +
+            fabs(m_leftDriveTalonA->GetOutputCurrent())) / 2.0;
 }
 
 /**
@@ -267,16 +267,16 @@ double Drive::GetAngularRate() const {
  * @param left  desired left Output
  * @param right desired right Output
  */
-void Drive::SetDriveOutput(phoenix::motorcontrol::ControlMode controlMode,
+void Drive::SetDriveOutput(ControlMode controlMode,
                            double left, double right) {
     m_leftDriveOutput = left;
     m_rightDriveOutput = right;
 
-    if (controlMode == phoenix::motorcontrol::ControlMode::Velocity) {
+    if (controlMode == ControlMode::Velocity) {
         m_leftDriveOutput /= DRIVE_IPS_FROM_RPM;
         m_rightDriveOutput /= DRIVE_IPS_FROM_RPM;
     }
-    else if (controlMode == phoenix::motorcontrol::ControlMode::Position) {
+    else if (controlMode == ControlMode::Position) {
         m_leftDriveOutput /= DRIVE_DIST_PER_REVOLUTION;
         m_rightDriveOutput /= DRIVE_DIST_PER_REVOLUTION;
     }
@@ -316,13 +316,13 @@ void Drive::TaskPeriodic(RobotMode mode) {
     m_rightDistLog->LogDouble(GetRightDist());
     m_rightDistRateLog->LogDouble(GetRightRate());
 
-    if (m_controlMode == phoenix::motorcontrol::ControlMode::Velocity) {
+    if (m_controlMode == ControlMode::Velocity) {
         m_leftDriveOutputLog->LogDouble(m_leftDriveOutput *
                                         DRIVE_IPS_FROM_RPM);
         m_rightDriveOutputLog->LogDouble(m_rightDriveOutput *
                                          DRIVE_IPS_FROM_RPM);
     }
-    else if (m_controlMode == phoenix::motorcontrol::ControlMode::Position) {
+    else if (m_controlMode == ControlMode::Position) {
         m_leftDriveOutputLog->LogDouble(m_leftDriveOutput *
                                         DRIVE_DIST_PER_REVOLUTION);
         m_rightDriveOutputLog->LogDouble(m_rightDriveOutput *

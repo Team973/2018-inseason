@@ -42,13 +42,13 @@ void AssistedArcadeDriveController::CalcDriveOutput(DriveStateProvider *state,
 	leftOutput = m_throttle - m_turn - turnCorrection;
 	rightOutput = m_throttle + m_turn + turnCorrection;
 
-  double maxSpeed = Util::max(Util::abs(leftOutput), Util::abs(rightOutput));
+  double maxSpeed = Util::max(fabs(leftOutput), fabs(rightOutput));
   if (maxSpeed > 1.0) {
       leftOutput = leftOutput * (1.0 / maxSpeed);
       rightOutput = rightOutput * (1.0 / maxSpeed);
 	}
 
-	out->SetDriveOutput(phoenix::motorcontrol::ControlMode::PercentOutput,
+	out->SetDriveOutput(ControlMode::PercentOutput,
 								      -leftOutput, -rightOutput);
 	DBStringPrintf(DBStringPos::DB_LINE4,
 				"arcade l=%1.2lf r=%1.2lf", leftOutput, rightOutput);
