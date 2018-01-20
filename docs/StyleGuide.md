@@ -34,6 +34,12 @@ cd into the WORKSPACE directory and type
 
 Check that there were no errors in the output.  If all was successful, then next time you commit the script will automatically check your changed files for style violations.  
 
+### Enforcing the style guide in your program
+Run this command whenever you want to enforce the style guide in your program.
+```
+./tools/styles/enforce_style.sh
+```
+
 ## Style Rules
 
 ### Rule #1: Indentions
