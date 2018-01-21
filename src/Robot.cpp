@@ -39,8 +39,8 @@ Robot::Robot()
         , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick,
                               m_tuningJoystick))
         , m_test(new Test(m_driverJoystick, m_operatorJoystick,
-                          m_tuningJoystick, m_elevator)) {
-        , m_dashboard(NetworkTableInstance::GetDefault())
+                          m_tuningJoystick, m_elevator))
+        , m_dashboard(NetworkTableInstance::GetDefault()) {
     std::cout << "Constructed a Robot!" << std::endl;
 }
 
