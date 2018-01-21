@@ -65,5 +65,4 @@ void StraightDriveController::SetTarget(
 
     m_turnPID->SetTarget(m_targetAngle);
 }
-
 }

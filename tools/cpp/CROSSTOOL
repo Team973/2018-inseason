@@ -159,6 +159,10 @@ toolchain {
   unfiltered_cxx_flag: "-D__TIMESTAMP__=\"redacted\""
   unfiltered_cxx_flag: "-D__TIME__=\"redacted\""
 
+  # Personal Config
+  unfiltered_cxx_flag: "-Wno-unused-variable"
+  unfiltered_cxx_flag: "-Wno-unused-but-set-variable"
+
   # Enable coloring even if there's no attached terminal. Bazel removes the
   # escape sequences if --nocolor is specified. This isn't supported by gcc
   # on Ubuntu 14.04.
@@ -283,6 +287,10 @@ toolchain {
   # Anticipated future default.
   unfiltered_cxx_flag: "-no-canonical-prefixes"
   unfiltered_cxx_flag: "-fno-canonical-system-headers"
+
+  # Personal Config
+  unfiltered_cxx_flag: "-Wno-unused-variable"
+  unfiltered_cxx_flag: "-Wno-unused-but-set-variable"
 
   # Make C++ compilation deterministic. Use linkstamping instead of these
   # compiler symbols.

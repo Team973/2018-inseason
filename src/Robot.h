@@ -13,6 +13,8 @@
 
 #include "WPILib.h"
 #include "Phoenix.h"
+#include "networktables/NetworkTableInstance.h"
+#include "networktables/NetworkTableEntry.h"
 #include <iostream>
 #include "src/info/RobotInfo.h"
 #include "src/DisabledMode.h"
@@ -31,63 +33,73 @@
 
 using namespace frc;
 using namespace ctre;
+using namespace nt;
 
-namespace frc973{
+namespace frc973 {
 class Disabled;
 class Autonomous;
 class Drive;
 
-class Robot : public CoopMTRobot, public JoystickObserver {
-    public:
-        Robot();
-        virtual ~Robot();
+class Robot
+        : public CoopMTRobot
+        , public JoystickObserver {
+public:
+    Robot();
+    virtual ~Robot();
 
-        void Initialize();
+    void Initialize();
 
-        void DisabledStart();
-        void DisabledContinuous();
-        void DisabledStop();
+    void DisabledStart();
+    void DisabledContinuous();
+    void DisabledStop();
 
-        void AutonomousStart();
-        void AutonomousContinuous();
-        void AutonomousStop();
+    void AutonomousStart();
+    void AutonomousContinuous();
+    void AutonomousStop();
 
-        void TeleopStart();
-        void TeleopContinuous();
-        void TeleopStop();
+    void TeleopStart();
+    void TeleopContinuous();
+    void TeleopStop();
 
-        void TestStart();
-        void TestContinuous();
-        void TestStop();
+    void TestStart();
+    void TestContinuous();
+    void TestStop();
 
-        void RobotPeriodic() override;
-        void ObserveJoystickStateChange(uint32_t port, uint32_t button, bool pressedP) override;
-    private:
-        ObservableJoystick *m_driverJoystick;
-        ObservableJoystick *m_operatorJoystick;
-        ObservableJoystick *m_tuningJoystick;
+    void RobotPeriodic() override;
 
-        TalonSRX *m_leftDriveTalonA;
-        VictorSPX *m_leftDriveVictorB;
-        VictorSPX *m_leftDriveVictorC;
-        TalonSRX *m_rightDriveTalonA;
-        VictorSPX *m_rightDriveVictorB;
-        VictorSPX *m_rightDriveVictorC;
+    void ObserveJoystickStateChange(uint32_t port, uint32_t button,
+                                    bool pressedP) override;
 
-        ADXRS450_Gyro *m_gyro;
+private:
+    ObservableJoystick *m_driverJoystick;
+    ObservableJoystick *m_operatorJoystick;
+    ObservableJoystick *m_tuningJoystick;
+    
+    TalonSRX *m_leftDriveTalonA;
+    VictorSPX *m_leftDriveVictorB;
+    VictorSPX *m_leftDriveVictorC;
+    TalonSRX *m_rightDriveTalonA;
+    VictorSPX *m_rightDriveVictorB;
+    VictorSPX *m_rightDriveVictorC;
 
-        LogSpreadsheet *m_logger;
+    ADXRS450_Gyro *m_gyro;
 
-        TalonSRX *m_elevatorMotor;
+    LogSpreadsheet *m_logger;
 
-        Elevator *m_elevator;
-        Claw *m_claw;
-        Drive *m_drive;
-        Hanger *m_hanger;
+    TalonSRX *m_clawLeftRoller;
+    TalonSRX *m_clawRightRoller;
+    DigitalInput *m_clawCubeSensor;
+    TalonSRX *m_elevatorMotor;
 
-        Disabled *m_disabled;
-        Autonomous *m_autonomous;
-        Teleop *m_teleop;
-        Test *m_test;
-    };
+    Elevator *m_elevator;
+    Claw *m_claw;
+    Drive *m_drive;
+    Hanger *m_hanger;
+
+    Disabled *m_disabled;
+    Autonomous *m_autonomous;
+    Teleop *m_teleop;
+    Test *m_test;
+    NetworkTableInstance m_dashboard;
+};
 };

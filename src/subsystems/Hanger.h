@@ -19,12 +19,13 @@ class TaskMgr;
 class LogSpreadsheet;
 
 class Hanger : public CoopTask {
-    public:
-        Hanger(TaskMgr *scheduler, LogSpreadsheet *logger);
-        virtual ~Hanger();
+public:
+    Hanger(TaskMgr *scheduler, LogSpreadsheet *logger);
+    virtual ~Hanger();
 
-        void TaskPeriodic(RobotMode mode);
-    private:
-        TaskMgr *m_scheduler;
+    void TaskPeriodic(RobotMode mode);
+
+private:
+    TaskMgr *m_scheduler;
 };
 }

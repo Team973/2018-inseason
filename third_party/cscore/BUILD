@@ -1,38 +1,25 @@
 licenses(["permissive"])
 
 cc_library(
-    name = "opencv",
-    srcs = glob([
-        "opencv/lib/static/*.a",
-        "opencv/lib/shared/*.so.3.2",
-    ]),
-    hdrs = glob([
-        "opencv/include/opencv2/**/*.h",
-        "opencv/include/opencv2/**/*.hpp",
-    ]),
-    includes = [
-        "opencv/include",
-    ],
-)
-
-cc_library(
     name = "cscore",
     srcs = glob([
-        "src/*.cpp",
-        "src/*.hpp",
-        "src/*.h",
-    ]),
+        "src/main/native/cpp/**/*.cpp",
+        "src/main/native/cpp/**/*.hpp",
+        "src/main/native/cpp/**/*.h",
+    ],
+    exclude = glob(["src/main/native/cpp/jni/*.cpp"]),
+    ),
     hdrs = glob([
-        "include/*.h",
-        "include/*.inl",
-        "src/*.inl",
+        "src/main/native/include/*.h",
+        "src/main/native/include/*.inl",
+        "src/main/native/cpp/*.inl",
     ]),
     includes = [
-        "include",
+        "src/main/native/include",
     ],
     deps = [
-        "//third_party/ntcore:wpiutil",
-        ":opencv",
+        "//third_party/wpiutil:wpiutil",
+        "//third_party/opencv:opencv",
     ],
     visibility = ["//visibility:public"],
 )

@@ -20,11 +20,13 @@ namespace frc973 {
 /*
  * Interface for a class can determine the current statae of the drive
  * plant
-*/
+ */
 class DriveStateProvider {
 public:
-    DriveStateProvider() {}
-    virtual ~DriveStateProvider() {}
+    DriveStateProvider() {
+    }
+    virtual ~DriveStateProvider() {
+    }
     virtual double GetAngle() const = 0;
     virtual double GetAngularRate() const = 0;
     virtual double GetLeftDist() const = 0;
@@ -37,11 +39,13 @@ public:
 
 /*
  * Interface for a class that can take drive output
-*/
+ */
 class DriveControlSignalReceiver {
 public:
-    DriveControlSignalReceiver() {}
-    virtual ~DriveControlSignalReceiver() {}
+    DriveControlSignalReceiver() {
+    }
+    virtual ~DriveControlSignalReceiver() {
+    }
     /**
      * Receive calculated motor powers from a controller.
      * Should only be called from a child of DriveController.
@@ -56,24 +60,29 @@ public:
  * In general there will be two drive controllers: One that calculates output
  * based solely on joystick values and one that calcualtes output based solely
  * on pid.
-*/
+ */
 class DriveController {
 public:
-    DriveController() {}
-    virtual ~DriveController() {}
+    DriveController() {
+    }
+    virtual ~DriveController() {
+    }
     /**
      * Use the input signals from |angle| and |dist| and calculate some output,
      * then send that output to |out|.
      */
-    virtual void CalcDriveOutput(DriveStateProvider *state, DriveControlSignalReceiver *out) = 0;
+    virtual void CalcDriveOutput(DriveStateProvider *state,
+                                 DriveControlSignalReceiver *out) = 0;
     /**
      * Check whether the controller thinks we are on target.
      */
     virtual bool OnTarget() = 0;
 
-    virtual void Start() {}
+    virtual void Start() {
+    }
 
-    virtual void Stop() {}
+    virtual void Stop() {
+    }
 };
 
 /**
@@ -83,9 +92,7 @@ public:
  *
  * CoopTask handles calling TaskPostPeriodic once a cycle
  */
-class DriveBase :
-        public CoopTask
-{
+class DriveBase : public CoopTask {
 public:
     /**
      * Creates a new DriveBase Object.  The DriveBase object stores a drive
@@ -93,15 +100,16 @@ public:
      * to calculate drive outputs, then drive those drive outputs.
      */
     DriveBase(TaskMgr *scheduler, DriveStateProvider *state,
-            DriveControlSignalReceiver *outpt,
-            DriveController *controller = nullptr);
+              DriveControlSignalReceiver *outpt,
+              DriveController *controller = nullptr);
     virtual ~DriveBase();
     /**
      * When making calls to PID-like-commands, parameters can be relative to
      * the world (Absolute), relative to the current position (Now), or
      * relative to the current setpoint (SetPoint)
      */
-    enum RelativeTo {
+    enum RelativeTo
+    {
         Absolute,
         Now,
         SetPoint
@@ -129,6 +137,7 @@ public:
      * @return whether the current controller things we are done
      */
     bool OnTarget();
+
 private:
     TaskMgr *m_scheduler;
 
@@ -137,5 +146,4 @@ private:
 
     DriveController *m_controller;
 };
-
 }

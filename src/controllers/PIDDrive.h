@@ -8,7 +8,6 @@
 #ifndef SRC_CONTROLLERS_PIDDRIVECONTROLLER_H_
 #define SRC_CONTROLLERS_PIDDRIVECONTROLLER_H_
 
-
 #include "lib/bases/DriveBase.h"
 
 using namespace frc;
@@ -73,7 +72,7 @@ public:
     /*
      * Set the tolerance for distance exiting
      */
-    PIDDriveController *SetDistTolerance(double dist=2.0, double rate=2.0) {
+    PIDDriveController *SetDistTolerance(double dist = 2.0, double rate = 2.0) {
         m_distTolerance = dist;
         m_distRateTolerance = rate;
         return this;
@@ -82,7 +81,8 @@ public:
     /*
      * Set the tolerance for distance exiting
      */
-    PIDDriveController *SetAngleTolerance(double angle=2.0, double rate=2.0) {
+    PIDDriveController *SetAngleTolerance(double angle = 2.0,
+                                          double rate = 2.0) {
         m_angleTolerance = angle;
         m_angleRateTolerance = rate;
         return this;
@@ -143,7 +143,6 @@ private:
     static constexpr double DEFAULT_ANGLE_TOLERANCE = 2.0;
     static constexpr double DEFAULT_ANGLE_RATE_TOLERANCE = 5.0;
 };
-
 }
 
 #endif /* SRC_CONTROLLERS_PIDDRIVECONTROLLER_H_ */

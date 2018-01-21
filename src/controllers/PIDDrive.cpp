@@ -9,13 +9,14 @@
 #include "lib/helpers/PID.h"
 #include <stdio.h>
 #include "lib/util/WrapDash.h"
+#include <math.h>
 
 using namespace frc;
 using namespace ctre;
 
 namespace frc973 {
 
-static constexpr double DRIVE_PID_KP = 0.025;// 0.030;
+static constexpr double DRIVE_PID_KP = 0.025;  // 0.030;
 static constexpr double DRIVE_PID_KI = 0.0;
 static constexpr double DRIVE_PID_KD = 0.00;
 
@@ -144,5 +145,4 @@ void PIDDriveController::SetTarget(double dist, double angle,
     m_angleRateTolerance = DEFAULT_ANGLE_RATE_TOLERANCE;
     m_quickExit = false;
 }
-
 }

@@ -19,9 +19,8 @@ public:
     StraightDriveController();
     virtual ~StraightDriveController();
 
-    void SetTarget(DriveBase::RelativeTo relativeTo,
-            double throttle, double angle,
-            DriveStateProvider *state);
+    void SetTarget(DriveBase::RelativeTo relativeTo, double throttle,
+                   double angle, DriveStateProvider *state);
 
     void CalcDriveOutput(DriveStateProvider *state,
             DriveControlSignalReceiver *out) override;
@@ -43,5 +42,4 @@ private:
 
     PID *m_turnPID;
 };
-
 }

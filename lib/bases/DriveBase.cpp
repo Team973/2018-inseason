@@ -13,19 +13,18 @@
 namespace frc973 {
 
 DriveBase::DriveBase(TaskMgr *scheduler, DriveStateProvider *state,
-        DriveControlSignalReceiver *outpt, DriveController *controller)
-         : m_scheduler(scheduler)
-         , m_stateProvider(state)
-         , m_driveOutput(outpt)
-         , m_controller(controller)
-{
+                     DriveControlSignalReceiver *outpt,
+                     DriveController *controller)
+        : m_scheduler(scheduler)
+        , m_stateProvider(state)
+        , m_driveOutput(outpt)
+        , m_controller(controller) {
     m_scheduler->RegisterTask("DriveBase", this, TASK_POST_PERIODIC);
 }
 
 DriveBase::~DriveBase() {
     m_scheduler->UnregisterTask(this);
 }
-
 
 void DriveBase::TaskPostPeriodic(RobotMode mode) {
     if (m_controller != nullptr) {
@@ -55,5 +54,4 @@ bool DriveBase::OnTarget() {
         return false;
     }
 }
-
 }

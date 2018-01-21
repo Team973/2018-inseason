@@ -49,5 +49,4 @@ private:
     double m_throttle;
     double m_turn;
 };
-
 }

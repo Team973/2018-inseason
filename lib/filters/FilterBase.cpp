@@ -10,12 +10,10 @@
 namespace frc973 {
 
 FilterBase::FilterBase() {
-	// TODO Auto-generated constructor stub
-
+    // TODO Auto-generated constructor stub
 }
 
 FilterBase::~FilterBase() {
-	// TODO Auto-generated destructor stub
+    // TODO Auto-generated destructor stub
 }
-
 }

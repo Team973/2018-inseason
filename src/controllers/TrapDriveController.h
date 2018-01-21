@@ -14,13 +14,12 @@ using namespace ctre;
 
 namespace frc973 {
 
-class TrapDriveController: public DriveController {
+class TrapDriveController : public DriveController {
 public:
     TrapDriveController(DriveStateProvider *state, LogSpreadsheet *logger);
     virtual ~TrapDriveController();
 
-    void SetTarget(DriveBase::RelativeTo relativeTo,
-            double dist, double angle);
+    void SetTarget(DriveBase::RelativeTo relativeTo, double dist, double angle);
 
     TrapDriveController *SetHalt(bool start_halt, bool end_halt);
     TrapDriveController *SetConstraints(double max_vel, double max_acc);
@@ -40,6 +39,7 @@ public:
 
     double DistFromStart() const;
     double AngleFromStart() const;
+
 private:
     DriveStateProvider *m_state;
     double m_dist, m_angle;
@@ -55,8 +55,8 @@ private:
 
     bool m_done;
 
-    static constexpr double MAX_VELOCITY = 130;     //in/sec
-    static constexpr double MAX_ACCELERATION = 10.0; //in/sec^2
+    static constexpr double MAX_VELOCITY = 130;       // in/sec
+    static constexpr double MAX_ACCELERATION = 10.0;  // in/sec^2
 
     LogCell *m_l_pos_setpt_log;
     LogCell *m_l_pos_real_log;
@@ -70,5 +70,4 @@ private:
     LogCell *m_dist_endgoal_log;
     LogCell *m_angle_endgoal_log;
 };
-
 }

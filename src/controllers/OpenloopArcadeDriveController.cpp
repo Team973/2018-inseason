@@ -50,5 +50,4 @@ void OpenloopArcadeDriveController::SetJoysticks(double throttle, double turn) {
 
     //printf("left %lf  right %lf\n", m_leftOutput, m_rightOutput);
 }
-
 }

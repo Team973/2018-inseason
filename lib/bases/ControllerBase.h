@@ -29,11 +29,13 @@ class SimpleControlSystem;
  * Used by the controller to get its input signal
  */
 class SimpleControlStateProvider {
-	SimpleControlStateProvider() {}
-	virtual ~SimpleControlStateProvider() {}
+    SimpleControlStateProvider() {
+    }
+    virtual ~SimpleControlStateProvider() {
+    }
 
-	virtual double GetRate(SimpleControlSystem *system = nullptr) = 0;
-	virtual double GetPosition(SimpleControlSystem *system = nullptr) = 0;
+    virtual double GetRate(SimpleControlSystem *system = nullptr) = 0;
+    virtual double GetPosition(SimpleControlSystem *system = nullptr) = 0;
 };
 
 /**
@@ -41,15 +43,17 @@ class SimpleControlStateProvider {
  * The controller sends its output signal here
  */
 class SimpleControlSignalReceiver {
-	SimpleControlSignalReceiver() {}
-	virtual ~SimpleControlSignalReceiver() {}
+    SimpleControlSignalReceiver() {
+    }
+    virtual ~SimpleControlSignalReceiver() {
+    }
 
-	/**
-	 * Receive calculated motor powers from a controller.
-	 * Should only be called from a child of SimpleController.
-	 */
-	virtual void SetControllerOutput(double output,
-			SimpleControlSystem *system = nullptr) = 0;
+    /**
+     * Receive calculated motor powers from a controller.
+     * Should only be called from a child of SimpleController.
+     */
+    virtual void SetControllerOutput(double output,
+                                     SimpleControlSystem *system = nullptr) = 0;
 };
 
 /**
@@ -60,66 +64,65 @@ class SimpleControlSignalReceiver {
  */
 class SimpleController {
 public:
-	SimpleController(SimpleControlSystem *system);
-	virtual ~SimpleController();
+    SimpleController(SimpleControlSystem *system);
+    virtual ~SimpleController();
 
-	virtual void Enable();
-	virtual void Disable();
+    virtual void Enable();
+    virtual void Disable();
 
-	/**
-	 * Use the input signals from |angle| and |dist| and calculate some output,
-	 * then send that output to |out|.
-	 */
-	virtual void CalcControllerOutput(SimpleControlStateProvider *state,
-			SimpleControlSignalReceiver *out) = 0;
-	/**
-	 * Check whether the controller thinks we are on target.
-	 */
-	virtual bool OnTarget() = 0;
+    /**
+     * Use the input signals from |angle| and |dist| and calculate some output,
+     * then send that output to |out|.
+     */
+    virtual void CalcControllerOutput(SimpleControlStateProvider *state,
+                                      SimpleControlSignalReceiver *out) = 0;
+    /**
+     * Check whether the controller thinks we are on target.
+     */
+    virtual bool OnTarget() = 0;
 };
 
 class SimpleControlSystem : public CoopTask {
 public:
-	SimpleControlSystem(TaskMgr *scheduler,
-			SimpleControlStateProvider *state,
-			SimpleControlSignalReceiver *out,
-			SimpleController *controller = nullptr) :
-				m_scheduler(scheduler),
-				m_state(state),
-				m_out(out),
-				m_activeController(controller) {
-		m_scheduler->RegisterTask("Simple Control System", this, TASK_POST_PERIODIC);
-	}
-	virtual ~SimpleControlSystem() {
-		m_scheduler->UnregisterTask(this);
-	}
+    SimpleControlSystem(TaskMgr *scheduler, SimpleControlStateProvider *state,
+                        SimpleControlSignalReceiver *out,
+                        SimpleController *controller = nullptr)
+            : m_scheduler(scheduler)
+            , m_state(state)
+            , m_out(out)
+            , m_activeController(controller) {
+        m_scheduler->RegisterTask("Simple Control System", this,
+                                  TASK_POST_PERIODIC);
+    }
+    virtual ~SimpleControlSystem() {
+        m_scheduler->UnregisterTask(this);
+    }
 
-	void SetActiveController(SimpleController *controller) {
-		if (m_activeController) {
-			m_activeController->Disable();
-		}
-		m_activeController = controller;
-		m_activeController->Enable();
-	}
+    void SetActiveController(SimpleController *controller) {
+        if (m_activeController) {
+            m_activeController->Disable();
+        }
+        m_activeController = controller;
+        m_activeController->Enable();
+    }
 
-	bool OnTarget() {
-		if (!m_activeController) {
-			return false;
-		}
-		return m_activeController->OnTarget();
-	}
+    bool OnTarget() {
+        if (!m_activeController) {
+            return false;
+        }
+        return m_activeController->OnTarget();
+    }
 
-	void TaskPostPeriodic(RobotMode mode) override {
-		if (m_activeController != nullptr) {
-			m_activeController->CalcControllerOutput(m_state, m_out);
-		}
-	}
+    void TaskPostPeriodic(RobotMode mode) override {
+        if (m_activeController != nullptr) {
+            m_activeController->CalcControllerOutput(m_state, m_out);
+        }
+    }
 
 private:
-	TaskMgr *m_scheduler;
-	SimpleControlStateProvider *m_state;
-	SimpleControlSignalReceiver *m_out;
-	SimpleController *m_activeController;
+    TaskMgr *m_scheduler;
+    SimpleControlStateProvider *m_state;
+    SimpleControlSignalReceiver *m_out;
+    SimpleController *m_activeController;
 };
-
 }

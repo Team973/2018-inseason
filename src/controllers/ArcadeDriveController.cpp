@@ -8,6 +8,7 @@
 #include "src/controllers/ArcadeDriveController.h"
 #include "lib/util/Util.h"
 #include <stdio.h>
+#include <math.h>
 #include "lib/util/WrapDash.h"
 #include "src/info/RobotInfo.h"
 
@@ -53,5 +54,4 @@ void ArcadeDriveController::SetJoysticks(double throttle, double turn) {
 
     //printf("left %lf  right %lf\n", m_leftOutput, m_rightOutput);
 }
-
 }

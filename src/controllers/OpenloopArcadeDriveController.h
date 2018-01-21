@@ -49,5 +49,4 @@ private:
     double m_leftOutput;
     double m_rightOutput;
 };
-
 }

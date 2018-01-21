@@ -10,7 +10,7 @@ using namespace ctre;
 
 namespace frc973 {
 
-class SplineDriveController: public DriveController {
+class SplineDriveController : public DriveController {
 public:
     SplineDriveController(DriveStateProvider *state, LogSpreadsheet *logger);
     virtual ~SplineDriveController();
@@ -51,8 +51,8 @@ private:
 
     bool m_done;
 
-    static constexpr double MAX_VELOCITY = 130;     //in/sec
-    static constexpr double MAX_ACCELERATION = 10.0; //in/sec^2
+    static constexpr double MAX_VELOCITY = 130;       // in/sec
+    static constexpr double MAX_ACCELERATION = 10.0;  // in/sec^2
 
     LogCell *m_l_pos_setpt_log;
     LogCell *m_l_pos_real_log;
@@ -66,5 +66,4 @@ private:
     LogCell *m_dist_endgoal_log;
     LogCell *m_angle_endgoal_log;
 };
-
 }
