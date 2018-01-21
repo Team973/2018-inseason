@@ -12,6 +12,8 @@
 #pragma once
 
 #include "WPILib.h"
+#include "networktables/NetworkTableInstance.h"
+#include "networktables/NetworkTableEntry.h"
 #include <iostream>
 #include "src/info/RobotInfo.h"
 #include "src/DisabledMode.h"
@@ -27,6 +29,9 @@
 #include "lib/helpers/JoystickHelper.h"
 #include "lib/bases/CoopMTRobot.h"
 #include "ctre/Phoenix.h"
+
+using namespace frc;
+using namespace nt;
 
 namespace frc973 {
 class Disabled;
@@ -83,5 +88,6 @@ private:
     Autonomous *m_autonomous;
     Teleop *m_teleop;
     Test *m_test;
+    NetworkTableInstance m_dashboard;
 };
 };

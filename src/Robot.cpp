@@ -1,4 +1,5 @@
 #include "WPILib.h"
+#include "networktables/NetworkTableInstance.h"
 #include <iostream>
 #include "src/info/RobotInfo.h"
 #include "src/DisabledMode.h"
@@ -7,6 +8,9 @@
 #include "src/TestMode.h"
 #include "src/Robot.h"
 #include "ctre/Phoenix.h"
+
+using namespace frc;
+using namespace nt;
 
 namespace frc973 {
 Robot::Robot()
@@ -35,7 +39,8 @@ Robot::Robot()
         , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick,
                               m_tuningJoystick))
         , m_test(new Test(m_driverJoystick, m_operatorJoystick,
-                          m_tuningJoystick, m_elevator)) {
+                          m_tuningJoystick, m_elevator))
+        , m_dashboard(NetworkTableInstance::GetDefault()) {
     std::cout << "Constructed a Robot!" << std::endl;
 }
 
