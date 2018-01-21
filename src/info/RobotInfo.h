@@ -25,8 +25,8 @@ static const int CLAW_RIGHT_ROLLER_CAN_ID = 12;
 static const int CUBE_BANNER_SENSOR_DIN = 0;
 
 // Hanger
-static const int LEFT_FORKLIFT_CAN_ID = 6;
-static const int RIGHT_FORKLIFT_CAN_ID = 11;
+static const int FORKLIFT_TALON_CAN_ID = 6;
+static const int FORKLIFT_VICTOR_ID = 11;
 
 // Solenoids
 static const int HANGER_PTO_PCM_ID = 1;
