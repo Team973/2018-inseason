@@ -25,13 +25,15 @@ public:
      * In this case just return the most recent joystick commands.
      */
     void CalcDriveOutput(DriveStateProvider *state,
-            DriveControlSignalReceiver *out);
+                         DriveControlSignalReceiver *out);
 
     /*
      * This controller is open-loop so OnTarget doesn't make sense here...
      * just return false I guess...
      */
-    bool OnTarget() override { return false; }
+    bool OnTarget() override {
+        return false;
+    }
 
     /*
      * Set the joystick values (which in this case will be output)
@@ -45,6 +47,7 @@ public:
     void Stop() override {
         printf("Turning off Open Loop Arcade Mode\n");
     }
+
 private:
     double m_leftOutput;
     double m_rightOutput;

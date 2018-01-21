@@ -16,23 +16,20 @@ using namespace ctre;
 
 namespace frc973 {
 
-OpenloopArcadeDriveController::OpenloopArcadeDriveController():
-    m_leftOutput(0.0),
-    m_rightOutput(0.0)
-{
+OpenloopArcadeDriveController::OpenloopArcadeDriveController()
+        : m_leftOutput(0.0), m_rightOutput(0.0) {
 }
 
 OpenloopArcadeDriveController::~OpenloopArcadeDriveController() {
 }
 
-void OpenloopArcadeDriveController::CalcDriveOutput(DriveStateProvider *state,
-        DriveControlSignalReceiver *out) {
-
-    out->SetDriveOutput(ControlMode::PercentOutput,
-                        -m_leftOutput, -m_rightOutput);
-    DBStringPrintf(DBStringPos::DB_LINE4,
-                "arcade l=%1.2lf r=%1.2lf", m_leftOutput, m_rightOutput);
-    //printf("arcade l=%1.2lf r=%1.2lf\n", m_leftOutput, m_rightOutput);
+void OpenloopArcadeDriveController::CalcDriveOutput(
+    DriveStateProvider *state, DriveControlSignalReceiver *out) {
+    out->SetDriveOutput(ControlMode::PercentOutput, -m_leftOutput,
+                        -m_rightOutput);
+    DBStringPrintf(DBStringPos::DB_LINE4, "arcade l=%1.2lf r=%1.2lf",
+                   m_leftOutput, m_rightOutput);
+    // printf("arcade l=%1.2lf r=%1.2lf\n", m_leftOutput, m_rightOutput);
 }
 
 void OpenloopArcadeDriveController::SetJoysticks(double throttle, double turn) {
@@ -48,6 +45,6 @@ void OpenloopArcadeDriveController::SetJoysticks(double throttle, double turn) {
         m_rightOutput = m_rightOutput * (1.0 / maxSpeed);
     }
 
-    //printf("left %lf  right %lf\n", m_leftOutput, m_rightOutput);
+    // printf("left %lf  right %lf\n", m_leftOutput, m_rightOutput);
 }
 }

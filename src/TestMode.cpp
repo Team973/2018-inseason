@@ -24,9 +24,11 @@ void Test::TestInit() {
 
 void Test::TestPeriodic() {
     double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
-    double x = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis) + -m_tuningJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
+    double x =
+        -m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis) +
+        -m_tuningJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
     bool quickturn = m_driverJoystick->GetRawButton(DualAction::LeftBumper);
-    if(m_driverJoystick->GetRawButton(DualAction::RightBumper)) {
+    if (m_driverJoystick->GetRawButton(DualAction::RightBumper)) {
         x /= 3.0;
         y /= 3.0;
     }
@@ -38,7 +40,9 @@ void Test::TestPeriodic() {
         m_drive->ArcadeDrive(y, x);
     }
     else if (m_driveMode == DriveMode::Cheesy) {
-        m_drive->CheesyDrive(y, x, quickturn, false); // gear set to false until solenoids get set up
+        m_drive->CheesyDrive(
+            y, x, quickturn,
+            false);  // gear set to false until solenoids get set up
     }
     else if (m_driveMode == DriveMode::Openloop) {
         m_drive->OpenloopArcadeDrive(y, x);
@@ -47,7 +51,8 @@ void Test::TestPeriodic() {
         m_drive->AssistedArcadeDrive(y, x);
     }
 
-    // double y = m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
+    // double y =
+    // m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
     // printf("%1.3lf\n", y);
     // m_elevatorPosition +=
     //     1.5 * Util::bound(m_driverJoystick->GetRawAxisWithDeadband(

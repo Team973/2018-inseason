@@ -23,9 +23,11 @@ public:
                    double angle, DriveStateProvider *state);
 
     void CalcDriveOutput(DriveStateProvider *state,
-            DriveControlSignalReceiver *out) override;
+                         DriveControlSignalReceiver *out) override;
 
-    bool OnTarget() override { return false; }
+    bool OnTarget() override {
+        return false;
+    }
 
     void Start() override {
         printf("Turning on Straight Mode\n");

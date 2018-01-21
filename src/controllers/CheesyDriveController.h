@@ -21,21 +21,23 @@ public:
     virtual ~CheesyDriveController();
 
     /*
-    * Calculate motor output given the most recent joystick commands.
-    * In this case just return the most recent joystick commands.
-    */
+     * Calculate motor output given the most recent joystick commands.
+     * In this case just return the most recent joystick commands.
+     */
     void CalcDriveOutput(DriveStateProvider *state,
                          DriveControlSignalReceiver *out);
 
     /*
-    * This controller is open-loop so OnTarget doesn't make sense here...
-    * just return false I guess...
-    */
-    bool OnTarget() override { return false; }
+     * This controller is open-loop so OnTarget doesn't make sense here...
+     * just return false I guess...
+     */
+    bool OnTarget() override {
+        return false;
+    }
 
     /*
-    *  Set the joystick values
-    */
+     *  Set the joystick values
+     */
     void SetJoysticks(double throttle, double turn, bool isQuickTurn,
                       bool isHighGear);
 
@@ -46,6 +48,7 @@ public:
     void Stop() override {
         printf("Turning off Cheesy Mode\n");
     }
+
 private:
     double m_leftOutput;
     double m_rightOutput;
@@ -54,9 +57,9 @@ private:
     double m_negInertiaAccumulator;
 
     /*
-    * These factor determine how fast the turn traverses the "non linear" sine
-    *  curve.
-    */
+     * These factor determine how fast the turn traverses the "non linear" sine
+     *  curve.
+     */
     const double kHighWheelNonLinearity = 0.65;
     const double kLowWheelNonLinearity = 0.5;
     const double kHighNegInertiaScalar = 4.0;
@@ -70,5 +73,4 @@ private:
     const double kQuickStopWeight = 0.1;
     const double kQuickStopScalar = 5.0;
 };
-
 }

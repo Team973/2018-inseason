@@ -17,18 +17,15 @@ using namespace ctre;
 
 namespace frc973 {
 
-AssistedArcadeDriveController::AssistedArcadeDriveController():
-	m_throttle(0.0),
-	m_turn(0.0)
-{
+AssistedArcadeDriveController::AssistedArcadeDriveController()
+        : m_throttle(0.0), m_turn(0.0) {
 }
 
 AssistedArcadeDriveController::~AssistedArcadeDriveController() {
 }
 
-void AssistedArcadeDriveController::CalcDriveOutput(DriveStateProvider *state,
-		DriveControlSignalReceiver *out) {
-
+void AssistedArcadeDriveController::CalcDriveOutput(
+    DriveStateProvider *state, DriveControlSignalReceiver *out) {
     double currAngRate = state->GetAngularRate();
     double leftOutput;
     double rightOutput;
@@ -43,17 +40,16 @@ void AssistedArcadeDriveController::CalcDriveOutput(DriveStateProvider *state,
     leftOutput = m_throttle - m_turn - turnCorrection;
     rightOutput = m_throttle + m_turn + turnCorrection;
 
-  double maxSpeed = Util::max(fabs(leftOutput), fabs(rightOutput));
-  if (maxSpeed > 1.0) {
-      leftOutput = leftOutput * (1.0 / maxSpeed);
-      rightOutput = rightOutput * (1.0 / maxSpeed);
-	}
+    double maxSpeed = Util::max(fabs(leftOutput), fabs(rightOutput));
+    if (maxSpeed > 1.0) {
+        leftOutput = leftOutput * (1.0 / maxSpeed);
+        rightOutput = rightOutput * (1.0 / maxSpeed);
+    }
 
-	out->SetDriveOutput(ControlMode::PercentOutput,
-								      -leftOutput, -rightOutput);
-	DBStringPrintf(DBStringPos::DB_LINE4,
-				"arcade l=%1.2lf r=%1.2lf", leftOutput, rightOutput);
-	//printf("arcade l=%1.2lf r=%1.2lf\n", leftOutput, rightOutput);
+    out->SetDriveOutput(ControlMode::PercentOutput, -leftOutput, -rightOutput);
+    DBStringPrintf(DBStringPos::DB_LINE4, "arcade l=%1.2lf r=%1.2lf",
+                   leftOutput, rightOutput);
+    // printf("arcade l=%1.2lf r=%1.2lf\n", leftOutput, rightOutput);
 }
 
 void AssistedArcadeDriveController::SetJoysticks(double throttle, double turn) {

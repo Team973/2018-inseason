@@ -28,20 +28,22 @@ public:
      * the pid object to decide on an ideal set of outputs
      */
     void CalcDriveOutput(DriveStateProvider *state,
-            DriveControlSignalReceiver *out) override;
+                         DriveControlSignalReceiver *out) override;
 
     /*
      * On CalcDriveOutput, the robot sets the internal m_onTarget flag if it
      * is within tolerance of the target.  This method returns whether we are
      * on target.
      */
-    bool OnTarget() override { return m_onTarget; }
+    bool OnTarget() override {
+        return m_onTarget;
+    }
 
     /*
      * Set the target position/heading relative to absolute world
      */
-    void SetTarget(double dist, double heading, DriveBase::RelativeTo
-                   relativity, DriveStateProvider *state);
+    void SetTarget(double dist, double heading,
+                   DriveBase::RelativeTo relativity, DriveStateProvider *state);
 
     /*
      * Enable distance pid, do angle and dist together.
@@ -65,7 +67,7 @@ public:
      *
      * |newCap| of 1.0 means max speed
      */
-    void SetCap (double newCap){
+    void SetCap(double newCap) {
         m_speedCap = newCap;
     }
 
@@ -108,6 +110,7 @@ public:
     void Stop() override {
         printf("Turning off PID Mode\n");
     }
+
 private:
     bool m_quickExit = false;
     double m_prevDist;

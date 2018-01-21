@@ -11,34 +11,33 @@ namespace frc973 {
 using namespace Constants;
 
 SplineDriveController::SplineDriveController(DriveStateProvider *state,
-        LogSpreadsheet *logger):
-    m_state(state),
-    m_dist(0.0),
-    m_angle(0.0),
-    m_dist_offset(0.0),
-    m_angle_offset(0.0),
-    m_time_offset(0.0),
-    m_max_vel(MAX_VELOCITY),
-    m_max_acc(MAX_VELOCITY),
-    m_start_halt(true),
-    m_end_halt(true),
-    m_l_pos_pid(1.0, 0.0, 0.0),
-    m_l_vel_pid(0.1, 0.0, 0.0),
-    m_a_pos_pid(1.9, 0.0, 0.0),
-    m_a_vel_pid(0.2, 0.0, 0.0),
-    m_done(false),
-    m_l_pos_setpt_log(new LogCell("linear pos incr goal")),
-    m_l_pos_real_log(new LogCell("linear pos incr actual")),
-    m_l_vel_setpt_log(new LogCell("linear vel incr goal")),
-    m_l_vel_real_log(new LogCell("linear vel incr actual")),
-    m_a_pos_setpt_log(new LogCell("angular pos incr goal")),
-    m_a_pos_real_log(new LogCell("angular pos incr actual")),
-    m_a_vel_setpt_log(new LogCell("angular vel incr goal")),
-    m_max_vel_log(new LogCell("trap max velocity")),
-    m_max_acc_log(new LogCell("trap max accel")),
-    m_dist_endgoal_log(new LogCell("linear pos end goal")),
-    m_angle_endgoal_log(new LogCell("angle pos end goal"))
-{
+                                             LogSpreadsheet *logger)
+        : m_state(state)
+        , m_dist(0.0)
+        , m_angle(0.0)
+        , m_dist_offset(0.0)
+        , m_angle_offset(0.0)
+        , m_time_offset(0.0)
+        , m_max_vel(MAX_VELOCITY)
+        , m_max_acc(MAX_VELOCITY)
+        , m_start_halt(true)
+        , m_end_halt(true)
+        , m_l_pos_pid(1.0, 0.0, 0.0)
+        , m_l_vel_pid(0.1, 0.0, 0.0)
+        , m_a_pos_pid(1.9, 0.0, 0.0)
+        , m_a_vel_pid(0.2, 0.0, 0.0)
+        , m_done(false)
+        , m_l_pos_setpt_log(new LogCell("linear pos incr goal"))
+        , m_l_pos_real_log(new LogCell("linear pos incr actual"))
+        , m_l_vel_setpt_log(new LogCell("linear vel incr goal"))
+        , m_l_vel_real_log(new LogCell("linear vel incr actual"))
+        , m_a_pos_setpt_log(new LogCell("angular pos incr goal"))
+        , m_a_pos_real_log(new LogCell("angular pos incr actual"))
+        , m_a_vel_setpt_log(new LogCell("angular vel incr goal"))
+        , m_max_vel_log(new LogCell("trap max velocity"))
+        , m_max_acc_log(new LogCell("trap max accel"))
+        , m_dist_endgoal_log(new LogCell("linear pos end goal"))
+        , m_angle_endgoal_log(new LogCell("angle pos end goal")) {
     m_l_pos_pid.SetBounds(-100, 100);
     m_l_vel_pid.SetBounds(-100, 100);
     m_a_pos_pid.SetBounds(-100, 100);
@@ -107,8 +106,7 @@ SplineDriveController *SplineDriveController::SetConstraints(double max_vel,
 }
 
 void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
-        DriveControlSignalReceiver *out) {
-
+                                            DriveControlSignalReceiver *out) {
     double time = GetSecTime() - m_time_offset;
 
     Profiler::Waypoint goal = Profiler::TrapProfileUnsafe(
@@ -119,8 +117,7 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
 
     if (goal.error) {
         printf("trap drive error\n");
-        out->SetDriveOutput(ControlMode::Velocity, 1.0,
-                            -1.0);
+        out->SetDriveOutput(ControlMode::Velocity, 1.0, -1.0);
         return;
     }
 
@@ -153,8 +150,7 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     double left_output = left_l_vel_ff + left_a_vel_ff + linear_dist_term +
                          linear_vel_term - angular_dist_term - angular_vel_term;
 
-    out->SetDriveOutput(ControlMode::Velocity,
-                        left_output, right_output);
+    out->SetDriveOutput(ControlMode::Velocity, left_output, right_output);
 
     m_done = goal.done;
 

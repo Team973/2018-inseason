@@ -21,35 +21,39 @@ public:
     virtual ~ArcadeDriveController();
 
     /*
-    * Calculate motor output given the most recent joystick commands.
-    * In this case just return the most recent joystick commands.
-    */
+     * Calculate motor output given the most recent joystick commands.
+     * In this case just return the most recent joystick commands.
+     */
     void CalcDriveOutput(DriveStateProvider *state,
-      DriveControlSignalReceiver *out);
+                         DriveControlSignalReceiver *out);
 
     /*
-    * This controller is open-loop so OnTarget doesn't make sense here...
-    * just return false I guess...
-    */
-    bool OnTarget() override { return false; }
+     * This controller is open-loop so OnTarget doesn't make sense here...
+     * just return false I guess...
+     */
+    bool OnTarget() override {
+        return false;
+    }
 
     /*
-    * Set the joystick values (which in this case will be output)
-    */
+     * Set the joystick values (which in this case will be output)
+     */
     void SetJoysticks(double throttle, double turn);
 
     void Start() override {
-    printf("Turning on Arcade Mode\n");
+        printf("Turning on Arcade Mode\n");
     }
 
     void Stop() override {
-    printf("Turning off Arcade Mode\n");
+        printf("Turning off Arcade Mode\n");
     }
+
 private:
     double m_leftOutput;
     double m_rightOutput;
 
-    static constexpr double THROTTLE_MAX = 130;  //in inches/sec
-    static constexpr double TURN_MAX = 4.0; //in radians/sec 6.3radians ~= 360°
+    static constexpr double THROTTLE_MAX = 130;  // in inches/sec
+    static constexpr double TURN_MAX = 4.0;      // in radians/sec 6.3radians ~=
+                                                 // 360°
 };
 }

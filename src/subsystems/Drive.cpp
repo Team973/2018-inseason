@@ -23,45 +23,42 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
              VictorSPX *leftDriveVictorC, TalonSRX *rightDriveTalonA,
              VictorSPX *rightDriveVictorB, VictorSPX *rightDriveVictorC,
              ADXRS450_Gyro *gyro)
-             : DriveBase(scheduler, this, this, nullptr)
-             , m_logger(logger)
-             , m_leftDriveTalonA(leftDriveTalonA)
-             , m_leftDriveVictorB(leftDriveVictorB)
-             , m_leftDriveVictorC(leftDriveVictorC)
-             , m_rightDriveTalonA(rightDriveTalonA)
-             , m_rightDriveVictorB(rightDriveVictorB)
-             , m_rightDriveVictorC(rightDriveVictorC)
-             , m_controlMode(ControlMode::PercentOutput)
-             , m_leftDriveOutput(0.0)
-             , m_rightDriveOutput(0.0)
-             , m_leftDriveOutputLog(new LogCell("Left motor signal (pow or vel)"))
-             , m_rightDriveOutputLog(new LogCell("Right motor signal (pow or vel)"))
-             , m_leftVoltageLog(new LogCell("Left motor voltage"))
-             , m_rightVoltageLog(new LogCell("Right motor voltage"))
-             , m_leftPosZero(0.0)
-             , m_rightPosZero(0.0)
-             , m_gyro(gyro)
-             , m_gyroZero(0.0)
-             , m_arcadeDriveController(new ArcadeDriveController())
-             , m_cheesyDriveController(new CheesyDriveController())
-             , m_openloopArcadeDriveController(new
-                                               OpenloopArcadeDriveController())
-             , m_assistedArcadeDriveController(new
-                                               AssistedArcadeDriveController())
-             , m_pidDriveController(new PIDDriveController())
-             , m_trapDriveController(new TrapDriveController(this, logger))
-             , m_straightDriveController(new StraightDriveController())
-             , m_splineDriveController(new SplineDriveController(this, logger))
-             , m_angle()
-             , m_angleRate()
-             , m_angleLog(new LogCell("Angle"))
-             , m_angularRateLog(new LogCell("Angular Rate"))
-             , m_leftDistLog(new LogCell("Left Encoder Distance"))
-             , m_leftDistRateLog(new LogCell("Left Encoder Rate"))
-             , m_rightDistLog(new LogCell("Right Encoder Distance"))
-             , m_rightDistRateLog(new LogCell("Right Encoder Rate"))
-             , m_currentLog(new LogCell("Drive current"))
-{
+        : DriveBase(scheduler, this, this, nullptr)
+        , m_logger(logger)
+        , m_leftDriveTalonA(leftDriveTalonA)
+        , m_leftDriveVictorB(leftDriveVictorB)
+        , m_leftDriveVictorC(leftDriveVictorC)
+        , m_rightDriveTalonA(rightDriveTalonA)
+        , m_rightDriveVictorB(rightDriveVictorB)
+        , m_rightDriveVictorC(rightDriveVictorC)
+        , m_controlMode(ControlMode::PercentOutput)
+        , m_leftDriveOutput(0.0)
+        , m_rightDriveOutput(0.0)
+        , m_leftDriveOutputLog(new LogCell("Left motor signal (pow or vel)"))
+        , m_rightDriveOutputLog(new LogCell("Right motor signal (pow or vel)"))
+        , m_leftVoltageLog(new LogCell("Left motor voltage"))
+        , m_rightVoltageLog(new LogCell("Right motor voltage"))
+        , m_leftPosZero(0.0)
+        , m_rightPosZero(0.0)
+        , m_gyro(gyro)
+        , m_gyroZero(0.0)
+        , m_arcadeDriveController(new ArcadeDriveController())
+        , m_cheesyDriveController(new CheesyDriveController())
+        , m_openloopArcadeDriveController(new OpenloopArcadeDriveController())
+        , m_assistedArcadeDriveController(new AssistedArcadeDriveController())
+        , m_pidDriveController(new PIDDriveController())
+        , m_trapDriveController(new TrapDriveController(this, logger))
+        , m_straightDriveController(new StraightDriveController())
+        , m_splineDriveController(new SplineDriveController(this, logger))
+        , m_angle()
+        , m_angleRate()
+        , m_angleLog(new LogCell("Angle"))
+        , m_angularRateLog(new LogCell("Angular Rate"))
+        , m_leftDistLog(new LogCell("Left Encoder Distance"))
+        , m_leftDistRateLog(new LogCell("Left Encoder Rate"))
+        , m_rightDistLog(new LogCell("Right Encoder Distance"))
+        , m_rightDistRateLog(new LogCell("Right Encoder Rate"))
+        , m_currentLog(new LogCell("Drive current")) {
     this->SetDriveController(m_arcadeDriveController);
 
     m_leftDriveTalonA->SetNeutralMode(Coast);
@@ -79,8 +76,7 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_rightDriveVictorC->Follow(*m_rightDriveTalonA);
 }
 
-Drive::~Drive() {};
-
+Drive::~Drive(){};
 
 /**
  * Sets Drive controller to ArcadeDrive
@@ -142,12 +138,10 @@ void Drive::AssistedArcadeDrive(double throttle, double turn) {
  * @return            the PID Drive contoller
  */
 PIDDriveController *Drive::PIDDrive(double dist, double turn,
-        RelativeTo relativity, double powerCap)
-{
+                                    RelativeTo relativity, double powerCap) {
     this->SetDriveController(m_pidDriveController);
     m_pidDriveController->SetCap(powerCap);
-    m_pidDriveController->SetTarget(dist, turn,
-            relativity, this);
+    m_pidDriveController->SetTarget(dist, turn, relativity, this);
     m_pidDriveController->EnableDist();
     return m_pidDriveController;
 }
@@ -163,12 +157,10 @@ PIDDriveController *Drive::PIDDrive(double dist, double turn,
  * @return            the PID Drive contoller
  */
 PIDDriveController *Drive::PIDTurn(double turn, RelativeTo relativity,
-        double powerCap)
-{
+                                   double powerCap) {
     this->SetDriveController(m_pidDriveController);
     m_pidDriveController->SetCap(powerCap);
-    m_pidDriveController->SetTarget(0.0, turn,
-            relativity, this);
+    m_pidDriveController->SetTarget(0.0, turn, relativity, this);
     m_pidDriveController->DisableDist();
     return m_pidDriveController;
 }
@@ -180,7 +172,8 @@ PIDDriveController *Drive::PIDTurn(double turn, RelativeTo relativity,
  */
 double Drive::GetLeftDist() const {
     return m_leftDriveTalonA->GetSelectedSensorPosition(0) *
-                              DRIVE_DIST_PER_REVOLUTION - m_leftPosZero;
+               DRIVE_DIST_PER_REVOLUTION -
+           m_leftPosZero;
 }
 
 /**
@@ -190,7 +183,8 @@ double Drive::GetLeftDist() const {
  */
 double Drive::GetRightDist() const {
     return -m_rightDriveTalonA->GetSelectedSensorPosition(0) *
-                                DRIVE_DIST_PER_REVOLUTION - m_rightPosZero;
+               DRIVE_DIST_PER_REVOLUTION -
+           m_rightPosZero;
 }
 
 /**
@@ -211,7 +205,7 @@ double Drive::GetLeftRate() const {
  */
 double Drive::GetRightRate() const {
     return -m_rightDriveTalonA->GetSelectedSensorVelocity(0) *
-                                DRIVE_IPS_FROM_RPM;
+           DRIVE_IPS_FROM_RPM;
 }
 
 /**
@@ -240,7 +234,8 @@ double Drive::GetRate() const {
  */
 double Drive::GetDriveCurrent() const {
     return (fabs(m_rightDriveTalonA->GetOutputCurrent()) +
-            fabs(m_leftDriveTalonA->GetOutputCurrent())) / 2.0;
+            fabs(m_leftDriveTalonA->GetOutputCurrent())) /
+           2.0;
 }
 
 /**
@@ -267,8 +262,7 @@ double Drive::GetAngularRate() const {
  * @param left  desired left Output
  * @param right desired right Output
  */
-void Drive::SetDriveOutput(ControlMode controlMode,
-                           double left, double right) {
+void Drive::SetDriveOutput(ControlMode controlMode, double left, double right) {
     m_leftDriveOutput = left;
     m_rightDriveOutput = right;
 
@@ -294,18 +288,16 @@ void Drive::SetDriveOutput(ControlMode controlMode,
 void Drive::TaskPeriodic(RobotMode mode) {
     m_angle = m_gyro->GetAngle();
 
-    //Austin ADXRS450_Gyro config
+    // Austin ADXRS450_Gyro config
     double currRate = m_gyro->GetRate();
-    if(currRate == 0){
+    if (currRate == 0) {
     }
-    else{
+    else {
         m_angleRate = currRate;
     }
 
-    DBStringPrintf(DB_LINE9, "l %2.1lf r %2.1lf g %2.1lf",
-            this->GetLeftDist(),
-            this->GetRightDist(),
-            this->GetAngle());
+    DBStringPrintf(DB_LINE9, "l %2.1lf r %2.1lf g %2.1lf", this->GetLeftDist(),
+                   this->GetRightDist(), this->GetAngle());
 
     m_angleLog->LogDouble(GetAngle());
     m_angularRateLog->LogDouble(GetAngularRate());
@@ -317,8 +309,7 @@ void Drive::TaskPeriodic(RobotMode mode) {
     m_rightDistRateLog->LogDouble(GetRightRate());
 
     if (m_controlMode == ControlMode::Velocity) {
-        m_leftDriveOutputLog->LogDouble(m_leftDriveOutput *
-                                        DRIVE_IPS_FROM_RPM);
+        m_leftDriveOutputLog->LogDouble(m_leftDriveOutput * DRIVE_IPS_FROM_RPM);
         m_rightDriveOutputLog->LogDouble(m_rightDriveOutput *
                                          DRIVE_IPS_FROM_RPM);
     }
@@ -344,15 +335,15 @@ void Drive::DriveStraight(RelativeTo relativity, double dist, double angle) {
     m_straightDriveController->SetTarget(relativity, dist, angle, this);
 }
 
-TrapDriveController *Drive::TrapDrive(RelativeTo relativity,
-        double dist, double angle) {
+TrapDriveController *Drive::TrapDrive(RelativeTo relativity, double dist,
+                                      double angle) {
     this->SetDriveController(m_trapDriveController);
     m_trapDriveController->SetTarget(relativity, dist, angle);
     return m_trapDriveController;
 }
 
-SplineDriveController *Drive::SplineDrive(RelativeTo relativity,
-        double dist, double angle) {
+SplineDriveController *Drive::SplineDrive(RelativeTo relativity, double dist,
+                                          double angle) {
     this->SetDriveController(m_splineDriveController);
     m_splineDriveController->SetTarget(relativity, dist, angle);
     return m_splineDriveController;

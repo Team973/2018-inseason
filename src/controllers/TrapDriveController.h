@@ -25,9 +25,11 @@ public:
     TrapDriveController *SetConstraints(double max_vel, double max_acc);
 
     void CalcDriveOutput(DriveStateProvider *state,
-            DriveControlSignalReceiver *out) override;
+                         DriveControlSignalReceiver *out) override;
 
-    bool OnTarget() override { return m_done; }
+    bool OnTarget() override {
+        return m_done;
+    }
 
     void Start() override {
         printf("Turning on Trap Mode\n");

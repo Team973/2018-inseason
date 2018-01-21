@@ -39,9 +39,9 @@ Robot::Robot()
               new Elevator(this, m_logger, m_driverJoystick, m_elevatorMotor))
         , m_claw(new Claw(this, m_logger, m_clawLeftRoller, m_clawRightRoller,
                           m_clawCubeSensor))
-        , m_drive(new Drive(this, m_logger, m_leftDriveTalonA, 
-                            m_leftDriveVictorB, m_leftDriveVictorC, 
-                            m_rightDriveTalonA, m_rightDriveVictorB, 
+        , m_drive(new Drive(this, m_logger, m_leftDriveTalonA,
+                            m_leftDriveVictorB, m_leftDriveVictorC,
+                            m_rightDriveTalonA, m_rightDriveVictorB,
                             m_rightDriveVictorC, m_gyro))
         , m_hanger(new Hanger(this, m_logger))
         , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick,

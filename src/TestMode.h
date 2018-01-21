@@ -34,7 +34,8 @@ private:
     ObservableJoystick *m_operatorJoystick;
     ObservableJoystick *m_tuningJoystick;
     Drive *m_drive;
-    enum DriveMode{
+    enum DriveMode
+    {
         Arcade,
         Cheesy,
         Openloop,

@@ -133,7 +133,7 @@ inline double max(double a, double b) {
 
 /* Return the limit of the two given numbers */
 inline double limit(double x, double maxMagnitude) {
-      return fmin(maxMagnitude, fmax(-maxMagnitude, x));
+    return fmin(maxMagnitude, fmax(-maxMagnitude, x));
 }
 
 /**
