@@ -20,12 +20,14 @@ sh_binary(
     data = [
         "//src:robot",
         ":robotCommand",
+        "//third_party/opencv:opencv_libs",
     ],
     args = select(get_team_number_options(
             args = [
                 "TEAM_NUMBER_HERE",
                 "$(location //src:robot)",
                 "$(location :robotCommand)",
+                "$(locations //third_party/opencv:opencv_libs)",
             ],
             numbers = team_numbers,
             number_location = 0,

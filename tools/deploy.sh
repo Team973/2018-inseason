@@ -1,20 +1,35 @@
 #!/bin/bash
 TEAM_NUMBER=$1
-PROGRAM=$2
-ROBOTCOMMAND=$3
+shift # shift "shifts" the command line arguments up by 1 so $2 becomes $1 etc.
+PROGRAM=$1
+shift
+ROBOTCOMMAND=$1
+shift
+LIBRARIES=( "$@" )
+
 TARGET_USER=lvuser
 TARGET_DIR=/home/lvuser
 
 deploy () {
     if [ $? -eq 0 ]; then
         echo "Removing old program..."
-        ssh "$TARGET_USER@$TARGET" "rm -f $TARGET_DIR/FRCUserProgram" > /dev/null 2>&1
+        ssh -o StrictHostKeyChecking=no "$TARGET_USER@$TARGET" "rm -f $TARGET_DIR/FRCUserProgram" > /dev/null 2>&1
         echo "Copying over new program..."
-        scp "$PROGRAM" "$TARGET_USER@$TARGET:$TARGET_DIR/FRCUserProgram" > /dev/null 2>&1
+        scp -o StrictHostKeyChecking=no "$PROGRAM" "$TARGET_USER@$TARGET:$TARGET_DIR/FRCUserProgram" > /dev/null 2>&1
         echo "Copying over robotCommand..."
-        scp "$ROBOTCOMMAND" "$TARGET_USER@$TARGET:$TARGET_DIR" > /dev/null 2>&1
+        scp -o StrictHostKeyChecking=no "$ROBOTCOMMAND" "$TARGET_USER@$TARGET:$TARGET_DIR" > /dev/null 2>&1
+        echo "Checking for libraries..."
+        for LIB in "${LIBRARIES[@]}"
+        do
+            LIBRARY_SO=$(basename "$LIB")
+            if ssh -o StrictHostKeyChecking=no  "$TARGET_USER@$TARGET" "test $TARGET_DIR/$LIBRARY_SO" \> /dev/null 2\>\&1
+            then
+                echo "Copying $LIBRARY_SO to $TARGET_DIR/$LIBRARY_SO"
+                scp -o StrictHostKeyChecking=no "$LIB" "$TARGET_USER@$TARGET:$TARGET_DIR/$LIBRARY_SO" > /dev/null 2>&1
+            fi
+        done
         echo "Cleaning up..."
-        ssh "$TARGET_USER@$TARGET" ". /etc/profile.d/natinst-path.sh;
+        ssh -o StrictHostKeyChecking=no "$TARGET_USER@$TARGET" ". /etc/profile.d/natinst-path.sh;
         chown lvuser $TARGET_DIR/FRCUserProgram;
         setcap 'cap_sys_nice=pe' $TARGET_DIR/FRCUserProgram;
         chmod a+x $TARGET_DIR/FRCUserProgram;
