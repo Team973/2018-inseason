@@ -78,6 +78,7 @@ private:
     TalonSRX *m_clawRightRoller;
     DigitalInput *m_clawCubeSensor;
     TalonSRX *m_elevatorMotor;
+    Solenoid *m_hangerpto;
 
     Elevator *m_elevator;
     Claw *m_claw;
