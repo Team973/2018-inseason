@@ -31,6 +31,7 @@ Robot::Robot()
         , m_rightDriveVictorC(new VictorSPX(RIGHT_DRIVE_C_VICTOR_ID))
         , m_gyro(new ADXRS450_Gyro())
         , m_logger(new LogSpreadsheet(this))
+        , m_dashboard(NetworkTableInstance::GetDefault())
         , m_clawLeftRoller(new TalonSRX(CLAW_LEFT_ROLLER_CAN_ID))
         , m_clawRightRoller(new TalonSRX(CLAW_RIGHT_ROLLER_CAN_ID))
         , m_clawCubeSensor(new DigitalInput(CUBE_BANNER_SENSOR_DIN))
@@ -39,7 +40,7 @@ Robot::Robot()
               new Elevator(this, m_logger, m_driverJoystick, m_elevatorMotor))
         , m_claw(new Claw(this, m_logger, m_clawLeftRoller, m_clawRightRoller,
                           m_clawCubeSensor))
-        , m_drive(new Drive(this, m_logger, m_leftDriveTalonA,
+        , m_drive(new Drive(this, m_logger, m_dashboard, m_leftDriveTalonA,
                             m_leftDriveVictorB, m_leftDriveVictorC,
                             m_rightDriveTalonA, m_rightDriveVictorB,
                             m_rightDriveVictorC, m_gyro))
@@ -50,8 +51,7 @@ Robot::Robot()
         , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick,
                               m_tuningJoystick))
         , m_test(new Test(m_driverJoystick, m_operatorJoystick,
-                          m_tuningJoystick, m_drive, m_elevator))
-        , m_dashboard(NetworkTableInstance::GetDefault()) {
+                          m_tuningJoystick, m_drive, m_elevator)) {
     std::cout << "Constructed a Robot!" << std::endl;
 }
 

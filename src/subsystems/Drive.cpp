@@ -13,18 +13,20 @@
 #include "lib/util/Util.h"
 #include "lib/util/WrapDash.h"
 #include "lib/logging/LogSpreadsheet.h"
+#include "networktables/NetworkTableInstance.h"
 
 using namespace frc;
 using namespace ctre;
 
 namespace frc973 {
 Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
-             TalonSRX *leftDriveTalonA, VictorSPX *leftDriveVictorB,
-             VictorSPX *leftDriveVictorC, TalonSRX *rightDriveTalonA,
-             VictorSPX *rightDriveVictorB, VictorSPX *rightDriveVictorC,
-             ADXRS450_Gyro *gyro)
+             NetworkTableInstance dashboard, TalonSRX *leftDriveTalonA,
+             VictorSPX *leftDriveVictorB, VictorSPX *leftDriveVictorC,
+             TalonSRX *rightDriveTalonA, VictorSPX *rightDriveVictorB,
+             VictorSPX *rightDriveVictorC, ADXRS450_Gyro *gyro)
         : DriveBase(scheduler, this, this, nullptr)
         , m_logger(logger)
+        , m_dashboard(dashboard)
         , m_leftDriveTalonA(leftDriveTalonA)
         , m_leftDriveVictorB(leftDriveVictorB)
         , m_leftDriveVictorC(leftDriveVictorC)
@@ -286,6 +288,12 @@ void Drive::SetDriveOutput(ControlMode controlMode, double left, double right) {
 }
 
 void Drive::TaskPeriodic(RobotMode mode) {
+    // NetworkTables
+    m_dashboard.GetEntry("leftvoltage")
+        .SetDouble(m_leftDriveTalonA->GetMotorOutputVoltage());
+    m_dashboard.GetEntry("rightvoltage")
+        .SetDouble(m_rightDriveTalonA->GetMotorOutputVoltage());
+
     m_angle = m_gyro->GetAngle();
 
     // Austin ADXRS450_Gyro config

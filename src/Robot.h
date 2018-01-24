@@ -85,6 +85,7 @@ private:
     ADXRS450_Gyro *m_gyro;
 
     LogSpreadsheet *m_logger;
+    NetworkTableInstance m_dashboard;
 
     TalonSRX *m_clawLeftRoller;
     TalonSRX *m_clawRightRoller;
@@ -100,6 +101,5 @@ private:
     Autonomous *m_autonomous;
     Teleop *m_teleop;
     Test *m_test;
-    NetworkTableInstance m_dashboard;
 };
 };
