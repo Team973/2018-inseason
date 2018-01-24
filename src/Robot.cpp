@@ -28,12 +28,15 @@ Robot::Robot()
         , m_clawCubeSensor(new DigitalInput(CUBE_BANNER_SENSOR_DIN))
         , m_elevatorMotor(new TalonSRX(ELEVATOR_CAN_ID))
         , m_hangerpto(new Solenoid(HANGER_PTO_PCM_ID))
+        , m_forkliftTalon(new TalonSRX(FORKLIFT_TALON_CAN_ID))
+        , m_forkliftVictor(new VictorSPX(FORKLIFT_VICTOR_ID))
         , m_elevator(
               new Elevator(this, m_logger, m_driverJoystick, m_elevatorMotor))
         , m_claw(new Claw(this, m_logger, m_clawLeftRoller, m_clawRightRoller,
                           m_clawCubeSensor))
         , m_drive(new Drive(this, m_logger))
-        , m_hanger(new Hanger(this, m_logger, m_drive, m_elevator, m_hangerpto))
+        , m_hanger(new Hanger(this, m_logger, m_drive, m_elevator, m_hangerpto,
+                              m_forkliftTalon, m_forkliftVictor))
         , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick,
                                   m_tuningJoystick))
         , m_autonomous(new Autonomous(m_disabled))

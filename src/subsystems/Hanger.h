@@ -23,16 +23,25 @@ class LogSpreadsheet;
 class Hanger : public CoopTask {
 public:
     Hanger(TaskMgr *scheduler, LogSpreadsheet *logger, Drive *drive,
-           Elevator *elevator, Solenoid *hangerpto);
+           Elevator *elevator, Solenoid *hangerpto, TalonSRX *forkliftTalon,
+           VictorSPX *forkliftVictor);
     virtual ~Hanger();
 
     void EngagePTO();
     /**
-     * Engages the hanger PTO
+     * Engages the hanger PTO, runs drive + elevator motors
      **/
     void DisengagePTO();
     /**
-     * Disengages the hanger PTO
+     * Disengages the hanger PTO, stops drive + elevator motors
+     **/
+    void ForkliftForwardpower();
+    /**
+     * Sets all forklift motors forward at %100 speed
+     **/
+    void ForkliftReversepower();
+    /**
+     * Sets all forklift motors in reverse at %100 speed
      **/
     void TaskPeriodic(RobotMode mode);
 
@@ -42,5 +51,7 @@ private:
     Drive *m_drive;
     Elevator *m_elevator;
     Solenoid *m_hangerpto;
+    TalonSRX *m_forkliftTalon;
+    VictorSPX *m_forkliftVictor;
 };
 }
