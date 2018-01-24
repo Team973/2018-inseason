@@ -56,6 +56,10 @@ void Claw::Stop() {
     m_rightRoller->Set(ControlMode::PercentOutput, 0.0);
 }
 
+bool Claw::IsCubeIn() {
+    return m_cubeSensor->Get();
+}
+
 void Claw::TaskPeriodic(RobotMode mode) {
 }
 }

@@ -23,11 +23,32 @@ class Claw : public CoopTask {
         Claw(TaskMgr *scheduler, LogSpreadsheet *logger,
              TalonSRX *rightRoller, TalonSRX *leftRoller,
              DigitalInput *cubeSensor);
+
         virtual ~Claw();
 
+
+        /**
+         * Starts the wheels to pull things in
+         **/
         void Intake();
+
+        /**
+         * Starts spitting whatever's in the claw, out.
+         **/
         void Eject();
+
+        /**
+         * Sets the claw wheels to neutral, braking them.
+         **/
         void Stop();
+
+        /**
+          * Checks for presense of cube
+          *
+          * @return Boolean if beam breaker is trigerred ot not
+          **/
+        bool IsCubeIn();
+
 
         void TaskPeriodic(RobotMode mode);
     private:
