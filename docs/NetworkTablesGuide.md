@@ -63,7 +63,7 @@ SubsystemName::SubsystemName(TaskMgr *scheduler, ... NetworkTableInstance dashbo
     ...
 };
 ```
-**Note: make sure you declare `m_scheduler` in the header in the same posistion as in the cpp!**
+**Note: make sure you declare `m_dashboard` in the header in the same posistion as in the cpp!**
 
 ## Step 4: Write to the table!
 In your subsystem's cpp, find the function that you want to have the ability to send information to the table, i.e. TaskPeriodic, which will continuously update values:
