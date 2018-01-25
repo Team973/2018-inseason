@@ -68,7 +68,7 @@ SubsystemName::SubsystemName(TaskMgr *scheduler, ... NetworkTableInstance dashbo
 ## Step 4: Write to the table!
 In your subsystem's cpp, find the function that you want to have the ability to send information to the table, i.e. TaskPeriodic, which will continuously update values:
 ```cpp
-float value = 0;
+int value = 0;
 ...
 void SubsystemName::TaskPeriodic(RobotMode mode) {
     ...
