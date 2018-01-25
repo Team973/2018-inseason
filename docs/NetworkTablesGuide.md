@@ -38,6 +38,7 @@ Robot::Robot()
     ....
 };
 ```
+**Note: make sure the parameters for your subsystem constructor are in the correct order and all exist!**
 
 ## Step 3: Declare a private member `m_dashboard` in your subsystem
 In your subsystem's header, find the private section, and add a new `m_dashboard` member:
