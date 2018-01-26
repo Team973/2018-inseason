@@ -1,14 +1,16 @@
 #include "src/TestMode.h"
+#include "src/subsystems/Hanger.h"
 
 using namespace frc;
 
 namespace frc973 {
 Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-           ObservableJoystick *tuning, Elevator *elevator)
+           ObservableJoystick *tuning, Elevator *elevator, Hanger *hanger)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_tuningJoystick(tuning)
         , m_elevator(elevator)
+        , m_hanger(hanger)
         , m_elevatorMode(ElevatorMode::percentOutput)
         , m_elevatorPosition(0.0) {
 }
@@ -21,7 +23,7 @@ void Test::TestInit() {
 }
 
 void Test::TestPeriodic() {
-    if (m_elevatorPosition > 100.0) {
+    /*if (m_elevatorPosition > 100.0) {
         m_elevatorPosition = 100.0;  // does not allow value to exceed 100.0
     }
     else if (m_elevatorPosition < 0.0) {
@@ -44,7 +46,7 @@ void Test::TestPeriodic() {
     }
     else if (m_elevatorMode == ElevatorMode::position) {
         m_elevator->SetPosition(m_elevatorPosition);
-    }
+    }*/
 }
 
 void Test::TestStop() {
@@ -70,6 +72,10 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
+                    m_hanger->SetForkliftPower(0.3);
+                }
+                else {
+                    m_hanger->SetForkliftPower(0);
                 }
                 break;
             case DualAction::RightTrigger:

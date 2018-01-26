@@ -6,6 +6,7 @@
 #include "lib/helpers/JoystickHelper.h"
 #include "lib/util/Util.h"
 #include "src/subsystems/Elevator.h"
+#include "src/subsystems/Hanger.h"
 
 using namespace frc;
 
@@ -19,7 +20,7 @@ public:
         position
     };
     Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-         ObservableJoystick *tuning, Elevator *elevator);
+         ObservableJoystick *tuning, Elevator *elevator, Hanger *hanger);
     virtual ~Test();
 
     void TestInit();
@@ -34,6 +35,7 @@ private:
     ObservableJoystick *m_tuningJoystick;
 
     Elevator *m_elevator;
+    Hanger *m_hanger;
 
     ElevatorMode m_elevatorMode;
     double m_elevatorPosition;

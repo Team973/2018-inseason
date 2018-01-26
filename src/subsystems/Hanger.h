@@ -27,22 +27,21 @@ public:
            VictorSPX *forkliftVictor);
     virtual ~Hanger();
 
-    void EngagePTO();
     /**
      * Engages the hanger PTO, runs drive + elevator motors
      **/
-    void DisengagePTO();
+    void EngagePTO();
+
     /**
      * Disengages the hanger PTO, stops drive + elevator motors
      **/
-    void ForkliftForwardpower();
+    void DisengagePTO();
+
     /**
-     * Sets all forklift motors forward at %100 speed
+     * Sets all forklift motors to a determined speed
      **/
-    void ForkliftReversepower();
-    /**
-     * Sets all forklift motors in reverse at %100 speed
-     **/
+    void SetForkliftPower(double power);
+
     void TaskPeriodic(RobotMode mode);
 
 private:

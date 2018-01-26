@@ -35,12 +35,10 @@ void Hanger::EngagePTO() {
 void Hanger::DisengagePTO() {
     m_hangerpto->Set(false);
 }
-void Hanger::ForkliftForwardpower() {
-    m_forkliftTalon->Set(ControlMode::PercentOutput, 1.0);
+void Hanger::SetForkliftPower(double power) {
+    m_forkliftTalon->Set(ControlMode::PercentOutput, power);
 }
-void Hanger::ForkliftReversepower() {
-    m_forkliftTalon->Set(ControlMode::PercentOutput, -1.0);
-}
+
 
 void Hanger::TaskPeriodic(RobotMode mode) {
 }
