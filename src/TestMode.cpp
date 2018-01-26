@@ -19,22 +19,20 @@ Test::~Test() {
 
 void Test::TestInit() {
     std::cout << "Test Start" << std::endl;
-    m_driveMode = DriveMode::Cheesy;
+    m_driveMode = DriveMode::Openloop;
 }
 
 void Test::TestPeriodic() {
-    double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
-    double x =
-        -m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis) +
-        -m_tuningJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
+    double y = -m_driverJoystick->GetY(GenericHID::JoystickHand::kLeftHand);
+    double x = -m_driverJoystick->GetX(GenericHID::JoystickHand::kRightHand);
     bool quickturn = m_driverJoystick->GetRawButton(DualAction::LeftBumper);
     if (m_driverJoystick->GetRawButton(DualAction::RightBumper)) {
         x /= 3.0;
         y /= 3.0;
     }
-    else if (m_elevatorPosition < 0.0) {
-        m_elevatorPosition = 0.0;  // does not allow value to be under 0.0
-    }
+
+    printf("%lf", x);
+    printf("%lf", y);
 
     if (m_driveMode == DriveMode::Arcade) {
         m_drive->ArcadeDrive(y, x);

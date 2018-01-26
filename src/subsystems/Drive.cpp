@@ -13,7 +13,6 @@
 #include "lib/util/Util.h"
 #include "lib/util/WrapDash.h"
 #include "lib/logging/LogSpreadsheet.h"
-#include "networktables/NetworkTableInstance.h"
 
 using namespace frc;
 using namespace ctre;
