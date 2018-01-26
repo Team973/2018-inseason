@@ -66,7 +66,7 @@ SubsystemName::SubsystemName(TaskMgr *scheduler, ... NetworkTableInstance dashbo
 ```
 **Note: make sure you declare `m_dashboard` in the header in the same posistion as in the cpp!**
 
-## Step 4: Write to the table!
+## Step 4a: Write to the table!
 In your subsystem's cpp, find the function that you want to have the ability to send information to the table, i.e. TaskPeriodic, which will continuously update values:
 ```cpp
 int value = 0;
@@ -81,3 +81,6 @@ void SubsystemName::TaskPeriodic(RobotMode mode) {
 The example above will set `value` equal to itself plus 1, then set the entry `CountBy1` equal to `value`.
 
 Other set options are available! View them [here](http://first.wpi.edu/FRC/roborio/release/docs/cpp/classnt_1_1NetworkTableEntry.html).
+
+## Step 4b: Choosing your key name
+Wherever you have a NetworkTable entry, you should have an appropriate key, or entry name. For example, if your subsystem was drive, and you wanted to post a gyro value, a good choice for a key would be `GetEntry("drive/gyro")`. It's good practice to follow the `GetEntry("SubsystemName/SubsystemDeviceName")` for naming your keys.
