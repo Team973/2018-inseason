@@ -18,7 +18,7 @@ class SubsystemName ... {
 ```
 **Note: there is no * before dashboard.**
 
-In your subsystem's cpp, find the constructor caller, and mirror the constructor declaration in the header:
+In your subsystem's cpp, find the constructor definition, and mirror the constructor declaration in the header:
 ```cpp
 SubsystemName::SubsystemName(TaskMgr *scheduler, ... NetworkTableInstance dashboard, ...)
         ... {
@@ -55,7 +55,7 @@ class SubsystemName ... {
 }
 ```
 
-In your subsystem's cpp, find the constructor caller, and add `m_dashboard`:
+In your subsystem's cpp, find the constructor's initialize list and add `m_dashboard`:
 ```cpp
 SubsystemName::SubsystemName(TaskMgr *scheduler, ... NetworkTableInstance dashboard, ...)
         : m_scheduler(scheduler)
