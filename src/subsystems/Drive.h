@@ -17,14 +17,14 @@ using namespace ctre;
 using namespace nt;
 
 namespace frc973 {
-class ArcadeDriveController;
-class CheesyDriveController;
-class PIDDriveController;
-class OpenloopArcadeDriveController;
 class AssistedArcadeDriveController;
+class CheesyDriveController;
+class HangerController;
+class OpenloopArcadeDriveController;
+class PIDDriveController;
+class SplineDriveController;
 class StraightDriveController;
 class TrapDriveController;
-class SplineDriveController;
 class LogSpreadsheet;
 
 /*
@@ -61,6 +61,15 @@ public:
      */
     void Zero();
 
+    /**
+     * Set a drive to use the mostly open loop arcade controller plus
+     * some gyro velocity help
+     *
+     * @param throttle Forward-backwards-ness to drive with
+     * @param turn Turn value to drive with
+     */
+    void AssistedArcadeDrive(double throttle, double turn);
+
     /*
      * Sets drive to use the cheesy drive controller if it doesn't already.
      * Also sets the input for the cheesy drive controller.
@@ -73,15 +82,12 @@ public:
     void CheesyDrive(double throttle, double turn, bool isQuickTurn,
                      bool isHighGear);
 
-    /*
-     * Sets drive to use standard arcade drive controller if it doesn't
-     *  already
-     * Also sets the input for the arcade drive controller.
+    /**
+     * Set drive to use the hanger controller and sets powers
      *
-     * @param throttle Forward-backwards-ness to drive with
-     * @param turn Turn value to drive with
+     * @param throttle Forward-ness to hang with
      */
-    void ArcadeDrive(double throttle, double turn);
+    void Hanger(double throttle);
 
     /**
      * Set drive to use the open loop arcade drive controller and sets
@@ -91,15 +97,6 @@ public:
      * @param turn Turn value to drive with
      */
     void OpenloopArcadeDrive(double throttle, double turn);
-
-    /**
-     * Set a drive to use the mostly open loop arcade controller plus
-     * some gyro velocity help
-     *
-     * @param throttle Forward-backwards-ness to drive with
-     * @param turn Turn value to drive with
-     */
-    void AssistedArcadeDrive(double throttle, double turn);
 
     /**
      * Set a target distance to be achieved by pid
@@ -120,6 +117,16 @@ public:
      */
     PIDDriveController *PIDTurn(double angle, RelativeTo relativity,
                                 double powerCap);
+
+    /**
+     * Set a drive to use spline drive controller
+     *
+     * @param relativity What is that angle metric relative to?
+     * @param dist Distance in inches to go
+     * @param angle Angle in degrees to go
+     */
+    SplineDriveController *SplineDrive(RelativeTo relativity, double dist,
+                                       double angle);
 
     /**
      * Set a drive to drive straight
@@ -143,16 +150,6 @@ public:
     const TrapDriveController *GetTrapDriveController() {
         return m_trapDriveController;
     }
-
-    /**
-     * Set a drive to use spline drive controller
-     *
-     * @param relativity What is that angle metric relative to?
-     * @param dist Distance in inches to go
-     * @param angle Angle in degrees to go
-     */
-    SplineDriveController *SplineDrive(RelativeTo relativity, double dist,
-                                       double angle);
 
     const SplineDriveController *GetSplineDriveController() {
         return m_splineDriveController;
@@ -222,14 +219,14 @@ private:
     ADXRS450_Gyro *m_gyro;
     double m_gyroZero;
 
-    ArcadeDriveController *m_arcadeDriveController;
-    CheesyDriveController *m_cheesyDriveController;
-    OpenloopArcadeDriveController *m_openloopArcadeDriveController;
     AssistedArcadeDriveController *m_assistedArcadeDriveController;
+    CheesyDriveController *m_cheesyDriveController;
+    HangerController *m_hangerController;
+    OpenloopArcadeDriveController *m_openloopArcadeDriveController;
     PIDDriveController *m_pidDriveController;
-    TrapDriveController *m_trapDriveController;
-    StraightDriveController *m_straightDriveController;
     SplineDriveController *m_splineDriveController;
+    StraightDriveController *m_straightDriveController;
+    TrapDriveController *m_trapDriveController;
 
     double m_angle;
     double m_angleRate;

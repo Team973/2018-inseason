@@ -36,14 +36,14 @@ private:
     Drive *m_drive;
     enum DriveMode
     {
-        Arcade,
-        Cheesy,
-        Openloop,
         AssistedArcade,
+        Cheesy,
+        Hanger,
+        Openloop,
         PID,
-        Trap,
+        Spline,
         Straight,
-        Spline
+        Trap
     };
     DriveMode m_driveMode;
 

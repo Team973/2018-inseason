@@ -1,8 +1,8 @@
 /*
- * ArcadeDrive.h
+ * HangerController.h
  *
- *  Created on: Oct 30, 2015
- *      Author: Andrew
+ *  Created on: Jan 15, 2018
+ *      Author: Chris
  */
 
 #pragma once
@@ -14,11 +14,10 @@ using namespace frc;
 using namespace ctre;
 
 namespace frc973 {
-
-class ArcadeDriveController : public DriveController {
+class HangerController : public DriveController {
 public:
-    ArcadeDriveController();
-    virtual ~ArcadeDriveController();
+    HangerController();
+    virtual ~HangerController();
 
     /*
      * Calculate motor output given the most recent joystick commands.
@@ -38,14 +37,14 @@ public:
     /*
      * Set the joystick values (which in this case will be output)
      */
-    void SetJoysticks(double throttle, double turn);
+    void SetJoysticks(double throttle);
 
     void Start() override {
-        printf("Turning on Arcade Mode\n");
+        printf("Turning on Hanger Mode\n");
     }
 
     void Stop() override {
-        printf("Turning off Arcade Mode\n");
+        printf("Turning off Hanger Mode\n");
     }
 
 private:

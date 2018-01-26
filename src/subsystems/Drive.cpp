@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include "WPILib.h"
-#include "src/controllers/ArcadeDriveController.h"
-#include "src/controllers/CheesyDriveController.h"
-#include "src/controllers/OpenloopArcadeDriveController.h"
 #include "src/controllers/AssistedArcadeDrive.h"
+#include "src/controllers/CheesyDriveController.h"
+#include "src/controllers/HangerController.h"
+#include "src/controllers/OpenloopArcadeDriveController.h"
 #include "src/controllers/PIDDrive.h"
 #include "src/controllers/StraightDriveController.h"
 #include "src/controllers/SplineDriveController.h"
@@ -43,14 +43,14 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
         , m_rightPosZero(0.0)
         , m_gyro(gyro)
         , m_gyroZero(0.0)
-        , m_arcadeDriveController(new ArcadeDriveController())
-        , m_cheesyDriveController(new CheesyDriveController())
-        , m_openloopArcadeDriveController(new OpenloopArcadeDriveController())
         , m_assistedArcadeDriveController(new AssistedArcadeDriveController())
+        , m_cheesyDriveController(new CheesyDriveController())
+        , m_hangerController(new HangerController())
+        , m_openloopArcadeDriveController(new OpenloopArcadeDriveController())
         , m_pidDriveController(new PIDDriveController())
-        , m_trapDriveController(new TrapDriveController(this, logger))
-        , m_straightDriveController(new StraightDriveController())
         , m_splineDriveController(new SplineDriveController(this, logger))
+        , m_straightDriveController(new StraightDriveController())
+        , m_trapDriveController(new TrapDriveController(this, logger))
         , m_angle()
         , m_angleRate()
         , m_angleLog(new LogCell("Angle"))
@@ -60,8 +60,6 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
         , m_rightDistLog(new LogCell("Right Encoder Distance"))
         , m_rightDistRateLog(new LogCell("Right Encoder Rate"))
         , m_currentLog(new LogCell("Drive current")) {
-    this->SetDriveController(m_arcadeDriveController);
-
     m_leftDriveTalonA->SetNeutralMode(Coast);
     m_leftDriveTalonA->ConfigSelectedFeedbackSensor(QuadEncoder, 0, 10);
 
@@ -78,17 +76,6 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
 }
 
 Drive::~Drive(){};
-
-/**
- * Sets Drive controller to ArcadeDrive
- *
- * @param throttle  Left joystick y-axis value
- * @param turn      Right joystick x-axis value
- */
-void Drive::ArcadeDrive(double throttle, double turn) {
-    this->SetDriveController(m_arcadeDriveController);
-    m_arcadeDriveController->SetJoysticks(throttle, turn);
-}
 
 /**
  * Sets Drive controller to CheesyDrive
@@ -109,11 +96,21 @@ void Drive::CheesyDrive(double throttle, double turn, bool isQuickTurn,
  * Sets Drive controller to OpenLoopArcadeDrive
  *
  * @param throttle  Left joystick y-axis value
- * @param turn      Right joystick x-axis value
  */
 void Drive::OpenloopArcadeDrive(double throttle, double turn) {
     this->SetDriveController(m_openloopArcadeDriveController);
     m_openloopArcadeDriveController->SetJoysticks(throttle, turn);
+}
+
+/**
+ * Sets Drive controller to HangerDrive
+ *
+ * @param throttle  Left joystick y-axis value
+ * @param turn      Right joystick x-axis value
+ */
+void Drive::Hanger(double throttle) {
+    this->SetDriveController(m_hangerController);
+    m_hangerController->SetJoysticks(throttle);
 }
 
 /**

@@ -99,7 +99,7 @@ void CheesyDriveController::SetJoysticks(double throttle, double turn,
     else {
         m_negInertiaAccumulator = 0;
     }
-    linearPower = throttle;
+    linearPower = -throttle;
 
     // Quickturn!
     if (isQuickTurn) {

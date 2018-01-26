@@ -19,12 +19,12 @@ Test::~Test() {
 
 void Test::TestInit() {
     std::cout << "Test Start" << std::endl;
-    m_driveMode = DriveMode::Openloop;
+    m_driveMode = DriveMode::Cheesy;
 }
 
 void Test::TestPeriodic() {
-    double y = -m_driverJoystick->GetY(GenericHID::JoystickHand::kLeftHand);
-    double x = -m_driverJoystick->GetX(GenericHID::JoystickHand::kRightHand);
+    double y = -m_driverJoystick->GetRawAxis(1);
+    double x = m_driverJoystick->GetRawAxis(2);
     bool quickturn = m_driverJoystick->GetRawButton(DualAction::LeftBumper);
     if (m_driverJoystick->GetRawButton(DualAction::RightBumper)) {
         x /= 3.0;
@@ -34,19 +34,19 @@ void Test::TestPeriodic() {
     printf("%lf", x);
     printf("%lf", y);
 
-    if (m_driveMode == DriveMode::Arcade) {
-        m_drive->ArcadeDrive(y, x);
+    if (m_driveMode == DriveMode::AssistedArcade) {
+        m_drive->AssistedArcadeDrive(y, x);
     }
     else if (m_driveMode == DriveMode::Cheesy) {
         m_drive->CheesyDrive(
             y, x, quickturn,
             false);  // gear set to false until solenoids get set up
     }
+    else if (m_driveMode == DriveMode::Hanger) {
+        m_drive->Hanger(y);
+    }
     else if (m_driveMode == DriveMode::Openloop) {
         m_drive->OpenloopArcadeDrive(y, x);
-    }
-    else if (m_driveMode == DriveMode::AssistedArcade) {
-        m_drive->AssistedArcadeDrive(y, x);
     }
 
     // double y =
