@@ -6,12 +6,16 @@ shift
 LIBRARIES=( "$@" )
 
 TEAM_NUMBER="${LIBRARIES[${#LIBRARIES[@]}-1]}"
-unset LIBRARIES["${#LIBRARIES[@]}"-1]
+if test ! $(echo "$TEAM_NUMBER" | grep .so | wc -l) -eq 1
+then
+    unset LIBRARIES["${#LIBRARIES[@]}"-1]
+else
+    TEAM_NUMBER=973
+fi
 
 TARGET_USER=lvuser
 TARGET_DIR=/home/lvuser
 
-COPIED_LIBS=false
 LIBRARY_USER=admin
 LIBRARY_DIR=/usr/local/frc/lib
 LIBRARY_TMP_DIR=$TARGET_DIR/tmp
@@ -25,28 +29,27 @@ deploy () {
         echo "Copying over robotCommand..."
         scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$ROBOTCOMMAND" "$TARGET_USER@$TARGET:$TARGET_DIR" > /dev/null 2>&1
         echo "Checking for libraries..."
-        ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$TARGET_USER@$TARGET" "test $(ls $LIBRARY_DIR | grep libopencv_ | wc -l) -eq 17" #> /dev/null 2>&1
+        ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$TARGET_USER@$TARGET" 'test ! $(ls '"$LIBRARY_DIR"' | grep libopencv_ | wc -l) -eq 17' > /dev/null 2>&1
         if [ $? -eq 0 ] 
         then
-            ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$TARGET_USER@$TARGET" "mkdir $LIBRARY_TMP_DIR" #> /dev/null 2>&1
+            ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$TARGET_USER@$TARGET" "mkdir $LIBRARY_TMP_DIR" > /dev/null 2>&1
             for LIB in "${LIBRARIES[@]}"
             do
                 LIBRARY_SO=$(basename "$LIB")
                 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$TARGET_USER@$TARGET" "test ! -e $LIBRARY_DIR/$LIBRARY_SO" > /dev/null 2>&1
                 if [ $? -eq 0 ] 
                 then
-                    echo "Copying $LIBRARY_SO to $LIBRARY_DIR/$LIBRARY_SO"
-                    scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$LIB" "$LIBRARY_USER@$TARGET:$LIBRARY_TMP_DIR/$LIBRARY_SO" #> /dev/null 2>&1
+                    echo "Copying $LIBRARY_SO to $LIBRARY_TMP_DIR/$LIBRARY_SO"
+                    scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$LIB" "$LIBRARY_USER@$TARGET:$LIBRARY_TMP_DIR/$LIBRARY_SO" > /dev/null 2>&1
                 fi
             done
-            echo "Cleaning up after libraries..."
-            if [ $COPIED_LIBS ]; then
-                ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$LIBRARY_USER@$TARGET" "sed -i -e 's/^StartupDLLs/;StartupDLLs/' /etc/natinst/share/ni-rt.ini; 
-                chmod +x $LIBRARY_TMP_DIR/libopencv_* && mv $LIBRARY_TMP_DIR/* $LIBRARY_DIR/. && ldconfig;
-                rm -rf $LIBRARY_TMP_DIR;
-                " #> /dev/null 2>&1
-            fi
+            echo "Cleaning up after copying libraries..."
+            ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$LIBRARY_USER@$TARGET" "sed -i -e 's/^StartupDLLs/;StartupDLLs/' /etc/natinst/share/ni-rt.ini; 
+            chmod +x $LIBRARY_TMP_DIR/libopencv_* && mv $LIBRARY_TMP_DIR/* $LIBRARY_DIR/. && ldconfig;
+            rm -rf $LIBRARY_TMP_DIR;
+            " > /dev/null 2>&1
         fi
+        echo "Cleaning up..."
         ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$TARGET_USER@$TARGET" ". /etc/profile.d/natinst-path.sh;
         chown lvuser $TARGET_DIR/FRCUserProgram;
         setcap 'cap_sys_nice=pe' $TARGET_DIR/FRCUserProgram;
