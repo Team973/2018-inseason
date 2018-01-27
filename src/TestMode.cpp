@@ -23,7 +23,7 @@ void Test::TestInit() {
 }
 
 void Test::TestPeriodic() {
-    /*if (m_elevatorPosition > 100.0) {
+  if (m_elevatorPosition > 100.0) {
         m_elevatorPosition = 100.0;  // does not allow value to exceed 100.0
     }
     else if (m_elevatorPosition < 0.0) {
@@ -46,7 +46,7 @@ void Test::TestPeriodic() {
     }
     else if (m_elevatorMode == ElevatorMode::position) {
         m_elevator->SetPosition(m_elevatorPosition);
-    }*/
+    }
 }
 
 void Test::TestStop() {
@@ -72,10 +72,8 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
-                    m_hanger->SetForkliftPower(0.3);
                 }
                 else {
-                    m_hanger->SetForkliftPower(0);
                 }
                 break;
             case DualAction::RightTrigger:
@@ -129,10 +127,18 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
         switch (button) {
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
+                    m_hanger->SetForkliftPower(0.3);
+                }
+                else {
+                    m_hanger->SetForkliftPower(0);
                 }
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
+                    m_hanger->SetForkliftPower(-0.3);
+                }
+                else {
+                    m_hanger->SetForkliftPower(0);
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
