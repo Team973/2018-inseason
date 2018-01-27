@@ -39,4 +39,9 @@ Build and deploy to the robot:
 bazel run //tools:deploy --cpu=roborio
 ```
 
+Build and deploy to a robot with a team number besides `973`
+```
+bazel run //tools:deploy --cpu=roborio -- 254
+```
+
 **Note:** MacOS users need to specify `roborio-darwin` as the cpu
