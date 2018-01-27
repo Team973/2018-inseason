@@ -4,62 +4,46 @@ using namespace frc;
 
 namespace frc973 {
 Claw::Claw(TaskMgr *scheduler, LogSpreadsheet *logger,
-           TalonSRX *leftRoller, TalonSRX *rightRoller,
-           DigitalInput *cubeSensor)
+           Solenoid *leftArm, Solenoid *rightArm, Solenoid *ejector)
     : m_scheduler(scheduler)
-    , m_leftRoller(leftRoller)
-    , m_rightRoller(rightRoller)
-    , m_cubeSensor(cubeSensor)
+    , m_leftArm(leftArm)
+    , m_rightArm(rightArm)
+    , m_ejector(ejector)
 {
     this->m_scheduler->RegisterTask("Claw", this, TASK_PERIODIC);
-    m_leftRoller->SetNeutralMode(NeutralMode::Brake);
-
-    m_leftRoller->ConfigNominalOutputForward(0.0, 10);
-    m_leftRoller->ConfigNominalOutputReverse(0.0, 10);
-    m_leftRoller->ConfigPeakOutputForward(1.0, 10);
-    m_leftRoller->ConfigPeakOutputReverse(-1.0, 10);
-
-    m_rightRoller->SetNeutralMode(NeutralMode::Brake);
-    m_rightRoller->SetInverted(true);
-
-    m_rightRoller->ConfigNominalOutputForward(0.0, 10);
-    m_rightRoller->ConfigNominalOutputReverse(0.0, 10);
-    m_rightRoller->ConfigPeakOutputForward(1.0, 10);
-    m_rightRoller->ConfigPeakOutputReverse(-1.0, 10);
-
-    m_leftRoller->Set(ControlMode::PercentOutput, 0.0);
-    m_rightRoller->Set(ControlMode::PercentOutput, 0.0);
+    Timer m_ejectTimer();
+    m_ejectorState = idle;
 }
 
 Claw::~Claw() {
     m_scheduler->UnregisterTask(this);
 }
 
-void Claw::Intake() {
-  if (m_cubeSensor->Get() == false) {
-      m_leftRoller->Set(ControlMode::PercentOutput, 1.0);
-      m_rightRoller->Set(ControlMode::PercentOutput, 1.0);
-  }
-  else {
-      m_leftRoller->Set(ControlMode::PercentOutput, 0.0);
-      m_rightRoller->Set(ControlMode::PercentOutput, 0.0);
-  }
-}
-
 void Claw::Eject() {
-    m_leftRoller->Set(ControlMode::PercentOutput, -1.0);
-    m_rightRoller->Set(ControlMode::PercentOutput, -1.0);
+
+  m_ejector->Set(Claw::EjectState::ejected);
+  m_ejectTimer.Start();
+  m_ejectorState = ejected;
 }
 
-void Claw::Stop() {
-    m_leftRoller->Set(ControlMode::PercentOutput, 0.0);
-    m_rightRoller->Set(ControlMode::PercentOutput, 0.0);
+void Claw::Grip() {
+
+  m_leftArm->Set(true);
+  m_rightArm->Set(true);
+
 }
 
-bool Claw::IsCubeIn() {
-    return m_cubeSensor->Get();
-}
+void Claw::Release() {
 
+  m_leftArm->Set(false);
+  m_rightArm->Set(false);
+}
 void Claw::TaskPeriodic(RobotMode mode) {
+  if (m_ejectorState == ejected && m_ejectTimer.Get()>= 0.5){
+    m_ejectorState = idle;
+    m_ejector->Set(Claw::EjectState::idle);
+    m_ejectTimer.Stop();
+    m_ejectTimer.Reset();
+  }
 }
 }

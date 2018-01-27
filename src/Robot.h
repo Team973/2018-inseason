@@ -66,9 +66,9 @@ class Robot : public CoopMTRobot, public JoystickObserver {
 
         LogSpreadsheet *m_logger;
 
-        TalonSRX *m_clawLeftRoller;
-        TalonSRX *m_clawRightRoller;
-        DigitalInput *m_clawCubeSensor;
+        Solenoid *m_clawLeftSolenoid;
+        Solenoid *m_clawRightSolenoid;
+        Solenoid *m_ejectSolenoid;
         TalonSRX *m_elevatorMotor;
 
         Elevator *m_elevator;

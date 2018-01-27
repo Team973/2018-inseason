@@ -22,6 +22,9 @@ namespace frc973{
     static const int RIGHT_DRIVE_C_VICTOR_ID = 16;
 
     //Solenoids
+    static const int CLAW_LEFT_PCM_ID = 2;
+    static const int CLAW_RIGHT_PCM_ID = 3;
+    static const int CLAW_EJECT_PCM_ID = 4;
 
     //Analog
 
