@@ -32,6 +32,9 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, ObservableJoystic
     m_elevatorMotor->ConfigMotionCruiseVelocity(100.0, 10);
     m_elevatorMotor->ConfigMotionAcceleration(50.0, 10);
 
+    m_elevatorMotor->EnableCurrentLimit(true);
+    m_elevatorMotor->ConfigContinuousCurrentLimit(10, 10);
+
     m_elevatorMotor->Set(ControlMode::PercentOutput, 0.0);
     m_positionCell = new LogCell("Elevator Position", 32, true);
     logger->RegisterCell(m_positionCell);
