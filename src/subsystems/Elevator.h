@@ -87,7 +87,6 @@ class Elevator : public CoopTask {
 
         TalonSRX *m_elevatorMotor;
 
-        double m_position;
         Level m_currLevel;
         TalonMode m_talonMode;
         ObservableJoystick *m_joystick;

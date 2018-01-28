@@ -79,10 +79,11 @@ void Robot::TestStart() {
 void Robot::TestContinuous(){
     printf("Test Periodic\n");
     m_test->TestPeriodic();
-    if(m_driverJoystick->GetRawButton(2)) {
+    printf("Elevator Voltage: %3.3lf\n", m_elevatorMotor->GetMotorOutputVoltage());
+    /*if(m_driverJoystick->GetRawButton(2)) {
         m_elevatorMotor->Set(ControlMode::MotionMagic, 300);
         printf("Pressed A\n");
-    }
+    }*/
 }
 
 void Robot::TestStop() {

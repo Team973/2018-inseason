@@ -9,7 +9,6 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, ObservableJoystic
                    TalonSRX *motor)
     : m_scheduler(scheduler)
     , m_elevatorMotor(motor)
-    , m_position(0.0)
     , m_currLevel(Level::zero)
     , m_talonMode(TalonMode::manual)
     , m_joystick(driver)
@@ -33,7 +32,8 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, ObservableJoystic
     m_elevatorMotor->ConfigMotionAcceleration(50.0, 10);
 
     m_elevatorMotor->EnableCurrentLimit(true);
-    m_elevatorMotor->ConfigContinuousCurrentLimit(10, 10);
+    m_elevatorMotor->ConfigContinuousCurrentLimit(5, 10);
+    m_elevatorMotor->ConfigVoltageCompSaturation(3, 10);
 
     m_elevatorMotor->Set(ControlMode::PercentOutput, 0.0);
     m_positionCell = new LogCell("Elevator Position", 32, true);
@@ -64,7 +64,7 @@ void Elevator::SetLevel(Level level) {
 }
 
 void Elevator::Reset() {
-    SetLevel(Level::zero);
+    m_currLevel = Level::zero;
 }
 
 double Elevator::GetPosition() {
@@ -73,13 +73,19 @@ double Elevator::GetPosition() {
 
 void Elevator::TaskPeriodic(RobotMode mode) {
     m_positionCell->LogDouble(m_elevatorMotor->GetSelectedSensorPosition(0));
+    SmartDashboard::PutNumber("elevator/current", m_elevatorMotor->GetOutputCurrent());
     switch (m_talonMode) {
         case manual:
             break;
         case motionMagic:
             switch (m_currLevel) {
                 case zero:
-                    this->SetMotionMagic(0.0);
+                    this->SetPower(-0.2);
+                    if (m_elevatorMotor->GetOutputCurrent() > 4.0) {
+                        m_elevatorMotor->GetSensorCollection().SetQuadraturePosition(0, 0);
+                        this->SetPower(0.0);
+                        m_currLevel = Level::lowGoal;
+                    }
                     break;
                 case lowGoal:
                     this->SetMotionMagic(30.0);
