@@ -29,16 +29,16 @@ void Test::TestPeriodic(){
         m_elevatorPosition = 0.0; //does not allow value to be under 0.0
     }
 
-    double y = m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
+    double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
     printf("%1.3lf\n", y);
     m_elevatorPosition += 1.5 * Util::bound(m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightYAxis), 0.0, 100.0); //Adds on 1.5 every call (20ms) to position while bounding it 10
-
-    if (m_elevatorMode == ElevatorMode::percentOutput) {
+    printf("Elevator Pos: %3.3lf\n", m_elevator->GetPosition());
+    /*if (m_elevatorMode == ElevatorMode::percentOutput) {
         m_elevator->SetPower(y);
     }
     else if (m_elevatorMode == ElevatorMode::motionMagic) {
         m_elevator->SetMotionMagic(m_elevatorPosition);
-    }
+    }*/
 }
 
 void Test::TestStop(){
@@ -88,10 +88,12 @@ void Test::HandleTestButton(uint32_t port, uint32_t button,
                break;
             case DualAction::BtnA:
                if (pressedP) {
+                   //m_elevator->SetLevel(Elevator::Level::scaleHigh);
                }
                break;
             case DualAction::BtnB:
                if (pressedP) {
+                   m_elevator->SetLevel(Elevator::Level::scaleMid);
                }
                break;
             case DualAction::BtnX:

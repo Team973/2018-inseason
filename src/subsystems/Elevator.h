@@ -72,6 +72,13 @@ class Elevator : public CoopTask {
         void Reset();
 
         /**
+         * Gets Elevator Encoder Position
+         *
+         * @return encoder value for elevator
+         **/
+        double GetPosition();
+
+        /**
          * Update function synonymous to TeleopContinuous that gets called continuously
          **/
         void TaskPeriodic(RobotMode mode);

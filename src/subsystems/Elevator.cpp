@@ -64,6 +64,10 @@ void Elevator::Reset() {
     SetLevel(Level::zero);
 }
 
+double Elevator::GetPosition() {
+    return m_elevatorMotor->GetSelectedSensorPosition(0);
+}
+
 void Elevator::TaskPeriodic(RobotMode mode) {
     m_positionCell->LogDouble(m_elevatorMotor->GetSelectedSensorPosition(0));
     switch (m_talonMode) {
@@ -84,7 +88,7 @@ void Elevator::TaskPeriodic(RobotMode mode) {
                     this->SetMotionMagic(60.0);
                     break;
                 case scaleHigh:
-                    this->SetMotionMagic(70.0);
+                    this->SetMotionMagic(1000.0);
                     break;
                 default:
                     this->Reset();
