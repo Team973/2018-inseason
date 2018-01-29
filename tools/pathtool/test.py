@@ -3,6 +3,7 @@ from pypathfinder import generate_tank_trajectory, generate_trajectory, Waypoint
 import math
 from itertools import tee
 
+
 def pairwise(iterable):
     " s -> (s0, s1), (s1, s2), (s2, s3), ... "
     a, b = tee(iterable)
@@ -22,10 +23,10 @@ class TestPyPathfinder(unittest.TestCase):
             self.assertLessEqual(segment.velocity, max_vel + 0.1)
 
         for pre, nxt in pairwise(trajectory):
-            expected_d_position = (pre.velocity + nxt.velocity) / 2.0 * timestep
+            expected_d_position = (
+                pre.velocity + nxt.velocity) / 2.0 * timestep
             self.assertAlmostEqual(pre.position + expected_d_position,
                                    nxt.position)
-
 
     def test_doesnt_crash(self):
         """
@@ -35,10 +36,10 @@ class TestPyPathfinder(unittest.TestCase):
         """
 
         trajectory = generate_trajectory([
-                Waypoint(x=-4, y=-1, angle=math.radians(45)),
-                Waypoint(x=-1, y=2, angle=0),
-                Waypoint(x=4, y=20, angle=0),
-            ],
+            Waypoint(x=-4, y=-1, angle=math.radians(45)),
+            Waypoint(x=-1, y=2, angle=0),
+            Waypoint(x=4, y=20, angle=0),
+        ],
             timestep=0.05,
             max_vel=15.0,
             max_accel=10.0,
@@ -55,16 +56,19 @@ class TestPyPathfinder(unittest.TestCase):
         """
 
         lTraj, rTraj = generate_tank_trajectory([
-                Waypoint(x=-4, y=-1, angle=math.radians(45)),
-                Waypoint(x=-1, y=2, angle=0),
-                Waypoint(x=4, y=20, angle=0),
-            ],
+            Waypoint(x=-4, y=-1, angle=math.radians(45)),
+            Waypoint(x=-1, y=2, angle=0),
+            Waypoint(x=4, y=20, angle=0),
+        ],
             timestep=0.05,
             max_vel=15.0,
             max_accel=10.0,
             max_jerk=60.0,
             wheelbase_width=24.0,
         )
+
+        for segment in lTraj + rTraj:
+            self.assertAlmostEqual(segment.dt, 0.05)
 
 
 if __name__ == '__main__':
