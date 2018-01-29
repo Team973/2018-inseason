@@ -7,7 +7,6 @@ Check the bottom of this file for exports.
 from ctypes import cdll
 import ctypes
 from collections import namedtuple
-from typing import List, Tuple
 
 _pathfinder_lib = cdll.LoadLibrary("third_party/pathfinder/pathfinder_cdll.so")
 
