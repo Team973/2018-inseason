@@ -10,6 +10,7 @@ before_install:
 
 script:
  - docker run team973/frc-bazel /bin/sh -c "bazel build //src:robot --cpu=roborio"
+ - docker run team973/frc-bazel /bin/sh -c "bazel test //tools/pathtool:test"
 
 notifications:
   slack: greybotsfrc973:dwVtOBBSTIHn2Th9zIUGfpCX

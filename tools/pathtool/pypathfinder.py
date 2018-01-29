@@ -15,6 +15,13 @@ class _Waypoint(ctypes.Structure):
                 ("y", ctypes.c_double),
                 ("angle", ctypes.c_double)]
 
+    def toPyWaypoint(self):
+        return Waypoint(self.x, self.y, self.angle)
+
+    @staticmethod
+    def fromPyWaypoint(pyWay):
+        return _Waypoint(pyWay.x, pyWay.y, pyWay.angle)
+
 class _Spline(ctypes.Structure):
     _fields_ = [("a", ctypes.c_double),
                 ("b", ctypes.c_double),
@@ -40,6 +47,16 @@ class _Segment(ctypes.Structure):
                 ("acceleration", ctypes.c_double),
                 ("jerk", ctypes.c_double),
                 ("heading", ctypes.c_double)]
+
+    def toPySegment(self):
+        return Segment(self.dt, self.x, self.y, self.position, self.velocity,
+                       self.acceleration, self.jerk, self.heading)
+
+    @staticmethod
+    def fromPySegment(pySeg):
+        return _Segment(pySeg.dt, pySeg.x, pySeg.y, pySeg.position,
+                        pySeg.velocity, pySeg.acceleration, pySeg.jerk,
+                        pySeg.heading)
 
 class _TrajectoryConfig(ctypes.Structure):
     _fields_ = [("dt", ctypes.c_double),
@@ -114,6 +131,15 @@ in pathfinder/structs.h
 """
 Waypoint = namedtuple("Waypoint", ["x", "y", "angle"])
 
+"""
+The output to all of these trajectory generation algorithms is a list
+of Segment objects.  Behind the scenes, these get converted from _Segment
+objects which are ctype structs equivalent to the Segment struct defined
+in pathfinder/structs.h
+"""
+Segment = namedtuple("Segment", ["dt", "x", "y", "position", "velocity",
+                                 "acceleration", "jerk", "heading"])
+
 def generate_trajectory(waypoints, timestep, max_vel, max_accel, max_jerk):
     """
     Generate a trajectory by calling into the Pathfinder library
@@ -123,7 +149,7 @@ def generate_trajectory(waypoints, timestep, max_vel, max_accel, max_jerk):
 
     waypoint_buff = (_Waypoint * len(waypoints))()
     for idx, point in enumerate(waypoints):
-        waypoint_buff[idx] = _Waypoint(point.x, point.y, point.angle)
+        waypoint_buff[idx] = _Waypoint.fromPyWaypoint(point)
 
     _pathfinder_lib.pathfinder_prepare(
             waypoint_buff,
@@ -144,21 +170,31 @@ def generate_trajectory(waypoints, timestep, max_vel, max_accel, max_jerk):
             segmentBuff,
     )
 
-    return segmentBuff
+    return [segment.toPySegment() for segment in segmentBuff]
 
 def generate_tank_trajectory(waypoints, timestep, max_vel,
                              max_accel, max_jerk, wheelbase_width):
     """
     Generate a trajectory for the left and the right wheels
     """
-    trajectory = generate_trajectory(waypoints, timestep,
-                                     max_vel, max_accel, max_jerk)
+    trajectory = generate_trajectory(
+            waypoints=waypoints,
+            timestep=timestep,
+            max_vel=max_vel,
+            max_accel=max_accel,
+            max_jerk=max_jerk,
+    )
+
+    traj_buff = (_Segment * len(trajectory))()
+    for idx, segment in enumerate(trajectory):
+        traj_buff[idx] = _Segment.fromPySegment(segment)
 
     leftBuff = (_Segment * len(trajectory))()
     rightBuff = (_Segment * len(trajectory))()
 
+
     _pathfinder_lib.pathfinder_modify_tank(
-            trajectory, ctypes.c_int(len(trajectory)),
+            traj_buff, ctypes.c_int(len(trajectory)),
             leftBuff,
             rightBuff,
             ctypes.c_double(wheelbase_width),
