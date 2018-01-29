@@ -10,8 +10,8 @@ services:
 # andrew2nelson/frc-bazel:latest does not contain our codebase, but the
 # image that travis will build in this build step will contain our codebase
 before_install:
- - docker pull andrew2nelson/frc-bazel:latest
- - docker build -t team973/frc-bazel . --cache-from andrew2nelson/frc-bazel:latest
+ - docker pull andrew2nelson/frc-bazel
+ - docker build -t team973/frc-bazel . --cache-from andrew2nelson/frc-bazel
 
 script:
  - docker run team973/frc-bazel /bin/sh -c "bazel build //src:robot --cpu=roborio"
