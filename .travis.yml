@@ -5,8 +5,13 @@ language: cpp
 services:
   - docker
 
+# Be careful not to push the docker image during a travis build.
+# Docker images are public and can be seen by anyone.
+# andrew2nelson/frc-bazel:latest does not contain our codebase, but the
+# image that travis will build in this build step will contain our codebase
 before_install:
- - docker build -t team973/frc-bazel .
+ - docker pull andrew2nelson/frc-bazel:latest
+ - docker build -t team973/frc-bazel . --cache-from andrew2nelson/frc-bazel:latest
 
 script:
  - docker run team973/frc-bazel /bin/sh -c "bazel build //src:robot --cpu=roborio"
