@@ -158,9 +158,7 @@ Segment = namedtuple("Segment", ["dt", "x", "y", "position", "velocity",
                                  "acceleration", "jerk", "heading"])
 
 
-def generate_trajectory(waypoints: List[Segment], timestep: float,
-                        max_vel: float, max_accel: float,
-                        max_jerk: float) -> List[Segment]:
+def generate_trajectory(waypoints, timestep, max_vel, max_accel, max_jerk):
     """
     Generate a trajectory by calling into the Pathfinder library
     let |waypoints| be a list of Waypoint namedtuple types
@@ -193,10 +191,8 @@ def generate_trajectory(waypoints: List[Segment], timestep: float,
     return [segment.toPySegment() for segment in segmentBuff]
 
 
-def generate_tank_trajectory(waypoints: List[Waypoint], timestep: float,
-                             max_vel: float, max_accel: float, max_jerk: float,
-                             wheelbase_width: float
-                            ) -> Tuple[List[Segment], List[Segment]]:
+def generate_tank_trajectory(waypoints, timestep, max_vel, max_accel, max_jerk,
+                             wheelbase_width):
     """
     Generate a trajectory for the left and the right wheels
     """
