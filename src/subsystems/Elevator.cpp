@@ -16,9 +16,9 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, ObservableJoystic
     this->m_scheduler->RegisterTask("Elevator", this, TASK_PERIODIC);
 
     m_elevatorMotor->ConfigSelectedFeedbackSensor(ctre::phoenix::motorcontrol::FeedbackDevice::QuadEncoder, 0, 10); //0 = Not cascaded PID Loop; 10 = in constructor, not in a loop
-    m_elevatorMotor->SetSensorPhase(false);
     m_elevatorMotor->SetNeutralMode(NeutralMode::Brake);
-    m_elevatorMotor->SetInverted(true);
+    m_elevatorMotor->SetInverted(false);
+    m_elevatorMotor->SetSensorPhase(false);
 
     m_elevatorMotor->ConfigNominalOutputForward(0.0, 10);
     m_elevatorMotor->ConfigNominalOutputReverse(0.0, 10);
@@ -30,7 +30,7 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, ObservableJoystic
     m_elevatorMotor->Config_kD(0, 0.0, 10);
     m_elevatorMotor->Config_kF(0, 0.0,10);
     m_elevatorMotor->ConfigMotionCruiseVelocity(100.0, 10);
-    m_elevatorMotor->ConfigMotionAcceleration(50.0, 10);
+    m_elevatorMotor->ConfigMotionAcceleration(300.0, 10);
 
     m_elevatorMotor->EnableCurrentLimit(true);
     m_elevatorMotor->ConfigPeakCurrentDuration(0, 10);
