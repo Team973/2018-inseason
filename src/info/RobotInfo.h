@@ -30,6 +30,9 @@ static const int FORKLIFT_VICTOR_ID = 11;
 
 // Solenoids
 static const int HANGER_PTO_PCM_ID = 1;
+static const int CLAW_ARMS_PCM_ID = 2;
+static const int CLAW_KICKER_PCM_ID = 3;
+static const int KICKER_PIN_PCM_ID = 4;
 
 // Analog
 static const int PRESSURE_ANLG_ID = 0;

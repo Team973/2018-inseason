@@ -21,7 +21,8 @@ class LogSpreadsheet;
 class Claw : public CoopTask {
 public:
     Claw(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *rightRoller,
-         TalonSRX *leftRoller, DigitalInput *cubeSensor);
+         TalonSRX *leftRoller, DigitalInput *cubeSensor, Solenoid *clawArms,
+         Solenoid *clawKicker, Solenoid *kickerPin);
     virtual ~Claw();
 
     void Intake();
@@ -35,5 +36,8 @@ private:
     TalonSRX *m_leftRoller;
     TalonSRX *m_rightRoller;
     DigitalInput *m_cubeSensor;
+    Solenoid *m_clawArms;
+    Solenoid *m_clawKicker;
+    Solenoid *m_kickerPin;
 };
 }
