@@ -19,13 +19,12 @@ using namespace ctre;
 
 namespace frc973 {
 Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
-             NetworkTableInstance dashboard, TalonSRX *leftDriveTalonA,
-             VictorSPX *leftDriveVictorB, VictorSPX *leftDriveVictorC,
-             TalonSRX *rightDriveTalonA, VictorSPX *rightDriveVictorB,
-             VictorSPX *rightDriveVictorC, ADXRS450_Gyro *gyro)
+             TalonSRX *leftDriveTalonA, VictorSPX *leftDriveVictorB,
+             VictorSPX *leftDriveVictorC, TalonSRX *rightDriveTalonA,
+             VictorSPX *rightDriveVictorB, VictorSPX *rightDriveVictorC,
+             ADXRS450_Gyro *gyro)
         : DriveBase(scheduler, this, this, nullptr)
         , m_logger(logger)
-        , m_dashboard(dashboard)
         , m_leftDriveTalonA(leftDriveTalonA)
         , m_leftDriveVictorB(leftDriveVictorB)
         , m_leftDriveVictorC(leftDriveVictorC)
@@ -60,6 +59,7 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
         , m_rightDistLog(new LogCell("Right Encoder Distance"))
         , m_rightDistRateLog(new LogCell("Right Encoder Rate"))
         , m_currentLog(new LogCell("Drive current")) {
+    this->m_scheduler->RegisterTask("Drive", this, TASK_PERIODIC);
     m_leftDriveTalonA->SetNeutralMode(Coast);
     m_leftDriveTalonA->ConfigSelectedFeedbackSensor(QuadEncoder, 0, 10);
 
@@ -284,11 +284,23 @@ void Drive::SetDriveOutput(ControlMode controlMode, double left, double right) {
 }
 
 void Drive::TaskPeriodic(RobotMode mode) {
-    // NetworkTables
-    m_dashboard.GetEntry("leftvoltage")
-        .SetDouble(m_leftDriveTalonA->GetMotorOutputVoltage());
-    m_dashboard.GetEntry("rightvoltage")
-        .SetDouble(m_rightDriveTalonA->GetMotorOutputVoltage());
+    // NetworkTable Voltages
+    SmartDashboard::PutNumber("drive/voltages/leftvoltage",
+                              m_leftDriveTalonA->GetMotorOutputVoltage());
+    SmartDashboard::PutNumber("drive/voltages/rightvoltage",
+                              m_rightDriveTalonA->GetMotorOutputVoltage());
+
+    // NetworkTable Currents
+    SmartDashboard::PutNumber("drive/currents/leftcurrent",
+                              m_leftDriveTalonA->GetOutputCurrent());
+    SmartDashboard::PutNumber("drive/currents/rightcurrent",
+                              m_rightDriveTalonA->GetOutputCurrent());
+
+    // NetworkTable Encoders
+    SmartDashboard::PutNumber("drive/encoders/leftencoder",
+                              m_leftDriveTalonA->GetSelectedSensorPosition(0));
+    SmartDashboard::PutNumber("drive/encoders/rightencoder",
+                              m_rightDriveTalonA->GetSelectedSensorPosition(0));
 
     m_angle = m_gyro->GetAngle();
 

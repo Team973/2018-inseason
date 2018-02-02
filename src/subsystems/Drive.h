@@ -14,7 +14,6 @@
 
 using namespace frc;
 using namespace ctre;
-using namespace nt;
 
 namespace frc973 {
 class AssistedArcadeDriveController;
@@ -48,8 +47,7 @@ class Drive
         , public DriveStateProvider
         , public DriveControlSignalReceiver {
 public:
-    Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
-          NetworkTableInstance dashboard, TalonSRX *leftDriveTalonA,
+    Drive(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *leftDriveTalonA,
           VictorSPX *leftDriveVictorB, VictorSPX *leftDriveVictorC,
           TalonSRX *rightDriveTalonA, VictorSPX *rightDriveVictorB,
           VictorSPX *rightDriveVictorC, ADXRS450_Gyro *gyro);
@@ -194,7 +192,6 @@ public:
 
 private:
     LogSpreadsheet *m_logger;
-    NetworkTableInstance m_dashboard;
 
     TalonSRX *m_leftDriveTalonA;
     VictorSPX *m_leftDriveVictorB;
