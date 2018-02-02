@@ -120,7 +120,6 @@ void Drive::OpenloopArcadeDrive(double throttle, double turn) {
  * Sets Drive controller to HangerDrive
  *
  * @param throttle  Left joystick y-axis value
- * @param turn      Right joystick x-axis value
  */
 void Drive::Hanger(double throttle) {
     this->SetDriveController(m_hangerController);
