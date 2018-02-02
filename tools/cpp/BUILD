@@ -20,6 +20,11 @@ filegroup(
     srcs = [],
 )
 
+filegroup(
+    name = "osx_wrapper",
+    srcs = ["osx_cc_wrapper.sh"],
+)
+
 # This is the entry point for --crosstool_top.  Toolchains are found
 # by lopping off the name of --crosstool_top and searching for
 # "cc-compiler-${CPU}" in this BUILD file, where CPU is the target CPU
