@@ -74,18 +74,21 @@ void PIDDriveController::CalcDriveOutput(DriveStateProvider *state,
                    MAX_SPEED * m_speedCap * throttle,
                    MAX_SPEED * m_speedCap * turn);
 
-    printf("dist target %lf, dist curr %lf, dist error: %lf \n", m_targetDist,
-           m_prevDist, m_targetDist - m_prevDist);
+    printf("dt %lf, dc %lf, de: %lf \n", m_targetDist, m_prevDist,
+           m_targetDist - m_prevDist);
     printf("angle target %lf, angle curr %lf, turn error %lf\n", m_targetAngle,
            m_prevAngle, m_targetAngle - m_prevAngle);
     printf("throttle %lf  turn %lf\n", throttle, turn);
+
+    DBStringPrintf(DBStringPos::DB_LINE5, "dt %5.0lf, dc %5.0lf", m_targetDist,
+                   m_prevDist);
 
     DBStringPrintf(DBStringPos::DB_LINE6, "err d %.3lf a %.3lf",
                    m_prevDist - m_targetDist, m_prevAngle - m_targetAngle);
 
     out->SetDriveOutput(ControlMode::Velocity,
-                        MAX_SPEED * m_speedCap * (throttle - turn),
-                        MAX_SPEED * m_speedCap * (throttle + turn));
+                        MAX_SPEED * m_speedCap * (throttle + turn),
+                        MAX_SPEED * m_speedCap * (throttle - turn));
 
     if (m_quickExit == false) {
         if ((m_distEnabled == false ||

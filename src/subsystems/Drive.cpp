@@ -62,6 +62,13 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
     this->m_scheduler->RegisterTask("Drive", this, TASK_PERIODIC);
     m_leftDriveTalonA->SetNeutralMode(Coast);
     m_leftDriveTalonA->ConfigSelectedFeedbackSensor(QuadEncoder, 0, 10);
+    m_leftDriveTalonA->SetSensorPhase(true);
+    m_leftDriveTalonA->SetInverted(true);
+    m_leftDriveTalonA->SelectProfileSlot(0, 0);
+    m_leftDriveTalonA->Config_kP(0, 0.7, 10);
+    m_leftDriveTalonA->Config_kI(0, 0, 10);
+    m_leftDriveTalonA->Config_kD(0, 0, 10);  // 0.7
+    m_leftDriveTalonA->Config_kF(0, 0, 10);  // 0.2
 
     m_leftDriveVictorB->Follow(*m_leftDriveTalonA);
 
@@ -69,6 +76,13 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
 
     m_rightDriveTalonA->SetNeutralMode(Coast);
     m_rightDriveTalonA->ConfigSelectedFeedbackSensor(QuadEncoder, 0, 10);
+    m_rightDriveTalonA->SetSensorPhase(true);
+    m_rightDriveTalonA->SetInverted(true);
+    m_rightDriveTalonA->SelectProfileSlot(0, 0);
+    m_rightDriveTalonA->Config_kP(0, 0.7, 10);
+    m_rightDriveTalonA->Config_kI(0, 0, 10);
+    m_rightDriveTalonA->Config_kD(0, 0, 10);  // 0.7
+    m_rightDriveTalonA->Config_kF(0, 0, 10);  // 0.2
 
     m_rightDriveVictorB->Follow(*m_rightDriveTalonA);
 
@@ -242,7 +256,7 @@ double Drive::GetDriveCurrent() const {
  * @return  Current angle position with respect to initial position
  */
 double Drive::GetAngle() const {
-    return -(m_angle - m_gyroZero);
+    return m_angle - m_gyroZero;
 }
 
 /**
@@ -251,7 +265,7 @@ double Drive::GetAngle() const {
  * @return  Current angular rate
  */
 double Drive::GetAngularRate() const {
-    return -m_angleRate;
+    return m_angleRate;
 }
 
 /**
@@ -297,10 +311,11 @@ void Drive::TaskPeriodic(RobotMode mode) {
                               m_rightDriveTalonA->GetOutputCurrent());
 
     // NetworkTable Encoders
-    SmartDashboard::PutNumber("drive/encoders/leftencoder",
-                              m_leftDriveTalonA->GetSelectedSensorPosition(0));
-    SmartDashboard::PutNumber("drive/encoders/rightencoder",
-                              m_rightDriveTalonA->GetSelectedSensorPosition(0));
+    SmartDashboard::PutNumber("drive/encoders/leftencoder", GetLeftDist());
+    SmartDashboard::PutNumber("drive/encoders/rightencoder", GetRightDist());
+
+    // NetworkTable Gyro
+    SmartDashboard::PutNumber("drive/gyro/angle", m_gyro->GetAngle());
 
     m_angle = m_gyro->GetAngle();
 

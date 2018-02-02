@@ -25,8 +25,8 @@ OpenloopArcadeDriveController::~OpenloopArcadeDriveController() {
 
 void OpenloopArcadeDriveController::CalcDriveOutput(
     DriveStateProvider *state, DriveControlSignalReceiver *out) {
-    out->SetDriveOutput(ControlMode::PercentOutput, -m_leftOutput,
-                        -m_rightOutput);
+    out->SetDriveOutput(ControlMode::PercentOutput, m_leftOutput,
+                        m_rightOutput);
     DBStringPrintf(DBStringPos::DB_LINE4, "arcade l=%1.2lf r=%1.2lf",
                    m_leftOutput, m_rightOutput);
     printf("arcade l=%1.2lf r=%1.2lf\n", m_leftOutput, m_rightOutput);

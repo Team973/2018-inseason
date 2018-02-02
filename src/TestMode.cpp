@@ -19,12 +19,12 @@ Test::~Test() {
 
 void Test::TestInit() {
     std::cout << "Test Start" << std::endl;
-    m_driveMode = DriveMode::Cheesy;
+    m_driveMode = DriveMode::PID;
 }
 
 void Test::TestPeriodic() {
     double y = -m_driverJoystick->GetRawAxis(1);
-    double x = m_driverJoystick->GetRawAxis(2);
+    double x = -m_driverJoystick->GetRawAxis(2);
     bool quickturn = m_driverJoystick->GetRawButton(DualAction::LeftBumper);
     if (m_driverJoystick->GetRawButton(DualAction::RightBumper)) {
         x /= 3.0;
@@ -121,18 +121,22 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::BtnB:
                 if (pressedP) {
+                    m_driveMode = DriveMode::Openloop;
                 }
                 break;
             case DualAction::BtnX:
                 if (pressedP) {
+                    m_driveMode = DriveMode::AssistedArcade;
                 }
                 break;
             case DualAction::BtnY:
                 if (pressedP) {
+                    m_driveMode = DriveMode::Cheesy;
                 }
                 break;
             case DualAction::Start:
                 if (pressedP) {
+                    m_drive->PIDDrive(-50, 0, Drive::RelativeTo::Now, 1);
                 }
                 break;
             case DualAction::Back:

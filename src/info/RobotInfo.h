@@ -45,8 +45,8 @@ static const int OPERATOR_JOYSTICK_PORT = 1;
 static const int TUNING_JOYSTICK_PORT = 2;
 
 // Misc
-static const double DRIVE_WIDTH = 5.0;
-static const double DRIVE_WHEEL_DIAMETER = 3.25;
+static const double DRIVE_WIDTH = 23.0;
+static const double DRIVE_WHEEL_DIAMETER = 5.0;
 static const double DRIVE_DIST_PER_REVOLUTION =
     DRIVE_WHEEL_DIAMETER * Constants::PI;
 static const double DRIVE_IPS_FROM_RPM = DRIVE_DIST_PER_REVOLUTION / 60.0;

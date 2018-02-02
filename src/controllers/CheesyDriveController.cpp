@@ -148,7 +148,7 @@ void CheesyDriveController::SetJoysticks(double throttle, double turn,
         rightPwm = -1.0;
     }
 
-    m_leftOutput = leftPwm;
-    m_rightOutput = rightPwm;
+    m_leftOutput = -leftPwm;
+    m_rightOutput = -rightPwm;
 }
 }
