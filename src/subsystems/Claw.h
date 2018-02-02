@@ -28,26 +28,31 @@ class Claw : public CoopTask {
          * Starts the wheels to pull things in
          **/
 
-        enum EjectState{
-          ejected = true,
-          idle = false
+        enum openState {
+            open = true,
+            idle = false
         };
 
-        void Grip();
+        void openClaw();
 
         /**
-         * Grip the cube
-         **/
-        void Release();
-
-        /**
-         * Releases the cube
+         * Activates both claw arm solenoids to open the arms
+         * Default position is closed
          **/
 
-        void Eject();
+        void clawKick();
 
         /**
-         * Eject the cube
+         * Activates the claw kicker solenoid
+         * Pushes power cubes
+         * Default state is deactivated
+         **/
+
+        void runKickerPin();
+
+        /**
+         * Enables the kicker print
+         * Default state is disabled
          **/
 
         void TaskPeriodic(RobotMode mode);
@@ -56,7 +61,8 @@ class Claw : public CoopTask {
         Solenoid *m_clawArms;
         Solenoid *m_clawKicker;
         Solenoid *m_kickerPin;
-        Timer m_ejectTimer;
-        EjectState m_ejectorState;
+        Timer m_openTimer;
+        openState m_openerState;
+
 };
 }

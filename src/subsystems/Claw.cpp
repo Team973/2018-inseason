@@ -11,42 +11,33 @@ Claw::Claw(TaskMgr *scheduler, LogSpreadsheet *logger,
     , m_kickerPin(kickerPin)
 {
     this->m_scheduler->RegisterTask("Claw", this, TASK_PERIODIC);
-    /* Timer m_ejectTimer();
-    m_ejectorState = idle; */
+    Timer m_openTimer();
+    m_openState = idle;
 }
 
 Claw::~Claw() {
     m_scheduler->UnregisterTask(this);
 }
 
-void Claw::Eject() {
-
-  /*
-  m_ejector->Set(Claw::EjectState::ejected);
-  m_ejectTimer.Start();
-  m_ejectorState = ejected;
-  */
+void Claw::openClaw() {
+    m_clawArms->Set(Claw::OpenState::Open);
+    m_openTimer.Start();
+    m_openerState = open;
 }
 
-void Claw::Grip() {
-  /*
-  m_leftArm->Set(true);
-  m_rightArm->Set(true);
-  */
+void Claw::clawKick() {
+
 }
 
-void Claw::Release() {
-  /*
-  m_leftArm->Set(false);
-  m_rightArm->Set(false);
-  */
+void Claw::runKickerPin() {
+
 }
 void Claw::TaskPeriodic(RobotMode mode) {
-  /* if (m_ejectorState == ejected && m_ejectTimer.Get()>= 0.5){
-    m_ejectorState = idle;
-    m_ejector->Set(Claw::EjectState::idle);
-    m_ejectTimer.Stop();
-    m_ejectTimer.Reset();
-    */
+    if(m_openerState == open && m_openTimer.Get()>= 0.5) {
+        m_openerState = idle;
+        m_opener->set(Claw::EjectState::idle);
+        m_openTimer.Stop();
+        m_openTimer.Reset();
+    }
   }
 }
