@@ -8,6 +8,7 @@
 #include "src/TestMode.h"
 #include "src/Robot.h"
 #include "ctre/Phoenix.h"
+#include "lib/helpers/GreyTalon.h"
 
 using namespace frc;
 using namespace nt;
@@ -42,6 +43,10 @@ Robot::Robot()
                           m_tuningJoystick, m_elevator))
         , m_dashboard(NetworkTableInstance::GetDefault()) {
     std::cout << "Constructed a Robot!" << std::endl;
+
+    FactoryReset(m_clawLeftRoller);
+    FactoryReset(m_clawRightRoller);
+    FactoryReset(m_elevatorMotor);
 }
 
 Robot::~Robot() {
