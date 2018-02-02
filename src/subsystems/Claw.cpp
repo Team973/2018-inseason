@@ -50,4 +50,3 @@ void Claw::TaskPeriodic(RobotMode mode) {
     */
   }
 }
-}
