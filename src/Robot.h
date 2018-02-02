@@ -13,8 +13,6 @@
 
 #include "WPILib.h"
 #include "Phoenix.h"
-#include "networktables/NetworkTableInstance.h"
-#include "networktables/NetworkTableEntry.h"
 #include <iostream>
 #include "src/info/RobotInfo.h"
 #include "src/DisabledMode.h"
@@ -33,7 +31,6 @@
 
 using namespace frc;
 using namespace ctre;
-using namespace nt;
 
 namespace frc973 {
 class Disabled;
@@ -71,6 +68,8 @@ public:
                                     bool pressedP) override;
 
 private:
+    PowerDistributionPanel *m_pdp;
+
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
     ObservableJoystick *m_tuningJoystick;
@@ -85,7 +84,6 @@ private:
     ADXRS450_Gyro *m_gyro;
 
     LogSpreadsheet *m_logger;
-    NetworkTableInstance m_dashboard;
 
     TalonSRX *m_clawLeftRoller;
     TalonSRX *m_clawRightRoller;

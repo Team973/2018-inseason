@@ -1,6 +1,5 @@
 #include "WPILib.h"
 #include "Phoenix.h"
-#include "networktables/NetworkTableInstance.h"
 #include <iostream>
 #include "src/info/RobotInfo.h"
 #include "src/DisabledMode.h"
@@ -12,11 +11,11 @@
 
 using namespace frc;
 using namespace ctre;
-using namespace nt;
 namespace frc973 {
 Robot::Robot()
         : CoopMTRobot()
         , JoystickObserver()
+        , m_pdp(new PowerDistributionPanel())
         , m_driverJoystick(
               new ObservableJoystick(DRIVER_JOYSTICK_PORT, this, this))
         , m_operatorJoystick(
@@ -31,7 +30,6 @@ Robot::Robot()
         , m_rightDriveVictorC(new VictorSPX(RIGHT_DRIVE_C_VICTOR_ID))
         , m_gyro(new ADXRS450_Gyro())
         , m_logger(new LogSpreadsheet(this))
-        , m_dashboard(NetworkTableInstance::GetDefault())
         , m_clawLeftRoller(new TalonSRX(CLAW_LEFT_ROLLER_CAN_ID))
         , m_clawRightRoller(new TalonSRX(CLAW_RIGHT_ROLLER_CAN_ID))
         , m_clawCubeSensor(new DigitalInput(CUBE_BANNER_SENSOR_DIN))
@@ -40,7 +38,7 @@ Robot::Robot()
               new Elevator(this, m_logger, m_driverJoystick, m_elevatorMotor))
         , m_claw(new Claw(this, m_logger, m_clawLeftRoller, m_clawRightRoller,
                           m_clawCubeSensor))
-        , m_drive(new Drive(this, m_logger, m_dashboard, m_leftDriveTalonA,
+        , m_drive(new Drive(this, m_logger, m_leftDriveTalonA,
                             m_leftDriveVictorB, m_leftDriveVictorC,
                             m_rightDriveTalonA, m_rightDriveVictorB,
                             m_rightDriveVictorC, m_gyro))
@@ -110,6 +108,8 @@ void Robot::TestStop() {
 }
 
 void Robot::RobotPeriodic() {
+    // NetworkTable Battery Voltage
+    SmartDashboard::PutNumber("misc/pdp/batteryvoltage", m_pdp->GetVoltage());
 }
 
 void Robot::ObserveJoystickStateChange(uint32_t port, uint32_t button,
