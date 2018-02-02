@@ -1,88 +1,36 @@
-#include "GreyTalon.h"
-#include "CANTalon.h"
+#include "WPILib.h"
+#include "Phoenix.h"
 
 namespace frc973 {
-GreyTalon::GreyTalon(double canId, double controlPeriod, TaskMgr *scheduler)
-        : super(canId, controlPeriod)
-        , m_scheduler(scheduler)
-        , m_limitingMode(LimitingMode::PeakCurrentMode)
-        , m_peakCurrent(0.0)
-        , m_outputCurrent(0.0)
-        , m_maxPeakCurrentDuration(0)
-        , m_foldbackCurrent(0.0)
-        , m_maxFoldbackCurrentDuration(0)
-        , m_currentDuration(0)
-        , m_currentFilter(new MovingAverageFilter(0.9)) {
-    this->m_scheduler->RegisterTask("GreyTalon", this, TASK_PERIODIC);
-    EnableCurrentLimit(true);
-}
+void FactoryReset(TalonSRX *motor) {
+    motor->ConfigSelectedFeedbackSensor(
+        FeedbackDevice::QuadEncoder, 0,
+        10);  // 0 = Not cascaded PID Loop; 10 = in constructor, not in a loop
+    motor->SetSensorPhase(false);
+    motor->SetInverted(false);
+    motor->SetNeutralMode(NeutralMode::Coast);
 
-GreyTalon::~GreyTalon() {
-    m_scheduler->UnregisterTask(this);
-}
+    motor->ConfigNominalOutputForward(0.0, 10);
+    motor->ConfigNominalOutputReverse(0.0, 10);
+    motor->ConfigPeakOutputForward(1.0, 10);
+    motor->ConfigPeakOutputReverse(-1.0, 10);
 
-void GreyTalon::SetCurrentLimit(double currentLim) {
-    SetLegacyMode(currentLim);
-}
+    // Gains
+    motor->Config_kP(0, 0.0, 10);
+    motor->Config_kI(0, 0.0, 10);
+    motor->Config_kD(0, 0.0, 10);
+    motor->Config_kF(0, 0.0, 10);
+    motor->ConfigMotionCruiseVelocity(0.0, 10);
+    motor->ConfigMotionAcceleration(0.0, 10);
 
-void GreyTalon::ConfigureFoldbackCurrentLimit(
-    double peakCurrent, uint32_t maxPeakCurrentDuration, double foldbackCurrent,
-    uint32_t maxFoldbackCurrentDuration) {
-    m_peakCurrent = peakCurrent;
-    m_maxPeakCurrentDuration = maxPeakCurrentDuration;
-    m_foldbackCurrent = foldbackCurrent;
-    m_maxFoldbackCurrentDuration = maxFoldbackCurrentDuration;
-    m_limitingMode = LimitingMode::PeakCurrentMode;
-    SetPeakCurrentMode();
-}
+    // Limiting
+    motor->EnableCurrentLimit(false);
+    motor->ConfigPeakCurrentDuration(0, 10);
+    motor->ConfigPeakCurrentLimit(0, 10);
+    motor->ConfigContinuousCurrentLimit(0, 10);
+    motor->EnableVoltageCompensation(false);
+    motor->ConfigVoltageCompSaturation(12, 10);
 
-void GreyTalon::SetLegacyMode(double currentLim) {
-    m_limitingMode = LimitingMode::LegacyMode;
-    this->CANTalon::SetCurrentLimit(currentLim);
-}
-
-void GreyTalon::SetPeakCurrentMode() {
-    m_limitingMode = LimitingMode::PeakCurrentMode;
-    m_currentDuration = -1;
-    this->CANTalon::SetCurrentLimit(m_peakCurrent);
-}
-
-void GreyTalon::SetFoldbackMode() {
-    m_currentDuration = GetMsecTime();
-    m_limitingMode = LimitingMode::FoldbackCurrentMode;
-    this->CANTalon::SetCurrentLimit(m_foldbackCurrent);
-}
-
-double GreyTalon::GetFilteredOutputCurrent() {
-    return m_outputCurrent;
-}
-
-void GreyTalon::TaskPrePeriodic(RobotMode mode) {
-    m_outputCurrent = m_currentFilter->Update(this->GetOutputCurrent());
-    switch (m_limitingMode) {
-        case LegacyMode:
-            break;
-        case PeakCurrentMode:
-            if (m_outputCurrent <= m_peakCurrent) {
-                m_currentDuration = -1;
-            }
-            if (m_outputCurrent > m_peakCurrent) {
-                if (m_currentDuration == -1) {
-                    m_currentDuration = GetMsecTime();
-                }
-
-                if (GetMsecTime() - m_currentDuration >
-                    m_maxPeakCurrentDuration) {
-                    SetFoldbackMode();
-                }
-            }
-            break;
-        case FoldbackCurrentMode:
-            if (GetMsecTime() - m_currentDuration >
-                m_maxFoldbackCurrentDuration) {
-                SetPeakCurrentMode();
-            }
-            break;
-    }
+    motor->Set(ControlMode::PercentOutput, 0.0);
 }
 }
