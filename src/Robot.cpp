@@ -24,10 +24,11 @@ Robot::Robot()
         , m_tuningJoystick(
               new ObservableJoystick(TUNING_JOYSTICK_PORT, this, this))
         , m_logger(new LogSpreadsheet(this))
-        , m_clawLeftRoller(new TalonSRX(CLAW_LEFT_ROLLER_CAN_ID))
-        , m_clawRightRoller(new TalonSRX(CLAW_RIGHT_ROLLER_CAN_ID))
+        , m_clawLeftRoller(FactoryReset(new TalonSRX(CLAW_LEFT_ROLLER_CAN_ID)))
+        , m_clawRightRoller(
+              FactoryReset(new TalonSRX(CLAW_RIGHT_ROLLER_CAN_ID)))
         , m_clawCubeSensor(new DigitalInput(CUBE_BANNER_SENSOR_DIN))
-        , m_elevatorMotor(new TalonSRX(ELEVATOR_CAN_ID))
+        , m_elevatorMotor(FactoryReset(new TalonSRX(ELEVATOR_CAN_ID)))
         , m_elevator(
               new Elevator(this, m_logger, m_driverJoystick, m_elevatorMotor))
         , m_claw(new Claw(this, m_logger, m_clawLeftRoller, m_clawRightRoller,
@@ -43,10 +44,6 @@ Robot::Robot()
                           m_tuningJoystick, m_elevator))
         , m_dashboard(NetworkTableInstance::GetDefault()) {
     std::cout << "Constructed a Robot!" << std::endl;
-
-    FactoryReset(m_clawLeftRoller);
-    FactoryReset(m_clawRightRoller);
-    FactoryReset(m_elevatorMotor);
 }
 
 Robot::~Robot() {

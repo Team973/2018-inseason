@@ -2,7 +2,7 @@
 #include "Phoenix.h"
 
 namespace frc973 {
-void FactoryReset(TalonSRX *motor) {
+TalonSRX* FactoryReset(TalonSRX* motor) {
     motor->ConfigSelectedFeedbackSensor(
         FeedbackDevice::QuadEncoder, 0,
         10);  // 0 = Not cascaded PID Loop; 10 = in constructor, not in a loop
@@ -32,5 +32,7 @@ void FactoryReset(TalonSRX *motor) {
     motor->ConfigVoltageCompSaturation(12, 10);
 
     motor->Set(ControlMode::PercentOutput, 0.0);
+
+    return motor;
 }
 }
