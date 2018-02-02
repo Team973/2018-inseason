@@ -139,9 +139,10 @@ public:
      */
     bool OnTarget();
 
-private:
+protected:
     TaskMgr *m_scheduler;
 
+private:
     DriveStateProvider *m_stateProvider;
     DriveControlSignalReceiver *m_driveOutput;
 
