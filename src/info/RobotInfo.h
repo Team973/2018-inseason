@@ -11,7 +11,7 @@ namespace frc973{
     static const int LEFT_DRIVE_A_CAN_ID = 1;
     static const int ELEVATOR_CAN_ID = 60;
     static const int CLAW_LEFT_ROLLER_CAN_ID = 5;
-    static const int CLAW_RIGHT_ROLLER_CAN_ID = 6;
+    static const int CLAW_RIGHT_ROLLER_CAN_ID = 12;
     static const int RIGHT_DRIVE_A_CAN_ID = 14;
 
     //Victors
@@ -29,7 +29,7 @@ namespace frc973{
     //Analog
 
     //Digital
-    static const int CUBE_BANNER_SENSOR_DIN = 0;
+    static const int BEAM_BREAKER_SENSOR_DIN = 0;
 
     //Relays
     static const int COMPRESSOR_RELAY = 0;

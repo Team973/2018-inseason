@@ -11,8 +11,8 @@ Claw::Claw(TaskMgr *scheduler, LogSpreadsheet *logger,
     , m_kickerPin(kickerPin)
 {
     this->m_scheduler->RegisterTask("Claw", this, TASK_PERIODIC);
-    Timer m_ejectTimer();
-    m_ejectorState = idle;
+    /* Timer m_ejectTimer();
+    m_ejectorState = idle; */
 }
 
 Claw::~Claw() {
@@ -42,11 +42,12 @@ void Claw::Release() {
   */
 }
 void Claw::TaskPeriodic(RobotMode mode) {
-  if (m_ejectorState == ejected && m_ejectTimer.Get()>= 0.5){
+  /* if (m_ejectorState == ejected && m_ejectTimer.Get()>= 0.5){
     m_ejectorState = idle;
     m_ejector->Set(Claw::EjectState::idle);
     m_ejectTimer.Stop();
     m_ejectTimer.Reset();
+    */
   }
 }
 }

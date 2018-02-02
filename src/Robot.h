@@ -21,6 +21,7 @@
 #include "lib/helpers/JoystickHelper.h"
 #include "src/subsystems/Elevator.h"
 #include "src/subsystems/Claw.h"
+#include "src/subsystems/Intake.h"
 #include "src/subsystems/Hanger.h"
 #include "src/subsystems/Drive.h"
 #include "lib/logging/LogSpreadsheet.h"
@@ -70,9 +71,13 @@ class Robot : public CoopMTRobot, public JoystickObserver {
         Solenoid *m_clawKicker;
         Solenoid *m_kickerPin;
         TalonSRX *m_elevatorMotor;
+        TalonSRX *m_rightRoller;
+        TalonSRX *m_leftRoller;
+        DigitalInput *m_cubeSensor;
 
         Elevator *m_elevator;
         Claw *m_claw;
+        Intake *m_intake;
         Drive *m_drive;
         Hanger *m_hanger;
 
