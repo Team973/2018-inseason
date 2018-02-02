@@ -20,7 +20,7 @@ class LogSpreadsheet;
 class Claw : public CoopTask {
     public:
         Claw(TaskMgr *scheduler, LogSpreadsheet *logger,
-             Solenoid *rightArm, Solenoid *leftArm, Solenoid *ejector);
+             Solenoid *clawArms, Solenoid *clawKicker, Solenoid *kickerPin);
 
         virtual ~Claw();
 
@@ -53,9 +53,9 @@ class Claw : public CoopTask {
         void TaskPeriodic(RobotMode mode);
     private:
         TaskMgr *m_scheduler;
-        Solenoid *m_leftArm;
-        Solenoid *m_rightArm;
-        Solenoid *m_ejector;
+        Solenoid *m_clawArms;
+        Solenoid *m_clawKicker;
+        Solenoid *m_kickerPin;
         Timer m_ejectTimer;
         EjectState m_ejectorState;
 };

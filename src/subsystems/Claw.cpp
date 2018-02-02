@@ -4,11 +4,11 @@ using namespace frc;
 
 namespace frc973 {
 Claw::Claw(TaskMgr *scheduler, LogSpreadsheet *logger,
-           Solenoid *leftArm, Solenoid *rightArm, Solenoid *ejector)
+           Solenoid *clawArms, Solenoid *clawKicker, Solenoid *kickerPin)
     : m_scheduler(scheduler)
-    , m_leftArm(leftArm)
-    , m_rightArm(rightArm)
-    , m_ejector(ejector)
+    , m_clawArms(clawArms)
+    , m_clawKicker(clawKicker)
+    , m_kickerPin(kickerPin)
 {
     this->m_scheduler->RegisterTask("Claw", this, TASK_PERIODIC);
     Timer m_ejectTimer();
@@ -21,22 +21,25 @@ Claw::~Claw() {
 
 void Claw::Eject() {
 
+  /*
   m_ejector->Set(Claw::EjectState::ejected);
   m_ejectTimer.Start();
   m_ejectorState = ejected;
+  */
 }
 
 void Claw::Grip() {
-
+  /*
   m_leftArm->Set(true);
   m_rightArm->Set(true);
-
+  */
 }
 
 void Claw::Release() {
-
+  /*
   m_leftArm->Set(false);
   m_rightArm->Set(false);
+  */
 }
 void Claw::TaskPeriodic(RobotMode mode) {
   if (m_ejectorState == ejected && m_ejectTimer.Get()>= 0.5){
