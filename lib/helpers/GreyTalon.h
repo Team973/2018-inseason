@@ -4,16 +4,20 @@
 namespace frc973 {
 TalonSRX* FactoryReset(TalonSRX* motor) {
     motor->ConfigSelectedFeedbackSensor(
-        FeedbackDevice::QuadEncoder, 0,
+        FeedbackDevice::None, 0,
         10);  // 0 = Not cascaded PID Loop; 10 = in constructor, not in a loop
     motor->SetSensorPhase(false);
     motor->SetInverted(false);
     motor->SetNeutralMode(NeutralMode::Coast);
 
+    motor->ConfigOpenloopRamp(0, 10);
+    motor->ConfigClosedloopRamp(0, 10);
+
     motor->ConfigNominalOutputForward(0.0, 10);
     motor->ConfigNominalOutputReverse(0.0, 10);
     motor->ConfigPeakOutputForward(1.0, 10);
     motor->ConfigPeakOutputReverse(-1.0, 10);
+    motor->ConfigNeutralDeadband(0.04, 10);
 
     // Gains
     motor->Config_kP(0, 0.0, 10);
