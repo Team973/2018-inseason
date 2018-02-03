@@ -1,20 +1,23 @@
 import sys, json
-import pypathfinder
+from pypathfinder import set_cdll_path
 
-sourcePath = sys.argv[1]
-targetPath = sys.argv[2]
+jsonPath = sys.argv[1]
+headerPath = sys.argv[2]
+cdllPath = sys.argv[3]
+
+Waypoint, Segment, generate_trajectory, generate_tank_trajectory = set_cdll_path(cdllPath)
 
 def openPointStructs(source):
     with open(source) as inputFile:
-         sourceJSON = json.load(source)
-    left, right = generate_tank_trajectory(sourceJSON["waypoints"], sourceJSON["timestep"],
-                                      sourceJSON["max_vel"], sourceJSON["max_accel"],
-                                      sourceJSON["max_jerk"])
-    return left, right, sourceJSON
+        sourceJSON = json.load(inputFile)
+        left, right = generate_tank_trajectory(sourceJSON["waypoints"], sourceJSON["timestep"],
+                sourceJSON["max_vel"], sourceJSON["max_accel"],
+                sourceJSON["max_jerk"], 16)
+        return left, right, sourceJSON
 
 def writeHeader(target):
     header = open(target, "w+")
-    leftTraj, rightTraj, sourceJSON = openPointStructs(sourcePath)
+    leftTraj, rightTraj, sourceJSON = openPointStructs(jsonPath)
     header.write('''#include "path_to_pathfinder_struct_definitions.h"
     namespace generated_profiles {
     TrajectoryDescription ''' + sourceJSON[name])
@@ -33,4 +36,4 @@ def writeHeader(target):
                 leftTraj, rightTraj))
     header.close()
 
-writeHeader(targetPath)
+writeHeader(headerPath)

@@ -21,10 +21,10 @@ py_test(
 py_binary(
     name = "generatePath",
     srcs = [
-          "generatePath.py",
+        "generatePath.py",
     ],
     deps = [
-         ":pypathfinder",
+        ":pypathfinder",
     ],
 )
 
@@ -35,11 +35,10 @@ genrule(
     ],
     tools = [
         ":generatePath",
-        ":pypathfinder",
         "//third_party/pathfinder:pathfinder_cdll.so",
     ],
     srcs = [
-        "sampleJSON",
+        "sample.json",
     ],
-    cmd = "$(location :generatePath) $(location sampleJSON) $@",
+    cmd = "$(location :generatePath) $(location sample.json) $@ $(location //third_party/pathfinder:pathfinder_cdll.so)",
 )
