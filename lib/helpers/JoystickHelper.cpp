@@ -53,7 +53,7 @@ ObservableJoystick *ObservableJoystick::RegisterLog(LogSpreadsheet *logger) {
 }
 
 float ObservableJoystick::GetRawAxisWithDeadband(int axis, bool fSquared,
-                                                 float threshold) {
+                                                 double threshold) {
     float value = Util::deadband(GetRawAxis(axis), threshold);
 
     if (fSquared) {

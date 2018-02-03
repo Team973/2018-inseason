@@ -136,7 +136,7 @@ inline double max(double a, double b) {
  * Useful for joysticks that aren't quite centered at zero
  */
 inline double deadband(double n, double threshold) {
-    if (abs(n) > threshold) {
+    if (fabs(n) > threshold) {
         return n;
     }
     else {

@@ -63,7 +63,7 @@ public:
     void TestContinuous();
     void TestStop();
 
-    void RobotPeriodic() override;
+    void AllStateContinuous() override;
 
     void ObserveJoystickStateChange(uint32_t port, uint32_t button,
                                     bool pressedP) override;
