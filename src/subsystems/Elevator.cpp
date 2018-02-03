@@ -21,11 +21,6 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_elevatorMotor->SetSensorPhase(false);
     m_elevatorMotor->SetNeutralMode(NeutralMode::Brake);
 
-    m_elevatorMotor->ConfigNominalOutputForward(0.0, 10);
-    m_elevatorMotor->ConfigNominalOutputReverse(0.0, 10);
-    m_elevatorMotor->ConfigPeakOutputForward(1.0, 10);
-    m_elevatorMotor->ConfigPeakOutputReverse(-1.0, 10);
-
     m_elevatorMotor->Config_kP(0, 0.05, 10);
     m_elevatorMotor->Config_kI(0, 0.0, 10);
     m_elevatorMotor->Config_kD(0, 0.0, 10);

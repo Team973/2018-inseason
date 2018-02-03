@@ -8,6 +8,7 @@
 #include "src/TestMode.h"
 #include "src/Robot.h"
 #include "ctre/Phoenix.h"
+#include "lib/helpers/GreyTalon.h"
 
 using namespace frc;
 using namespace ctre;
@@ -30,10 +31,10 @@ Robot::Robot()
         , m_rightDriveVictorC(new VictorSPX(RIGHT_DRIVE_C_VICTOR_ID))
         , m_gyro(new ADXRS450_Gyro())
         , m_logger(new LogSpreadsheet(this))
-        , m_clawLeftRoller(new TalonSRX(CLAW_LEFT_ROLLER_CAN_ID))
-        , m_clawRightRoller(new TalonSRX(CLAW_RIGHT_ROLLER_CAN_ID))
+        , m_clawLeftRoller(new GreyTalonSRX(CLAW_LEFT_ROLLER_CAN_ID))
+        , m_clawRightRoller(new GreyTalonSRX(CLAW_RIGHT_ROLLER_CAN_ID))
         , m_clawCubeSensor(new DigitalInput(CUBE_BANNER_SENSOR_DIN))
-        , m_elevatorMotor(new TalonSRX(ELEVATOR_CAN_ID))
+        , m_elevatorMotor(new GreyTalonSRX(ELEVATOR_CAN_ID))
         , m_elevator(
               new Elevator(this, m_logger, m_driverJoystick, m_elevatorMotor))
         , m_claw(new Claw(this, m_logger, m_clawLeftRoller, m_clawRightRoller,
