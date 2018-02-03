@@ -32,40 +32,28 @@ public:
         scaleHigh
     };
 
-    enum TalonMode {
+    enum TalonMode
+    {
         manual,
         motionMagic
     };
 
-    Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
-             TalonSRX *motor);
+    Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor);
     virtual ~Elevator();
 
-    /**
-     * Sets Elevator Talon Control Mode
-     *
-     * @param mode: the control mode being set to for the talon.
-     **/
-    void SetControlMode(ControlMode mode, double value);
     /**
      * Sets Elevator Position
      *
      * @param position: the position goal
      **/
     void SetPosition(double position);
+
     /**
      * Sets Elevator Power
      *
      * @param power: power being sent to the motor from -1.0 to 1.0
      **/
     void SetPower(double power);
-    /**
-     * Sets Elevator Talon Control Mode to Motion Magic and uses Motion
-     *profiling to set position goal
-     *
-     * @param position: the position goal of the elevator
-     **/
-    void SetMotionMagic(double position);
 
     /**
      * Sets Elevator Level
@@ -84,7 +72,7 @@ public:
     /**
      * @return: returns current elevator position in sensor units
      **/
-    int GetPosition();
+    float GetPosition();
 
     /**
      * Update function synonymous to TeleopContinuous that gets called

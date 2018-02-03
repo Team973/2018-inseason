@@ -94,13 +94,6 @@ void Robot::TestStart() {
 
 void Robot::TestContinuous() {
     m_test->TestPeriodic();
-    if(m_driverJoystick->GetRawButton(DualAction::BtnA)) {
-        m_elevatorMotor->Set(ControlMode::Position, 6000);
-        printf("Pressed A\n");
-    }
-    else if(m_driverJoystick->GetRawButton(DualAction::BtnB)) {
-        m_elevatorMotor->Set(ControlMode::Position, 12000);
-    }
 }
 
 void Robot::TestStop() {

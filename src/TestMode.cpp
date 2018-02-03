@@ -37,6 +37,13 @@ void Test::TestPeriodic(){
     else if (m_elevatorMode == ElevatorMode::motionMagic) {
         m_elevator->SetMotionMagic(m_elevatorPosition);
     }*/
+
+    if(m_driverJoystick->GetRawButton(DualAction::BtnA)) {
+        m_elevator->SetPosition(11.0);
+    }
+    else if(m_driverJoystick->GetRawButton(DualAction::BtnB)) {
+        m_elevator->SetPosition(22.0);
+    }
 }
 
 void Test::TestStop() {

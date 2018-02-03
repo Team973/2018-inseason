@@ -1,17 +1,17 @@
 #include "src/subsystems/Elevator.h"
 #include "WPILib.h"
 #include "ctre/Phoenix.h"
+#include "lib/util/WrapDash.h"
 
 using namespace frc;
 
 namespace frc973 {
-Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
-                   TalonSRX *motor)
+Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor)
         : m_scheduler(scheduler)
         , m_elevatorMotor(motor)
         , m_position(0.0)
         , m_currLevel(Level::zero)
-        , m_talonMode(TalonMode::manual){
+        , m_talonMode(TalonMode::manual) {
     this->m_scheduler->RegisterTask("Elevator", this, TASK_PERIODIC);
 
     m_elevatorMotor->ConfigSelectedFeedbackSensor(
@@ -44,17 +44,14 @@ Elevator::~Elevator() {
     m_scheduler->UnregisterTask(this);
 }
 
-void Elevator::SetControlMode(ControlMode mode, double value) {
-    m_elevatorMotor->Set(mode, value);
-}
-
 void Elevator::SetPower(double power) {
     m_elevatorMotor->Set(ControlMode::PercentOutput, power);
     m_talonMode = TalonMode::manual;
 }
 
-void Elevator::SetMotionMagic(double position) {
-    Elevator::SetControlMode(ControlMode::MotionMagic, position);
+void Elevator::SetPosition(double position) {
+    int position_clicks = position / ELEVATOR_INCHES_PER_CLICK;
+    m_elevatorMotor->Set(ControlMode::MotionMagic, position_clicks);
     m_talonMode = TalonMode::motionMagic;
 }
 
@@ -67,14 +64,15 @@ void Elevator::Reset() {
     m_currLevel = Level::zero;
 }
 
-int Elevator::GetPosition() {
-    return m_elevatorMotor->GetSelectedSensorPosition(0);
+float Elevator::GetPosition() {
+    return ELEVATOR_INCHES_PER_CLICK *
+           ((float)m_elevatorMotor->GetSelectedSensorPosition(0));
 }
 
 void Elevator::TaskPeriodic(RobotMode mode) {
     m_positionCell->LogDouble(GetPosition());
-    printf("Elevator Pos: %d\n", m_elevatorMotor->GetSelectedSensorPosition(0));
-    SmartDashboard::PutNumber("elevator/current", m_elevatorMotor->GetOutputCurrent());
+    printf("Elevator Pos: %f\n", GetPosition());
+    DBStringPrintf(DBStringPos::DB_LINE4, "%f", GetPosition());
     /*switch (m_talonMode) {
         case manual:
             break;
@@ -83,9 +81,8 @@ void Elevator::TaskPeriodic(RobotMode mode) {
                 case zero:
                     this->SetPower(-0.2);
                     if (m_elevatorMotor->GetOutputCurrent() > 4.0) {
-                        m_elevatorMotor->GetSensorCollection().SetQuadraturePosition(0, 0);
-                        this->SetPower(0.0);
-                        m_currLevel = Level::lowGoal;
+                        m_elevatorMotor->GetSensorCollection().SetQuadraturePosition(0,
+    0); this->SetPower(0.0); m_currLevel = Level::lowGoal;
                     }
                     break;
                 case lowGoal:
