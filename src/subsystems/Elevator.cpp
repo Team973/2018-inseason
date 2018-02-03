@@ -25,8 +25,8 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor)
     m_elevatorMotor->Config_kI(0, 0.0, 10);
     m_elevatorMotor->Config_kD(0, 0.0, 10);
     m_elevatorMotor->Config_kF(0, 0.0, 10);
-    m_elevatorMotor->ConfigMotionCruiseVelocity(1000.0, 10);
-    m_elevatorMotor->ConfigMotionAcceleration(1000.0, 10);
+    m_elevatorMotor->ConfigMotionCruiseVelocity(3000.0, 10);
+    m_elevatorMotor->ConfigMotionAcceleration(2000.0, 10);
     m_elevatorMotor->SelectProfileSlot(0, 0);
 
     m_elevatorMotor->EnableCurrentLimit(true);
@@ -72,6 +72,7 @@ float Elevator::GetPosition() {
 void Elevator::TaskPeriodic(RobotMode mode) {
     m_positionCell->LogDouble(GetPosition());
     printf("Elevator Pos: %f\n", GetPosition());
+    SmartDashboard::PutNumber("/SmartDashboard/elevator/currents/current", m_elevatorMotor->GetOutputCurrent());
     DBStringPrintf(DBStringPos::DB_LINE4, "%f", GetPosition());
     /*switch (m_talonMode) {
         case manual:

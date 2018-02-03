@@ -41,7 +41,7 @@ void Test::TestPeriodic() {
      }*/
 
     if (m_driverJoystick->GetRawButton(DualAction::BtnA)) {
-        m_elevator->SetPosition(11.0);
+        m_elevator->SetPosition(60.0);
     }
     else if (m_driverJoystick->GetRawButton(DualAction::BtnB)) {
         m_elevator->SetPosition(22.0);
