@@ -26,23 +26,24 @@ class AsynchLogCellListener;
  */
 class AsynchLogCell : public LogCell {
 public:
-	/**
-	 * Construct an AsynchLogCell, given the name of the column to log,
-	 * and the listener to notify when content is requested.
-	 *
-	 * When GetContent is called, listener->NofityAsynchLogCellListener(this)
-	 * gets called to generate the content to return.
-	 */
-	AsynchLogCell(char *name, AsynchLogCellListener *listener,
-			unsigned int size = DEFAULT_MAX_LOG_CELL_SIZE);
+    /**
+     * Construct an AsynchLogCell, given the name of the column to log,
+     * and the listener to notify when content is requested.
+     *
+     * When GetContent is called, listener->NofityAsynchLogCellListener(this)
+     * gets called to generate the content to return.
+     */
+    AsynchLogCell(char *name, AsynchLogCellListener *listener,
+                  unsigned int size = DEFAULT_MAX_LOG_CELL_SIZE);
 
-	/**
-	 * Call listener->NotifyAsynchLogCellListener(this) to get the
-	 * contents to be logged and return those contents.
-	 */
-	virtual const char *GetContent();
+    /**
+     * Call listener->NotifyAsynchLogCellListener(this) to get the
+     * contents to be logged and return those contents.
+     */
+    virtual const char *GetContent();
+
 private:
-	AsynchLogCellListener *m_listener;
+    AsynchLogCellListener *m_listener;
 };
 
 /**
@@ -54,14 +55,14 @@ private:
  */
 class AsynchLogCellListener {
 public:
-	virtual ~AsynchLogCellListener() {}
+    virtual ~AsynchLogCellListener() {
+    }
 
-	/**
-	 * Handle an AsynchLogCell's request for data
-	 *
-	 * @param cell requesting data
-	 */
-	virtual void NotifyAsynchLogCellListener(AsynchLogCell *cell) = 0;
+    /**
+     * Handle an AsynchLogCell's request for data
+     *
+     * @param cell requesting data
+     */
+    virtual void NotifyAsynchLogCellListener(AsynchLogCell *cell) = 0;
 };
-
 }

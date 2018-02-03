@@ -24,35 +24,34 @@ namespace frc973 {
  */
 class DelaySwitch {
 public:
-	/**
-	 * Higher numbers of filteratude mean even more delay between on and off...
-	 * unless the numbers get above 1.0 in which case don't do that!
-	 *
-	 * Also don't put negative numbers in otherwise this filter will go
-	 * back in time to change past points.
-	 */
-	DelaySwitch(double filteratude = 0.9);
-	virtual ~DelaySwitch();
+    /**
+     * Higher numbers of filteratude mean even more delay between on and off...
+     * unless the numbers get above 1.0 in which case don't do that!
+     *
+     * Also don't put negative numbers in otherwise this filter will go
+     * back in time to change past points.
+     */
+    DelaySwitch(double filteratude = 0.9);
+    virtual ~DelaySwitch();
 
-	/**
-	 * Calculate the filtered value given the original datapoint.
-	 *
-	 * @parm currentValue  the current data point that needs to be filtered
-	 *
-	 * @return result of filtering calculation.
-	 */
-	bool Update(bool currentValue);
+    /**
+     * Calculate the filtered value given the original datapoint.
+     *
+     * @parm currentValue  the current data point that needs to be filtered
+     *
+     * @return result of filtering calculation.
+     */
+    bool Update(bool currentValue);
 
-	/**
-	 * Remember the latest value calculated by filtering
-	 *
-	 * @return result of previous filtering calcuation
-	 */
-	bool GetLast(void);
+    /**
+     * Remember the latest value calculated by filtering
+     *
+     * @return result of previous filtering calcuation
+     */
+    bool GetLast(void);
 
 private:
-	bool m_prevValue;
-	MovingAverageFilter m_filter;
+    bool m_prevValue;
+    MovingAverageFilter m_filter;
 };
-
 }

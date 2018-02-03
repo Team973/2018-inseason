@@ -10,7 +10,7 @@ RUN curl https://bazel.build/bazel-release.pub.gpg | apt-key add -
 
 RUN apt-get update
 
-RUN apt-get install -y frc-toolchain bazel openjdk-8-jdk git
+RUN apt-get install -y frc-toolchain bazel openjdk-8-jdk git clang
 
 ADD . /build
 

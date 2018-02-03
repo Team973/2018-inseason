@@ -4,8 +4,7 @@ using namespace frc;
 
 namespace frc973 {
 Hanger::Hanger(TaskMgr *scheduler, LogSpreadsheet *logger)
-: m_scheduler(scheduler)
-{
+        : m_scheduler(scheduler) {
     this->m_scheduler->RegisterTask("Hanger", this, TASK_PERIODIC);
 }
 
