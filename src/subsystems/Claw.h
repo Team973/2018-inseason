@@ -33,6 +33,16 @@ class Claw : public CoopTask {
             idle = false
         };
 
+        enum kickState {
+            active = true,
+            kickIdle = false
+        };
+
+        enum kickPinState {
+            pinActive = true,
+            pinIdle = false
+        };
+
         void openClaw();
 
         /**
@@ -63,6 +73,10 @@ class Claw : public CoopTask {
         Solenoid *m_kickerPin;
         Timer m_openTimer;
         openState m_openerState;
+        Timer m_kickTimer;
+        kickState m_kickerState;
+        Timer m_pinTimer;
+        kickPinState m_kickPinState;
 
 };
 }
