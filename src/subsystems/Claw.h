@@ -29,8 +29,8 @@ class Claw : public CoopTask {
          **/
 
         enum openState {
-            open = true,
-            idle = false
+            clawOpen = true,
+            clawClosed = false
         };
 
         enum kickState {
@@ -39,44 +39,64 @@ class Claw : public CoopTask {
         };
 
         enum kickPinState {
+
+            /*
+            * Activating the pin holds the kicker in place
+            */
+
             pinActive = true,
             pinIdle = false
         };
 
-        void openClaw();
+        enum ClawState {
+            released,
+            grabbed,
+            dropOpen,
+            dropClosed,
+            pushOpen,
+            pushClosed,
+            kickHold,
+            kickPreFire,
+            kickRelease,
+        };
 
-        /**
-         * Activates both claw arm solenoids to open the arms
-         * Default position is closed
-         **/
-
-        void clawKick();
-
-        /**
-         * Activates the claw kicker solenoid
-         * Pushes power cubes
-         * Default state is deactivated
-         **/
-
-        void runKickerPin();
-
-        /**
-         * Enables the kicker print
-         * Default state is disabled
-         **/
-
+        void open();
+        /*
+        * When called, opens the claw arms
+        */
+        void grab();
+        /*
+        * When called, closes claw arms, and
+        * has all claw solenoids set to idle
+        */
+        void drop();
+        /*
+        * When called, opens claw arms to drop cube
+        */
+        void push();
+        /*
+        * When called, opens claw arms and
+        * activates kicker
+        */
+        void fire();
+        /*
+        * When called, sets cube to be launched by the
+        * kicker aided by the kicker pin
+        */
         void TaskPeriodic(RobotMode mode);
     private:
+
+        void goToState(ClawState newState);
+
+
         TaskMgr *m_scheduler;
         Solenoid *m_clawArms;
         Solenoid *m_clawKicker;
         Solenoid *m_kickerPin;
-        Timer m_openTimer;
-        openState m_openerState;
-        Timer m_kickTimer;
-        kickState m_kickerState;
-        Timer m_pinTimer;
-        kickPinState m_kickPinState;
+        ClawState m_clawState;
+
+        uint32_t m_stateStartTimeMs;
+
 
 };
 }

@@ -6,6 +6,7 @@
 #include "lib/helpers/JoystickHelper.h"
 #include "lib/util/Util.h"
 #include "src/subsystems/Elevator.h"
+#include "src/subsystems/Claw.h"
 
 using namespace frc;
 
@@ -18,7 +19,7 @@ class Test {
             position
         };
         Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-                          ObservableJoystick *tuning, Elevator *elevator);
+             ObservableJoystick *tuning, Elevator *elevator, Claw *claw);
         virtual ~Test();
 
         void TestInit();
@@ -33,6 +34,7 @@ class Test {
         ObservableJoystick *m_tuningJoystick;
 
         Elevator *m_elevator;
+        Claw *m_claw;
 
         ElevatorMode m_elevatorMode;
         double m_elevatorPosition;

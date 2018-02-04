@@ -9,56 +9,123 @@ Claw::Claw(TaskMgr *scheduler, LogSpreadsheet *logger,
     , m_clawArms(clawArms)
     , m_clawKicker(clawKicker)
     , m_kickerPin(kickerPin)
+    , m_clawState(Claw::ClawState::grabbed)
 {
     this->m_scheduler->RegisterTask("Claw", this, TASK_PERIODIC);
-    Timer m_openTimer();
-    m_openerState = idle;
-    Timer m_kickTimer();
-    m_kickerState = kickIdle;
-    Timer m_kickPinState();
-    m_kickPinState = pinIdle;
+    goToState(grabbed);
 }
 
 Claw::~Claw() {
     m_scheduler->UnregisterTask(this);
 }
 
-void Claw::openClaw() {
-    m_clawArms->Set(Claw::openState::open);
-    m_openTimer.Start();
-    m_openerState = open;
+void Claw::open() {
+    goToState(released);
 }
 
-void Claw::clawKick() {
-    m_clawKicker->Set(Claw::kickState::active);
-    m_kickTimer.Start();
-    m_kickerState = active;
+void Claw::grab() {
+    goToState(grabbed);
 }
 
-void Claw::runKickerPin() {
-    m_kickerPin->Set(Claw::kickPinState::pinActive);
-    m_pinTimer.Start();
-    m_kickPinState = pinActive;
+void Claw::drop() {
+    goToState(dropOpen);
 }
+
+void Claw::push() {
+    goToState(pushOpen);
+}
+
+void Claw::fire() {
+    goToState(kickHold);
+}
+
 void Claw::TaskPeriodic(RobotMode mode) {
-    if(m_openerState == open && m_openTimer.Get()>= 0.5) {
-        m_openerState = idle;
-        m_clawArms->Set(Claw::openState::idle);
-        m_openTimer.Stop();
-        m_openTimer.Reset();
-    }
-    if(m_kickerState == active && m_kickTimer.Get()>= 0.5) {
-        m_kickerState = kickIdle;
-        m_clawKicker->Set(Claw::kickerState::kickIdle);
-        m_kickTimer.Stop();
-        m_kickTimer.Reset();
-    }
-    if(m_kickPinState == pinActive && m_pinTimer.Get()>= 0.5) {
-        m_kickPinState = pinIdle;
-        m_kickerPin->Set(Claw::kickPinState::pinIdle);
-        m_pinTimer.Stop();
-        m_pinTimer.Reset();
+    switch(m_clawState) {
+        case ClawState::released:
+            break;
+        case ClawState::grabbed:
+            break;
+        case ClawState::dropOpen:
+            if (GetMsecTime() - m_stateStartTimeMs > 100) {
+                goToState(dropClosed);
+            }
+            break;
+        case ClawState::dropClosed:
+            goToState(grabbed);
+            break;
+        case ClawState::pushOpen:
+            if (GetMsecTime() - m_stateStartTimeMs > 100) {
+                goToState(pushClosed);
+            }
+            break;
+        case ClawState::pushClosed:
+            goToState(grabbed);
+            break;
+        case ClawState::kickHold:
+            if (GetMsecTime() - m_stateStartTimeMs > 50) {
+                goToState(kickPreFire);
+            }
+            break;
+        case ClawState::kickPreFire:
+            if (GetMsecTime() - m_stateStartTimeMs > 50) {
+                goToState(kickRelease);
+            }
+            break;
+        case ClawState::kickRelease:
+            goToState(grabbed);
+            break;
     }
 
-  }
+}
+void Claw::goToState(ClawState newState) {
+    m_stateStartTimeMs = GetMsecTime();
+    m_clawState = newState;
+    switch(m_clawState) {
+        case ClawState::released:
+            m_clawArms->Set(clawOpen);
+            m_clawKicker->Set(kickIdle);
+            m_kickerPin->Set(pinIdle);
+            break;
+        case ClawState::grabbed:
+            m_clawArms->Set(clawClosed);
+            m_clawKicker->Set(kickIdle);
+            m_kickerPin->Set(pinIdle);
+            break;
+        case ClawState::dropOpen:
+            m_clawArms->Set(clawOpen);
+            m_clawKicker->Set(kickIdle);
+            m_kickerPin->Set(pinIdle);
+            break;
+        case ClawState::dropClosed:
+            m_clawArms->Set(clawClosed);
+            m_clawKicker->Set(kickIdle);
+            m_kickerPin->Set(pinIdle);
+            break;
+        case ClawState::pushOpen:
+            m_clawArms->Set(clawOpen);
+            m_clawKicker->Set(active);
+            m_kickerPin->Set(pinIdle);
+            break;
+        case ClawState::pushClosed:
+            m_clawArms->Set(clawClosed);
+            m_clawKicker->Set(kickIdle);
+            m_kickerPin->Set(pinIdle);
+            break;
+        case ClawState::kickHold:
+            m_clawArms->Set(clawClosed);
+            m_clawKicker->Set(kickIdle);
+            m_kickerPin->Set(pinActive);
+            break;
+        case ClawState::kickPreFire:
+            m_clawArms->Set(clawClosed);
+            m_clawKicker->Set(active);
+            m_kickerPin->Set(pinActive);
+            break;
+        case ClawState::kickRelease:
+            m_clawArms->Set(clawOpen);
+            m_clawKicker->Set(active);
+            m_kickerPin->Set(pinIdle);
+            break;
+    }
+}
 }
