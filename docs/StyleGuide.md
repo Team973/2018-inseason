@@ -50,9 +50,10 @@ private:
 ```
 
 ### Rule #2: Naming variables according to scope
-Member, static, and global variables should be named starting with `m_`, `s_`, or `g_` respectively. In declaring member variables in a class, there should be a space between the type and the name.
+Member, static, and global variables should be named starting with `m_`, `s_`, or `g_` respectively. In declaring member variables in a class, there should be a space between the type and the name. Declaring constants should have all characters in uppercase and should use underscores instead of spaces.
 ```c++
 int g_value = 10
+static const double  TALON_ID = 0;
 class MyClass() {
 private:
     int m_value;
@@ -111,7 +112,7 @@ public:
 ```
 
 ### Rule #7: Explicit Conversions
-The compiler is allowed to make one implicit conversion to resolve the parameters to a function. What this means is that the compiler can use constructors callable with a single parameter to convert from one type to another in order to get the right type for a parameter. 
+The compiler is allowed to make one implicit conversion to resolve the parameters to a function. What this means is that the compiler can use constructors callable with a single parameter to convert from one type to another in order to get the right type for a parameter.
 Prefixing the explicit keyword to the constructor prevents the compiler from using that constructor for implicit conversions. Use the explicit keyword for conversion operators and single-argument constructors.
 For an in-depth explanation of what the explicit keyword does go [here](https://stackoverflow.com/questions/121162/what-does-the-explicit-keyword-mean).
 ```c++
