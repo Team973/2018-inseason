@@ -14,8 +14,10 @@ class Test {
     public:
         enum ElevatorMode {
             percentOutput,
-            motionMagic
+            motionMagic,
+            zero
         };
+
         Test(ObservableJoystick *driver, ObservableJoystick *codriver,
                           ObservableJoystick *tuning, Elevator *elevator);
         virtual ~Test();

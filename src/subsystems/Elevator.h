@@ -22,21 +22,21 @@ class LogSpreadsheet;
 
 class Elevator : public CoopTask {
 public:
-    enum Level
-    {
-        zero,
-        vault,
-        lowGoal,
-        scaleLow,
-        scaleMid,
-        scaleHigh
-    };
-
-    enum TalonMode
+    enum ElevatorState
     {
         manual,
-        motionMagic
+        zeroing,
+        position,
+        goDown,
+        stop
     };
+
+    static constexpr double GROUND = 0.1;
+    static constexpr double VAULT = 3.0;
+    static constexpr double LOW_GOAL = 25.0;
+    static constexpr double SCALE_LOW = 50.0;
+    static constexpr double SCALE_MID = 60.0;
+    static constexpr double SCALE_HIGH = 85.0;
 
     Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor);
     virtual ~Elevator();
@@ -54,14 +54,6 @@ public:
      * @param power: power being sent to the motor from -1.0 to 1.0
      **/
     void SetPower(double power);
-
-    /**
-     * Sets Elevator Level
-     *
-     * @param level: the level the elevator should be in (refer to enum above
-     *for choices)
-     **/
-    void SetLevel(Level level);
 
     /**
      * Resets elevator subsystem by setting position to zero
@@ -86,8 +78,7 @@ private:
     TalonSRX *m_elevatorMotor;
 
     double m_position;
-    Level m_currLevel;
-    TalonMode m_talonMode;
+    ElevatorState m_elevatorState;
     LogCell *m_positionCell;
 };
 }

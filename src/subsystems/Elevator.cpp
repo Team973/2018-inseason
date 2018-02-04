@@ -10,8 +10,7 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor)
         : m_scheduler(scheduler)
         , m_elevatorMotor(motor)
         , m_position(0.0)
-        , m_currLevel(Level::zero)
-        , m_talonMode(TalonMode::manual) {
+        , m_elevatorState(ElevatorState::manual) {
     this->m_scheduler->RegisterTask("Elevator", this, TASK_PERIODIC);
 
     m_elevatorMotor->ConfigSelectedFeedbackSensor(
@@ -45,23 +44,18 @@ Elevator::~Elevator() {
 }
 
 void Elevator::SetPower(double power) {
+    m_elevatorState = ElevatorState::manual;
     m_elevatorMotor->Set(ControlMode::PercentOutput, power);
-    m_talonMode = TalonMode::manual;
 }
 
 void Elevator::SetPosition(double position) {
+    m_elevatorState = ElevatorState::position;
     int position_clicks = position / ELEVATOR_INCHES_PER_CLICK;
     m_elevatorMotor->Set(ControlMode::MotionMagic, position_clicks);
-    m_talonMode = TalonMode::motionMagic;
-}
-
-void Elevator::SetLevel(Level level) {
-    m_currLevel = level;
-    m_talonMode = TalonMode::motionMagic;
 }
 
 void Elevator::Reset() {
-    m_currLevel = Level::zero;
+    m_elevatorState = ElevatorState::zeroing;
 }
 
 float Elevator::GetPosition() {
@@ -74,37 +68,27 @@ void Elevator::TaskPeriodic(RobotMode mode) {
     printf("Elevator Pos: %f\n", GetPosition());
     SmartDashboard::PutNumber("/SmartDashboard/elevator/currents/current", m_elevatorMotor->GetOutputCurrent());
     DBStringPrintf(DBStringPos::DB_LINE4, "%f", GetPosition());
-    /*switch (m_talonMode) {
+    switch (m_elevatorState) {
         case manual:
             break;
-        case motionMagic:
-            switch (m_currLevel) {
-                case zero:
-                    this->SetPower(-0.2);
-                    if (m_elevatorMotor->GetOutputCurrent() > 4.0) {
-                        m_elevatorMotor->GetSensorCollection().SetQuadraturePosition(0,
-    0); this->SetPower(0.0); m_currLevel = Level::lowGoal;
-                    }
-                    break;
-                case lowGoal:
-                    this->SetMotionMagic(30.0);
-                    break;
-                case scaleLow:
-                    this->SetMotionMagic(50.0);
-                    break;
-                case scaleMid:
-                    this->SetMotionMagic(60.0);
-                    break;
-                case scaleHigh:
-                    this->SetMotionMagic(1000.0);
-                    break;
-                default:
-                    this->Reset();
-                    break;
+        case zeroing:
+            m_elevatorState = ElevatorState::goDown;
+            break;
+        case goDown:
+            this->SetPower(-0.2);
+            if (m_elevatorMotor->GetOutputCurrent() > 4.0) {
+                m_elevatorState = ElevatorState::stop;
             }
-          break;
-      default:
-          break;
-    }*/
-}
+            break;
+        case stop:
+            m_elevatorMotor->GetSensorCollection().SetQuadraturePosition(0,0);
+            this->SetPower(0.0);
+            m_elevatorState = ElevatorState::manual;
+            break;
+        case position:
+            break;
+        default:
+            break;
+        }
+    }
 }
