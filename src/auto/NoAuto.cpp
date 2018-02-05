@@ -3,8 +3,7 @@
 using namespace frc;
 
 namespace frc973 {
-NoAuto::NoAuto(void)
-{
+NoAuto::NoAuto(void) {
 }
 
 NoAuto::~NoAuto(void) {

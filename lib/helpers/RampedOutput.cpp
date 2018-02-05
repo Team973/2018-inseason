@@ -7,15 +7,15 @@
 
 #include "lib/helpers/RampedOutput.h"
 #include "lib/util/Util.h"
+#include <math.h>
 
 namespace frc973 {
 
-RampedOutput::RampedOutput(double rampRate, double initialOutput):
-		m_rampRate(rampRate),
-		m_prevOutput(initialOutput),
-		m_prevTimeMs(0),
-		m_rampFinished(false)
-{
+RampedOutput::RampedOutput(double rampRate, double initialOutput)
+        : m_rampRate(rampRate)
+        , m_prevOutput(initialOutput)
+        , m_prevTimeMs(0)
+        , m_rampFinished(false) {
 }
 
 RampedOutput::~RampedOutput() {
@@ -26,44 +26,41 @@ RampedOutput::~RampedOutput() {
  * In this special case, just return m_prevOutput (probably 0.0)
  */
 double RampedOutput::Update(double input) {
-	double timeDiffSec = ((double) (GetMsecTime() - m_prevTimeMs)) *
-			Constants::SEC_PER_MSEC;
+    double timeDiffSec =
+        ((double)(GetMsecTime() - m_prevTimeMs)) * Constants::SEC_PER_MSEC;
 
-	double maxOutputDiff = timeDiffSec * m_rampRate;
-	double requestedOutputDiff = Util::abs(input - m_prevOutput);
+    double maxOutputDiff = timeDiffSec * m_rampRate;
+    double requestedOutputDiff = fabs(input - m_prevOutput);
 
-	if (m_prevTimeMs != 0) {
-		m_rampFinished = requestedOutputDiff < maxOutputDiff;
+    if (m_prevTimeMs != 0) {
+        m_rampFinished = requestedOutputDiff < maxOutputDiff;
 
-		if (input > m_prevOutput) {
-			m_prevOutput +=
-					Util::min(maxOutputDiff, requestedOutputDiff);
-		}
-		else {
-			m_prevOutput -=
-					Util::min(maxOutputDiff, requestedOutputDiff);
-		}
-	}
+        if (input > m_prevOutput) {
+            m_prevOutput += Util::min(maxOutputDiff, requestedOutputDiff);
+        }
+        else {
+            m_prevOutput -= Util::min(maxOutputDiff, requestedOutputDiff);
+        }
+    }
 
-	m_prevTimeMs = GetMsecTime();
+    m_prevTimeMs = GetMsecTime();
 
-	return m_prevOutput;
+    return m_prevOutput;
 }
 
 bool RampedOutput::IsRampFinished(void) {
-	return m_rampFinished;
+    return m_rampFinished;
 }
 
 void RampedOutput::SetRampRate(double rampRate) {
-	m_rampRate = Util::abs(rampRate);
+    m_rampRate = fabs(rampRate);
 }
 
 double RampedOutput::GetRampRate(void) {
-	return m_rampRate;
+    return m_rampRate;
 }
 
 void RampedOutput::OverridePrevOutput(double prevOutput) {
-	m_prevOutput = prevOutput;
+    m_prevOutput = prevOutput;
 }
-
 }

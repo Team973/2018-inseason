@@ -3,9 +3,7 @@
 using namespace frc;
 
 namespace frc973 {
-AutoRoutine::AutoRoutine()
-: m_autoState(0)
-{
+AutoRoutine::AutoRoutine() : m_autoState(0) {
 }
 
 AutoRoutine::~AutoRoutine() {

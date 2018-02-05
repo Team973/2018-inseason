@@ -3,14 +3,13 @@
 using namespace frc;
 
 namespace frc973 {
-Claw::Claw(TaskMgr *scheduler, LogSpreadsheet *logger,
-           Solenoid *clawArms, Solenoid *clawKicker, Solenoid *kickerPin)
-    : m_scheduler(scheduler)
-    , m_clawArms(clawArms)
-    , m_clawKicker(clawKicker)
-    , m_kickerPin(kickerPin)
-    , m_clawState(Claw::ClawState::grabbed)
-{
+Claw::Claw(TaskMgr *scheduler, LogSpreadsheet *logger, Solenoid *clawArms,
+           Solenoid *clawKicker, Solenoid *kickerPin)
+        : m_scheduler(scheduler)
+        , m_clawArms(clawArms)
+        , m_clawKicker(clawKicker)
+        , m_kickerPin(kickerPin)
+        , m_clawState(Claw::ClawState::grabbed) {
     this->m_scheduler->RegisterTask("Claw", this, TASK_PERIODIC);
     goToState(grabbed);
 }
@@ -40,7 +39,7 @@ void Claw::fire() {
 }
 
 void Claw::TaskPeriodic(RobotMode mode) {
-    switch(m_clawState) {
+    switch (m_clawState) {
         case ClawState::released:
             break;
         case ClawState::grabbed:
@@ -75,12 +74,11 @@ void Claw::TaskPeriodic(RobotMode mode) {
             goToState(grabbed);
             break;
     }
-
 }
 void Claw::goToState(ClawState newState) {
     m_stateStartTimeMs = GetMsecTime();
     m_clawState = newState;
-    switch(m_clawState) {
+    switch (m_clawState) {
         case ClawState::released:
             m_clawArms->Set(clawOpen);
             m_clawKicker->Set(kickIdle);
