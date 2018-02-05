@@ -8,6 +8,7 @@
 #include "src/TestMode.h"
 #include "src/Robot.h"
 #include "ctre/Phoenix.h"
+#include "lib/helpers/GreyTalon.h"
 
 using namespace frc;
 using namespace nt;
@@ -23,10 +24,10 @@ Robot::Robot()
         , m_tuningJoystick(
               new ObservableJoystick(TUNING_JOYSTICK_PORT, this, this))
         , m_logger(new LogSpreadsheet(this))
-        , m_clawLeftRoller(new TalonSRX(CLAW_LEFT_ROLLER_CAN_ID))
-        , m_clawRightRoller(new TalonSRX(CLAW_RIGHT_ROLLER_CAN_ID))
+        , m_clawLeftRoller(new GreyTalonSRX(CLAW_LEFT_ROLLER_CAN_ID))
+        , m_clawRightRoller(new GreyTalonSRX(CLAW_RIGHT_ROLLER_CAN_ID))
         , m_clawCubeSensor(new DigitalInput(CUBE_BANNER_SENSOR_DIN))
-        , m_elevatorMotor(new TalonSRX(ELEVATOR_CAN_ID))
+        , m_elevatorMotor(new GreyTalonSRX(ELEVATOR_CAN_ID))
         , m_clawArms(new Solenoid(CLAW_ARMS_PCM_ID))
         , m_clawKicker(new Solenoid(CLAW_KICKER_PCM_ID))
         , m_kickerPin(new Solenoid(KICKER_PIN_PCM_ID))
