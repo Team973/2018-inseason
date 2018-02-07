@@ -29,7 +29,7 @@ Robot::Robot()
         /*, m_kickerPin(new Solenoid(KICKER_PIN_PCM_ID))*/
         , m_rightRoller(new TalonSRX(CLAW_RIGHT_ROLLER_CAN_ID))
         , m_leftRoller(new TalonSRX(CLAW_LEFT_ROLLER_CAN_ID))
-        , m_cubeSensor(new DigitalInput(BEAM_BREAKER_SENSOR_DIN))
+        , m_cubeSensor(new DigitalInput(INTAKE_BEAM_BREAKER_SENSOR_DIN))
         , m_elevatorMotor(new TalonSRX(ELEVATOR_CAN_ID))
         , m_elevator(
               new Elevator(this, m_logger, m_driverJoystick, m_elevatorMotor))
