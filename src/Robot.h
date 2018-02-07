@@ -27,6 +27,7 @@
 #include "src/subsystems/Drive.h"
 #include "lib/logging/LogSpreadsheet.h"
 #include "lib/helpers/JoystickHelper.h"
+#include "lib/helpers/GreyCompressor.h"
 #include "lib/bases/CoopMTRobot.h"
 #include "ctre/Phoenix.h"
 
@@ -83,6 +84,10 @@ private:
     Claw *m_claw;
     Drive *m_drive;
     Hanger *m_hanger;
+
+    DigitalInput *m_airPressureSwitch;
+    Relay *m_compressorRelay;
+    GreyCompressor *m_compressor;
 
     Disabled *m_disabled;
     Autonomous *m_autonomous;
