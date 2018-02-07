@@ -20,10 +20,10 @@ static const int RIGHT_DRIVE_C_VICTOR_ID = 14;
 static const int ELEVATOR_CAN_ID = 4;
 
 // Solenoids
-static const int CLAW_ARMS_PCM_ID = 2;
-static const int CLAW_KICKER_PCM_ID = 3;
-static const int KICKER_PIN_PCM_ID = 4;
-static const int HANGER_PTO_PCM_ID = 1;
+static const int CUBE_CLAMP_PCM_ID = 1;
+static const int CLAW_KICKER_PCM_ID = 2;
+/*static const int KICKER_PIN_PCM_ID = 4;*/
+static const int HANGER_PTO_PCM_ID = 0;
 
 // Claw
 static const int CLAW_LEFT_ROLLER_CAN_ID = 5;

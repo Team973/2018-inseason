@@ -23,17 +23,17 @@ Robot::Robot()
         , m_tuningJoystick(
               new ObservableJoystick(TUNING_JOYSTICK_PORT, this, this))
         , m_logger(new LogSpreadsheet(this))
-        , m_clawArms(new Solenoid(CLAW_ARMS_PCM_ID))
+        , m_cubeClamp(new Solenoid(CUBE_CLAMP_PCM_ID))
         , m_clawKicker(new Solenoid(CLAW_KICKER_PCM_ID))
-        , m_kickerPin(new Solenoid(KICKER_PIN_PCM_ID))
+        /*, m_kickerPin(new Solenoid(KICKER_PIN_PCM_ID))*/
         , m_rightRoller(new TalonSRX(CLAW_RIGHT_ROLLER_CAN_ID))
         , m_leftRoller(new TalonSRX(CLAW_LEFT_ROLLER_CAN_ID))
         , m_cubeSensor(new DigitalInput(BEAM_BREAKER_SENSOR_DIN))
         , m_elevatorMotor(new TalonSRX(ELEVATOR_CAN_ID))
         , m_elevator(
               new Elevator(this, m_logger, m_driverJoystick, m_elevatorMotor))
-        , m_claw(
-              new Claw(this, m_logger, m_clawArms, m_clawKicker, m_kickerPin))
+        , m_claw(new Claw(this, m_logger, m_cubeClamp,
+                          m_clawKicker /*, m_kickerPin*/))
         , m_intake(new Intake(this, m_logger, m_rightRoller, m_leftRoller,
                               m_cubeSensor))
         , m_drive(new Drive(this, m_logger))

@@ -18,85 +18,80 @@ class TaskMgr;
 class LogSpreadsheet;
 
 class Claw : public CoopTask {
-    public:
-        Claw(TaskMgr *scheduler, LogSpreadsheet *logger,
-             Solenoid *clawArms, Solenoid *clawKicker, Solenoid *kickerPin);
+public:
+    Claw(TaskMgr *scheduler, LogSpreadsheet *logger, Solenoid *cubeClamp,
+         Solenoid *clawKicker /*, Solenoid *kickerPin*/);
 
-        virtual ~Claw();
+    virtual ~Claw();
 
-        /**
-         * Starts the wheels to pull things in
-         **/
+    /**
+     * Starts the wheels to pull things in
+     **/
 
-        enum openState {
-            clawOpen = true,
-            clawClosed = false
-        };
+    enum openState
+    {
+        clawOpen = true,
+        clawClosed = false
+    };
 
-        enum kickState {
-            active = true,
-            kickIdle = false
-        };
+    enum kickState
+    {
+        active = true,
+        kickIdle = false
+    };
 
-        enum kickPinState {
+    /*enum kickPinState {
+        pinActive = true,
+        pinIdle = false
+    };*/
 
-            /*
-            * Activating the pin holds the kicker in place
-            */
+    enum ClawState
+    {
+        released,
+        grabbed,
+        dropOpen,
+        dropClosed,
+        pushOpen,
+        pushClosed,
+        /*kickHold,
+        kickPreFire,
+        kickRelease,*/
+    };
 
-            pinActive = true,
-            pinIdle = false
-        };
+    void open();
+    /*
+     * When called, opens the claw arms
+     */
+    void grab();
+    /*
+     * When called, closes claw arms, and
+     * has all claw solenoids set to idle
+     */
+    void drop();
+    /*
+     * When called, opens claw arms to drop cube
+     */
+    void push();
+    /*
+     * When called, opens claw arms and
+     * activates kicker
+     */
+    /*void fire();*/
+    /*
+     * When called, sets cube to be launched by the
+     * kicker aided by the kicker pin
+     */
+    void TaskPeriodic(RobotMode mode);
 
-        enum ClawState {
-            released,
-            grabbed,
-            dropOpen,
-            dropClosed,
-            pushOpen,
-            pushClosed,
-            kickHold,
-            kickPreFire,
-            kickRelease,
-        };
+private:
+    void goToState(ClawState newState);
 
-        void open();
-        /*
-        * When called, opens the claw arms
-        */
-        void grab();
-        /*
-        * When called, closes claw arms, and
-        * has all claw solenoids set to idle
-        */
-        void drop();
-        /*
-        * When called, opens claw arms to drop cube
-        */
-        void push();
-        /*
-        * When called, opens claw arms and
-        * activates kicker
-        */
-        void fire();
-        /*
-        * When called, sets cube to be launched by the
-        * kicker aided by the kicker pin
-        */
-        void TaskPeriodic(RobotMode mode);
-    private:
+    TaskMgr *m_scheduler;
+    Solenoid *m_cubeClamp;
+    Solenoid *m_clawKicker;
+    /*Solenoid *m_kickerPin;*/
+    ClawState m_clawState;
 
-        void goToState(ClawState newState);
-
-
-        TaskMgr *m_scheduler;
-        Solenoid *m_clawArms;
-        Solenoid *m_clawKicker;
-        Solenoid *m_kickerPin;
-        ClawState m_clawState;
-
-        uint32_t m_stateStartTimeMs;
-
-
+    uint32_t m_stateStartTimeMs;
 };
 }
