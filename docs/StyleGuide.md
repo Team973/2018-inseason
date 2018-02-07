@@ -229,3 +229,31 @@ Autonomous::Autonomous(Disabled *disabled)
     // constructor body
 }
 ```
+
+### Rule #17: `enum` vs. `enum class`
+Use an `enum class` rather than `enum` when possible. if using an `enum`, having the same name for an item in two or more enumerations will give an error and will cause confusion when someone is reading your code. Using an `enum class` instead makes our code easier to read and compile since we have to explicitly call what enum class we are using.
+
+``` c++
+enum class PandaType {
+    Red,    //this no longer conflicts with TulipColor::Red
+    Giant,
+    Qunling
+};
+
+enum class TulipColor {
+    Red,    // this no longer conflicts with PandaType::Red
+    Pink,
+    Purple,
+    Yellow
+};
+
+void SaveThePandas(PandaType type) {
+    // TODO
+}
+
+int main(void) {
+    SaveThePandas(PandaType::Red);
+    // You have to say PandaType now.  This makes it
+    // easier to read because you can look for the definition of PandaType.  
+}
+```
