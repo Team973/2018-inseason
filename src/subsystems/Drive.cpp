@@ -279,8 +279,8 @@ void Drive::SetDriveOutput(ControlMode controlMode, double left, double right) {
     m_rightDriveOutput = right;
 
     if (controlMode == ControlMode::Velocity) {
-        m_leftDriveOutput *= DRIVE_IPS_FROM_CPDS;
-        m_rightDriveOutput *= DRIVE_IPS_FROM_CPDS;
+        m_leftDriveOutput /= DRIVE_IPS_FROM_CPDS;
+        m_rightDriveOutput /= DRIVE_IPS_FROM_CPDS;
     }
     else if (controlMode == ControlMode::Position) {
         m_leftDriveOutput /= DRIVE_DIST_PER_REVOLUTION;
