@@ -11,31 +11,31 @@ using namespace frc;
 
 namespace frc973 {
 class Test {
-public:
-    enum ElevatorMode
-    {
-        percentOutput,
-        motionMagic,
-        position
-    };
-    Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-         ObservableJoystick *tuning, Elevator *elevator);
-    virtual ~Test();
+    public:
+        enum ElevatorMode {
+            percentOutput,
+            motionMagic,
+            zero
+        };
 
-    void TestInit();
-    void TestPeriodic();
-    void TestStop();
+        Test(ObservableJoystick *driver, ObservableJoystick *codriver,
+                          ObservableJoystick *tuning, Elevator *elevator);
+        virtual ~Test();
 
-    void HandleTestButton(uint32_t port, uint32_t button, bool pressedP);
+        void TestInit();
+        void TestPeriodic();
+        void TestStop();
 
-private:
-    ObservableJoystick *m_driverJoystick;
-    ObservableJoystick *m_operatorJoystick;
-    ObservableJoystick *m_tuningJoystick;
+        void HandleTestButton(uint32_t port, uint32_t button,
+                              bool pressedP);
+    private:
+        ObservableJoystick *m_driverJoystick;
+        ObservableJoystick *m_operatorJoystick;
+        ObservableJoystick *m_tuningJoystick;
 
-    Elevator *m_elevator;
+        Elevator *m_elevator;
 
-    ElevatorMode m_elevatorMode;
-    double m_elevatorPosition;
+        ElevatorMode m_elevatorMode;
+        double m_elevatorPosition;
 };
 };

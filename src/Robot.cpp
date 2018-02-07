@@ -28,8 +28,7 @@ Robot::Robot()
         , m_clawRightRoller(new GreyTalonSRX(CLAW_RIGHT_ROLLER_CAN_ID))
         , m_clawCubeSensor(new DigitalInput(CUBE_BANNER_SENSOR_DIN))
         , m_elevatorMotor(new GreyTalonSRX(ELEVATOR_CAN_ID))
-        , m_elevator(
-              new Elevator(this, m_logger, m_driverJoystick, m_elevatorMotor))
+        , m_elevator(new Elevator(this, m_logger, m_elevatorMotor))
         , m_claw(new Claw(this, m_logger, m_clawLeftRoller, m_clawRightRoller,
                           m_clawCubeSensor))
         , m_drive(new Drive(this, m_logger))
@@ -56,6 +55,7 @@ void Robot::DisabledStart() {
 }
 
 void Robot::DisabledContinuous() {
+    printf("Disabled Periodic\n");
     m_disabled->DisabledPeriodic();
 }
 
@@ -99,7 +99,7 @@ void Robot::TestStop() {
     m_test->TestStop();
 }
 
-void Robot::RobotPeriodic() {
+void Robot::AllStateContinuous() {
 }
 
 void Robot::ObserveJoystickStateChange(uint32_t port, uint32_t button,

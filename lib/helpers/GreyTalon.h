@@ -1,3 +1,5 @@
+#pragma once
+
 #include "WPILib.h"
 #include "Phoenix.h"
 
@@ -23,6 +25,7 @@ public:
         motor->SetSensorPhase(false);
         motor->SetInverted(false);
         motor->SetNeutralMode(NeutralMode::Coast);
+        motor->GetSensorCollection().SetQuadraturePosition(0, 0);
 
         motor->ConfigNominalOutputForward(0.0, 10);
         motor->ConfigNominalOutputReverse(0.0, 10);
@@ -39,6 +42,7 @@ public:
         motor->Config_kF(0, 0.0, 10);
         motor->ConfigMotionCruiseVelocity(0.0, 10);
         motor->ConfigMotionAcceleration(0.0, 10);
+        motor->SelectProfileSlot(0, 0);
 
         // Limiting
         motor->EnableCurrentLimit(false);
