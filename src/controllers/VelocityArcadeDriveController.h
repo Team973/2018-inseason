@@ -1,8 +1,8 @@
 /*
- * ArcadeDrive.h
+ * VelocityArcadeDriveController.h
  *
- *  Created on: Oct 30, 2015
- *      Author: Andrew
+ *  Created on: Feb 3, 2018
+ *      Author: Kyle
  */
 
 #pragma once
