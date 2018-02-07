@@ -8,6 +8,7 @@
 #include "src/TestMode.h"
 #include "src/Robot.h"
 #include "ctre/Phoenix.h"
+#include "lib/helpers/GreyTalon.h"
 
 using namespace frc;
 using namespace nt;

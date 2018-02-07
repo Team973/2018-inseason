@@ -1,11 +1,17 @@
 licenses(["permissive"])
 
-cc_library(
-    name = "opencv",
+filegroup(
+    name = "opencv_libs",
     srcs = glob([
         "*.so.*",
         "*.so",
     ]),
+    visibility = ["//visibility:public"],
+)
+
+cc_library(
+    name = "opencv",
+    srcs = [":opencv_libs"],
     hdrs = glob([
         "include/opencv2/**/*.h",
         "include/opencv2/**/*.hpp",
@@ -13,5 +19,6 @@ cc_library(
     includes = [
         "include",
     ],
+    linkstatic = 1,
     visibility = ["//visibility:public"],
 )
