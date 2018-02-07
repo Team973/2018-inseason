@@ -205,7 +205,8 @@ double Drive::GetRightDist() const {
  *  second; As per manual 17.2.1, GetSpeed reports RPM
  */
 double Drive::GetLeftRate() const {
-    return m_leftDriveTalonA->GetSelectedSensorVelocity(0) * DRIVE_IPS_FROM_RPM;
+    return m_leftDriveTalonA->GetSelectedSensorVelocity(0) *
+           DRIVE_IPS_FROM_CPDS;
 }
 
 /**
@@ -216,7 +217,7 @@ double Drive::GetLeftRate() const {
  */
 double Drive::GetRightRate() const {
     return -m_rightDriveTalonA->GetSelectedSensorVelocity(0) *
-           DRIVE_IPS_FROM_RPM;
+           DRIVE_IPS_FROM_CPDS;
 }
 
 /**
@@ -278,8 +279,8 @@ void Drive::SetDriveOutput(ControlMode controlMode, double left, double right) {
     m_rightDriveOutput = right;
 
     if (controlMode == ControlMode::Velocity) {
-        m_leftDriveOutput /= DRIVE_IPS_FROM_RPM;
-        m_rightDriveOutput /= DRIVE_IPS_FROM_RPM;
+        m_leftDriveOutput *= DRIVE_IPS_FROM_CPDS;
+        m_rightDriveOutput *= DRIVE_IPS_FROM_CPDS;
     }
     else if (controlMode == ControlMode::Position) {
         m_leftDriveOutput /= DRIVE_DIST_PER_REVOLUTION;
@@ -339,9 +340,10 @@ void Drive::TaskPeriodic(RobotMode mode) {
     m_rightDistRateLog->LogDouble(GetRightRate());
 
     if (m_controlMode == ControlMode::Velocity) {
-        m_leftDriveOutputLog->LogDouble(m_leftDriveOutput * DRIVE_IPS_FROM_RPM);
+        m_leftDriveOutputLog->LogDouble(m_leftDriveOutput *
+                                        DRIVE_IPS_FROM_CPDS);
         m_rightDriveOutputLog->LogDouble(m_rightDriveOutput *
-                                         DRIVE_IPS_FROM_RPM);
+                                         DRIVE_IPS_FROM_CPDS);
     }
     else if (m_controlMode == ControlMode::Position) {
         m_leftDriveOutputLog->LogDouble(m_leftDriveOutput *
