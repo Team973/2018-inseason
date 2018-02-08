@@ -51,6 +51,10 @@ public:
         motor->ConfigContinuousCurrentLimit(0, 10);
         motor->EnableVoltageCompensation(false);
         motor->ConfigVoltageCompSaturation(12, 10);
+        motor->ConfigForwardSoftLimitThreshold(10000, 10);
+        motor->ConfigReverseSoftLimitThreshold(10000, 10);
+        motor->ConfigForwardSoftLimitEnable(false, 10);
+        motor->ConfigReverseSoftLimitEnable(false, 10);
 
         motor->Set(ControlMode::PercentOutput, 0.0);
 
