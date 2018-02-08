@@ -111,7 +111,7 @@ public:
 ```
 
 ### Rule #7: Explicit Conversions
-The compiler is allowed to make one implicit conversion to resolve the parameters to a function. What this means is that the compiler can use constructors callable with a single parameter to convert from one type to another in order to get the right type for a parameter. 
+The compiler is allowed to make one implicit conversion to resolve the parameters to a function. What this means is that the compiler can use constructors callable with a single parameter to convert from one type to another in order to get the right type for a parameter.
 Prefixing the explicit keyword to the constructor prevents the compiler from using that constructor for implicit conversions. Use the explicit keyword for conversion operators and single-argument constructors.
 For an in-depth explanation of what the explicit keyword does go [here](https://stackoverflow.com/questions/121162/what-does-the-explicit-keyword-mean).
 ```c++
@@ -226,5 +226,33 @@ Autonomous::Autonomous(Disabled *disabled)
         , m_forwardAuto(new ForwardAuto())
         , m_disabled(disabled) {
     // constructor body
+}
+```
+
+### Rule #17: `enum` vs. `enum class`
++Use an `enum class` rather than `enum` when possible. if using an `enum`, having the same name for an item in two or more enumerations will give an error and will cause confusion when someone is reading your code. Using an `enum class` instead makes our code easier to read and compile since we have to explicitly call what enum class we are using.
+
+``` c++
+enum class PandaType {
+    Red,   // if we used regular enum, this would conflict with TulipColor::Red
+    Giant,
+    Qunling
+};
+
+enum class TulipColor {
+    Red,    // if we used regular enum, this would conflict with PandaType::Red
+    Pink,
+    Purple,
+    Yellow
+};
+
+void SaveThePandas(PandaType type) {
+    // TODO
+}
+
+int main(void) {
+    SaveThePandas(PandaType::Red);
+    // You must explicitly reference PandaType to use its own definition of Red. This makes it
+    // easier to read because you can look for the definition of PandaType.  
 }
 ```
