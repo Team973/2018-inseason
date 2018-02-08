@@ -9,8 +9,7 @@ Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_operatorJoystick(codriver)
         , m_tuningJoystick(tuning)
         , m_elevator(elevator)
-        , m_elevatorMode(ElevatorMode::percentOutput)
-        , m_elevatorPosition(0.0) {
+        , m_elevatorMode(ElevatorMode::percentOutput) {
 }
 
 Test::~Test() {
@@ -21,16 +20,8 @@ void Test::TestInit() {
 }
 
 void Test::TestPeriodic() {
-    if (m_elevator->GetPosition() > 100.0) {
-        m_elevator->SetPosition(Elevator::SCALE_HIGH); //does not allow value to exceed 100.0
-    }
-    else if (m_elevatorPosition < 0.0) {
-        m_elevator->SetPosition(Elevator::GROUND);  // does not allow value to be under 0.0
-    }
-
-    double elevatorManualPower = -m_driverJoystick->GetRawAxis(DualAction::LeftYAxis);
+     double elevatorManualPower = -m_driverJoystick->GetRawAxis(DualAction::LeftYAxis);
      printf("%1.3lf\n", elevatorManualPower);
-     m_elevatorPosition += 1.5 * Util::bound(m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightYAxis), 0.0, 100.0); //Adds on 1.5 every call (20ms) to position while bounding it 10
 
      if (fabs(elevatorManualPower) > 0.1 || m_elevatorMode == ElevatorMode::percentOutput) {
          m_elevator->SetPower(elevatorManualPower);

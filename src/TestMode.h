@@ -36,6 +36,5 @@ class Test {
         Elevator *m_elevator;
 
         ElevatorMode m_elevatorMode;
-        double m_elevatorPosition;
 };
 };

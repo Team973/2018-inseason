@@ -33,6 +33,10 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor)
     m_elevatorMotor->ConfigPeakCurrentLimit(0, 10);
     m_elevatorMotor->ConfigContinuousCurrentLimit(5, 10);
     m_elevatorMotor->EnableVoltageCompensation(false);
+    m_elevatorMotor->ConfigForwardSoftLimitThreshold(81 / ELEVATOR_INCHES_PER_CLICK, 10);
+    m_elevatorMotor->ConfigReverseSoftLimitThreshold(0, 10);
+    m_elevatorMotor->ConfigForwardSoftLimitEnable(true, 10);
+    m_elevatorMotor->ConfigReverseSoftLimitEnable(true, 10);
 
     m_elevatorMotor->Set(ControlMode::PercentOutput, 0.0);
     m_positionCell = new LogCell("Elevator Position", 32, true);
