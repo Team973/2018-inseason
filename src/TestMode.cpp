@@ -28,12 +28,12 @@ void Test::TestPeriodic() {
         m_elevator->SetPosition(Elevator::GROUND);  // does not allow value to be under 0.0
     }
 
-    double y = -m_driverJoystick->GetRawAxis(DualAction::LeftYAxis);
-     printf("%1.3lf\n", y);
+    double elevatorManualPower = -m_driverJoystick->GetRawAxis(DualAction::LeftYAxis);
+     printf("%1.3lf\n", elevatorManualPower);
      m_elevatorPosition += 1.5 * Util::bound(m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightYAxis), 0.0, 100.0); //Adds on 1.5 every call (20ms) to position while bounding it 10
 
-     if (y > 0.1 || y < -0.1 || m_elevatorMode == ElevatorMode::percentOutput) {
-         m_elevator->SetPower(y);
+     if (fabs(elevatorManualPower) > 0.1 || m_elevatorMode == ElevatorMode::percentOutput) {
+         m_elevator->SetPower(elevatorManualPower);
      }
      else if (m_elevatorMode == ElevatorMode::zero) {
          m_elevator->Reset();
