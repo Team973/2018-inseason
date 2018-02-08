@@ -111,7 +111,6 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::Start:
                 if (pressedP) {
-
                 }
                 break;
             case DualAction::Back:

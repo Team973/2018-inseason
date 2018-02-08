@@ -55,7 +55,6 @@ void Robot::DisabledStart() {
 }
 
 void Robot::DisabledContinuous() {
-    printf("Disabled Periodic\n");
     m_disabled->DisabledPeriodic();
 }
 
