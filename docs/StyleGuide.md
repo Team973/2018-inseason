@@ -50,7 +50,7 @@ private:
 ```
 
 ### Rule #2: Naming variables according to scope
-Member, static, and global variables should be named starting with `m_`, `s_`, or `g_` respectively. In declaring member variables in a class, there should be a space between the type and the name.
+Member, static, and global variables should be named starting with `m_`, `s_`, or `g_` respectively. In declaring member variables in a class, there should be a space between the type and the name. Declaring constants should have all characters in uppercase and should use underscores instead of spaces.
 ```c++
 int g_value = 10
 class MyClass() {
