@@ -59,7 +59,7 @@ void Elevator::SetPosition(double position) {
 }
 
 void Elevator::Reset() {
-    m_elevatorState = ElevatorState::zeroing;
+    m_elevatorState = ElevatorState::zeroing_start;
 }
 
 float Elevator::GetPosition() {
@@ -75,16 +75,16 @@ void Elevator::TaskPeriodic(RobotMode mode) {
     switch (m_elevatorState) {
         case manual:
             break;
-        case zeroing:
-            m_elevatorState = ElevatorState::goDown;
+        case zeroing_start:
+            m_elevatorState = ElevatorState::zeroing_goDown;
             break;
-        case goDown:
+        case zeroing_goDown:
             this->SetPower(-0.2);
             if (m_elevatorMotor->GetOutputCurrent() > 4.0) {
-                m_elevatorState = ElevatorState::stop;
+                m_elevatorState = ElevatorState::zeroing_stop;
             }
             break;
-        case stop:
+        case zeroing_stop:
             m_elevatorMotor->GetSensorCollection().SetQuadraturePosition(0,0);
             this->SetPower(0.0);
             m_elevatorState = ElevatorState::manual;

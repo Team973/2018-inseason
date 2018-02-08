@@ -25,10 +25,10 @@ public:
     enum ElevatorState
     {
         manual,
-        zeroing,
+        zeroing_start,
         position,
-        goDown,
-        stop
+        zeroing_goDown,
+        zeroing_stop
     };
 
     static constexpr double GROUND = 0.1;
