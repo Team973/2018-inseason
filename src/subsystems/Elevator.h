@@ -31,12 +31,12 @@ public:
         zeroing_stop
     };
 
-    static constexpr double GROUND = 0.1;
+    static constexpr double GROUND = 0.0;
     static constexpr double VAULT = 3.0;
-    static constexpr double LOW_GOAL = 25.0;
-    static constexpr double SCALE_LOW = 50.0;
-    static constexpr double SCALE_MID = 60.0;
-    static constexpr double SCALE_HIGH = 85.0;
+    static constexpr double LOW_GOAL = 30.0;
+    static constexpr double SCALE_LOW = 64.0;
+    static constexpr double SCALE_MID = 70.0;
+    static constexpr double SCALE_HIGH = 78.0;
 
     Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor);
     virtual ~Elevator();
