@@ -204,7 +204,7 @@ SplineDriveController *Drive::SplineDrive(RelativeTo relativity, double dist,
  * @param throttle Forward-backwards-ness to drive with
  * @param angle Angle in degrees to go
  */
-void Drive::DriveStraight(RelativeTo relativity, double dist, double angle) {
+void Drive::StraightDrive(RelativeTo relativity, double dist, double angle) {
     this->SetDriveController(m_straightDriveController);
     m_straightDriveController->SetTarget(relativity, dist, angle, this);
 }

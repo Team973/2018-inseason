@@ -133,7 +133,7 @@ public:
      * @param throttle Forward-backwards-ness to drive with
      * @param angle Angle in degrees to go
      */
-    void DriveStraight(RelativeTo relativity, double throttle, double angle);
+    void StraightDrive(RelativeTo relativity, double throttle, double angle);
 
     /**
      * Set a drive to use trap profile drive controller
