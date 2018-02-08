@@ -5,7 +5,7 @@
  *      Author: Andrew
  */
 
-#include "src/controllers/PIDDrive.h"
+#include "src/controllers/PIDDriveController.h"
 #include "lib/helpers/PID.h"
 #include <stdio.h>
 #include "lib/util/WrapDash.h"

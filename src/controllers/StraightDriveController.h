@@ -1,5 +1,8 @@
 /*
- * TrapDriveController.h
+ * StraightDriveController.h
+ *
+ *  Created on: Nov 5, 2015
+ *      Author: Andrew
  */
 
 #pragma once

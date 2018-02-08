@@ -5,7 +5,7 @@
  *      Author: Andrew
  */
 
-#include "src/controllers/AssistedArcadeDrive.h"
+#include "src/controllers/AssistedArcadeDriveController.h"
 #include "lib/util/Util.h"
 #include <stdio.h>
 #include <math.h>

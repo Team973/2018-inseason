@@ -2,7 +2,7 @@
  * Drive.h
  *
  *  Created on: January 7, 2018
- *      Author: Kyle
+ *      Authors: Kyle, Chris
  */
 #pragma once
 
@@ -18,7 +18,7 @@ using namespace ctre;
 namespace frc973 {
 class AssistedArcadeDriveController;
 class CheesyDriveController;
-class HangerController;
+class HangerDriveController;
 class OpenloopArcadeDriveController;
 class PIDDriveController;
 class SplineDriveController;
@@ -85,7 +85,7 @@ public:
      *
      * @param throttle Forward-ness to hang with
      */
-    void Hanger(double throttle);
+    void HangerDrive(double throttle);
 
     /**
      * Set drive to use the open loop arcade drive controller and sets
@@ -218,7 +218,7 @@ private:
 
     AssistedArcadeDriveController *m_assistedArcadeDriveController;
     CheesyDriveController *m_cheesyDriveController;
-    HangerController *m_hangerController;
+    HangerDriveController *m_hangerDriveController;
     OpenloopArcadeDriveController *m_openloopArcadeDriveController;
     PIDDriveController *m_pidDriveController;
     SplineDriveController *m_splineDriveController;

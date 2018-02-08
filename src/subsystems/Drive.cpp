@@ -1,10 +1,17 @@
+/*
+ * Drive.cpp
+ *
+ *  Created on: January 7, 2018
+ *      Authors: Chris
+ */
+
 #include <stdio.h>
 #include "WPILib.h"
-#include "src/controllers/AssistedArcadeDrive.h"
+#include "src/controllers/AssistedArcadeDriveController.h"
 #include "src/controllers/CheesyDriveController.h"
-#include "src/controllers/HangerController.h"
+#include "src/controllers/HangerDriveController.h"
 #include "src/controllers/OpenloopArcadeDriveController.h"
-#include "src/controllers/PIDDrive.h"
+#include "src/controllers/PIDDriveController.h"
 #include "src/controllers/StraightDriveController.h"
 #include "src/controllers/SplineDriveController.h"
 #include "src/controllers/TrapDriveController.h"
@@ -44,7 +51,7 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
         , m_gyroZero(0.0)
         , m_assistedArcadeDriveController(new AssistedArcadeDriveController())
         , m_cheesyDriveController(new CheesyDriveController())
-        , m_hangerController(new HangerController())
+        , m_hangerDriveController(new HangerDriveController())
         , m_openloopArcadeDriveController(new OpenloopArcadeDriveController())
         , m_pidDriveController(new PIDDriveController())
         , m_splineDriveController(new SplineDriveController(this, logger))
@@ -92,6 +99,17 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
 Drive::~Drive(){};
 
 /**
+ * Sets Drive controller to AssistedArcadeDrive
+ *
+ * @param throttle  Left joystick y-axis value
+ * @param turn      Right joystick x-axis value
+ */
+void Drive::AssistedArcadeDrive(double throttle, double turn) {
+    this->SetDriveController(m_assistedArcadeDriveController);
+    m_assistedArcadeDriveController->SetJoysticks(throttle, turn);
+}
+
+/**
  * Sets Drive controller to CheesyDrive
  *
  * @param throttle  Left joystick y-axis value
@@ -107,6 +125,16 @@ void Drive::CheesyDrive(double throttle, double turn, bool isQuickTurn,
 }
 
 /**
+ * Sets Drive controller to HangerDrive
+ *
+ * @param throttle  Left joystick y-axis value
+ */
+void Drive::HangerDrive(double throttle) {
+    this->SetDriveController(m_hangerDriveController);
+    m_hangerDriveController->SetJoysticks(throttle);
+}
+
+/**
  * Sets Drive controller to OpenLoopArcadeDrive
  *
  * @param throttle  Left joystick y-axis value
@@ -114,27 +142,6 @@ void Drive::CheesyDrive(double throttle, double turn, bool isQuickTurn,
 void Drive::OpenloopArcadeDrive(double throttle, double turn) {
     this->SetDriveController(m_openloopArcadeDriveController);
     m_openloopArcadeDriveController->SetJoysticks(throttle, turn);
-}
-
-/**
- * Sets Drive controller to HangerDrive
- *
- * @param throttle  Left joystick y-axis value
- */
-void Drive::Hanger(double throttle) {
-    this->SetDriveController(m_hangerController);
-    m_hangerController->SetJoysticks(throttle);
-}
-
-/**
- * Sets Drive controller to AssistedArcadeDrive
- *
- * @param throttle  Left joystick y-axis value
- * @param turn      Right joystick x-axis value
- */
-void Drive::AssistedArcadeDrive(double throttle, double turn) {
-    this->SetDriveController(m_assistedArcadeDriveController);
-    m_assistedArcadeDriveController->SetJoysticks(throttle, turn);
 }
 
 /**
@@ -174,6 +181,46 @@ PIDDriveController *Drive::PIDTurn(double turn, RelativeTo relativity,
     m_pidDriveController->SetTarget(0.0, turn, relativity, this);
     m_pidDriveController->DisableDist();
     return m_pidDriveController;
+}
+
+/**
+ * Set a drive to use spline drive controller
+ *
+ * @param relativity What is that angle metric relative to?
+ * @param dist Distance in inches to go
+ * @param angle Angle in degrees to go
+ */
+SplineDriveController *Drive::SplineDrive(RelativeTo relativity, double dist,
+                                          double angle) {
+    this->SetDriveController(m_splineDriveController);
+    m_splineDriveController->SetTarget(relativity, dist, angle);
+    return m_splineDriveController;
+}
+
+/**
+ * Set a drive to drive straight
+ *
+ * @param relativity What is that angle metric relative to?
+ * @param throttle Forward-backwards-ness to drive with
+ * @param angle Angle in degrees to go
+ */
+void Drive::DriveStraight(RelativeTo relativity, double dist, double angle) {
+    this->SetDriveController(m_straightDriveController);
+    m_straightDriveController->SetTarget(relativity, dist, angle, this);
+}
+
+/**
+ * Set a drive to use trap profile drive controller
+ *
+ * @param relativity What is that angle metric relative to?
+ * @param dist Distance in inches to go
+ * @param angle Angle in degrees to go
+ */
+TrapDriveController *Drive::TrapDrive(RelativeTo relativity, double dist,
+                                      double angle) {
+    this->SetDriveController(m_trapDriveController);
+    m_trapDriveController->SetTarget(relativity, dist, angle);
+    return m_trapDriveController;
 }
 
 /**
@@ -360,24 +407,5 @@ void Drive::TaskPeriodic(RobotMode mode) {
     m_rightVoltageLog->LogDouble(m_rightDriveTalonA->GetMotorOutputVoltage());
 
     m_currentLog->LogDouble(GetDriveCurrent());
-}
-
-void Drive::DriveStraight(RelativeTo relativity, double dist, double angle) {
-    this->SetDriveController(m_straightDriveController);
-    m_straightDriveController->SetTarget(relativity, dist, angle, this);
-}
-
-TrapDriveController *Drive::TrapDrive(RelativeTo relativity, double dist,
-                                      double angle) {
-    this->SetDriveController(m_trapDriveController);
-    m_trapDriveController->SetTarget(relativity, dist, angle);
-    return m_trapDriveController;
-}
-
-SplineDriveController *Drive::SplineDrive(RelativeTo relativity, double dist,
-                                          double angle) {
-    this->SetDriveController(m_splineDriveController);
-    m_splineDriveController->SetTarget(relativity, dist, angle);
-    return m_splineDriveController;
 }
 }

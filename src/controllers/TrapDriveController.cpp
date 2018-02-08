@@ -1,3 +1,10 @@
+/*
+ * TrapDriveController.cpp
+ *
+ *  Created on: Nov 5, 2015
+ *      Author: Andrew
+ */
+
 #include "src/controllers/TrapDriveController.h"
 #include "lib/profiles/TrapProfile.h"
 #include "src/info/RobotInfo.h"

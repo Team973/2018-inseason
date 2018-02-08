@@ -1,11 +1,11 @@
 /*
- * HangerController.cpp
+ * HangerDriveController.cpp
  *
- *  Created on: Jan 15, 2018
- *      Authors: Oliver, Chris
+ *  Created on: Jan 25, 2018
+ *      Author: Chris
  */
 
-#include "src/controllers/HangerController.h"
+#include "src/controllers/HangerDriveController.h"
 #include "lib/util/Util.h"
 #include <stdio.h>
 #include "lib/util/WrapDash.h"
@@ -16,14 +16,15 @@ using namespace ctre;
 
 namespace frc973 {
 
-HangerController::HangerController() : m_leftOutput(0.0), m_rightOutput(0.0) {
+HangerDriveController::HangerDriveController()
+        : m_leftOutput(0.0), m_rightOutput(0.0) {
 }
 
-HangerController::~HangerController() {
+HangerDriveController::~HangerDriveController() {
 }
 
-void HangerController::CalcDriveOutput(DriveStateProvider *state,
-                                       DriveControlSignalReceiver *out) {
+void HangerDriveController::CalcDriveOutput(DriveStateProvider *state,
+                                            DriveControlSignalReceiver *out) {
     out->SetDriveOutput(ControlMode::PercentOutput, m_leftOutput,
                         m_rightOutput);
     DBStringPrintf(DBStringPos::DB_LINE4, "hanger l=%1.2lf r=%1.2lf",
@@ -31,7 +32,7 @@ void HangerController::CalcDriveOutput(DriveStateProvider *state,
     // printf("hanger l=%1.2lf r=%1.2lf\n", m_leftOutput, m_rightOutput);
 }
 
-void HangerController::SetJoysticks(double throttle) {
+void HangerDriveController::SetJoysticks(double throttle) {
     throttle = Util::bound(fabs(throttle), -1.0, 1.0) * THROTTLE_MAX;
 
     double TURN_RAMPUP = 0.25;

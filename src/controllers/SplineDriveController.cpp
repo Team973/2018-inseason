@@ -1,3 +1,10 @@
+/*
+ * SplineDriveController.h
+ *
+ *  Created on: 2017
+ *      Author: Kyle
+ */
+
 #include "src/controllers/SplineDriveController.h"
 #include "lib/profiles/TrapProfile.h"
 #include "src/info/RobotInfo.h"

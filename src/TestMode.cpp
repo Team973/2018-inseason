@@ -43,7 +43,7 @@ void Test::TestPeriodic() {
             false);  // gear set to false until solenoids get set up
     }
     else if (m_driveMode == DriveMode::Hanger) {
-        m_drive->Hanger(y);
+        m_drive->HangerDrive(y);
     }
     else if (m_driveMode == DriveMode::Openloop) {
         m_drive->OpenloopArcadeDrive(y, x);
