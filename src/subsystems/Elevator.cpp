@@ -33,7 +33,7 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor)
     m_elevatorMotor->ConfigPeakCurrentLimit(0, 10);
     m_elevatorMotor->ConfigContinuousCurrentLimit(5, 10);
     m_elevatorMotor->EnableVoltageCompensation(false);
-    m_elevatorMotor->ConfigForwardSoftLimitThreshold(81 / ELEVATOR_INCHES_PER_CLICK, 10);
+    m_elevatorMotor->ConfigForwardSoftLimitThreshold(ELEVATOR_SOFT_HEIGHT_LIMIT / ELEVATOR_INCHES_PER_CLICK, 10);
     m_elevatorMotor->ConfigReverseSoftLimitThreshold(0, 10);
     m_elevatorMotor->ConfigForwardSoftLimitEnable(true, 10);
     m_elevatorMotor->ConfigReverseSoftLimitEnable(true, 10);
@@ -70,6 +70,7 @@ float Elevator::GetPosition() {
 void Elevator::TaskPeriodic(RobotMode mode) {
     m_positionCell->LogDouble(GetPosition());
     printf("Elevator Pos: %f\n", GetPosition());
+    printf("Elevator Curr: %f\n", m_elevatorMotor->GetOutputCurrent());
     SmartDashboard::PutNumber("/SmartDashboard/elevator/currents/current", m_elevatorMotor->GetOutputCurrent());
     DBStringPrintf(DBStringPos::DB_LINE4, "%f", GetPosition());
     switch (m_elevatorState) {
