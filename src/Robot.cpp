@@ -53,6 +53,7 @@ Robot::~Robot() {
 }
 
 void Robot::Initialize() {
+    m_compressor->Enable();
 }
 
 void Robot::DisabledStart() {
@@ -84,6 +85,8 @@ void Robot::TeleopStart() {
 }
 
 void Robot::TeleopContinuous() {
+    m_compressorRelay->Set(Relay::kOn);
+    //printf("TeleopPeriodic\n");
     m_teleop->TeleopPeriodic();
 }
 

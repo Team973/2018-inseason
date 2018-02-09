@@ -45,23 +45,23 @@ public:
     Robot();
     virtual ~Robot();
 
-    void Initialize();
+    void Initialize()  override;
 
-    void DisabledStart();
-    void DisabledContinuous();
-    void DisabledStop();
+    void DisabledStart() override;
+    void DisabledContinuous() override;
+    void DisabledStop() override;
 
-    void AutonomousStart();
-    void AutonomousContinuous();
-    void AutonomousStop();
+    void AutonomousStart() override;
+    void AutonomousContinuous() override;
+    void AutonomousStop() override;
 
-    void TeleopStart();
-    void TeleopContinuous();
-    void TeleopStop();
+    void TeleopStart() override;
+    void TeleopContinuous() override;
+    void TeleopStop() override;
 
-    void TestStart();
-    void TestContinuous();
-    void TestStop();
+    void TestStart() override;
+    void TestContinuous() override;
+    void TestStop() override;
 
     void RobotPeriodic() override;
 

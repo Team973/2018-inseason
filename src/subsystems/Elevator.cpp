@@ -65,10 +65,10 @@ void Elevator::Reset() {
 
 void Elevator::TaskPeriodic(RobotMode mode) {
     m_positionCell->LogDouble(m_elevatorMotor->GetSelectedSensorPosition(0));
-    printf("Elevator Task Periodic\n");
-    switch (m_currLevel) {
+    //printf("Elevator Task Periodic\n");
+    /*switch (m_currLevel) {
         case zero:
-            this->SetMotionMagic(0.0);
+            //this->SetMotionMagic(0.0);
             break;
         case vault:
             this->SetMotionMagic(3.0);
@@ -91,6 +91,6 @@ void Elevator::TaskPeriodic(RobotMode mode) {
         default:
             this->Reset();
             break;
-    }
+    }*/
 }
 }
