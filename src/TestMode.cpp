@@ -19,7 +19,7 @@ Test::~Test() {
 
 void Test::TestInit() {
     std::cout << "Test Start" << std::endl;
-    m_driveMode = DriveMode::PID;
+    m_driveMode = DriveMode::Openloop;
 }
 
 void Test::TestPeriodic() {
@@ -31,8 +31,8 @@ void Test::TestPeriodic() {
         y /= 3.0;
     }
 
-    printf("%lf", x);
-    printf("%lf", y);
+    // printf("%lf", x);
+    // printf("%lf", y);
 
     if (m_driveMode == DriveMode::AssistedArcade) {
         m_drive->AssistedArcadeDrive(y, x);
@@ -47,6 +47,9 @@ void Test::TestPeriodic() {
     }
     else if (m_driveMode == DriveMode::Openloop) {
         m_drive->OpenloopArcadeDrive(y, x);
+    }
+    else if (m_driveMode == DriveMode::Velocity) {
+        m_drive->VelocityArcadeDrive(y, x);
     }
 
     // double y =
@@ -116,7 +119,7 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::BtnA:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::percentOutput;
+                    m_driveMode = DriveMode::Velocity;
                 }
                 break;
             case DualAction::BtnB:

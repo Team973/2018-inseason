@@ -24,6 +24,7 @@ class PIDDriveController;
 class SplineDriveController;
 class StraightDriveController;
 class TrapDriveController;
+class VelocityArcadeDriveController;
 class LogSpreadsheet;
 
 /*
@@ -126,6 +127,10 @@ public:
     SplineDriveController *SplineDrive(RelativeTo relativity, double dist,
                                        double angle);
 
+    const SplineDriveController *GetSplineDriveController() {
+        return m_splineDriveController;
+    }
+
     /**
      * Set a drive to drive straight
      *
@@ -149,9 +154,14 @@ public:
         return m_trapDriveController;
     }
 
-    const SplineDriveController *GetSplineDriveController() {
-        return m_splineDriveController;
-    }
+    /**
+     * Set drive to use the velocity arcade drive controller and sets
+     *  powers
+     *
+     * @param throttle Forward-backwards-ness to drive with
+     * @param turn Turn value to drive with
+     */
+    void VelocityArcadeDrive(double throttle, double turn);
 
     /**
      * All distances given in inches
@@ -224,6 +234,7 @@ private:
     SplineDriveController *m_splineDriveController;
     StraightDriveController *m_straightDriveController;
     TrapDriveController *m_trapDriveController;
+    VelocityArcadeDriveController *m_velocityArcadeDriveController;
 
     double m_angle;
     double m_angleRate;

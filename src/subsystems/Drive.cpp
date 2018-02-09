@@ -15,6 +15,7 @@
 #include "src/controllers/StraightDriveController.h"
 #include "src/controllers/SplineDriveController.h"
 #include "src/controllers/TrapDriveController.h"
+#include "src/controllers/VelocityArcadeDriveController.h"
 #include "src/info/RobotInfo.h"
 #include "src/subsystems/Drive.h"
 #include "lib/util/Util.h"
@@ -57,6 +58,7 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
         , m_splineDriveController(new SplineDriveController(this, logger))
         , m_straightDriveController(new StraightDriveController())
         , m_trapDriveController(new TrapDriveController(this, logger))
+        , m_velocityArcadeDriveController(new VelocityArcadeDriveController())
         , m_angle()
         , m_angleRate()
         , m_angleLog(new LogCell("Angle"))
@@ -69,31 +71,35 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
     this->m_scheduler->RegisterTask("Drive", this, TASK_PERIODIC);
     m_leftDriveTalonA->SetNeutralMode(Coast);
     m_leftDriveTalonA->ConfigSelectedFeedbackSensor(QuadEncoder, 0, 10);
-    m_leftDriveTalonA->SetSensorPhase(true);
-    m_leftDriveTalonA->SetInverted(true);
+    m_leftDriveTalonA->SetSensorPhase(false);
+    m_leftDriveTalonA->SetInverted(false);
     m_leftDriveTalonA->SelectProfileSlot(0, 0);
-    m_leftDriveTalonA->Config_kP(0, 0.7, 10);
+    m_leftDriveTalonA->Config_kP(0, 0.07, 10);
     m_leftDriveTalonA->Config_kI(0, 0, 10);
     m_leftDriveTalonA->Config_kD(0, 0, 10);  // 0.7
     m_leftDriveTalonA->Config_kF(0, 0, 10);  // 0.2
 
     m_leftDriveVictorB->Follow(*m_leftDriveTalonA);
+    m_leftDriveVictorB->SetInverted(false);
 
     m_leftDriveVictorC->Follow(*m_leftDriveTalonA);
+    m_leftDriveVictorC->SetInverted(false);
 
     m_rightDriveTalonA->SetNeutralMode(Coast);
     m_rightDriveTalonA->ConfigSelectedFeedbackSensor(QuadEncoder, 0, 10);
-    m_rightDriveTalonA->SetSensorPhase(true);
-    m_rightDriveTalonA->SetInverted(true);
+    m_rightDriveTalonA->SetSensorPhase(false);
+    m_rightDriveTalonA->SetInverted(false);
     m_rightDriveTalonA->SelectProfileSlot(0, 0);
-    m_rightDriveTalonA->Config_kP(0, 0.7, 10);
+    m_rightDriveTalonA->Config_kP(0, 0.07, 10);
     m_rightDriveTalonA->Config_kI(0, 0, 10);
     m_rightDriveTalonA->Config_kD(0, 0, 10);  // 0.7
     m_rightDriveTalonA->Config_kF(0, 0, 10);  // 0.2
 
     m_rightDriveVictorB->Follow(*m_rightDriveTalonA);
+    m_rightDriveVictorB->SetInverted(false);
 
     m_rightDriveVictorC->Follow(*m_rightDriveTalonA);
+    m_rightDriveVictorC->SetInverted(false);
 }
 
 Drive::~Drive(){};
@@ -223,13 +229,18 @@ TrapDriveController *Drive::TrapDrive(RelativeTo relativity, double dist,
     return m_trapDriveController;
 }
 
+void Drive::VelocityArcadeDrive(double throttle, double turn) {
+    this->SetDriveController(m_velocityArcadeDriveController);
+    m_velocityArcadeDriveController->SetJoysticks(throttle, turn);
+}
+
 /**
  * Returns Left Drive Distance thorugh encoder translation
  *
  * @return  Left Drive Distance reported in inches
  */
 double Drive::GetLeftDist() const {
-    return m_leftDriveTalonA->GetSelectedSensorPosition(0) *
+    return -m_leftDriveTalonA->GetSelectedSensorPosition(0) *
                DRIVE_DIST_PER_REVOLUTION -
            m_leftPosZero;
 }
@@ -240,7 +251,7 @@ double Drive::GetLeftDist() const {
  * @return  Right Drive Distance reported in inches
  */
 double Drive::GetRightDist() const {
-    return -m_rightDriveTalonA->GetSelectedSensorPosition(0) *
+    return m_rightDriveTalonA->GetSelectedSensorPosition(0) *
                DRIVE_DIST_PER_REVOLUTION -
            m_rightPosZero;
 }
@@ -252,7 +263,7 @@ double Drive::GetRightDist() const {
  *  second; As per manual 17.2.1, GetSpeed reports RPM
  */
 double Drive::GetLeftRate() const {
-    return m_leftDriveTalonA->GetSelectedSensorVelocity(0) *
+    return -m_leftDriveTalonA->GetSelectedSensorVelocity(0) *
            DRIVE_IPS_FROM_CPDS;
 }
 
@@ -263,7 +274,7 @@ double Drive::GetLeftRate() const {
  *  second; As per manual 17.2.1, GetSpeed reports RPM
  */
 double Drive::GetRightRate() const {
-    return -m_rightDriveTalonA->GetSelectedSensorVelocity(0) *
+    return m_rightDriveTalonA->GetSelectedSensorVelocity(0) *
            DRIVE_IPS_FROM_CPDS;
 }
 

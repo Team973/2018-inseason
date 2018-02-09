@@ -43,7 +43,8 @@ private:
         PID,
         Spline,
         Straight,
-        Trap
+        Trap,
+        Velocity
     };
     DriveMode m_driveMode;
 
