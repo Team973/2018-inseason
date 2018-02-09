@@ -4,15 +4,11 @@ using namespace frc;
 
 namespace frc973 {
 Claw::Claw(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *leftRoller,
-           TalonSRX *rightRoller, DigitalInput *cubeSensor, Solenoid *clawArms,
-           Solenoid *clawKicker, Solenoid *m_kickerPin)
+           TalonSRX *rightRoller, DigitalInput *cubeSensor)
         : m_scheduler(scheduler)
         , m_leftRoller(leftRoller)
         , m_rightRoller(rightRoller)
-        , m_cubeSensor(cubeSensor)
-        , m_clawArms(clawArms)
-        , m_clawKicker(clawKicker)
-        , m_kickerPin(kickerPin) {
+        , m_cubeSensor(cubeSensor) {
     this->m_scheduler->RegisterTask("Claw", this, TASK_PERIODIC);
     m_leftRoller->SetNeutralMode(NeutralMode::Brake);
 

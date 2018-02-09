@@ -79,9 +79,6 @@ private:
     DigitalInput *m_clawCubeSensor;
     TalonSRX *m_elevatorMotor;
     Solenoid *m_hangerpto;
-    Solenoid *m_clawArms;
-    Solenoid *m_clawKicker;
-    Solenoid *m_kickerPin;
     TalonSRX *m_forkliftTalon;
     VictorSPX *m_forkliftVictor;
 
