@@ -24,7 +24,7 @@ static constexpr double TURN_PID_KP = 0.0105;
 static constexpr double TURN_PID_KI = 0.0;
 static constexpr double TURN_PID_KD = 0.00135;
 
-static constexpr double MAX_SPEED = 150;
+static constexpr double MAX_SPEED = 30;
 
 PIDDriveController::PIDDriveController()
         : m_prevDist(0.0)
@@ -64,11 +64,6 @@ void PIDDriveController::CalcDriveOutput(DriveStateProvider *state,
     else {
         throttle = 0.0;
     }
-
-    if (throttle > m_lastThrottle + 0.09) {
-        throttle = m_lastThrottle + 0.09;
-    }
-    m_lastThrottle = throttle;
 
     DBStringPrintf(DBStringPos::DB_LINE3, "p %2.2lf t %2.2lf",
                    MAX_SPEED * m_speedCap * throttle,
