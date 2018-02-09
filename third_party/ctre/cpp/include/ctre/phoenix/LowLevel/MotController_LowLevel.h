@@ -75,7 +75,7 @@ protected:
 public:
 	MotController_LowLevel(int baseArbId);
 
-	ErrorCode SetDemand(ControlMode mode, int demand0, int demand1);
+	ErrorCode SetDemand(ctre::phoenix::motorcontrol::ControlMode mode, int demand0, int demand1);
 	void SelectDemandType(bool enable);
 	void SetMPEOutput(int MpeOutput);
 	void EnableHeadingHold(bool enable);

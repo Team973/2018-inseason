@@ -23,16 +23,17 @@ void Test::TestInit() {
 }
 
 void Test::TestPeriodic() {
-    double y = -m_driverJoystick->GetRawAxis(1);
-    double x = -m_driverJoystick->GetRawAxis(2);
+    double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
+    double x =
+        -m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
     bool quickturn = m_driverJoystick->GetRawButton(DualAction::LeftBumper);
     if (m_driverJoystick->GetRawButton(DualAction::RightBumper)) {
         x /= 3.0;
         y /= 3.0;
     }
 
-    // printf("%lf", x);
-    // printf("%lf", y);
+    printf("%lf", x);
+    printf("%lf", y);
 
     if (m_driveMode == DriveMode::AssistedArcade) {
         m_drive->AssistedArcadeDrive(y, x);
