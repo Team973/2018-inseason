@@ -18,9 +18,9 @@ using namespace ctre;
 namespace frc973 {
 
 // Drive pid takes in error in inches and outputs velocity in inches/sec
-static constexpr double DRIVE_PID_KP = 1.0;
+static constexpr double DRIVE_PID_KP = 2.6;
 static constexpr double DRIVE_PID_KI = 0.0;
-static constexpr double DRIVE_PID_KD = 0.0;
+static constexpr double DRIVE_PID_KD = 0.05;
 
 // Turn pid takes in error in degrees and outputs velocity in degrees/sec
 static constexpr double TURN_PID_KP = 1.0;
@@ -48,6 +48,9 @@ PIDDriveController::PIDDriveController()
         , m_distRateTolerance(DEFAULT_DIST_RATE_TOLERANCE)
         , m_angleTolerance(DEFAULT_ANGLE_TOLERANCE)
         , m_angleRateTolerance(DEFAULT_ANGLE_RATE_TOLERANCE) {
+    m_drivePID->SetBounds(-MAX_LINEAR_SPEED_IPS, MAX_LINEAR_SPEED_IPS);
+    m_turnPID->SetBounds(-MAX_ANGULAR_RATE_DEG_PER_SEC,
+                         MAX_ANGULAR_RATE_DEG_PER_SEC);
 }
 
 PIDDriveController::~PIDDriveController() {

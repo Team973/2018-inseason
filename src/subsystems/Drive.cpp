@@ -239,7 +239,7 @@ void Drive::VelocityArcadeDrive(double throttle, double turn) {
  */
 double Drive::GetLeftDist() const {
     return -m_leftDriveTalonA->GetSelectedSensorPosition(0) *
-               DRIVE_DIST_PER_REVOLUTION -
+               DRIVE_DIST_PER_CLICK -
            m_leftPosZero;
 }
 
@@ -250,7 +250,7 @@ double Drive::GetLeftDist() const {
  */
 double Drive::GetRightDist() const {
     return m_rightDriveTalonA->GetSelectedSensorPosition(0) *
-               DRIVE_DIST_PER_REVOLUTION -
+               DRIVE_DIST_PER_CLICK -
            m_rightPosZero;
 }
 
@@ -339,8 +339,8 @@ void Drive::SetDriveOutput(ControlMode controlMode, double left, double right) {
         m_rightDriveOutput /= DRIVE_IPS_FROM_CPDS;
     }
     else if (controlMode == ControlMode::Position) {
-        m_leftDriveOutput /= DRIVE_DIST_PER_REVOLUTION;
-        m_rightDriveOutput /= DRIVE_DIST_PER_REVOLUTION;
+        m_leftDriveOutput /= DRIVE_DIST_PER_CLICK;
+        m_rightDriveOutput /= DRIVE_DIST_PER_CLICK;
     }
 
     if (std::isnan(m_leftDriveOutput) || std::isnan(m_rightDriveOutput)) {
@@ -411,9 +411,9 @@ void Drive::TaskPeriodic(RobotMode mode) {
     }
     else if (m_controlMode == ControlMode::Position) {
         m_leftDriveOutputLog->LogDouble(m_leftDriveOutput *
-                                        DRIVE_DIST_PER_REVOLUTION);
+                                        DRIVE_DIST_PER_CLICK);
         m_rightDriveOutputLog->LogDouble(m_rightDriveOutput *
-                                         DRIVE_DIST_PER_REVOLUTION);
+                                         DRIVE_DIST_PER_CLICK);
     }
     else {
         m_leftDriveOutputLog->LogDouble(m_leftDriveOutput);
