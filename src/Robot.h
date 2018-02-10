@@ -12,8 +12,7 @@
 #pragma once
 
 #include "WPILib.h"
-#include "networktables/NetworkTableInstance.h"
-#include "networktables/NetworkTableEntry.h"
+#include "Phoenix.h"
 #include <iostream>
 #include "src/info/RobotInfo.h"
 #include "src/DisabledMode.h"
@@ -32,11 +31,12 @@
 #include "ctre/Phoenix.h"
 
 using namespace frc;
-using namespace nt;
+using namespace ctre;
 
 namespace frc973 {
 class Disabled;
 class Autonomous;
+class Drive;
 
 class Robot
         : public CoopMTRobot
@@ -69,9 +69,20 @@ public:
                                     bool pressedP) override;
 
 private:
+    PowerDistributionPanel *m_pdp;
+
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
     ObservableJoystick *m_tuningJoystick;
+
+    TalonSRX *m_leftDriveTalonA;
+    VictorSPX *m_leftDriveVictorB;
+    VictorSPX *m_leftDriveVictorC;
+    TalonSRX *m_rightDriveTalonA;
+    VictorSPX *m_rightDriveVictorB;
+    VictorSPX *m_rightDriveVictorC;
+
+    ADXRS450_Gyro *m_gyro;
 
     LogSpreadsheet *m_logger;
 
@@ -93,6 +104,5 @@ private:
     Autonomous *m_autonomous;
     Teleop *m_teleop;
     Test *m_test;
-    NetworkTableInstance m_dashboard;
 };
 };

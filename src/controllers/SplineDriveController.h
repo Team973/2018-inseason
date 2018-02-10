@@ -1,3 +1,10 @@
+/*
+ * SplineDriveController.h
+ *
+ *  Created on: 2017
+ *      Author: Kyle
+ */
+
 #pragma once
 
 #include "lib/bases/DriveBase.h"
@@ -6,6 +13,7 @@
 #include <stdio.h>
 
 using namespace frc;
+using namespace ctre;
 
 namespace frc973 {
 
@@ -26,9 +34,13 @@ public:
         return m_done;
     }
 
-    void Start() override;
+    void Start() override {
+        printf("Turning on Spline Mode\n");
+    }
 
-    void Stop() override;
+    void Stop() override {
+        printf("Turning off Spline Mode\n");
+    }
 
     double DistFromStart() const;
     double AngleFromStart() const;
@@ -47,7 +59,6 @@ private:
     PID m_a_pos_pid, m_a_vel_pid;
 
     bool m_done;
-    bool m_needSetControlMode;
 
     static constexpr double MAX_VELOCITY = 130;       // in/sec
     static constexpr double MAX_ACCELERATION = 10.0;  // in/sec^2
