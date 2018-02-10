@@ -178,7 +178,7 @@ void CoopMTRobot::ModeStart(RobotMode toStart) {
             TeleopStart();
             break;
         case RobotMode::MODE_TEST:
-            TaskStopModeAll(toStart);
+            TaskStartModeAll(toStart);
             TestStart();
             break;
     }
