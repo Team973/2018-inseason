@@ -1,5 +1,5 @@
 #include "WPILib.h"
-#include "networktables/NetworkTableInstance.h"
+#include "Phoenix.h"
 #include <iostream>
 #include "src/info/RobotInfo.h"
 #include "src/DisabledMode.h"
@@ -10,18 +10,25 @@
 #include "ctre/Phoenix.h"
 
 using namespace frc;
-using namespace nt;
-
+using namespace ctre;
 namespace frc973 {
 Robot::Robot()
         : CoopMTRobot()
         , JoystickObserver()
+        , m_pdp(new PowerDistributionPanel())
         , m_driverJoystick(
               new ObservableJoystick(DRIVER_JOYSTICK_PORT, this, this))
         , m_operatorJoystick(
               new ObservableJoystick(OPERATOR_JOYSTICK_PORT, this, this))
         , m_tuningJoystick(
               new ObservableJoystick(TUNING_JOYSTICK_PORT, this, this))
+        , m_leftDriveTalonA(new GreyTalonSRX(LEFT_DRIVE_A_CAN_ID))
+        , m_leftDriveVictorB(new VictorSPX(LEFT_DRIVE_B_VICTOR_ID))
+        , m_leftDriveVictorC(new VictorSPX(LEFT_DRIVE_C_VICTOR_ID))
+        , m_rightDriveTalonA(new GreyTalonSRX(RIGHT_DRIVE_A_CAN_ID))
+        , m_rightDriveVictorB(new VictorSPX(RIGHT_DRIVE_B_VICTOR_ID))
+        , m_rightDriveVictorC(new VictorSPX(RIGHT_DRIVE_C_VICTOR_ID))
+        , m_gyro(new ADXRS450_Gyro())
         , m_logger(new LogSpreadsheet(this))
         , m_cubeClamp(new Solenoid(CUBE_CLAMP_PCM_ID))
         , m_clawKicker(new Solenoid(CLAW_KICKER_PCM_ID))
@@ -34,7 +41,10 @@ Robot::Robot()
         , m_claw(new Claw(this, m_logger, m_cubeClamp, m_clawKicker))
         , m_intake(new Intake(this, m_logger, m_rightRoller, m_leftRoller,
                               m_cubeSensor))
-        , m_drive(new Drive(this, m_logger))
+        , m_drive(new Drive(this, m_logger, m_leftDriveTalonA,
+                            m_leftDriveVictorB, m_leftDriveVictorC,
+                            m_rightDriveTalonA, m_rightDriveVictorB,
+                            m_rightDriveVictorC, m_gyro))
         , m_hanger(new Hanger(this, m_logger))
         , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick,
                                   m_tuningJoystick))
@@ -42,8 +52,7 @@ Robot::Robot()
         , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick,
                               m_tuningJoystick))
         , m_test(new Test(m_driverJoystick, m_operatorJoystick,
-                          m_tuningJoystick, m_elevator, m_claw))
-        , m_dashboard(NetworkTableInstance::GetDefault()) {
+                          m_tuningJoystick, m_drive, m_elevator)) {
     std::cout << "Constructed a Robot!" << std::endl;
 }
 
@@ -102,6 +111,8 @@ void Robot::TestStop() {
 }
 
 void Robot::RobotPeriodic() {
+    // NetworkTable Battery Voltage
+    SmartDashboard::PutNumber("misc/pdp/batteryvoltage", m_pdp->GetVoltage());
 }
 
 void Robot::ObserveJoystickStateChange(uint32_t port, uint32_t button,

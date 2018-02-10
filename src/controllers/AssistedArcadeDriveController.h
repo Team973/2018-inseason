@@ -1,5 +1,5 @@
 /*
- * ArcadeDrive.h
+ * AssistedArcadeDriveController.h
  *
  *  Created on: Oct 30, 2015
  *      Author: Andrew
@@ -11,13 +11,14 @@
 #include <stdio.h>
 
 using namespace frc;
+using namespace ctre;
 
 namespace frc973 {
 
-class ArcadeDriveController : public DriveController {
+class AssistedArcadeDriveController : public DriveController {
 public:
-    ArcadeDriveController();
-    virtual ~ArcadeDriveController();
+    AssistedArcadeDriveController();
+    virtual ~AssistedArcadeDriveController();
 
     /*
      * Calculate motor output given the most recent joystick commands.
@@ -31,7 +32,7 @@ public:
      * just return false I guess...
      */
     bool OnTarget() override {
-        return false;
+        return true;
     }
 
     /*
@@ -40,21 +41,15 @@ public:
     void SetJoysticks(double throttle, double turn);
 
     void Start() override {
-        m_needSetControlMode = true;
-        printf("Turning on Arcade Mode\n");
+        printf("Turning on Assisted Arcade Mode\n");
     }
 
     void Stop() override {
-        printf("Turning off arcade Mode\n");
+        printf("Turning off Assisted Arcade Mode\n");
     }
 
 private:
-    double m_leftOutput;
-    double m_rightOutput;
-    bool m_needSetControlMode;
-
-    static constexpr double THROTTLE_MAX = 130;  // in inches/sec
-    static constexpr double TURN_MAX =
-        4.0;  // in radians/sec... 6.3radians ~= 360degrees
+    double m_throttle;
+    double m_turn;
 };
 }
