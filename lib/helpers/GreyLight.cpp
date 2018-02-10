@@ -11,9 +11,7 @@
 #include "lib/pixelprocessors/PixelChase.h"
 #include "lib/pixelprocessors/Static.h"
 #include "lib/pixelprocessors/TeamNumber.h"
-
-// #include <PixelProcessors/Particles.h>
-
+#include "lib/pixelprocessors/Siren.h"
 GreyLight::GreyLight(int numLEDs) {
     state = PixelState{};
     state.fps = 60;
@@ -22,9 +20,11 @@ GreyLight::GreyLight(int numLEDs) {
     state.pixels = std::vector<Color>(numLEDs);
 
     // processor = new LoopModulator(new Gradient({255,0,0},{0,0,255}));
-    processor = new PixelChase(
-        new LoopModulator(new Gradient({255, 0, 0}, {0, 0, 255})), {0, 100, 0});
+    // processor = new PixelChase(
+    // new LoopModulator(new Gradient({255, 0, 0}, {0, 0, 255})), {0, 100, 0});
     // processor = new TeamNumber();
+    processor =
+        new PixelChase(new Siren({255, 0, 0}, {0, 255, 0}, 3), {0, 0, 0});
     worker = std::thread(&GreyLight::loop, this);
 }
 

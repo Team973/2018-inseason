@@ -1,8 +1,5 @@
 #include <SFML/Graphics.hpp>
-
-
 #include "lib/helpers/GreyLight.h"
-
 #include <stdio.h>
 #include <iostream>
 #include <time.h>
