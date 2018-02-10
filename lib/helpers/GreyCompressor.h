@@ -18,9 +18,6 @@
 using namespace frc;
 
 namespace frc973 {
-
-class Debouncer;
-
 class GreyCompressor : public CoopTask {
 public:
     /**
@@ -55,7 +52,6 @@ public:
 
 private:
     bool m_enabled;
-    Debouncer *m_pressureSwitchFilter;
     DigitalInput *m_airPressureSwitch;
     Relay *m_compressor;
 

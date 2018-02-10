@@ -15,7 +15,6 @@ namespace frc973 {
 GreyCompressor::GreyCompressor(DigitalInput *pressureSwitch, Relay *compressor,
                                TaskMgr *scheduler)
         : m_enabled(true)
-        , m_pressureSwitchFilter(new Debouncer(2.0))
         , m_airPressureSwitch(pressureSwitch)
         , m_compressor(compressor)
         , m_scheduler(scheduler) {
@@ -24,7 +23,6 @@ GreyCompressor::GreyCompressor(DigitalInput *pressureSwitch, Relay *compressor,
 
 GreyCompressor::~GreyCompressor() {
     this->m_scheduler->UnregisterTask(this);
-    delete m_pressureSwitchFilter;
 }
 
 void GreyCompressor::Enable() {
