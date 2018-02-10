@@ -140,7 +140,8 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::Start:
                 if (pressedP) {
-                    m_drive->PIDDrive(-50, 0, Drive::RelativeTo::Now, 1);
+                    m_driveMode = DriveMode::PID;
+                    m_drive->PIDDrive(24, 0, Drive::RelativeTo::Now, 1);
                 }
                 break;
             case DualAction::Back:

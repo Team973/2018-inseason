@@ -74,10 +74,10 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_leftDriveTalonA->SetSensorPhase(false);
     m_leftDriveTalonA->SetInverted(false);
     m_leftDriveTalonA->SelectProfileSlot(0, 0);
-    m_leftDriveTalonA->Config_kP(0, 0.07, 10);
+    m_leftDriveTalonA->Config_kP(0, 0.08, 10);
     m_leftDriveTalonA->Config_kI(0, 0, 10);
-    m_leftDriveTalonA->Config_kD(0, 0, 10);  // 0.7
-    m_leftDriveTalonA->Config_kF(0, 0, 10);  // 0.2
+    m_leftDriveTalonA->Config_kD(0, 0, 10);     // 0.7
+    m_leftDriveTalonA->Config_kF(0, 0.28, 10);  // 0.2
 
     m_leftDriveVictorB->Follow(*m_leftDriveTalonA);
     m_leftDriveVictorB->SetInverted(false);
@@ -90,10 +90,10 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_rightDriveTalonA->SetSensorPhase(false);
     m_rightDriveTalonA->SetInverted(false);
     m_rightDriveTalonA->SelectProfileSlot(0, 0);
-    m_rightDriveTalonA->Config_kP(0, 0.07, 10);
+    m_rightDriveTalonA->Config_kP(0, 0.08, 10);
     m_rightDriveTalonA->Config_kI(0, 0, 10);
-    m_rightDriveTalonA->Config_kD(0, 0, 10);  // 0.7
-    m_rightDriveTalonA->Config_kF(0, 0, 10);  // 0.2
+    m_rightDriveTalonA->Config_kD(0, 0, 10);     // 0.7
+    m_rightDriveTalonA->Config_kF(0, 0.28, 10);  // 0.2
 
     m_rightDriveVictorB->Follow(*m_rightDriveTalonA);
     m_rightDriveVictorB->SetInverted(false);
@@ -370,6 +370,12 @@ void Drive::TaskPeriodic(RobotMode mode) {
     SmartDashboard::PutNumber("drive/encoders/leftencoder", GetLeftDist());
     SmartDashboard::PutNumber("drive/encoders/rightencoder", GetRightDist());
 
+    // NetworkTable motor output
+    SmartDashboard::PutNumber("drive/outputs/leftratesetpoint",
+                              m_leftDriveOutput * DRIVE_IPS_FROM_CPDS);
+    SmartDashboard::PutNumber("drive/outputs/leftrateactual",
+                              Drive::GetLeftRate());
+
     // NetworkTable Gyro
     SmartDashboard::PutNumber("drive/gyro/angle", m_gyro->GetAngle());
 
@@ -385,6 +391,8 @@ void Drive::TaskPeriodic(RobotMode mode) {
 
     DBStringPrintf(DB_LINE9, "l %2.1lf r %2.1lf g %2.1lf", this->GetLeftDist(),
                    this->GetRightDist(), this->GetAngle());
+
+    DBStringPrintf(DB_LINE8, "d %2.1lf", this->GetDist());
 
     m_angleLog->LogDouble(GetAngle());
     m_angularRateLog->LogDouble(GetAngularRate());

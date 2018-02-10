@@ -28,7 +28,7 @@ void VelocityArcadeDriveController::CalcDriveOutput(
     out->SetDriveOutput(ControlMode::Velocity, m_leftOutput, m_rightOutput);
     DBStringPrintf(DBStringPos::DB_LINE4, "vAr l=%1.2lf r=%1.2lf", m_leftOutput,
                    m_rightOutput);
-    printf("arcade l=%1.2lf r=%1.2lf\n", m_leftOutput, m_rightOutput);
+    printf("velocity l=%1.2lf r=%1.2lf\n", m_leftOutput, m_rightOutput);
 }
 
 void VelocityArcadeDriveController::SetJoysticks(double throttle, double turn) {
