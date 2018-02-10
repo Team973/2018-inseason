@@ -64,10 +64,13 @@ public:
      * When called, opens claw arms and
      * activates kicker
      */
-    /*void fire();*/
+    void kickOn();
     /*
-     * When called, sets cube to be launched by the
-     * kicker aided by the kicker pin
+     * When called, activates kicker
+     */
+    void kickOff();
+    /*
+     * When called, deactivates clawKicker
      */
     void TaskPeriodic(RobotMode mode);
 

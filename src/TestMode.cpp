@@ -174,6 +174,10 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::BtnX:
                 if (pressedP) {
+                    m_claw->kickOn();
+                }
+                else {
+                    m_claw->kickOff();
                 }
                 break;
             case DualAction::BtnY:

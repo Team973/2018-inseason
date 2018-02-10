@@ -33,6 +33,14 @@ void Claw::push() {
     goToState(pushOpen);
 }
 
+void Claw::kickOn() {
+    m_clawKicker->Set(active);
+}
+
+void Claw::kickOff() {
+    m_clawKicker->Set(kickIdle);
+}
+
 void Claw::TaskPeriodic(RobotMode mode) {
     switch (m_clawState) {
         case ClawState::released:
