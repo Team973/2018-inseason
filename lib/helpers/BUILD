@@ -14,6 +14,20 @@ cc_library(
         "//lib/util:util",
         "//lib/managers:managers",
         "//lib/logging:logging",
+        ":greylight"
+    ],
+    visibility = ["//visibility:public"],
+)
+cc_library(
+    name = "greylight",
+    srcs = glob([
+        "GreyLight.cpp",
+    ]),
+    hdrs = glob([
+        "GreyLight.h",
+    ]),
+    deps = [
+        "//lib/pixelprocessors:pixelprocessors"
     ],
     visibility = ["//visibility:public"],
 )

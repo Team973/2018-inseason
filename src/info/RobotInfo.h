@@ -5,8 +5,6 @@
  */
 #pragma once
 
-using namespace frc;
-
 namespace frc973 {
 // Drive
 static const int LEFT_DRIVE_A_CAN_ID = 1;
@@ -41,6 +39,9 @@ static const int COMPRESSOR_RELAY = 0;
 static const int DRIVER_JOYSTICK_PORT = 0;
 static const int OPERATOR_JOYSTICK_PORT = 1;
 static const int TUNING_JOYSTICK_PORT = 2;
+
+// LEDs
+static const int NUM_LED = 44;
 
 // Misc
 static const double DRIVE_WIDTH = 5.0;
