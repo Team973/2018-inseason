@@ -33,7 +33,7 @@ void updateAndDraw(std::vector<Color> v, sf::RenderWindow& window, sf::CircleSha
 
 int main(int argc, char *argv[]) {
 	if(argc==1){
-		std::cerr << "\033[1;31mNumber of LEDs must be passed as an argument!" << "\033[0m\n";
+		std::cerr << "\033[1;31mNumber of LEDs must be passed as an argument!\033[0m\n";
 		return -1;
 	}
 	std::istringstream ss(argv[1]);
