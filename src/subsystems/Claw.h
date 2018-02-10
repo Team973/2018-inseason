@@ -20,13 +20,9 @@ class LogSpreadsheet;
 class Claw : public CoopTask {
 public:
     Claw(TaskMgr *scheduler, LogSpreadsheet *logger, Solenoid *cubeClamp,
-         Solenoid *clawKicker /*, Solenoid *kickerPin*/);
+         Solenoid *clawKicker);
 
     virtual ~Claw();
-
-    /**
-     * Starts the wheels to pull things in
-     **/
 
     enum openState
     {
@@ -40,11 +36,6 @@ public:
         kickIdle = false
     };
 
-    /*enum kickPinState {
-        pinActive = true,
-        pinIdle = false
-    };*/
-
     enum ClawState
     {
         released,
@@ -53,9 +44,6 @@ public:
         dropClosed,
         pushOpen,
         pushClosed,
-        /*kickHold,
-        kickPreFire,
-        kickRelease,*/
     };
 
     void open();
@@ -89,7 +77,6 @@ private:
     TaskMgr *m_scheduler;
     Solenoid *m_cubeClamp;
     Solenoid *m_clawKicker;
-    /*Solenoid *m_kickerPin;*/
     ClawState m_clawState;
 
     uint32_t m_stateStartTimeMs;

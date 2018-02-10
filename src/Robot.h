@@ -77,7 +77,6 @@ private:
 
     Solenoid *m_cubeClamp;
     Solenoid *m_clawKicker;
-    /*Solenoid *m_kickerPin;*/
     TalonSRX *m_rightRoller;
     TalonSRX *m_leftRoller;
     DigitalInput *m_cubeSensor;

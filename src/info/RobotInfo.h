@@ -22,7 +22,6 @@ static const int ELEVATOR_CAN_ID = 4;
 // Solenoids
 static const int CUBE_CLAMP_PCM_ID = 1;
 static const int CLAW_KICKER_PCM_ID = 2;
-/*static const int KICKER_PIN_PCM_ID = 4;*/
 static const int HANGER_PTO_PCM_ID = 0;
 
 // Claw
