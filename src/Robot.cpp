@@ -46,6 +46,11 @@ Robot::Robot()
                             m_rightDriveTalonA, m_rightDriveVictorB,
                             m_rightDriveVictorC, m_gyro))
         , m_hanger(new Hanger(this, m_logger))
+        , m_airPressureSwitch(new DigitalInput(PRESSURE_DIN_ID))
+        , m_compressorRelay(
+              new Relay(COMPRESSOR_RELAY, Relay::Direction::kForwardOnly))
+        , m_compressor(
+              new GreyCompressor(m_airPressureSwitch, m_compressorRelay, this))
         , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick,
                                   m_tuningJoystick))
         , m_autonomous(new Autonomous(m_disabled))
@@ -60,6 +65,7 @@ Robot::~Robot() {
 }
 
 void Robot::Initialize() {
+    m_compressor->Enable();
 }
 
 void Robot::DisabledStart() {

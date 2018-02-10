@@ -38,8 +38,8 @@ static const int FORKLIFT_VICTOR_ID = 11;
 // Digital
 static const int INTAKE_BEAM_BREAKER_SENSOR_DIN = 0;
 
-// Analog
-static const int PRESSURE_ANLG_ID = 0;
+// Digital
+static const int PRESSURE_DIN_ID = 1;
 
 // Relays
 static const int COMPRESSOR_RELAY = 0;
