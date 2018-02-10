@@ -24,20 +24,25 @@ def writeHeader(target):
     header.write('''#include "path_to_pathfinder_struct_definitions.h"
     namespace generated_profiles {
     TrajectoryDescription ''' + sourceJSON["name"])
-    struct = """{{
+    header.write('''{{
     .timestep = {}
     , .max_vel = {}
     , .max_accel = {}
     , .max_jerk =   {}
     , .wheelbase_width = {}
     , .length = {}
-    , .left_trajectory = {{ {} }}
-    , .right_trajectory = {{ {} }}
-    }};
-    }}""".format(sourceJSON["timestep"], sourceJSON["max_vel"], sourceJSON["max_accel"],
+    , .left_trajectory = {{\n'''.format(sourceJSON["timestep"], sourceJSON["max_vel"], sourceJSON["max_accel"],
                 sourceJSON["max_jerk"], sourceJSON["wheelbase_width"],
-                len(leftTraj), leftTraj, rightTraj)
-    header.write(struct)
+                len(leftTraj)))
+    for segment in leftTraj:
+        header.write("        " + str(segment) + ",\n")
+    header.write('''    }
+    , .right_trajectory = {\n''')
+    for segment in rightTraj:
+        header.write("        " + str(segment) + ",\n")
+    header.write('''    }
+    };
+    }''')
     header.close()
 
 writeHeader(headerPath)
