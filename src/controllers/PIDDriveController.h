@@ -5,8 +5,7 @@
  *      Author: Andrew
  */
 
-#ifndef SRC_CONTROLLERS_PIDDRIVECONTROLLER_H_
-#define SRC_CONTROLLERS_PIDDRIVECONTROLLER_H_
+#pragma once
 
 #include "lib/bases/DriveBase.h"
 
@@ -46,29 +45,12 @@ public:
                    DriveBase::RelativeTo relativity, DriveStateProvider *state);
 
     /*
-     * Enable distance pid, do angle and dist together.
-     */
-    void EnableDist() {
-        m_distEnabled = true;
-    }
-
-    /*
-     * Disable distance pid, do angle only.
-     *
-     * This is a cheap hack because we only have an encoder on left drive...
-     * if we had left and right we could actually determine our forward-ness
-     */
-    void DisableDist() {
-        m_distEnabled = false;
-    }
-
-    /*
      * Scale the pseed down by |newCap|
      *
      * |newCap| of 1.0 means max speed
      */
     void SetCap(double newCap) {
-        m_speedCap = newCap;
+        m_speedCap = Util::bound(newCap, 0.0, 1.0);
     }
 
     /*
@@ -90,11 +72,6 @@ public:
         return this;
     }
 
-    PIDDriveController *SetQuickExit(bool quickExit) {
-        m_quickExit = quickExit;
-        return this;
-    }
-
     void Zero() {
         m_prevDist = 0.0;
         m_prevAngle = 0.0;
@@ -112,7 +89,6 @@ public:
     }
 
 private:
-    bool m_quickExit = false;
     double m_prevDist;
     double m_prevAngle;
 
@@ -124,10 +100,7 @@ private:
     PID *m_drivePID;
     PID *m_turnPID;
 
-    bool m_distEnabled;
-
     double m_speedCap;
-    double m_lastThrottle;
 
     double m_distTolerance;
     double m_distRateTolerance;
@@ -147,5 +120,3 @@ private:
     static constexpr double DEFAULT_ANGLE_RATE_TOLERANCE = 5.0;
 };
 }
-
-#endif /* SRC_CONTROLLERS_PIDDRIVECONTROLLER_H_ */

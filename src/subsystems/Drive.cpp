@@ -166,7 +166,6 @@ PIDDriveController *Drive::PIDDrive(double dist, double turn,
     this->SetDriveController(m_pidDriveController);
     m_pidDriveController->SetCap(powerCap);
     m_pidDriveController->SetTarget(dist, turn, relativity, this);
-    m_pidDriveController->EnableDist();
     return m_pidDriveController;
 }
 
@@ -185,7 +184,6 @@ PIDDriveController *Drive::PIDTurn(double turn, RelativeTo relativity,
     this->SetDriveController(m_pidDriveController);
     m_pidDriveController->SetCap(powerCap);
     m_pidDriveController->SetTarget(0.0, turn, relativity, this);
-    m_pidDriveController->DisableDist();
     return m_pidDriveController;
 }
 
