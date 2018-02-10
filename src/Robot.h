@@ -26,6 +26,7 @@
 #include "src/subsystems/Drive.h"
 #include "lib/logging/LogSpreadsheet.h"
 #include "lib/helpers/JoystickHelper.h"
+#include "lib/helpers/GreyCompressor.h"
 #include "lib/bases/CoopMTRobot.h"
 #include "ctre/Phoenix.h"
 
@@ -44,23 +45,23 @@ public:
     Robot();
     virtual ~Robot();
 
-    void Initialize();
+    void Initialize()  override;
 
-    void DisabledStart();
-    void DisabledContinuous();
-    void DisabledStop();
+    void DisabledStart() override;
+    void DisabledContinuous() override;
+    void DisabledStop() override;
 
-    void AutonomousStart();
-    void AutonomousContinuous();
-    void AutonomousStop();
+    void AutonomousStart() override;
+    void AutonomousContinuous() override;
+    void AutonomousStop() override;
 
-    void TeleopStart();
-    void TeleopContinuous();
-    void TeleopStop();
+    void TeleopStart() override;
+    void TeleopContinuous() override;
+    void TeleopStop() override;
 
-    void TestStart();
-    void TestContinuous();
-    void TestStop();
+    void TestStart() override;
+    void TestContinuous() override;
+    void TestStop() override;
 
     void RobotPeriodic() override;
 
@@ -94,6 +95,10 @@ private:
     Claw *m_claw;
     Drive *m_drive;
     Hanger *m_hanger;
+
+    DigitalInput *m_airPressureSwitch;
+    Relay *m_compressorRelay;
+    GreyCompressor *m_compressor;
 
     Disabled *m_disabled;
     Autonomous *m_autonomous;
