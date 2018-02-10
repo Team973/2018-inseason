@@ -8,7 +8,6 @@
 #include "src/TestMode.h"
 #include "src/Robot.h"
 #include "ctre/Phoenix.h"
-#include "lib/helpers/GreyTalon.h"
 
 using namespace frc;
 using namespace nt;
@@ -26,8 +25,8 @@ Robot::Robot()
         , m_logger(new LogSpreadsheet(this))
         , m_cubeClamp(new Solenoid(CUBE_CLAMP_PCM_ID))
         , m_clawKicker(new Solenoid(CLAW_KICKER_PCM_ID))
-        , m_rightRoller(new TalonSRX(CLAW_RIGHT_ROLLER_CAN_ID))
-        , m_leftRoller(new TalonSRX(CLAW_LEFT_ROLLER_CAN_ID))
+        , m_rightRoller(new GreyTalonSRX(CLAW_RIGHT_ROLLER_CAN_ID))
+        , m_leftRoller(new GreyTalonSRX(CLAW_LEFT_ROLLER_CAN_ID))
         , m_cubeSensor(new DigitalInput(INTAKE_BEAM_BREAKER_SENSOR_DIN))
         , m_elevatorMotor(new TalonSRX(ELEVATOR_CAN_ID))
         , m_elevator(

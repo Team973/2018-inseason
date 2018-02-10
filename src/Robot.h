@@ -27,7 +27,7 @@
 #include "src/subsystems/Hanger.h"
 #include "src/subsystems/Drive.h"
 #include "lib/logging/LogSpreadsheet.h"
-#include "lib/helpers/JoystickHelper.h"
+#include "lib/helpers/GreyTalon.h"
 #include "lib/bases/CoopMTRobot.h"
 #include "ctre/Phoenix.h"
 
