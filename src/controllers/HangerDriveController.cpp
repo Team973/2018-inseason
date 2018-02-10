@@ -33,19 +33,10 @@ void HangerDriveController::CalcDriveOutput(DriveStateProvider *state,
 }
 
 void HangerDriveController::SetJoysticks(double throttle) {
-    throttle = Util::bound(fabs(throttle), -1.0, 1.0) * THROTTLE_MAX;
+    throttle = Util::bound(throttle, -1.0, 1.0);
 
-    double TURN_RAMPUP = 0.25;
-    m_leftOutput =
-        throttle - 0.5 * DRIVE_WIDTH * (TURN_RAMPUP * fabs(throttle));
-    m_rightOutput =
-        throttle + 0.5 * DRIVE_WIDTH * (TURN_RAMPUP * fabs(throttle));
-
-    double maxSpeed = Util::max(m_leftOutput, m_rightOutput);
-    if (maxSpeed > THROTTLE_MAX) {
-        m_leftOutput = m_leftOutput * (THROTTLE_MAX / maxSpeed);
-        m_rightOutput = m_rightOutput * (THROTTLE_MAX / maxSpeed);
-    }
+    m_leftOutput = throttle;
+    m_rightOutput = throttle;
 
     // printf("left %lf  right %lf\n", m_leftOutput, m_rightOutput);
 }

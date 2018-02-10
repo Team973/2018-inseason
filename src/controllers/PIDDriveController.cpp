@@ -23,7 +23,7 @@ static constexpr double DRIVE_PID_KI = 0.0;
 static constexpr double DRIVE_PID_KD = 0.05;
 
 // Turn pid takes in error in degrees and outputs velocity in degrees/sec
-static constexpr double TURN_PID_KP = 1.0;
+static constexpr double TURN_PID_KP = 8.0;
 static constexpr double TURN_PID_KI = 0.0;
 static constexpr double TURN_PID_KD = 0.0;
 

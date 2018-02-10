@@ -312,7 +312,7 @@ double Drive::GetDriveCurrent() const {
  * @return  Current angle position with respect to initial position
  */
 double Drive::GetAngle() const {
-    return m_angle - m_gyroZero;
+    return -(m_angle - m_gyroZero);
 }
 
 /**
@@ -321,7 +321,7 @@ double Drive::GetAngle() const {
  * @return  Current angular rate
  */
 double Drive::GetAngularRate() const {
-    return m_angleRate;
+    return -m_angleRate;
 }
 
 /**
@@ -377,7 +377,7 @@ void Drive::TaskPeriodic(RobotMode mode) {
                               Drive::GetLeftRate());
 
     // NetworkTable Gyro
-    SmartDashboard::PutNumber("drive/gyro/angle", m_gyro->GetAngle());
+    SmartDashboard::PutNumber("drive/gyro/angle", this->GetAngle());
 
     m_angle = m_gyro->GetAngle();
 
