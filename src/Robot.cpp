@@ -52,7 +52,7 @@ Robot::Robot()
         , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick,
                               m_tuningJoystick))
         , m_test(new Test(m_driverJoystick, m_operatorJoystick,
-                          m_tuningJoystick, m_drive, m_elevator)) {
+                          m_tuningJoystick, m_drive, m_elevator, m_claw)) {
     std::cout << "Constructed a Robot!" << std::endl;
 }
 
