@@ -50,9 +50,8 @@ public:
      * Receive calculated motor powers from a controller.
      * Should only be called from a child of DriveController.
      */
-    virtual void SetDriveOutput(double left, double right) = 0;
-    virtual void SetDriveControlMode(
-        ctre::phoenix::motorcontrol::ControlMode mode) = 0;
+    virtual void SetDriveOutput(ControlMode controlMode, double left,
+                                double right) = 0;
 };
 
 /*
@@ -140,9 +139,10 @@ public:
      */
     bool OnTarget();
 
-private:
+protected:
     TaskMgr *m_scheduler;
 
+private:
     DriveStateProvider *m_stateProvider;
     DriveControlSignalReceiver *m_driveOutput;
 

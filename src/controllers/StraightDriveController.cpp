@@ -10,6 +10,9 @@
 #include <stdio.h>
 #include "lib/util/WrapDash.h"
 
+using namespace frc;
+using namespace ctre;
+
 namespace frc973 {
 
 static constexpr double TURN_PID_KP = 0.02;
@@ -27,17 +30,12 @@ StraightDriveController::~StraightDriveController() {
 
 void StraightDriveController::CalcDriveOutput(DriveStateProvider *state,
                                               DriveControlSignalReceiver *out) {
-    if (m_needSetControlMode == true) {
-        out->SetDriveControlMode(
-            ctre::phoenix::motorcontrol::ControlMode::PercentOutput);
-        m_needSetControlMode = false;
-    }
-
     m_prevAngle = state->GetAngle();
     double turn = Util::bound(m_turnPID->CalcOutput(m_prevAngle), -0.5, 0.5);
     double throttle = m_throttle;
 
-    out->SetDriveOutput(-throttle + turn, -throttle - turn);
+    out->SetDriveOutput(ControlMode::PercentOutput, -throttle + turn,
+                        -throttle - turn);
 }
 
 /*
