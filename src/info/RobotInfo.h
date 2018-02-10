@@ -32,7 +32,7 @@ static const int FORKLIFT_VICTOR_ID = 11;
 static const int HANGER_PTO_PCM_ID = 1;
 
 // Digital
-static const int PRESSURE_DIN_ID = 0;
+static const int PRESSURE_DIN_ID = 1;
 
 // Relays
 static const int COMPRESSOR_RELAY = 0;

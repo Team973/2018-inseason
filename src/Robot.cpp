@@ -35,7 +35,7 @@ Robot::Robot()
         , m_drive(new Drive(this, m_logger))
         , m_hanger(new Hanger(this, m_logger))
         , m_airPressureSwitch(new DigitalInput(PRESSURE_DIN_ID))
-        , m_compressorRelay(new Relay(COMPRESSOR_RELAY))
+        , m_compressorRelay(new Relay(COMPRESSOR_RELAY, Relay::Direction::kForwardOnly))
         , m_compressor(
               new GreyCompressor(m_airPressureSwitch, m_compressorRelay, this))
         , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick,
@@ -85,8 +85,6 @@ void Robot::TeleopStart() {
 }
 
 void Robot::TeleopContinuous() {
-    m_compressorRelay->Set(Relay::kOn);
-    //printf("TeleopPeriodic\n");
     m_teleop->TeleopPeriodic();
 }
 
