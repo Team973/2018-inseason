@@ -1,23 +1,27 @@
 #pragma once
 
-struct {
-    const double dt;
-    const double x;
-    const double y;
-    const double position;
-    const double velocity;
-    const double acceleration;
-    const double jerk;
-    const double heading;
-} Segment;
+namespace trajectories {
+
+struct Segment {
+    double dt;
+    double x;
+    double y;
+    double position;
+    double velocity;
+    double acceleration;
+    double jerk;
+    double heading;
+};
 
 struct TrajectoryDescription {
-    const double timestep;
-    const double max_vel;
-    const double max_accel;
-    const double max_jerk;
-    const double wheelbase_width;
-    const int length;
-    const Segment *left_trajectory;
-    const Segment *right_trajectory;
+    double timestep;
+    double max_vel;
+    double max_accel;
+    double max_jerk;
+    double wheelbase_width;
+    int length;
+    Segment *left_trajectory;
+    Segment *right_trajectory;
 };
+
+}

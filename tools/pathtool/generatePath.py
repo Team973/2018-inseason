@@ -23,6 +23,8 @@ def writeHeader(target):
     leftTraj, rightTraj, sourceJSON = openPointStructs(jsonPath)
     header.write('''#include "lib/trajectories/structs.h"
 
+using namespace trajectories;
+
 namespace generated_profiles {
 
     TrajectoryDescription ''' + sourceJSON["name"])
