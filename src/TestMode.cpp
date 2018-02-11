@@ -21,13 +21,13 @@ void Test::TestInit() {
 
 void Test::TestPeriodic() {
      double elevatorManualPower = -m_driverJoystick->GetRawAxis(DualAction::LeftYAxis);
-     printf("%1.3lf\n", elevatorManualPower);
+     //printf("%1.3lf\n", elevatorManualPower);
 
      if (fabs(elevatorManualPower) > 0.1 || m_elevatorMode == ElevatorMode::percentOutput) {
+         m_elevatorMode = ElevatorMode::percentOutput;
          m_elevator->SetPower(elevatorManualPower);
      }
      else if (m_elevatorMode == ElevatorMode::zero) {
-         m_elevator->Reset();
      }
      else if (m_elevatorMode == ElevatorMode::motionMagic) {
      }
@@ -46,12 +46,12 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::motionMagic;
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
                     m_elevatorMode = ElevatorMode::zero;
+                    m_elevator->Reset();
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:
@@ -72,31 +72,37 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
+                  m_elevatorMode = ElevatorMode::motionMagic;
                   m_elevator->SetPosition(Elevator::SCALE_HIGH);
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
+                  m_elevatorMode = ElevatorMode::motionMagic;
                   m_elevator->SetPosition(Elevator::SCALE_MID);
                 }
                 break;
             case DualAction::BtnA:
                 if (pressedP) {
+                  m_elevatorMode = ElevatorMode::motionMagic;
                   m_elevator->SetPosition(Elevator::GROUND);
                 }
                 break;
             case DualAction::BtnB:
                 if (pressedP) {
+                  m_elevatorMode = ElevatorMode::motionMagic;
                   m_elevator->SetPosition(Elevator::VAULT);
                 }
                 break;
             case DualAction::BtnX:
                 if (pressedP) {
+                  m_elevatorMode = ElevatorMode::motionMagic;
                   m_elevator->SetPosition(Elevator::LOW_GOAL);
                 }
                 break;
             case DualAction::BtnY:
                 if (pressedP) {
+                  m_elevatorMode = ElevatorMode::motionMagic;
                   m_elevator->SetPosition(Elevator::SCALE_LOW);
                 }
                 break;

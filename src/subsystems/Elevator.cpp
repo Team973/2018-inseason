@@ -10,6 +10,7 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor)
         : m_scheduler(scheduler)
         , m_elevatorMotor(motor)
         , m_position(0.0)
+        , m_zeroingTime(0)
         , m_elevatorState(ElevatorState::manual) {
     this->m_scheduler->RegisterTask("Elevator", this, TASK_PERIODIC);
 
@@ -24,8 +25,8 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor)
     m_elevatorMotor->Config_kI(0, 0.0, 10);
     m_elevatorMotor->Config_kD(0, 0.0, 10);
     m_elevatorMotor->Config_kF(0, 0.0, 10);
-    m_elevatorMotor->ConfigMotionCruiseVelocity(3000.0, 10);
-    m_elevatorMotor->ConfigMotionAcceleration(2000.0, 10);
+    m_elevatorMotor->ConfigMotionCruiseVelocity(2000.0, 10);
+    m_elevatorMotor->ConfigMotionAcceleration(1600.0, 10);
     m_elevatorMotor->SelectProfileSlot(0, 0);
 
     m_elevatorMotor->EnableCurrentLimit(true);
@@ -66,22 +67,32 @@ float Elevator::GetPosition() {
     return ELEVATOR_INCHES_PER_CLICK *
            ((float)m_elevatorMotor->GetSelectedSensorPosition(0));
 }
+int prev_vel = 0;
+uint32_t prev_time = 0;
 
 void Elevator::TaskPeriodic(RobotMode mode) {
     m_positionCell->LogDouble(GetPosition());
-    printf("Elevator Pos: %f\n", GetPosition());
+    //printf("Elevator Pos: %f\n", GetPosition());
+    /*if (m_elevatorMotor->GetSelectedSensorVelocity(0) > prev_vel) {
+      printf("MaxVel: %d Acc: %f\n", prev_vel,
+              (float)(m_elevatorMotor->GetSelectedSensorVelocity(0) - prev_vel) / (GetSecTime() - prev_time));
+    }
+    prev_vel = m_elevatorMotor->GetSelectedSensorVelocity(0);
+    prev_time = GetSecTime();*/
     printf("Elevator Curr: %f\n", m_elevatorMotor->GetOutputCurrent());
+    printf("State %d\n", m_elevatorState);
     SmartDashboard::PutNumber("/SmartDashboard/elevator/currents/current", m_elevatorMotor->GetOutputCurrent());
     DBStringPrintf(DBStringPos::DB_LINE4, "%f", GetPosition());
     switch (m_elevatorState) {
         case manual:
             break;
         case zeroing_start:
+            m_zeroingTime = GetMsecTime();
             m_elevatorState = ElevatorState::zeroing_goDown;
             break;
         case zeroing_goDown:
             this->SetPower(-0.2);
-            if (m_elevatorMotor->GetOutputCurrent() > 4.0) {
+            if (GetMsecTime() - m_zeroingTime > 1500.0) {
                 m_elevatorState = ElevatorState::zeroing_stop;
             }
             break;

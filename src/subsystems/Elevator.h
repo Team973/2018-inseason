@@ -13,6 +13,7 @@
 #include "lib/logging/LogSpreadsheet.h"
 #include "src/info/RobotInfo.h"
 #include "lib/helpers/JoystickHelper.h"
+#include "lib/util/Util.h"
 
 using namespace frc;
 
@@ -78,6 +79,7 @@ private:
     TalonSRX *m_elevatorMotor;
 
     double m_position;
+    uint32_t m_zeroingTime;
     ElevatorState m_elevatorState;
     LogCell *m_positionCell;
 };
