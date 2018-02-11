@@ -35,11 +35,17 @@ def writeHeader(target):
                 sourceJSON["max_jerk"], sourceJSON["wheelbase_width"],
                 len(leftTraj)))
     for segment in leftTraj:
-        header.write("        " + str(segment) + ",\n")
+        header.write("        {.dt=" + str(segment.dt) + ", .x=" + str(segment.x) + ", .y=" + str(segment.y)
+                     + ", .position=" + str(segment.position) + ", .velocity=" + str(segment.velocity)
+                     + ", .acceleration=" + str(segment.acceleration) + ", .jerk=" + str(segment.jerk)
+                     + ", .heading=" + str(segment.heading) + "},\n")
     header.write('''    }
     , .right_trajectory = {\n''')
     for segment in rightTraj:
-        header.write("        " + str(segment) + ",\n")
+        header.write("        {.dt=" + str(segment.dt) + ", .x=" + str(segment.x) + ", .y=" + str(segment.y)
+                     + ", .position=" + str(segment.position) + ", .velocity=" + str(segment.velocity)
+                     + ", .acceleration=" + str(segment.acceleration) + ", .jerk=" + str(segment.jerk)
+                     + ", .heading=" + str(segment.heading) + "},\n")
     header.write('''    }
     };
     }''')
