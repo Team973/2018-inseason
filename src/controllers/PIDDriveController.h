@@ -10,7 +10,6 @@
 #include "lib/bases/DriveBase.h"
 
 using namespace frc;
-using namespace ctre;
 
 namespace frc973 {
 

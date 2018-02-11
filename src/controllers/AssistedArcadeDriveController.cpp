@@ -13,7 +13,6 @@
 #include "src/info/RobotInfo.h"
 
 using namespace frc;
-using namespace ctre;
 
 namespace frc973 {
 
@@ -46,7 +45,7 @@ void AssistedArcadeDriveController::CalcDriveOutput(
         rightOutput = rightOutput * (1.0 / maxSpeed);
     }
 
-    out->SetDriveOutput(ControlMode::PercentOutput, leftOutput, rightOutput);
+    out->SetDriveOutputVBus(leftOutput, rightOutput);
     DBStringPrintf(DBStringPos::DB_LINE4, "arcade l=%1.2lf r=%1.2lf",
                    leftOutput, rightOutput);
     // printf("arcade l=%1.2lf r=%1.2lf\n", leftOutput, rightOutput);

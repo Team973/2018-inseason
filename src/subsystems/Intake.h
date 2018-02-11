@@ -19,42 +19,40 @@ class TaskMgr;
 class LogSpreadsheet;
 
 class Intake : public CoopTask {
-    public:
-        Intake(TaskMgr *scheduler, LogSpreadsheet *logger,
-             TalonSRX *rightRoller, TalonSRX *leftRoller,
-             DigitalInput *cubeSensor);
+public:
+    Intake(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *rightRoller,
+           TalonSRX *leftRoller, DigitalInput *cubeSensor);
 
-        virtual ~Intake();
+    virtual ~Intake();
 
+    /**
+     * Starts the wheels to pull things in
+     **/
+    void Pull();
 
-        /**
-         * Starts the wheels to pull things in
-         **/
-        void Pull();
+    /**
+     * Starts spitting whatever's in the Intake, out.
+     **/
+    void Eject();
 
-        /**
-         * Starts spitting whatever's in the Intake, out.
-         **/
-        void Eject();
+    /**
+     * Sets the Intake wheels to neutral, braking them.
+     **/
+    void Stop();
 
-        /**
-         * Sets the Intake wheels to neutral, braking them.
-         **/
-        void Stop();
+    /**
+     * Checks for presense of cube
+     *
+     * @return Boolean if beam breaker is trigerred ot not
+     **/
+    bool IsCubeIn();
 
-        /**
-          * Checks for presense of cube
-          *
-          * @return Boolean if beam breaker is trigerred ot not
-          **/
-        bool IsCubeIn();
+    void TaskPeriodic(RobotMode mode);
 
-
-        void TaskPeriodic(RobotMode mode);
-    private:
-        TaskMgr *m_scheduler;
-        TalonSRX *m_leftRoller;
-        TalonSRX *m_rightRoller;
-        DigitalInput *m_cubeSensor;
+private:
+    TaskMgr *m_scheduler;
+    TalonSRX *m_leftRoller;
+    TalonSRX *m_rightRoller;
+    DigitalInput *m_cubeSensor;
 };
 }

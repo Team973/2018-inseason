@@ -11,7 +11,6 @@
 #include "lib/util/Util.h"
 
 using namespace frc;
-using namespace ctre;
 
 namespace frc973 {
 
@@ -124,7 +123,7 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
 
     if (goal.error) {
         printf("trap drive error\n");
-        out->SetDriveOutput(ControlMode::Velocity, 1.0, -1.0);
+        out->SetDriveOutputIPS(1.0, -1.0);
         return;
     }
 
@@ -157,7 +156,7 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     double left_output = left_l_vel_ff + left_a_vel_ff + linear_dist_term +
                          linear_vel_term - angular_dist_term - angular_vel_term;
 
-    out->SetDriveOutput(ControlMode::Velocity, left_output, right_output);
+    out->SetDriveOutputIPS(left_output, right_output);
 
     m_done = goal.done;
 
