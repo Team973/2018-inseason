@@ -7,13 +7,18 @@
 using namespace frc;
 
 namespace frc973 {
-Autonomous::Autonomous(Disabled *disabled)
+Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
+                       Claw *claw, ADXRS450_Gyro *gyro)
         : m_noAuto(new NoAuto())
-        , m_forwardAuto(new ForwardAuto())
+        , m_forwardAuto(new ForwardAuto(drive))
         , m_disabled(disabled)
         , m_scoringLocations("")
         , m_switchScalePosition(SwitchScalePosition::LL)
-        , m_routine(SelectedAutoRoutine::noAuto) {
+        , m_routine(SelectedAutoRoutine::noAuto)
+        , m_drive(drive)
+        , m_elevator(elevator)
+        , m_claw(claw)
+        , m_gyro(gyro) {
 }
 
 Autonomous::~Autonomous() {
@@ -21,10 +26,14 @@ Autonomous::~Autonomous() {
 
 void Autonomous::AutonomousInit() {
     // Remember to zero all sensors here
+    // m_elevator->SetMotion()
+    m_gyro->Reset();
+    m_claw->grab();
     std::cout << "Autonomous Start" << std::endl;
 
     m_scoringLocations = DriverStation::GetInstance().GetGameSpecificMessage();
     DBStringPrintf(DB_LINE1, "%s", m_scoringLocations.c_str());
+    printf("%s\n", m_scoringLocations.c_str());
 
     switch (m_disabled->GetStartPosition()) {
         case Disabled::RobotStartPosition::Left:
@@ -50,22 +59,24 @@ void Autonomous::AutonomousInit() {
             }
             break;
         case Disabled::RobotStartPosition::Center:
+            printf("Center Auto\n");
             switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case LL:
-                    m_switchAuto->Reset();
-                    m_routine = SelectedAutoRoutine::lowGoal;
+                    m_forwardAuto->Reset();
+                    m_routine = SelectedAutoRoutine::forward;
                     break;
                 case LR:
-                    m_switchAuto->Reset();
-                    m_routine = SelectedAutoRoutine::lowGoal;
+                    printf("Forward Auto\n");
+                    m_forwardAuto->Reset();
+                    m_routine = SelectedAutoRoutine::forward;
                     break;
                 case RL:
-                    m_switchAuto->Reset();
-                    m_routine = SelectedAutoRoutine::lowGoal;
+                    m_forwardAuto->Reset();
+                    m_routine = SelectedAutoRoutine::forward;
                     break;
                 case RR:
-                    m_switchAuto->Reset();
-                    m_routine = SelectedAutoRoutine::lowGoal;
+                    m_forwardAuto->Reset();
+                    m_routine = SelectedAutoRoutine::forward;
                     break;
                 default:
                     break;
@@ -121,7 +132,8 @@ void Autonomous::AutonomousPeriodic() {
 void Autonomous::AutonomousStop() {
 }
 
-Autonomous::SwitchScalePosition Autonomous::GetSwitchScalePosition(std::string message) {
+Autonomous::SwitchScalePosition Autonomous::GetSwitchScalePosition(
+    std::string message) {
     if (message[0] == 'L' && message[1] == 'L') {
         m_switchScalePosition = LL;
     }

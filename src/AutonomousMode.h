@@ -16,13 +16,30 @@ using namespace frc;
 
 namespace frc973 {
 class Disabled;
+class Drive;
+class Elevator;
+class Claw;
+
 class Autonomous {
 public:
-    enum SwitchScalePosition { LL, LR, RR, RL};
+    enum SwitchScalePosition
+    {
+        LL,
+        LR,
+        RR,
+        RL
+    };
 
-    enum SelectedAutoRoutine { noAuto, forward, lowGoal, highGoal};
+    enum SelectedAutoRoutine
+    {
+        noAuto,
+        forward,
+        lowGoal,
+        highGoal
+    };
 
-    Autonomous(Disabled *disabled);
+    Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator, Claw *claw,
+               ADXRS450_Gyro *gyro);
     virtual ~Autonomous();
 
     void AutonomousInit();
@@ -43,5 +60,10 @@ private:
     std::string m_scoringLocations;
     SwitchScalePosition m_switchScalePosition;
     SelectedAutoRoutine m_routine;
+
+    Drive *m_drive;
+    Elevator *m_elevator;
+    Claw *m_claw;
+    ADXRS450_Gyro *m_gyro;
 };
 };

@@ -11,6 +11,7 @@
 #include "src/info/RobotInfo.h"
 #include "lib/bases/DriveBase.h"
 #include "networktables/NetworkTableInstance.h"
+#include "lib/logging/LogSpreadsheet.h"
 
 using namespace frc;
 using namespace ctre;
