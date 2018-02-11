@@ -68,7 +68,7 @@ float Elevator::GetPosition() {
 
 void Elevator::TaskPeriodic(RobotMode mode) {
     m_positionCell->LogDouble(GetPosition());
-    DBStringPrintf(DBStringPos::DB_LINE4, "%f", GetPosition());
+    printf("Pos: %f\n", (float)m_elevatorMotor->GetSelectedSensorPosition(0));
     switch (m_elevatorState) {
         case manual:
             break;
@@ -77,18 +77,14 @@ void Elevator::TaskPeriodic(RobotMode mode) {
             m_elevatorState = ElevatorState::zeroing_goDown;
             break;
         case zeroing_goDown:
-            this->SetPower(-0.2);
-            printf("GetMsecTime()=%u, m_zeroingTime=%u, diff=%u",
-                   GetMsecTime(), m_zeroingTime,
-                   GetMsecTime() - m_zeroingTime);
+            m_elevatorMotor->Set(ControlMode::PercentOutput, -0.2);
             if (GetMsecTime() - m_zeroingTime > 1500) {
-                //m_elevatorState = ElevatorState::zeroing_stop;
-                printf("zeroing_goDown\n");
+                m_elevatorState = ElevatorState::zeroing_stop;
             }
             break;
         case zeroing_stop:
             m_elevatorMotor->GetSensorCollection().SetQuadraturePosition(0,0);
-            this->SetPower(0.0);
+            m_elevatorMotor->Set(ControlMode::PercentOutput, 0.0);
             m_elevatorState = ElevatorState::manual;
             break;
         case position:
