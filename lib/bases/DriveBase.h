@@ -51,7 +51,7 @@ public:
      * Should only be called from a child of DriveController.
      */
     virtual void SetDriveOutputIPS(double left, double right) = 0;
-    virtual void SetDriveOutputPos(double left, double right) = 0;
+    virtual void SetDriveOutputPosInches(double left, double right) = 0;
     virtual void SetDriveOutputVBus(double left, double right) = 0;
 };
 

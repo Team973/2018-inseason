@@ -355,7 +355,7 @@ void Drive::SetDriveOutputIPS(double left, double right) {
  * @param left  desired left Output
  * @param right desired right Output
  */
-void Drive::SetDriveOutputPos(double left, double right) {
+void Drive::SetDriveOutputPosInches(double left, double right) {
     m_leftDriveOutput = left;
     m_rightDriveOutput = right;
 

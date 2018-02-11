@@ -184,7 +184,7 @@ public:
     double GetAngularRate() const override;
 
     /*
-     * Used by the DriveController to set motor values in IPS
+     * Used by the DriveController to set motor values in inches/second
      *
      * @param left Velocity to send to leftDriveTalon
      * @param right Velocity to send to rightDriveTalon
@@ -197,7 +197,7 @@ public:
      * @param left Position to send to leftDriveTalon
      * @param right Position to send to rightDriveTalon
      */
-    void SetDriveOutputPos(double left, double right);
+    void SetDriveOutputPosInches(double left, double right);
 
     /*
      * Used by the DriveController to set motor values in percent
