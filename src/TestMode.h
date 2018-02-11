@@ -21,7 +21,8 @@ public:
         position
     };
     Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-         ObservableJoystick *tuning, Drive *drive, Elevator *elevator, Claw *claw);
+         ObservableJoystick *tuning, Drive *drive, Elevator *elevator,
+         Claw *claw);
     virtual ~Test();
 
     void TestInit();

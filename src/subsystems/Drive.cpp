@@ -325,31 +325,71 @@ double Drive::GetAngularRate() const {
 }
 
 /**
- * Calculates Drive Output and sets it from driver input or closed control loop
+ * Calculates Drive Output in Velocity (IPS) and sets it from driver input or
+ * closed control loop
  *
  * @param left  desired left Output
  * @param right desired right Output
  */
-void Drive::SetDriveOutput(ControlMode controlMode, double left, double right) {
+void Drive::SetDriveOutputIPS(double left, double right) {
     m_leftDriveOutput = left;
     m_rightDriveOutput = right;
 
-    if (controlMode == ControlMode::Velocity) {
-        m_leftDriveOutput /= DRIVE_IPS_FROM_CPDS;
-        m_rightDriveOutput /= DRIVE_IPS_FROM_CPDS;
-    }
-    else if (controlMode == ControlMode::Position) {
-        m_leftDriveOutput /= DRIVE_DIST_PER_CLICK;
-        m_rightDriveOutput /= DRIVE_DIST_PER_CLICK;
-    }
+    m_leftDriveOutput /= DRIVE_IPS_FROM_CPDS;
+    m_rightDriveOutput /= DRIVE_IPS_FROM_CPDS;
 
     if (std::isnan(m_leftDriveOutput) || std::isnan(m_rightDriveOutput)) {
-        m_leftDriveTalonA->Set(controlMode, 0.0);
-        m_rightDriveTalonA->Set(controlMode, 0.0);
+        m_leftDriveTalonA->Set(ControlMode::Velocity, 0.0);
+        m_rightDriveTalonA->Set(ControlMode::Velocity, 0.0);
     }
     else {
-        m_leftDriveTalonA->Set(controlMode, -m_leftDriveOutput);
-        m_rightDriveTalonA->Set(controlMode, m_rightDriveOutput);
+        m_leftDriveTalonA->Set(ControlMode::Velocity, -m_leftDriveOutput);
+        m_rightDriveTalonA->Set(ControlMode::Velocity, m_rightDriveOutput);
+    }
+}
+
+/**
+ * Calculates Drive Output in Position (Inches) and sets it from driver input or
+ * closed control loop
+ *
+ * @param left  desired left Output
+ * @param right desired right Output
+ */
+void Drive::SetDriveOutputPos(double left, double right) {
+    m_leftDriveOutput = left;
+    m_rightDriveOutput = right;
+
+    m_leftDriveOutput /= DRIVE_DIST_PER_CLICK;
+    m_rightDriveOutput /= DRIVE_DIST_PER_CLICK;
+
+    if (std::isnan(m_leftDriveOutput) || std::isnan(m_rightDriveOutput)) {
+        m_leftDriveTalonA->Set(ControlMode::Position, 0.0);
+        m_rightDriveTalonA->Set(ControlMode::Position, 0.0);
+    }
+    else {
+        m_leftDriveTalonA->Set(ControlMode::Position, -m_leftDriveOutput);
+        m_rightDriveTalonA->Set(ControlMode::Position, m_rightDriveOutput);
+    }
+}
+
+/**
+ * Calculates Drive Output in Percent Output and sets it from driver input or
+ * closed control loop
+ *
+ * @param left  desired left Output
+ * @param right desired right Output
+ */
+void Drive::SetDriveOutputVBus(double left, double right) {
+    m_leftDriveOutput = left;
+    m_rightDriveOutput = right;
+
+    if (std::isnan(m_leftDriveOutput) || std::isnan(m_rightDriveOutput)) {
+        m_leftDriveTalonA->Set(ControlMode::PercentOutput, 0.0);
+        m_rightDriveTalonA->Set(ControlMode::PercentOutput, 0.0);
+    }
+    else {
+        m_leftDriveTalonA->Set(ControlMode::PercentOutput, -m_leftDriveOutput);
+        m_rightDriveTalonA->Set(ControlMode::PercentOutput, m_rightDriveOutput);
     }
 }
 

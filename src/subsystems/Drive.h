@@ -184,19 +184,28 @@ public:
     double GetAngularRate() const override;
 
     /*
-     * Used by the DriveController to set motor values
+     * Used by the DriveController to set motor values in IPS
      *
-     * The unit of this command depends on the mode of the controller...
-     * If in PercentOutput mode (default), command is from -1.0 to 1.0 and
-     *      scales to voltage sent to motors
-     * If in Velocity mode, the command is the velocity setpoint in in/sec
-     * If in Positon mode, the command is the position setpoint in inches
-     *
-     * @param mode The ControlMode of the Talons
-     * @param left Output to send to leftDriveTalon
-     * @param right Output to send to rightDriveTalon
+     * @param left Velocity to send to leftDriveTalon
+     * @param right Velocity to send to rightDriveTalon
      */
-    void SetDriveOutput(ControlMode controlMode, double left, double right);
+    void SetDriveOutputIPS(double left, double right);
+
+    /*
+     * Used by the DriveController to set motor values in inches
+     *
+     * @param left Position to send to leftDriveTalon
+     * @param right Position to send to rightDriveTalon
+     */
+    void SetDriveOutputPos(double left, double right);
+
+    /*
+     * Used by the DriveController to set motor values in percent
+     *
+     * @param left Percent output to send to leftDriveTalon
+     * @param right Percent output to send to rightDriveTalon
+     */
+    void SetDriveOutputVBus(double left, double right);
 
     void TaskPeriodic(RobotMode mode);
 

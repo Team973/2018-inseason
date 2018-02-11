@@ -25,7 +25,7 @@ VelocityArcadeDriveController::~VelocityArcadeDriveController() {
 
 void VelocityArcadeDriveController::CalcDriveOutput(
     DriveStateProvider *state, DriveControlSignalReceiver *out) {
-    out->SetDriveOutput(ControlMode::Velocity, m_leftOutput, m_rightOutput);
+    out->SetDriveOutputIPS(m_leftOutput, m_rightOutput);
     DBStringPrintf(DBStringPos::DB_LINE4, "vAr l=%1.2lf r=%1.2lf", m_leftOutput,
                    m_rightOutput);
     printf("velocity l=%1.2lf r=%1.2lf\n", m_leftOutput, m_rightOutput);

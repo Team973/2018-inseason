@@ -13,7 +13,6 @@
 #include "src/info/RobotInfo.h"
 
 using namespace frc;
-using namespace ctre;
 
 namespace frc973 {
 
@@ -71,8 +70,7 @@ void PIDDriveController::CalcDriveOutput(DriveStateProvider *state,
                               MAX_ANGULAR_RATE_DEG_PER_SEC) *
                   m_speedCap * DRIVE_ARC_IN_PER_DEG;
 
-    out->SetDriveOutput(ControlMode::Velocity, throttle - turn,
-                        throttle + turn);
+    out->SetDriveOutputIPS(throttle - turn, throttle + turn);
 
     if (fabs(m_targetDist - m_prevDist) < m_distTolerance &&
         fabs(state->GetRate()) < m_distRateTolerance &&

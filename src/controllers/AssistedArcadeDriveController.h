@@ -11,7 +11,6 @@
 #include <stdio.h>
 
 using namespace frc;
-using namespace ctre;
 
 namespace frc973 {
 
