@@ -24,21 +24,24 @@ void Test::TestInit() {
 }
 
 void Test::TestPeriodic() {
-     double elevatorManualPower = -m_driverJoystick->GetRawAxis(DualAction::LeftYAxis);
+    double elevatorManualPower =
+        -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
 
-     if (fabs(elevatorManualPower) > 0.1 || m_elevatorMode == ElevatorMode::percentOutput) {
-         m_elevatorMode = ElevatorMode::percentOutput;
-         m_elevator->SetPower(elevatorManualPower);
-     }
-     else if (m_elevatorMode == ElevatorMode::zero) {
-     }
-     else if (m_elevatorMode == ElevatorMode::motionMagic) {
-     }
+    if (fabs(elevatorManualPower) > 0.1 ||
+        m_elevatorMode == ElevatorMode::percentOutput) {
+        m_elevatorMode = ElevatorMode::percentOutput;
+        m_elevator->SetPower(elevatorManualPower);
+    }
+    else if (m_elevatorMode == ElevatorMode::zero) {
+    }
+    else if (m_elevatorMode == ElevatorMode::motionMagic) {
+    }
 
     double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
-    double x = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
+    double x =
+        -m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
     bool quickturn = m_driverJoystick->GetRawButton(DualAction::LeftBumper);
-    
+
     if (m_driverJoystick->GetRawButton(DualAction::RightBumper)) {
         x /= 3.0;
         y /= 3.0;
@@ -102,14 +105,14 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
-                  m_elevatorMode = ElevatorMode::motionMagic;
-                  m_elevator->SetPosition(Elevator::SCALE_HIGH);
+                    m_elevatorMode = ElevatorMode::motionMagic;
+                    m_elevator->SetPosition(Elevator::SCALE_HIGH);
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
-                  m_elevatorMode = ElevatorMode::motionMagic;
-                  m_elevator->SetPosition(Elevator::SCALE_MID);
+                    m_elevatorMode = ElevatorMode::motionMagic;
+                    m_elevator->SetPosition(Elevator::SCALE_MID);
                 }
                 break;
             case DualAction::BtnA:
