@@ -35,9 +35,7 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor)
     m_elevatorMotor->ConfigContinuousCurrentLimit(5, 10);
     m_elevatorMotor->EnableVoltageCompensation(false);
     m_elevatorMotor->ConfigForwardSoftLimitThreshold(ELEVATOR_SOFT_HEIGHT_LIMIT / ELEVATOR_INCHES_PER_CLICK, 10);
-    m_elevatorMotor->ConfigReverseSoftLimitThreshold(0, 10);
     m_elevatorMotor->ConfigForwardSoftLimitEnable(true, 10);
-    m_elevatorMotor->ConfigReverseSoftLimitEnable(true, 10);
 
     m_elevatorMotor->Set(ControlMode::PercentOutput, 0.0);
     m_positionCell = new LogCell("Elevator Position", 32, true);
@@ -67,8 +65,6 @@ float Elevator::GetPosition() {
     return ELEVATOR_INCHES_PER_CLICK *
            ((float)m_elevatorMotor->GetSelectedSensorPosition(0));
 }
-int prev_vel = 0;
-uint32_t prev_time = 0;
 
 void Elevator::TaskPeriodic(RobotMode mode) {
     m_positionCell->LogDouble(GetPosition());
@@ -82,8 +78,12 @@ void Elevator::TaskPeriodic(RobotMode mode) {
             break;
         case zeroing_goDown:
             this->SetPower(-0.2);
-            if (GetMsecTime() - m_zeroingTime > 1500.0) {
-                m_elevatorState = ElevatorState::zeroing_stop;
+            printf("GetMsecTime()=%u, m_zeroingTime=%u, diff=%u",
+                   GetMsecTime(), m_zeroingTime,
+                   GetMsecTime() - m_zeroingTime);
+            if (GetMsecTime() - m_zeroingTime > 1500) {
+                //m_elevatorState = ElevatorState::zeroing_stop;
+                printf("zeroing_goDown\n");
             }
             break;
         case zeroing_stop:
