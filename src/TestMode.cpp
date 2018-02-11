@@ -4,12 +4,14 @@ using namespace frc;
 
 namespace frc973 {
 Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-           ObservableJoystick *tuning, Drive *drive, Elevator *elevator)
+           ObservableJoystick *tuning, Drive *drive, Elevator *elevator,
+           Claw *claw)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_tuningJoystick(tuning)
         , m_drive(drive)
         , m_elevator(elevator)
+        , m_claw(claw)
         , m_elevatorMode(ElevatorMode::percentOutput)
         , m_elevatorPosition(0.0) {
 }
@@ -151,12 +153,14 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::RightTrigger:
                 if (pressedP) {
+                    m_claw->cubeLaunch();
                 }
                 else {
                 }
                 break;
             case DualAction::RightBumper:
                 if (pressedP) {
+                    m_claw->push();
                 }
                 else {
                 }
@@ -171,14 +175,23 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::BtnA:
                 if (pressedP) {
+                    m_claw->open();
+                }
+                else {
+                    m_claw->grab();
                 }
                 break;
             case DualAction::BtnB:
                 if (pressedP) {
+                    m_claw->drop();
                 }
                 break;
             case DualAction::BtnX:
                 if (pressedP) {
+                    m_claw->kickOn();
+                }
+                else {
+                    m_claw->kickOff();
                 }
                 break;
             case DualAction::BtnY:

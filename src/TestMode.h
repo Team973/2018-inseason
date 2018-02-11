@@ -7,6 +7,7 @@
 #include "lib/util/Util.h"
 #include "src/subsystems/Drive.h"
 #include "src/subsystems/Elevator.h"
+#include "src/subsystems/Claw.h"
 
 using namespace frc;
 
@@ -20,7 +21,7 @@ public:
         position
     };
     Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-         ObservableJoystick *tuning, Drive *drive, Elevator *elevator);
+         ObservableJoystick *tuning, Drive *drive, Elevator *elevator, Claw *claw);
     virtual ~Test();
 
     void TestInit();
@@ -49,6 +50,7 @@ private:
     DriveMode m_driveMode;
 
     Elevator *m_elevator;
+    Claw *m_claw;
 
     ElevatorMode m_elevatorMode;
     double m_elevatorPosition;

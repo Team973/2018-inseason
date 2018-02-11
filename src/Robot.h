@@ -22,11 +22,13 @@
 #include "lib/helpers/JoystickHelper.h"
 #include "src/subsystems/Elevator.h"
 #include "src/subsystems/Claw.h"
+#include "src/subsystems/Intake.h"
 #include "src/subsystems/Hanger.h"
 #include "src/subsystems/Drive.h"
 #include "lib/logging/LogSpreadsheet.h"
 #include "lib/helpers/JoystickHelper.h"
 #include "lib/helpers/GreyCompressor.h"
+#include "lib/helpers/GreyTalon.h"
 #include "lib/bases/CoopMTRobot.h"
 #include "ctre/Phoenix.h"
 
@@ -45,7 +47,7 @@ public:
     Robot();
     virtual ~Robot();
 
-    void Initialize()  override;
+    void Initialize() override;
 
     void DisabledStart() override;
     void DisabledContinuous() override;
@@ -86,13 +88,16 @@ private:
 
     LogSpreadsheet *m_logger;
 
-    TalonSRX *m_clawLeftRoller;
-    TalonSRX *m_clawRightRoller;
-    DigitalInput *m_clawCubeSensor;
+    Solenoid *m_cubeClamp;
+    Solenoid *m_clawKicker;
+    TalonSRX *m_rightRoller;
+    TalonSRX *m_leftRoller;
+    DigitalInput *m_cubeSensor;
     TalonSRX *m_elevatorMotor;
 
     Elevator *m_elevator;
     Claw *m_claw;
+    Intake *m_intake;
     Drive *m_drive;
     Hanger *m_hanger;
 

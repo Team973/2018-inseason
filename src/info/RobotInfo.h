@@ -21,6 +21,12 @@ static const int RIGHT_DRIVE_C_VICTOR_ID = 3;
 // Elevator
 static const int ELEVATOR_CAN_ID = 4;
 
+// Solenoids
+static const int PCM_CAN_ID = 17;
+static const int CUBE_CLAMP_PCM_ID = 1;
+static const int CLAW_KICKER_PCM_ID = 2;
+static const int HANGER_PTO_PCM_ID = 0;
+
 // Claw
 static const int CLAW_LEFT_ROLLER_CAN_ID = 5;
 static const int CLAW_RIGHT_ROLLER_CAN_ID = 12;
@@ -30,8 +36,8 @@ static const int CUBE_BANNER_SENSOR_DIN = 0;
 static const int FORKLIFT_TALON_CAN_ID = 6;
 static const int FORKLIFT_VICTOR_ID = 11;
 
-// Solenoids
-static const int HANGER_PTO_PCM_ID = 1;
+// Digital
+static const int INTAKE_BEAM_BREAKER_SENSOR_DIN = 0;
 
 // Digital
 static const int PRESSURE_DIN_ID = 1;
