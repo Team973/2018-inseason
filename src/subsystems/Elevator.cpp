@@ -34,7 +34,8 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor)
     m_elevatorMotor->ConfigPeakCurrentLimit(0, 10);
     m_elevatorMotor->ConfigContinuousCurrentLimit(5, 10);
     m_elevatorMotor->EnableVoltageCompensation(false);
-    m_elevatorMotor->ConfigForwardSoftLimitThreshold(ELEVATOR_SOFT_HEIGHT_LIMIT / ELEVATOR_INCHES_PER_CLICK, 10);
+    m_elevatorMotor->ConfigForwardSoftLimitThreshold(
+        ELEVATOR_SOFT_HEIGHT_LIMIT / ELEVATOR_INCHES_PER_CLICK, 10);
     m_elevatorMotor->ConfigForwardSoftLimitEnable(true, 10);
 
     m_elevatorMotor->Set(ControlMode::PercentOutput, 0.0);
@@ -82,7 +83,7 @@ void Elevator::TaskPeriodic(RobotMode mode) {
             }
             break;
         case zeroing_stop:
-            m_elevatorMotor->GetSensorCollection().SetQuadraturePosition(0,0);
+            m_elevatorMotor->GetSensorCollection().SetQuadraturePosition(0, 0);
             m_elevatorMotor->Set(ControlMode::PercentOutput, 0.0);
             m_elevatorState = ElevatorState::manual;
             break;
@@ -90,6 +91,6 @@ void Elevator::TaskPeriodic(RobotMode mode) {
             break;
         default:
             break;
-        }
     }
+}
 }
