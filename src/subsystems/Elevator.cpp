@@ -68,7 +68,6 @@ float Elevator::GetPosition() {
 
 void Elevator::TaskPeriodic(RobotMode mode) {
     m_positionCell->LogDouble(GetPosition());
-    printf("Pos: %f\n", (float)m_elevatorMotor->GetSelectedSensorPosition(0));
     switch (m_elevatorState) {
         case manual:
             break;
