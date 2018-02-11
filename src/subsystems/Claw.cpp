@@ -1,4 +1,5 @@
 #include "src/subsystems/Claw.h"
+#include "lib/util/WrapDash.h"
 
 using namespace frc;
 
@@ -8,7 +9,7 @@ Claw::Claw(TaskMgr *scheduler, LogSpreadsheet *logger, Solenoid *cubeClamp,
         : m_scheduler(scheduler)
         , m_cubeClamp(cubeClamp)
         , m_clawKicker(clawKicker)
-        , m_clawState(Claw::ClawState::grabbed) {
+        , m_clawState(ClawState::grabbed) {
     this->m_scheduler->RegisterTask("Claw", this, TASK_PERIODIC);
     goToState(grabbed);
 }
@@ -41,14 +42,19 @@ void Claw::kickOff() {
     m_clawKicker->Set(kickIdle);
 }
 
+void Claw::cubeLaunch() {
+    goToState(preLaunch);
+}
+
 void Claw::TaskPeriodic(RobotMode mode) {
+    DBStringPrintf(DB_LINE7, "cs %d", m_clawState);
     switch (m_clawState) {
         case ClawState::released:
             break;
         case ClawState::grabbed:
             break;
         case ClawState::dropOpen:
-            if (GetMsecTime() - m_stateStartTimeMs > 100) {
+            if (GetMsecTime() - m_stateStartTimeMs > 1000) {
                 goToState(dropClosed);
             }
             break;
@@ -56,11 +62,24 @@ void Claw::TaskPeriodic(RobotMode mode) {
             goToState(grabbed);
             break;
         case ClawState::pushOpen:
-            if (GetMsecTime() - m_stateStartTimeMs > 100) {
+            if (GetMsecTime() - m_stateStartTimeMs > 1000) {
                 goToState(pushClosed);
             }
             break;
         case ClawState::pushClosed:
+            goToState(grabbed);
+            break;
+        case ClawState::preLaunch:
+            if (GetMsecTime() - m_stateStartTimeMs > 300) {
+                goToState(launch);
+            }
+            break;
+        case ClawState::launch:
+            if (GetMsecTime() - m_stateStartTimeMs > 1000) {
+                goToState(launchReset);
+            }
+            break;
+        case ClawState::launchReset:
             goToState(grabbed);
             break;
     }
@@ -90,6 +109,18 @@ void Claw::goToState(ClawState newState) {
             m_clawKicker->Set(active);
             break;
         case ClawState::pushClosed:
+            m_cubeClamp->Set(clawClosed);
+            m_clawKicker->Set(kickIdle);
+            break;
+        case ClawState::preLaunch:
+            m_cubeClamp->Set(clawClosed);
+            m_clawKicker->Set(active);
+            break;
+        case ClawState::launch:
+            m_cubeClamp->Set(clawOpen);
+            m_clawKicker->Set(active);
+            break;
+        case ClawState::launchReset:
             m_cubeClamp->Set(clawClosed);
             m_clawKicker->Set(kickIdle);
             break;

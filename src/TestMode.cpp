@@ -4,7 +4,8 @@ using namespace frc;
 
 namespace frc973 {
 Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-           ObservableJoystick *tuning, Drive *drive, Elevator *elevator, Claw *claw)
+           ObservableJoystick *tuning, Drive *drive, Elevator *elevator,
+           Claw *claw)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_tuningJoystick(tuning)
@@ -152,6 +153,7 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::RightTrigger:
                 if (pressedP) {
+                    m_claw->cubeLaunch();
                 }
                 else {
                 }

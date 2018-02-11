@@ -22,6 +22,7 @@ static const int RIGHT_DRIVE_C_VICTOR_ID = 3;
 static const int ELEVATOR_CAN_ID = 4;
 
 // Solenoids
+static const int PCM_ID = 17;
 static const int CUBE_CLAMP_PCM_ID = 1;
 static const int CLAW_KICKER_PCM_ID = 2;
 static const int HANGER_PTO_PCM_ID = 0;

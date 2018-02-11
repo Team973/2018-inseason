@@ -44,6 +44,9 @@ public:
         dropClosed,
         pushOpen,
         pushClosed,
+        preLaunch,
+        launch,
+        launchReset
     };
 
     void open();
@@ -71,6 +74,10 @@ public:
     void kickOff();
     /*
      * When called, deactivates clawKicker
+     */
+    void cubeLaunch();
+    /*
+     * When called, launches cube
      */
     void TaskPeriodic(RobotMode mode);
 
