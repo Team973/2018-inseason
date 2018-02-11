@@ -5,41 +5,51 @@
  *      Author: Andrew
  */
 
-#include "src/controllers/PIDDrive.h"
+#include "src/controllers/PIDDriveController.h"
 #include "lib/helpers/PID.h"
 #include <stdio.h>
 #include "lib/util/WrapDash.h"
 #include <math.h>
+#include "src/info/RobotInfo.h"
+
+using namespace frc;
 
 namespace frc973 {
 
-static constexpr double DRIVE_PID_KP = 0.025;  // 0.030;
+// Drive pid takes in error in inches and outputs velocity in inches/sec
+static constexpr double DRIVE_PID_KP = 2.6;
 static constexpr double DRIVE_PID_KI = 0.0;
-static constexpr double DRIVE_PID_KD = 0.00;
+static constexpr double DRIVE_PID_KD = 0.05;
 
-static constexpr double TURN_PID_KP = 0.0105;
+// Turn pid takes in error in degrees and outputs velocity in degrees/sec
+static constexpr double TURN_PID_KP = 8.0;
 static constexpr double TURN_PID_KI = 0.0;
-static constexpr double TURN_PID_KD = 0.00135;
+static constexpr double TURN_PID_KD = 0.0;
 
-static constexpr double MAX_SPEED = 150;
+static constexpr double MAX_LINEAR_SPEED_IPS =
+    60.0;  // reduced for testing from: 150.0;          // in in/sec
+static constexpr double MAX_ANGULAR_RATE_DEG_PER_SEC =
+    180.0;  // reduced for testing from: 360.0;  // in degrees/sec
+
+static constexpr double DRIVE_ARC_IN_PER_DEG =
+    DRIVE_WIDTH * Constants::PI / 360.0;
 
 PIDDriveController::PIDDriveController()
         : m_prevDist(0.0)
         , m_prevAngle(0.0)
         , m_targetDist(0.0)
         , m_targetAngle(0.0)
-        , m_onTarget(0.0)
-        , m_drivePID(nullptr)
-        , m_turnPID(nullptr)
-        , m_distEnabled(true)
+        , m_onTarget(false)
+        , m_drivePID(new PID(DRIVE_PID_KP, DRIVE_PID_KI, DRIVE_PID_KD))
+        , m_turnPID(new PID(TURN_PID_KP, TURN_PID_KI, TURN_PID_KD))
         , m_speedCap(1.0)
-        , m_lastThrottle(0.0)
         , m_distTolerance(DEFAULT_DIST_TOLERANCE)
         , m_distRateTolerance(DEFAULT_DIST_RATE_TOLERANCE)
         , m_angleTolerance(DEFAULT_ANGLE_TOLERANCE)
         , m_angleRateTolerance(DEFAULT_ANGLE_RATE_TOLERANCE) {
-    m_drivePID = new PID(DRIVE_PID_KP, DRIVE_PID_KI, DRIVE_PID_KD);
-    m_turnPID = new PID(TURN_PID_KP, TURN_PID_KI, TURN_PID_KD);
+    m_drivePID->SetBounds(-MAX_LINEAR_SPEED_IPS, MAX_LINEAR_SPEED_IPS);
+    m_turnPID->SetBounds(-MAX_ANGULAR_RATE_DEG_PER_SEC,
+                         MAX_ANGULAR_RATE_DEG_PER_SEC);
 }
 
 PIDDriveController::~PIDDriveController() {
@@ -49,66 +59,41 @@ PIDDriveController::~PIDDriveController() {
 
 void PIDDriveController::CalcDriveOutput(DriveStateProvider *state,
                                          DriveControlSignalReceiver *out) {
-    if (m_needSetControlMode == true) {
-        out->SetDriveControlMode(
-            ctre::phoenix::motorcontrol::ControlMode::Velocity);
-        m_needSetControlMode = false;
-    }
-
     m_prevDist = state->GetDist();
     m_prevAngle = state->GetAngle();
 
-    double throttle;
-    double turn = Util::bound(m_turnPID->CalcOutput(m_prevAngle), -0.5, 0.5);
+    double throttle = Util::bound(m_drivePID->CalcOutput(m_prevDist),
+                                  -MAX_LINEAR_SPEED_IPS, MAX_LINEAR_SPEED_IPS) *
+                      m_speedCap;
+    double turn = Util::bound(m_turnPID->CalcOutput(m_prevAngle),
+                              -MAX_ANGULAR_RATE_DEG_PER_SEC,
+                              MAX_ANGULAR_RATE_DEG_PER_SEC) *
+                  m_speedCap * DRIVE_ARC_IN_PER_DEG;
 
-    if (m_distEnabled) {
-        throttle = m_drivePID->CalcOutput(m_prevDist);
+    out->SetDriveOutputIPS(throttle - turn, throttle + turn);
+
+    if (fabs(m_targetDist - m_prevDist) < m_distTolerance &&
+        fabs(state->GetRate()) < m_distRateTolerance &&
+        fabs(m_targetAngle - m_prevAngle) < m_angleTolerance &&
+        fabs(state->GetAngularRate()) < m_angleRateTolerance) {
+        m_onTarget = true;
     }
     else {
-        throttle = 0.0;
+        m_onTarget = false;
     }
 
-    if (throttle > m_lastThrottle + 0.09) {
-        throttle = m_lastThrottle + 0.09;
-    }
-    m_lastThrottle = throttle;
+    DBStringPrintf(DBStringPos::DB_LINE3, "p %2.2lf t %2.2lf", throttle, turn);
 
-    DBStringPrintf(DBStringPos::DB_LINE3, "p %2.2lf t %2.2lf",
-                   MAX_SPEED * m_speedCap * throttle,
-                   MAX_SPEED * m_speedCap * turn);
-
-    printf("dist target %lf, dist curr %lf, dist error: %lf \n", m_targetDist,
-           m_prevDist, m_targetDist - m_prevDist);
+    printf("dt %lf, dc %lf, de: %lf \n", m_targetDist, m_prevDist,
+           m_targetDist - m_prevDist);
     printf("angle target %lf, angle curr %lf, turn error %lf\n", m_targetAngle,
            m_prevAngle, m_targetAngle - m_prevAngle);
     printf("throttle %lf  turn %lf\n", throttle, turn);
 
+    DBStringPrintf(DBStringPos::DB_LINE5, "dt %5.0lf, dc %5.0lf", m_targetDist,
+                   m_prevDist);
     DBStringPrintf(DBStringPos::DB_LINE6, "err d %.3lf a %.3lf",
-                   m_prevDist - m_targetDist, m_prevAngle - m_targetAngle);
-
-    out->SetDriveOutput(MAX_SPEED * m_speedCap * (throttle - turn),
-                        MAX_SPEED * m_speedCap * (throttle + turn));
-
-    if (m_quickExit == false) {
-        if ((m_distEnabled == false ||
-             (fabs(m_targetDist - m_prevDist) < m_distTolerance &&
-              fabs(state->GetRate()) < m_distRateTolerance)) &&
-            fabs(m_targetAngle - m_prevAngle) < m_angleTolerance &&
-            fabs(state->GetAngularRate()) < m_angleRateTolerance) {
-            m_onTarget = true;
-        }
-        else {
-            m_onTarget = false;
-        }
-    }
-    else {
-        if (fabs(m_targetDist - m_prevDist) < m_distTolerance) {
-            m_onTarget = true;
-        }
-        else {
-            m_onTarget = false;
-        }
-    }
+                   m_targetDist - m_prevDist, m_targetAngle - m_prevAngle);
 }
 
 /*
@@ -142,6 +127,5 @@ void PIDDriveController::SetTarget(double dist, double angle,
     m_distRateTolerance = DEFAULT_DIST_RATE_TOLERANCE;
     m_angleTolerance = DEFAULT_ANGLE_TOLERANCE;
     m_angleRateTolerance = DEFAULT_ANGLE_RATE_TOLERANCE;
-    m_quickExit = false;
 }
 }

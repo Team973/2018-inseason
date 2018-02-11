@@ -50,7 +50,7 @@ private:
 ```
 
 ### Rule #2: Naming variables according to scope
-Member, static, and global variables should be named starting with `m_`, `s_`, or `g_` respectively. In declaring member variables in a class, there should be a space between the type and the name.
+Member, static, and global variables should be named starting with `m_`, `s_`, or `g_` respectively. In declaring member variables in a class, there should be a space between the type and the name. Declaring constants should have all characters in uppercase and should use underscores instead of spaces.
 ```c++
 int g_value = 10
 static const double  TALON_ID = 0;
@@ -227,5 +227,33 @@ Autonomous::Autonomous(Disabled *disabled)
         , m_forwardAuto(new ForwardAuto())
         , m_disabled(disabled) {
     // constructor body
+}
+```
+
+### Rule #17: `enum` vs. `enum class`
++Use an `enum class` rather than `enum` when possible. if using an `enum`, having the same name for an item in two or more enumerations will give an error and will cause confusion when someone is reading your code. Using an `enum class` instead makes our code easier to read and compile since we have to explicitly call what enum class we are using.
+
+``` c++
+enum class PandaType {
+    Red,   // if we used regular enum, this would conflict with TulipColor::Red
+    Giant,
+    Qunling
+};
+
+enum class TulipColor {
+    Red,    // if we used regular enum, this would conflict with PandaType::Red
+    Pink,
+    Purple,
+    Yellow
+};
+
+void SaveThePandas(PandaType type) {
+    // TODO
+}
+
+int main(void) {
+    SaveThePandas(PandaType::Red);
+    // You must explicitly reference PandaType to use its own definition of Red. This makes it
+    // easier to read because you can look for the definition of PandaType.  
 }
 ```
