@@ -21,8 +21,10 @@ def openPointStructs(source):
 def writeHeader(target):
     header = open(target, "w+")
     leftTraj, rightTraj, sourceJSON = openPointStructs(jsonPath)
-    header.write('''#include "path_to_pathfinder_struct_definitions.h"
-    namespace generated_profiles {
+    header.write('''#include "lib/trajectories/structs.h"
+
+namespace generated_profiles {
+
     TrajectoryDescription ''' + sourceJSON["name"])
     header.write('''{{
     .timestep = {}

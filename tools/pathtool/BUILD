@@ -41,4 +41,5 @@ genrule(
         "sample.json",
     ],
     cmd = "$(location :generatePath) $(location sample.json) $@ $(location //third_party/pathfinder:pathfinder_cdll.so)",
+    visibility = ["//visibility:public"],
 )
