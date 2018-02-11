@@ -21,11 +21,6 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_elevatorMotor->SetSensorPhase(false);
     m_elevatorMotor->SetNeutralMode(NeutralMode::Brake);
 
-    m_elevatorMotor->ConfigNominalOutputForward(0.0, 10);
-    m_elevatorMotor->ConfigNominalOutputReverse(0.0, 10);
-    m_elevatorMotor->ConfigPeakOutputForward(1.0, 10);
-    m_elevatorMotor->ConfigPeakOutputReverse(-1.0, 10);
-
     m_elevatorMotor->Config_kP(0, 0.05, 10);
     m_elevatorMotor->Config_kI(0, 0.0, 10);
     m_elevatorMotor->Config_kD(0, 0.0, 10);
@@ -70,32 +65,5 @@ void Elevator::Reset() {
 
 void Elevator::TaskPeriodic(RobotMode mode) {
     m_positionCell->LogDouble(m_elevatorMotor->GetSelectedSensorPosition(0));
-    printf("Elevator Task Periodic\n");
-    switch (m_currLevel) {
-        case zero:
-            this->SetMotionMagic(0.0);
-            break;
-        case vault:
-            this->SetMotionMagic(3.0);
-            break;
-        case lowGoal:
-            this->SetMotionMagic(30.0);
-            break;
-        case scaleLow:
-            this->SetMotionMagic(50.0);
-            break;
-        case scaleMid:
-            this->SetMotionMagic(60.0);
-            break;
-        case scaleHigh:
-            this->SetMotionMagic(70.0);
-            break;
-        case manual:
-            this->SetPower(0.0);
-            break;
-        default:
-            this->Reset();
-            break;
-    }
 }
 }

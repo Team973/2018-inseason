@@ -77,19 +77,12 @@ cc_library(
     name = "wpilib",
     srcs = glob([
             "wpilibc/src/main/native/cpp/**/*.cpp",
-    ],
-    exclude = [
-        "wpilibc/src/main/native/cpp/CameraServer.cpp",
-        "wpilibc/src/main/native/cpp/vision/VisionRunner.cpp",
-        ],
-    ),
+    ]),
     hdrs = glob([
         "wpilibc/src/main/native/include/**/*.h",
         "wpilibc/src/main/native/include/**/*.inc",
     ],
     exclude = [
-        "wpilibc/src/main/native/include/CameraServer.h",
-        "wpilibc/src/main/native/include/vision/VisionRunner.h",
         "wpilibc/src/main/native/include/WPILibVersion.h",
         ],
     ),
@@ -110,6 +103,7 @@ cc_library(
         ":WPILibVersion",
         "//third_party/ntcore:ntcore",
         "//third_party/wpiutil:wpiutil",
+        "//third_party/cscore:cscore",
     ],
     linkstatic = 1,
     visibility = ["//visibility:public"],
