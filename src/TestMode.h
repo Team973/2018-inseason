@@ -13,7 +13,6 @@ using namespace frc;
 
 namespace frc973 {
 class Test {
-
 public:
     Test(ObservableJoystick *driver, ObservableJoystick *codriver,
          ObservableJoystick *tuning, Drive *drive, Elevator *elevator,
@@ -31,9 +30,9 @@ private:
     {
         percentOutput,
         motionMagic,
-        position
+        zero
     };
-  
+
     enum DriveMode
     {
         AssistedArcade,
@@ -46,7 +45,7 @@ private:
         Trap,
         Velocity
     };
-  
+
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
     ObservableJoystick *m_tuningJoystick;
