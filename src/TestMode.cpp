@@ -12,8 +12,7 @@ Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_drive(drive)
         , m_elevator(elevator)
         , m_claw(claw)
-        , m_elevatorMode(ElevatorMode::percentOutput)
-        , m_elevatorPosition(0.0) {
+        , m_elevatorMode(ElevatorMode::percentOutput) {
 }
 
 Test::~Test() {
@@ -25,17 +24,28 @@ void Test::TestInit() {
 }
 
 void Test::TestPeriodic() {
+    double elevatorManualPower =
+        -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
+
+    if (fabs(elevatorManualPower) > 0.1 ||
+        m_elevatorMode == ElevatorMode::percentOutput) {
+        m_elevatorMode = ElevatorMode::percentOutput;
+        m_elevator->SetPower(elevatorManualPower);
+    }
+    else if (m_elevatorMode == ElevatorMode::zero) {
+    }
+    else if (m_elevatorMode == ElevatorMode::motionMagic) {
+    }
+
     double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
     double x =
         -m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
     bool quickturn = m_driverJoystick->GetRawButton(DualAction::LeftBumper);
+
     if (m_driverJoystick->GetRawButton(DualAction::RightBumper)) {
         x /= 3.0;
         y /= 3.0;
     }
-
-    printf("%lf", x);
-    printf("%lf", y);
 
     if (m_driveMode == DriveMode::AssistedArcade) {
         m_drive->AssistedArcadeDrive(y, x);
@@ -69,12 +79,12 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::motionMagic;
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::position;
+                    m_elevatorMode = ElevatorMode::zero;
+                    m_elevator->Reset();
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:
@@ -95,10 +105,14 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
+                    m_elevatorMode = ElevatorMode::motionMagic;
+                    m_elevator->SetPosition(Elevator::SCALE_HIGH);
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
+                    m_elevatorMode = ElevatorMode::motionMagic;
+                    m_elevator->SetPosition(Elevator::SCALE_MID);
                 }
                 break;
             case DualAction::BtnA:
@@ -137,18 +151,26 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
         switch (button) {
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
+                    m_elevatorMode = ElevatorMode::motionMagic;
+                    m_elevator->SetPosition(Elevator::GROUND);
                 }
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
+                    m_elevatorMode = ElevatorMode::motionMagic;
+                    m_elevator->SetPosition(Elevator::LOW_GOAL);
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
+                    m_elevatorMode = ElevatorMode::motionMagic;
+                    m_elevator->SetPosition(Elevator::SCALE_LOW);
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
+                    m_elevatorMode = ElevatorMode::motionMagic;
+                    m_elevator->SetPosition(Elevator::VAULT);
                 }
                 break;
             case DualAction::RightTrigger:

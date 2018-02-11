@@ -20,6 +20,8 @@ static const int RIGHT_DRIVE_C_VICTOR_ID = 3;
 
 // Elevator
 static const int ELEVATOR_CAN_ID = 4;
+static const double ELEVATOR_INCHES_PER_CLICK = 8.0 / 4096.0;
+static const int ELEVATOR_SOFT_HEIGHT_LIMIT = 80;
 
 // Solenoids
 static const int PCM_CAN_ID = 17;
