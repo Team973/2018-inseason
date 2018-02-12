@@ -30,9 +30,13 @@ public:
         return m_done;
     }
 
-    void Start() override;
+    void Start() override {
+        printf("Turning on Trap Mode\n");
+    }
 
-    void Stop() override;
+    void Stop() override {
+        printf("Turning off Trap Mode\n");
+    }
 
     double DistFromStart() const;
     double AngleFromStart() const;
@@ -51,7 +55,6 @@ private:
     PID m_a_pos_pid, m_a_vel_pid;
 
     bool m_done;
-    bool m_needSetControlMode;
 
     static constexpr double MAX_VELOCITY = 130;       // in/sec
     static constexpr double MAX_ACCELERATION = 10.0;  // in/sec^2

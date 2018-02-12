@@ -1,8 +1,8 @@
 /*
- * ArcadeDrive.h
+ * VelocityArcadeDriveController.h
  *
- *  Created on: Oct 30, 2015
- *      Author: Andrew
+ *  Created on: Feb 3, 2018
+ *      Author: Kyle
  */
 
 #pragma once
@@ -14,10 +14,10 @@ using namespace frc;
 
 namespace frc973 {
 
-class ArcadeDriveController : public DriveController {
+class VelocityArcadeDriveController : public DriveController {
 public:
-    ArcadeDriveController();
-    virtual ~ArcadeDriveController();
+    VelocityArcadeDriveController();
+    virtual ~VelocityArcadeDriveController();
 
     /*
      * Calculate motor output given the most recent joystick commands.
@@ -40,21 +40,15 @@ public:
     void SetJoysticks(double throttle, double turn);
 
     void Start() override {
-        m_needSetControlMode = true;
-        printf("Turning on Arcade Mode\n");
+        printf("Turning on Velocity Arcade Mode\n");
     }
 
     void Stop() override {
-        printf("Turning off arcade Mode\n");
+        printf("Turning off Velocity Arcade Mode\n");
     }
 
 private:
     double m_leftOutput;
     double m_rightOutput;
-    bool m_needSetControlMode;
-
-    static constexpr double THROTTLE_MAX = 130;  // in inches/sec
-    static constexpr double TURN_MAX =
-        4.0;  // in radians/sec... 6.3radians ~= 360degrees
 };
 }

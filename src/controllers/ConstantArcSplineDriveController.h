@@ -1,8 +1,17 @@
+/**
+ * ConstantArcSplineDriveController.h
+ * Created On: Summer of 2017
+ * Author: Kyle
+ *
+ **/
+
 #pragma once
 
 #include "lib/bases/DriveBase.h"
 #include "lib/helpers/PID.h"
 #include "lib/logging/LogSpreadsheet.h"
+#include "lib/profiles/MotionProfile.h"
+#include "ctre/Phoenix.h"
 #include <stdio.h>
 
 using namespace frc;
@@ -17,9 +26,10 @@ public:
 
     void SetTarget(DriveBase::RelativeTo relativeTo, double dist, double angle);
 
-    ConstantArcSplineDriveController *SetHalt(bool start_halt, bool end_halt);
-    ConstantArcSplineDriveController *SetConstraints(double max_vel,
+    ConstantArcSplineDriveController *SetMaxVelAccel(double max_vel,
                                                      double max_acc);
+    ConstantArcSplineDriveController *SetStartEndVel(double start_vel,
+                                                     double end_vel);
 
     void CalcDriveOutput(DriveStateProvider *state,
                          DriveControlSignalReceiver *out) override;
@@ -40,7 +50,7 @@ private:
     double m_dist, m_angle;
     double m_dist_offset, m_angle_offset, m_time_offset;
     double m_max_vel, m_max_acc;
-    bool m_start_halt, m_end_halt;
+    double m_start_vel, m_end_vel;
 
     /* pid for linear {pos,vel} */
     PID m_l_pos_pid, m_l_vel_pid;
@@ -52,7 +62,7 @@ private:
     bool m_needSetControlMode;
 
     static constexpr double MAX_VELOCITY = 130;       // in/sec
-    static constexpr double MAX_ACCELERATION = 10.0;  // in/sec^2
+    static constexpr double MAX_ACCELERATION = 70.0;  // in/sec^2
 
     LogCell *m_l_pos_setpt_log;
     LogCell *m_l_pos_real_log;
@@ -65,5 +75,7 @@ private:
     LogCell *m_max_acc_log;
     LogCell *m_dist_endgoal_log;
     LogCell *m_angle_endgoal_log;
+    LogCell *m_left_output;
+    LogCell *m_right_output;
 };
 }

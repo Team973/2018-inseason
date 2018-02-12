@@ -13,6 +13,7 @@
 #include "lib/logging/LogSpreadsheet.h"
 #include "src/info/RobotInfo.h"
 #include "lib/helpers/JoystickHelper.h"
+#include "lib/util/Util.h"
 
 using namespace frc;
 
@@ -22,60 +23,49 @@ class LogSpreadsheet;
 
 class Elevator : public CoopTask {
 public:
-    enum Level
+    enum ElevatorState
     {
-        zero,
-        vault,
-        lowGoal,
-        scaleLow,
-        scaleMid,
-        scaleHigh,
-        manual
+        manual,
+        zeroing_start,
+        position,
+        zeroing_goDown,
+        zeroing_stop
     };
 
-    Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
-             ObservableJoystick *driver, TalonSRX *motor);
+    static constexpr double GROUND = 0.0;
+    static constexpr double VAULT = 3.0;
+    static constexpr double LOW_GOAL = 30.0;
+    static constexpr double SCALE_LOW = 64.0;
+    static constexpr double SCALE_MID = 70.0;
+    static constexpr double SCALE_HIGH = 78.0;
+
+    Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor);
     virtual ~Elevator();
 
-    /**
-     * Sets Elevator Talon Control Mode
-     *
-     * @param mode: the control mode being set to for the talon.
-     **/
-    void SetControlMode(ControlMode mode, double value);
     /**
      * Sets Elevator Position
      *
      * @param position: the position goal
      **/
     void SetPosition(double position);
+
     /**
      * Sets Elevator Power
      *
      * @param power: power being sent to the motor from -1.0 to 1.0
      **/
     void SetPower(double power);
-    /**
-     * Sets Elevator Talon Control Mode to Motion Magic and uses Motion
-     *profiling to set position goal
-     *
-     * @param position: the position goal of the elevator
-     **/
-    void SetMotionMagic(double position);
-
-    /**
-     * Sets Elevator Level
-     *
-     * @param level: the level the elevator should be in (refer to enum above
-     *for choices)
-     **/
-    void SetLevel(Level level);
 
     /**
      * Resets elevator subsystem by setting position to zero
      *  and setting control modes to % output
      **/
     void Reset();
+
+    /**
+     * @return: returns current elevator position in sensor units
+     **/
+    float GetPosition();
 
     /**
      * Update function synonymous to TeleopContinuous that gets called
@@ -89,9 +79,8 @@ private:
     TalonSRX *m_elevatorMotor;
 
     double m_position;
-    Level m_currLevel;
-    motorcontrol::ControlMode m_talonMode;
-    ObservableJoystick *m_joystick;
+    uint32_t m_zeroingTime;
+    ElevatorState m_elevatorState;
     LogCell *m_positionCell;
 };
 }
