@@ -39,15 +39,15 @@ void Intake::AutomatedPull() {
 
 void Intake::RegularPull() {
     m_leftRoller->Set(ControlMode::PercentOutput,
-                      -1.0);  // Negative output will cause intake to intake
-    m_rightRoller->Set(ControlMode::PercentOutput, -1.0);
+                      -0.7);  // Negative output will cause intake to intake
+    m_rightRoller->Set(ControlMode::PercentOutput, -0.7);
 }
 
 void Intake::Eject() {
     printf("Ejecting\n");
     m_leftRoller->Set(ControlMode::PercentOutput,
-                      1.0);  // Positive output will cause intake to spit out
-    m_rightRoller->Set(ControlMode::PercentOutput, 1.0);
+                      0.7);  // Positive output will cause intake to spit out
+    m_rightRoller->Set(ControlMode::PercentOutput, 0.7);
 }
 
 void Intake::Stop() {

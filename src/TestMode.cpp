@@ -192,18 +192,22 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 if (pressedP) {
                     m_intake->RegularPull();
                     m_intake->LowerIntake();
+                    m_claw->open();
                 }
                 else {
                     m_intake->Stop();
+                    m_claw->grab();
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
                     m_intake->Eject();
                     m_intake->LowerIntake();
+                    m_claw->open();
                 }
                 else {
                     m_intake->Stop();
+                    m_claw->grab();
                 }
                 break;
             case DualAction::BtnA:
