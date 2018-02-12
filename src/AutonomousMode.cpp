@@ -11,7 +11,7 @@ Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
                        Claw *claw, ADXRS450_Gyro *gyro)
         : m_noAuto(new NoAuto())
         , m_forwardAuto(new ForwardAuto(drive))
-        , m_switchAuto(new SwitchAuto(drive))
+        , m_switchAuto(new SwitchAuto(drive, elevator, claw))
         , m_disabled(disabled)
         , m_scoringLocations("")
         , m_switchScalePosition(SwitchScalePosition::LL)
@@ -27,7 +27,7 @@ Autonomous::~Autonomous() {
 
 void Autonomous::AutonomousInit() {
     // Remember to zero all sensors here
-    // m_elevator->SetMotion()
+    m_elevator->SetPosition(Elevator::GROUND);
     m_gyro->Reset();
     m_claw->grab();
     std::cout << "Autonomous Start" << std::endl;
