@@ -52,6 +52,10 @@ public:
      **/
     bool IsCubeIn();
 
+    void LowerIntake();
+
+    void RaiseIntake();
+
     void TaskPeriodic(RobotMode mode);
 
 private:

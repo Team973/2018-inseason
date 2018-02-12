@@ -59,6 +59,14 @@ bool Intake::IsCubeIn() {
     return m_cubeSensor->Get();
 }
 
+void Intake::LowerIntake() {
+    m_position->Set(true);
+}
+
+void Intake::RaiseIntake() {
+    m_position->Set(false);
+}
+
 void Intake::TaskPeriodic(RobotMode mode) {
 }
 }

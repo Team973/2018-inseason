@@ -191,6 +191,7 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::LeftBumper:
                 if (pressedP) {
                     m_intake->RegularPull();
+                    m_intake->LowerIntake();
                 }
                 else {
                     m_intake->Stop();
@@ -199,6 +200,7 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::LeftTrigger:
                 if (pressedP) {
                     m_intake->Eject();
+                    m_intake->LowerIntake();
                 }
                 else {
                     m_intake->Stop();
