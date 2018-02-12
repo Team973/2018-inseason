@@ -51,7 +51,9 @@ Robot::Robot()
         , m_compressor(
               new GreyCompressor(m_airPressureSwitch, m_compressorRelay, this))
         , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick,
-                                  m_tuningJoystick))
+                                  m_tuningJoystick, m_forkCamera,
+                                  m_intakeCamera,
+                                  CameraServer::GetInstance()->GetServer()))
         , m_autonomous(new Autonomous(m_disabled))
         , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick,
                               m_tuningJoystick))
@@ -65,6 +67,12 @@ Robot::~Robot() {
 
 void Robot::Initialize() {
     m_compressor->Enable();
+    m_intakeCamera = CameraServer::GetInstance()->StartAutomaticCapture(0);
+    m_forkCamera = CameraServer::GetInstance()->StartAutomaticCapture(1);
+    m_intakeCamera.SetVideoMode(VideoMode::PixelFormat::kMJPEG, 640, 360, 30);
+    m_forkCamera.SetVideoMode(VideoMode::PixelFormat::kMJPEG, 640, 360, 30);
+    m_cameraServer = CameraServer::GetInstance()->GetServer();
+    CameraServer::GetInstance()->GetServer().SetSource(m_intakeCamera);
 }
 
 void Robot::DisabledStart() {
