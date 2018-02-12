@@ -166,7 +166,7 @@ public:
      *        hand).
      */
     float GetRawAxisWithDeadband(int axis, bool fSquared = false,
-                                 float threshold = DEADBAND_INPUT_THRESHOLD);
+                                 double threshold = DEADBAND_INPUT_THRESHOLD);
 
     /*
      * Check whether the up button on the d pad is pressed

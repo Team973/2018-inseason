@@ -36,8 +36,7 @@ Robot::Robot()
         , m_leftRoller(new GreyTalonSRX(CLAW_LEFT_ROLLER_CAN_ID))
         , m_cubeSensor(new DigitalInput(INTAKE_BEAM_BREAKER_SENSOR_DIN))
         , m_elevatorMotor(new TalonSRX(ELEVATOR_CAN_ID))
-        , m_elevator(
-              new Elevator(this, m_logger, m_driverJoystick, m_elevatorMotor))
+        , m_elevator(new Elevator(this, m_logger, m_elevatorMotor))
         , m_claw(new Claw(this, m_logger, m_cubeClamp, m_clawKicker))
         , m_intake(new Intake(this, m_logger, m_rightRoller, m_leftRoller,
                               m_cubeSensor))
@@ -117,7 +116,7 @@ void Robot::TestStop() {
     m_test->TestStop();
 }
 
-void Robot::RobotPeriodic() {
+void Robot::AllStateContinuous() {
     // NetworkTable Battery Voltage
     SmartDashboard::PutNumber("misc/pdp/batteryvoltage", m_pdp->GetVoltage());
 }

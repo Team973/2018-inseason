@@ -31,6 +31,7 @@
 #include "lib/helpers/GreyTalon.h"
 #include "lib/bases/CoopMTRobot.h"
 #include "ctre/Phoenix.h"
+#include "lib/helpers/GreyTalon.h"
 
 using namespace frc;
 using namespace ctre;
@@ -65,7 +66,7 @@ public:
     void TestContinuous() override;
     void TestStop() override;
 
-    void RobotPeriodic() override;
+    void AllStateContinuous() override;
 
     void ObserveJoystickStateChange(uint32_t port, uint32_t button,
                                     bool pressedP) override;

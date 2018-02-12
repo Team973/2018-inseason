@@ -14,12 +14,6 @@ using namespace frc;
 namespace frc973 {
 class Test {
 public:
-    enum ElevatorMode
-    {
-        percentOutput,
-        motionMagic,
-        position
-    };
     Test(ObservableJoystick *driver, ObservableJoystick *codriver,
          ObservableJoystick *tuning, Drive *drive, Elevator *elevator,
          Claw *claw);
@@ -32,10 +26,13 @@ public:
     void HandleTestButton(uint32_t port, uint32_t button, bool pressedP);
 
 private:
-    ObservableJoystick *m_driverJoystick;
-    ObservableJoystick *m_operatorJoystick;
-    ObservableJoystick *m_tuningJoystick;
-    Drive *m_drive;
+    enum ElevatorMode
+    {
+        percentOutput,
+        motionMagic,
+        zero
+    };
+
     enum DriveMode
     {
         AssistedArcade,
@@ -48,12 +45,17 @@ private:
         Trap,
         Velocity
     };
+
+    ObservableJoystick *m_driverJoystick;
+    ObservableJoystick *m_operatorJoystick;
+    ObservableJoystick *m_tuningJoystick;
+    Drive *m_drive;
+
     DriveMode m_driveMode;
 
     Elevator *m_elevator;
     Claw *m_claw;
 
     ElevatorMode m_elevatorMode;
-    double m_elevatorPosition;
 };
 };
