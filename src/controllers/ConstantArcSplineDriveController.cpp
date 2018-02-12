@@ -1,4 +1,4 @@
-#include "src/controllers/SplineDriveController.h"
+#include "src/controllers/ConstantArcSplineDriveController.h"
 #include "lib/profiles/TrapProfile.h"
 #include "src/info/RobotInfo.h"
 #include "lib/util/Util.h"
@@ -7,8 +7,8 @@ namespace frc973 {
 
 using namespace Constants;
 
-SplineDriveController::SplineDriveController(DriveStateProvider *state,
-                                             LogSpreadsheet *logger)
+ConstantArcSplineDriveController::ConstantArcSplineDriveController(
+    DriveStateProvider *state, LogSpreadsheet *logger)
         : m_state(state)
         , m_dist(0.0)
         , m_angle(0.0)
@@ -56,12 +56,12 @@ SplineDriveController::SplineDriveController(DriveStateProvider *state,
     }
 }
 
-SplineDriveController::~SplineDriveController() {
+ConstantArcSplineDriveController::~ConstantArcSplineDriveController() {
     ;
 }
 
-void SplineDriveController::SetTarget(DriveBase::RelativeTo relativeTo,
-                                      double dist, double angle) {
+void ConstantArcSplineDriveController::SetTarget(
+    DriveBase::RelativeTo relativeTo, double dist, double angle) {
     m_time_offset = GetSecTime();
 
     switch (relativeTo) {
@@ -89,22 +89,23 @@ void SplineDriveController::SetTarget(DriveBase::RelativeTo relativeTo,
     m_end_halt = true;
 }
 
-SplineDriveController *SplineDriveController::SetHalt(bool start_halt,
-                                                      bool end_halt) {
+ConstantArcSplineDriveController *ConstantArcSplineDriveController::SetHalt(
+    bool start_halt, bool end_halt) {
     m_start_halt = start_halt;
     m_end_halt = end_halt;
     return this;
 }
 
-SplineDriveController *SplineDriveController::SetConstraints(double max_vel,
-                                                             double max_acc) {
+ConstantArcSplineDriveController *
+ConstantArcSplineDriveController::SetConstraints(double max_vel,
+                                                 double max_acc) {
     m_max_vel = max_vel;
     m_max_acc = max_acc;
     return this;
 }
 
-void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
-                                            DriveControlSignalReceiver *out) {
+void ConstantArcSplineDriveController::CalcDriveOutput(
+    DriveStateProvider *state, DriveControlSignalReceiver *out) {
     if (m_needSetControlMode == true) {
         out->SetDriveControlMode(
             ctre::phoenix::motorcontrol::ControlMode::Velocity);
@@ -170,22 +171,22 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     m_dist_endgoal_log->LogDouble(m_dist);
     m_angle_endgoal_log->LogDouble(m_angle);
 
-    printf("SplineDriveController active time %lf pos %lf\n", time,
+    printf("ConstantArcSplineDriveController active time %lf pos %lf\n", time,
            goal.linear_dist);
 }
 
-void SplineDriveController::Start() {
+void ConstantArcSplineDriveController::Start() {
     m_needSetControlMode = true;
 }
 
-void SplineDriveController::Stop() {
+void ConstantArcSplineDriveController::Stop() {
 }
 
-double SplineDriveController::DistFromStart() const {
+double ConstantArcSplineDriveController::DistFromStart() const {
     return m_state->GetDist() - m_dist_offset;
 }
 
-double SplineDriveController::AngleFromStart() const {
+double ConstantArcSplineDriveController::AngleFromStart() const {
     return m_state->GetAngle() - m_angle_offset;
 }
 }

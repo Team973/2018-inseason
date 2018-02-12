@@ -9,15 +9,17 @@ using namespace frc;
 
 namespace frc973 {
 
-class SplineDriveController : public DriveController {
+class ConstantArcSplineDriveController : public DriveController {
 public:
-    SplineDriveController(DriveStateProvider *state, LogSpreadsheet *logger);
-    virtual ~SplineDriveController();
+    ConstantArcSplineDriveController(DriveStateProvider *state,
+                                     LogSpreadsheet *logger);
+    virtual ~ConstantArcSplineDriveController();
 
     void SetTarget(DriveBase::RelativeTo relativeTo, double dist, double angle);
 
-    SplineDriveController *SetHalt(bool start_halt, bool end_halt);
-    SplineDriveController *SetConstraints(double max_vel, double max_acc);
+    ConstantArcSplineDriveController *SetHalt(bool start_halt, bool end_halt);
+    ConstantArcSplineDriveController *SetConstraints(double max_vel,
+                                                     double max_acc);
 
     void CalcDriveOutput(DriveStateProvider *state,
                          DriveControlSignalReceiver *out) override;
