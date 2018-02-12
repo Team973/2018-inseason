@@ -5,11 +5,13 @@ using namespace frc;
 
 namespace frc973 {
 Intake::Intake(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *leftRoller,
-               TalonSRX *rightRoller, DigitalInput *cubeSensor)
+               TalonSRX *rightRoller, DigitalInput *cubeSensor,
+               Solenoid *position)
         : m_scheduler(scheduler)
         , m_leftRoller(leftRoller)
         , m_rightRoller(rightRoller)
-        , m_cubeSensor(cubeSensor) {
+        , m_cubeSensor(cubeSensor)
+        , m_position(position) {
     this->m_scheduler->RegisterTask("Intake", this, TASK_PERIODIC);
     m_leftRoller->SetNeutralMode(NeutralMode::Brake);
 
@@ -26,6 +28,7 @@ Intake::~Intake() {
 
 void Intake::Pull() {
     if (m_cubeSensor->Get() == false) {
+        printf("Intaking\n");
         m_leftRoller->Set(ControlMode::PercentOutput, 1.0);
         m_rightRoller->Set(ControlMode::PercentOutput, 1.0);
     }
@@ -36,6 +39,7 @@ void Intake::Pull() {
 }
 
 void Intake::Eject() {
+    printf("Ejecting\n");
     m_leftRoller->Set(ControlMode::PercentOutput, -1.0);
     m_rightRoller->Set(ControlMode::PercentOutput, -1.0);
 }

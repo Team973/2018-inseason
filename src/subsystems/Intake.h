@@ -21,7 +21,7 @@ class LogSpreadsheet;
 class Intake : public CoopTask {
 public:
     Intake(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *rightRoller,
-           TalonSRX *leftRoller, DigitalInput *cubeSensor);
+           TalonSRX *leftRoller, DigitalInput *cubeSensor, Solenoid *position);
 
     virtual ~Intake();
 
@@ -54,5 +54,6 @@ private:
     TalonSRX *m_leftRoller;
     TalonSRX *m_rightRoller;
     DigitalInput *m_cubeSensor;
+    Solenoid *m_position;
 };
 }

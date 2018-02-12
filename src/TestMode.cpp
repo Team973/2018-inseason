@@ -5,13 +5,14 @@ using namespace frc;
 namespace frc973 {
 Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
            ObservableJoystick *tuning, Drive *drive, Elevator *elevator,
-           Claw *claw)
+           Claw *claw, Intake *intake)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_tuningJoystick(tuning)
         , m_drive(drive)
         , m_elevator(elevator)
         , m_claw(claw)
+        , m_intake(intake)
         , m_elevatorMode(ElevatorMode::percentOutput) {
 }
 
@@ -189,10 +190,18 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
+                    m_intake->Pull();
+                }
+                else {
+                    m_intake->Stop();
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
+                    m_intake->Eject();
+                }
+                else {
+                    m_intake->Stop();
                 }
                 break;
             case DualAction::BtnA:
