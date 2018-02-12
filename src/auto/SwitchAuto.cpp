@@ -3,7 +3,7 @@
 using namespace frc;
 
 namespace frc973 {
-SwitchAuto::SwitchAuto(void) {
+SwitchAuto::SwitchAuto(Drive *drive) : m_drive(drive) {
 }
 
 SwitchAuto::~SwitchAuto(void) {
@@ -18,7 +18,7 @@ void SwitchAuto::Execute(void) {
             break;
         case 1:
             if (m_drive->OnTarget()) {
-                m_drive->PIDDrive(70.0, -45.0, RelativeTo::Now, 0.5);
+                m_drive->PIDDrive(70.0, -45.0, Drive::RelativeTo::Now, 0.5);
             }
             break;
         default:

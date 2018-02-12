@@ -11,6 +11,7 @@ Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
                        Claw *claw, ADXRS450_Gyro *gyro)
         : m_noAuto(new NoAuto())
         , m_forwardAuto(new ForwardAuto(drive))
+        , m_switchAuto(new SwitchAuto(drive))
         , m_disabled(disabled)
         , m_scoringLocations("")
         , m_switchScalePosition(SwitchScalePosition::LL)
@@ -62,8 +63,8 @@ void Autonomous::AutonomousInit() {
             printf("Center Auto\n");
             switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case LL:
-                    m_forwardAuto->Reset();
-                    m_routine = SelectedAutoRoutine::forward;
+                    m_switchAuto->Reset();
+                    m_routine = SelectedAutoRoutine::lowGoal;
                     break;
                 case LR:
                     printf("Forward Auto\n");
