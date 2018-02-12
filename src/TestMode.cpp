@@ -190,7 +190,7 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
-                    m_intake->Pull();
+                    m_intake->RegularPull();
                 }
                 else {
                     m_intake->Stop();

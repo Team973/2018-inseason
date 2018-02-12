@@ -26,11 +26,10 @@ Intake::~Intake() {
     m_scheduler->UnregisterTask(this);
 }
 
-void Intake::Pull() {
+void Intake::AutomatedPull() {
     if (m_cubeSensor->Get() == false) {
         printf("Intaking\n");
-        m_leftRoller->Set(ControlMode::PercentOutput, 1.0);
-        m_rightRoller->Set(ControlMode::PercentOutput, 1.0);
+        RegularPull();
     }
     else {
         m_leftRoller->Set(ControlMode::PercentOutput, 0.0);
@@ -38,10 +37,17 @@ void Intake::Pull() {
     }
 }
 
+void Intake::RegularPull() {
+    m_leftRoller->Set(ControlMode::PercentOutput,
+                      -1.0);  // Negative output will cause intake to intake
+    m_rightRoller->Set(ControlMode::PercentOutput, -1.0);
+}
+
 void Intake::Eject() {
     printf("Ejecting\n");
-    m_leftRoller->Set(ControlMode::PercentOutput, -1.0);
-    m_rightRoller->Set(ControlMode::PercentOutput, -1.0);
+    m_leftRoller->Set(ControlMode::PercentOutput,
+                      1.0);  // Positive output will cause intake to spit out
+    m_rightRoller->Set(ControlMode::PercentOutput, 1.0);
 }
 
 void Intake::Stop() {

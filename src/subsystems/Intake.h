@@ -26,9 +26,14 @@ public:
     virtual ~Intake();
 
     /**
+     * Starts the wheels to pull things in with the aid of beam breaker sensor
+     **/
+    void AutomatedPull();
+
+    /**
      * Starts the wheels to pull things in
      **/
-    void Pull();
+    void RegularPull();
 
     /**
      * Starts spitting whatever's in the Intake, out.
