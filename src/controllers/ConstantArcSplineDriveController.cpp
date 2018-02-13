@@ -112,11 +112,6 @@ ConstantArcSplineDriveController::SetStartEndVel(double start_vel,
 
 void ConstantArcSplineDriveController::CalcDriveOutput(
     DriveStateProvider *state, DriveControlSignalReceiver *out) {
-    if (m_needSetControlMode == true) {
-        // out->SetDriveControlMode(ControlMode::Velocity);
-        m_needSetControlMode = false;
-    }
-
     double time = GetSecTime() - m_time_offset;
 
     Profiler::NewWaypoint goal;
