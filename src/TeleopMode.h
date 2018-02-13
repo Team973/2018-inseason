@@ -1,3 +1,11 @@
+/*
+ * TeleopMode.h
+ *
+ *  Created on: January 7, 2018
+ *      Authors: Kyle, Chris
+ *
+ *  Control map available at: https://goo.gl/MrViHA
+ */
 #pragma once
 
 #include "WPILib.h"
@@ -39,15 +47,8 @@ private:
     Drive *m_drive;
     enum DriveMode
     {
-        AssistedArcade,
         Cheesy,
-        Hanger,
-        Openloop,
-        PID,
-        Spline,
-        Straight,
-        Trap,
-        Velocity
+        Hanger
     };
     DriveMode m_driveMode;
 

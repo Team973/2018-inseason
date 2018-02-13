@@ -1,3 +1,11 @@
+/*
+ * TeleopMode.cpp
+ *
+ *  Created on: January 7, 2018
+ *      Authors: Kyle, Chris
+ *
+ *  Control map available at: https://goo.gl/MrViHA
+ */
 #include "src/TeleopMode.h"
 #include "lib/helpers/JoystickHelper.h"
 
@@ -19,7 +27,7 @@ Teleop::~Teleop() {
 
 void Teleop::TeleopInit() {
     std::cout << "Teleop Start" << std::endl;
-    m_driveMode = DriveMode::Openloop;
+    m_driveMode = DriveMode::Cheesy;
 }
 
 void Teleop::TeleopPeriodic() {
@@ -35,22 +43,13 @@ void Teleop::TeleopPeriodic() {
         y /= 3.0;
     }
 
-    if (m_driveMode == DriveMode::AssistedArcade) {
-        m_drive->AssistedArcadeDrive(y, x);
-    }
-    else if (m_driveMode == DriveMode::Cheesy) {
+    if (m_driveMode == DriveMode::Cheesy) {
         m_drive->CheesyDrive(
             y, x, quickturn,
             false);  // gear set to false until solenoids get set up
     }
     else if (m_driveMode == DriveMode::Hanger) {
         m_drive->HangerDrive(y);
-    }
-    else if (m_driveMode == DriveMode::Openloop) {
-        m_drive->OpenloopArcadeDrive(y, x);
-    }
-    else if (m_driveMode == DriveMode::Velocity) {
-        m_drive->VelocityArcadeDrive(y, x);
     }
 
     /**
@@ -100,17 +99,14 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
-                    m_claw->cubeLaunch();
+                    m_claw->drop();
                 }
                 else {
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
-                    m_claw->kickOn();
-                }
-                else {
-                    m_claw->kickOff();
+                    m_claw->cubeLaunch();
                 }
                 break;
             case DualAction::RightBumper:

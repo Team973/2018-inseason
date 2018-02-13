@@ -12,11 +12,7 @@ using namespace frc;
 namespace frc973 {
 class Disabled {
 public:
-    typedef enum routine
-    {
-        none,
-        forward
-    } SelectedAutoRoutine;
+    typedef enum routine { none, forward } SelectedAutoRoutine;
 
     Disabled(ObservableJoystick *driver, ObservableJoystick *codriver);
     virtual ~Disabled();
