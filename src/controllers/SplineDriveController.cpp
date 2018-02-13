@@ -8,6 +8,26 @@ namespace frc973 {
 using namespace Constants;
 using namespace trajectories;
 
+static constexpr double LEFT_POSITION_KP = 0.0;
+static constexpr double LEFT_POSITION_KI = 0.0;
+static constexpr double LEFT_POSITION_KD = 0.0;
+
+static constexpr double LEFT_VELOCITY_KP = 0.0;
+static constexpr double LEFT_VELOCITY_KI = 0.0;
+static constexpr double LEFT_VELOCITY_KD = 0.0;
+
+static constexpr double RIGHT_POSITION_KP = 0.0;
+static constexpr double RIGHT_POSITION_KI = 0.0;
+static constexpr double RIGHT_POSITION_KD = 0.0;
+
+static constexpr double RIGHT_VELOCITY_KP = 0.0;
+static constexpr double RIGHT_VELOCITY_KI = 0.0;
+static constexpr double RIGHT_VELOCITY_KD = 0.0;
+
+static constexpr double ANGULAR_POSITION_KP = 0.0;
+static constexpr double ANGULAR_POSITION_KI = 0.0;
+static constexpr double ANGULAR_POSITION_KD = 0.0;
+
 SplineDriveController::SplineDriveController(DriveStateProvider *state,
                                              LogSpreadsheet *logger)
         : m_state(state)
@@ -22,11 +42,12 @@ SplineDriveController::SplineDriveController(DriveStateProvider *state,
         , m_angle_offset(0.0)
         , m_time_offset(0.0)
         , m_done(false)
-        , m_l_pos_pid(0.0, 0.0, 0.0)
-        , m_l_vel_pid(0.0, 0.0, 0.0)
-        , m_r_pos_pid(0.0, 0.0, 0.0)
-        , m_r_vel_pid(0.0, 0.0, 0.0)
-        , m_a_pos_pid(0.0, 0.0, 0.0)
+        , m_l_pos_pid(LEFT_POSITION_KP, LEFT_POSITION_KI, LEFT_VELOCITY_KD)
+        , m_l_vel_pid(LEFT_VELOCITY_KP, LEFT_VELOCITY_KI, LEFT_VELOCITY_KD)
+        , m_r_pos_pid(RIGHT_POSITION_KP, RIGHT_POSITION_KI, RIGHT_POSITION_KD)
+        , m_r_vel_pid(RIGHT_VELOCITY_KP, RIGHT_VELOCITY_KI, RIGHT_VELOCITY_KD)
+        , m_a_pos_pid(ANGULAR_POSITION_KP, ANGULAR_POSITION_KI,
+                      ANGULAR_POSITION_KD)
         , m_l_pos_setpt_log(new LogCell("s_linear pos incr goal"))
         , m_l_pos_real_log(new LogCell("s_linear pos incr actual"))
         , m_l_vel_setpt_log(new LogCell("s_linear vel incr goal"))
@@ -39,6 +60,8 @@ SplineDriveController::SplineDriveController(DriveStateProvider *state,
         , m_right_output(new LogCell("s_right output")) {
     m_l_pos_pid.SetBounds(-100, 100);
     m_l_vel_pid.SetBounds(-100, 100);
+    m_r_pos_pid.SetBounds(-100, 100);
+    m_r_vel_pid.SetBounds(-100, 100);
     m_a_pos_pid.SetBounds(-100, 100);
 
     if (logger) {
@@ -100,20 +123,24 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
         trajectories::GetLeftDriveVelocity(m_trajectory, time);
 
     /* correction terms for error in {linear,angular} {position,velocioty */
-    double linear_dist_term = m_l_pos_pid.CalcOutput(LeftDistFromStart());
-    double linear_vel_term = m_l_vel_pid.CalcOutput(state->GetRate());
+    double left_linear_dist_term = m_l_pos_pid.CalcOutput(LeftDistFromStart());
+    double left_linear_vel_term = m_l_vel_pid.CalcOutput(state->GetRate());
+    double right_linear_dist_term =
+        m_r_pos_pid.CalcOutput(RightDistFromStart());
+    double right_linear_vel_term = m_r_vel_pid.CalcOutput(state->GetRate());
     double angular_dist_term = m_a_pos_pid.CalcOutput(AngleFromStart());
 
     /* right side receives positive angle correction */
-    double right_output =
-        right_l_vel_ff + linear_dist_term + linear_vel_term + angular_dist_term;
+    double right_output = right_l_vel_ff + right_linear_dist_term +
+                          right_linear_vel_term + angular_dist_term;
     /* left side receives negative angle correction */
-    double left_output =
-        left_l_vel_ff + linear_dist_term + linear_vel_term - angular_dist_term;
+    double left_output = left_l_vel_ff + left_linear_dist_term +
+                         left_linear_vel_term - angular_dist_term;
 
     out->SetDriveOutputIPS(left_output, right_output);
 
-    if (time < trajectories::GetLength(m_trajectory) * 0.01) {
+    if (time < trajectories::GetLength(m_trajectory) *
+                   m_trajectory->left_trajectory->dt) {
         m_done = false;
     }
     else {
