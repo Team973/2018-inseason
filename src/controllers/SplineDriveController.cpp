@@ -8,21 +8,13 @@ namespace frc973 {
 using namespace Constants;
 using namespace trajectories;
 
-static constexpr double LEFT_POSITION_KP = 0.0;
-static constexpr double LEFT_POSITION_KI = 0.0;
-static constexpr double LEFT_POSITION_KD = 0.0;
+static constexpr double POSITION_KP = 0.0;
+static constexpr double POSITION_KI = 0.0;
+static constexpr double POSITION_KD = 0.0;
 
-static constexpr double LEFT_VELOCITY_KP = 0.0;
-static constexpr double LEFT_VELOCITY_KI = 0.0;
-static constexpr double LEFT_VELOCITY_KD = 0.0;
-
-static constexpr double RIGHT_POSITION_KP = 0.0;
-static constexpr double RIGHT_POSITION_KI = 0.0;
-static constexpr double RIGHT_POSITION_KD = 0.0;
-
-static constexpr double RIGHT_VELOCITY_KP = 0.0;
-static constexpr double RIGHT_VELOCITY_KI = 0.0;
-static constexpr double RIGHT_VELOCITY_KD = 0.0;
+static constexpr double VELOCITY_KP = 0.0;
+static constexpr double VELOCITY_KI = 0.0;
+static constexpr double VELOCITY_KD = 0.0;
 
 static constexpr double ANGULAR_POSITION_KP = 0.0;
 static constexpr double ANGULAR_POSITION_KI = 0.0;
@@ -37,10 +29,10 @@ SplineDriveController::SplineDriveController(DriveStateProvider *state,
         , m_angle_offset(0.0)
         , m_time_offset(0.0)
         , m_done(false)
-        , m_l_pos_pid(LEFT_POSITION_KP, LEFT_POSITION_KI, LEFT_VELOCITY_KD)
-        , m_l_vel_pid(LEFT_VELOCITY_KP, LEFT_VELOCITY_KI, LEFT_VELOCITY_KD)
-        , m_r_pos_pid(RIGHT_POSITION_KP, RIGHT_POSITION_KI, RIGHT_POSITION_KD)
-        , m_r_vel_pid(RIGHT_VELOCITY_KP, RIGHT_VELOCITY_KI, RIGHT_VELOCITY_KD)
+        , m_l_pos_pid(POSITION_KP, POSITION_KI, VELOCITY_KD)
+        , m_l_vel_pid(VELOCITY_KP, VELOCITY_KI, VELOCITY_KD)
+        , m_r_pos_pid(POSITION_KP, POSITION_KI, POSITION_KD)
+        , m_r_vel_pid(VELOCITY_KP, VELOCITY_KI, VELOCITY_KD)
         , m_a_pos_pid(ANGULAR_POSITION_KP, ANGULAR_POSITION_KI,
                       ANGULAR_POSITION_KD)
         , m_l_pos_setpt_log(new LogCell("s_left pos incr goal"))
@@ -118,10 +110,11 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
 
     /* correction terms for error in {linear,angular} {position,velocioty */
     double left_linear_dist_term = m_l_pos_pid.CalcOutput(LeftDistFromStart());
-    double left_linear_vel_term = m_l_vel_pid.CalcOutput(state->GetRate());
+    double left_linear_vel_term = m_l_vel_pid.CalcOutput(state->GetLeftRate());
     double right_linear_dist_term =
         m_r_pos_pid.CalcOutput(RightDistFromStart());
-    double right_linear_vel_term = m_r_vel_pid.CalcOutput(state->GetRate());
+    double right_linear_vel_term =
+        m_r_vel_pid.CalcOutput(state->GetRightRate());
     double angular_dist_term = m_a_pos_pid.CalcOutput(AngleFromStart());
 
     /* right side receives positive angle correction */
