@@ -14,6 +14,8 @@
 #include "lib/pixelprocessors/Siren.h"
 #include "lib/pixelprocessors/LinearScale.h"
 #include "lib/pixelprocessors/CenterMirror.h"
+#include "lib/pixelprocessors/Wave.h"
+
 GreyLight::GreyLight(int numLEDs) {
     state = PixelState{};
     state.fps = 60;
@@ -27,8 +29,9 @@ GreyLight::GreyLight(int numLEDs) {
     // new PixelChase(new Siren({255, 0, 0}, {0, 255, 0}, 3), {0, 0, 0});
     // processor = new LinearScale({255,0,0},{0,255,0},0,100, new
     // Static({0,0,0}));
-    processor = new CenterMirror(
-        new PixelChase(new Gradient({255, 0, 0}, {0, 0, 255}), {0, 100, 0}));
+    // processor = new CenterMirror(
+    // new PixelChase(new Gradient({255, 0, 0}, {0, 0, 255}), {0, 100, 0}));
+    processor = new CenterMirror(new Wave({255, 255, 100}, {0, 0, 0}, 25));
     // processor = new Gradient({255, 0, 0}, {0, 0, 255});
 
     worker = std::thread(&GreyLight::loop, this);
