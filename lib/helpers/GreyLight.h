@@ -23,11 +23,10 @@ public:
     // only access with stateLock acquired
     PixelState state;
     void loop();
+    PixelStateProcessor* processor;
 
 private:
     void writeFrame(std::vector<Color> pixels);
-
-    PixelStateProcessor* processor;
 
     std::thread worker;
 };

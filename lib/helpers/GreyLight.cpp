@@ -12,19 +12,25 @@
 #include "lib/pixelprocessors/Static.h"
 #include "lib/pixelprocessors/TeamNumber.h"
 #include "lib/pixelprocessors/Siren.h"
+#include "lib/pixelprocessors/LinearScale.h"
+#include "lib/pixelprocessors/CenterMirror.h"
 GreyLight::GreyLight(int numLEDs) {
     state = PixelState{};
     state.fps = 60;
-
     state.numLEDs = numLEDs;
     state.pixels = std::vector<Color>(numLEDs);
-
     // processor = new LoopModulator(new Gradient({255,0,0},{0,0,255}));
     // processor = new PixelChase(
     // new LoopModulator(new Gradient({255, 0, 0}, {0, 0, 255})), {0, 100, 0});
     // processor = new TeamNumber();
-    processor =
-        new PixelChase(new Siren({255, 0, 0}, {0, 255, 0}, 3), {0, 0, 0});
+    // processor =
+    // new PixelChase(new Siren({255, 0, 0}, {0, 255, 0}, 3), {0, 0, 0});
+    // processor = new LinearScale({255,0,0},{0,255,0},0,100, new
+    // Static({0,0,0}));
+    processor = new CenterMirror(
+        new PixelChase(new Gradient({255, 0, 0}, {0, 0, 255}), {0, 100, 0}));
+    // processor = new Gradient({255, 0, 0}, {0, 0, 255});
+
     worker = std::thread(&GreyLight::loop, this);
 }
 
@@ -74,8 +80,8 @@ void GreyLight::loop() {
 // }
 // }
 
-void GreyLight::setPixelStateProcessor(PixelStateProcessor* processorr) {
+void GreyLight::setPixelStateProcessor(PixelStateProcessor* processor) {
     stateLock.lock();
-    this->processor = processorr;
+    this->processor = processor;
     stateLock.unlock();
 }

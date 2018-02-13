@@ -1,5 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include "lib/helpers/GreyLight.h"
+#include "lib/pixelprocessors/LinearScale.h"
+#include "lib/pixelprocessors/Static.h"
+
 #include <stdio.h>
 #include <iostream>
 #include <time.h>
