@@ -20,9 +20,8 @@ public:
         zero
     };
 
-    Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
-           ObservableJoystick *tuning, Claw *claw, Drive *drive,
-           Elevator *elevator);
+    Teleop(ObservableJoystick *driver, ObservableJoystick *codriver, Claw *claw,
+           Drive *drive, Elevator *elevator);
     virtual ~Teleop();
 
     void TeleopInit();
@@ -34,7 +33,6 @@ public:
 private:
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
-    ObservableJoystick *m_tuningJoystick;
 
     Claw *m_claw;
 

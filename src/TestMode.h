@@ -14,9 +14,8 @@ using namespace frc;
 namespace frc973 {
 class Test {
 public:
-    Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-         ObservableJoystick *tuning, Drive *drive, Elevator *elevator,
-         Claw *claw);
+    Test(ObservableJoystick *driver, ObservableJoystick *codriver, Drive *drive,
+         Elevator *elevator, Claw *claw);
     virtual ~Test();
 
     void TestInit();
@@ -48,7 +47,6 @@ private:
 
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
-    ObservableJoystick *m_tuningJoystick;
     Drive *m_drive;
 
     DriveMode m_driveMode;
@@ -58,4 +56,4 @@ private:
 
     ElevatorMode m_elevatorMode;
 };
-};
+}
