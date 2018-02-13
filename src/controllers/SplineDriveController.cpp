@@ -32,11 +32,6 @@ SplineDriveController::SplineDriveController(DriveStateProvider *state,
                                              LogSpreadsheet *logger)
         : m_state(state)
         , m_trajectory(nullptr)
-        , m_leftDist(0.0)
-        , m_rightDist(0.0)
-        , m_heading(0.0)
-        , m_leftVel(0.0)
-        , m_rightVel(0.0)
         , m_left_dist_offset(0.0)
         , m_right_dist_offset(0.0)
         , m_angle_offset(0.0)
@@ -58,8 +53,6 @@ SplineDriveController::SplineDriveController(DriveStateProvider *state,
         , m_r_vel_real_log(new LogCell("s_right vel incr actual"))
         , m_a_pos_setpt_log(new LogCell("s_angular pos incr goal"))
         , m_a_pos_real_log(new LogCell("s_angular pos incr actual"))
-        , m_left_dist_endgoal_log(new LogCell("s_left pos end goal"))
-        , m_right_dist_endgoal_log(new LogCell("s_right pos end goal"))
         , m_angle_endgoal_log(new LogCell("s_angle pos end goal"))
         , m_left_output(new LogCell("s_left output"))
         , m_right_output(new LogCell("s_right output")) {
@@ -80,8 +73,6 @@ SplineDriveController::SplineDriveController(DriveStateProvider *state,
         logger->RegisterCell(m_r_vel_real_log);
         logger->RegisterCell(m_a_pos_setpt_log);
         logger->RegisterCell(m_a_pos_real_log);
-        logger->RegisterCell(m_left_dist_endgoal_log);
-        logger->RegisterCell(m_right_dist_endgoal_log);
         logger->RegisterCell(m_angle_endgoal_log);
         logger->RegisterCell(m_left_output);
         logger->RegisterCell(m_right_output);
@@ -107,17 +98,17 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
                                             DriveControlSignalReceiver *out) {
     double time = GetSecTime() - m_time_offset;
 
-    m_leftDist = trajectories::GetLeftDist(m_trajectory, time);
-    m_rightDist = trajectories::GetRightDist(m_trajectory, time);
-    m_leftVel = trajectories::GetLeftDriveVelocity(m_trajectory, time);
-    m_rightVel = trajectories::GetRightDriveVelocity(m_trajectory, time);
-    m_heading = trajectories::GetHeading(m_trajectory, time);
+    double leftDist = trajectories::GetLeftDist(m_trajectory, time);
+    double rightDist = trajectories::GetRightDist(m_trajectory, time);
+    double leftVel = trajectories::GetLeftDriveVelocity(m_trajectory, time);
+    double rightVel = trajectories::GetRightDriveVelocity(m_trajectory, time);
+    double heading = trajectories::GetHeading(m_trajectory, time);
 
-    m_l_pos_pid.SetTarget(m_leftDist);
-    m_r_pos_pid.SetTarget(m_rightDist);
-    m_l_vel_pid.SetTarget(m_leftVel);
-    m_r_vel_pid.SetTarget(m_rightVel);
-    m_a_pos_pid.SetTarget(m_heading);
+    m_l_pos_pid.SetTarget(leftDist);
+    m_r_pos_pid.SetTarget(rightDist);
+    m_l_vel_pid.SetTarget(leftVel);
+    m_r_vel_pid.SetTarget(rightVel);
+    m_a_pos_pid.SetTarget(heading);
 
     /* vel feed forward for linear term */
     double right_l_vel_ff =
@@ -152,30 +143,27 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
 
     DBStringPrintf(DB_LINE1, "lo%0.3lf ro%0.3lf", m_left_output,
                    m_right_output);
-    DBStringPrintf(DB_LINE2, "lpset%2.2lf lp%2.2lf", m_leftDist,
+    DBStringPrintf(DB_LINE2, "lpset%2.2lf lp%2.2lf", leftDist,
                    LeftDistFromStart());
-    DBStringPrintf(DB_LINE3, "lvset%2.2lf lv%2.2lf", m_leftVel,
+    DBStringPrintf(DB_LINE3, "lvset%2.2lf lv%2.2lf", leftVel,
                    state->GetLeftRate());
-    DBStringPrintf(DB_LINE4, "rpset%2.2lf rp%2.2lf", m_rightDist,
+    DBStringPrintf(DB_LINE4, "rpset%2.2lf rp%2.2lf", rightDist,
                    RightDistFromStart());
-    DBStringPrintf(DB_LINE6, "rvset%2.2lf rv%2.2lf", m_rightVel,
+    DBStringPrintf(DB_LINE6, "rvset%2.2lf rv%2.2lf", rightVel,
                    state->GetRightRate());
-    DBStringPrintf(DB_LINE7, "apset%2.2lf ap%2.2lf", m_heading,
-                   AngleFromStart());
+    DBStringPrintf(DB_LINE7, "apset%2.2lf ap%2.2lf", heading, AngleFromStart());
 
-    m_l_pos_setpt_log->LogDouble(m_leftDist);
+    m_l_pos_setpt_log->LogDouble(leftDist);
     m_l_pos_real_log->LogDouble(LeftDistFromStart());
-    m_l_vel_setpt_log->LogDouble(m_leftVel);
+    m_l_vel_setpt_log->LogDouble(leftVel);
     m_l_vel_real_log->LogDouble(state->GetLeftRate());
-    m_r_pos_setpt_log->LogDouble(m_rightDist);
+    m_r_pos_setpt_log->LogDouble(rightDist);
     m_r_pos_real_log->LogDouble(RightDistFromStart());
-    m_r_vel_setpt_log->LogDouble(m_rightVel);
+    m_r_vel_setpt_log->LogDouble(rightVel);
     m_r_vel_real_log->LogDouble(state->GetRightRate());
-    m_a_pos_setpt_log->LogDouble(m_heading);
+    m_a_pos_setpt_log->LogDouble(heading);
     m_a_pos_real_log->LogDouble(AngleFromStart());
-    m_left_dist_endgoal_log->LogDouble(m_leftDist);
-    m_right_dist_endgoal_log->LogDouble(m_rightDist);
-    m_angle_endgoal_log->LogDouble(m_heading);
+    m_angle_endgoal_log->LogDouble(heading);
     m_left_output->LogDouble(left_output);
     m_right_output->LogDouble(right_output);
 }

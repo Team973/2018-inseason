@@ -45,8 +45,6 @@ public:
 private:
     DriveStateProvider *m_state;
     TrajectoryDescription *m_trajectory;
-    double m_leftDist, m_rightDist, m_heading;
-    double m_leftVel, m_rightVel;
     double m_left_dist_offset, m_right_dist_offset, m_angle_offset,
         m_time_offset;
     bool m_done;
@@ -68,8 +66,6 @@ private:
     LogCell *m_r_vel_real_log;
     LogCell *m_a_pos_setpt_log;
     LogCell *m_a_pos_real_log;
-    LogCell *m_left_dist_endgoal_log;
-    LogCell *m_right_dist_endgoal_log;
     LogCell *m_angle_endgoal_log;
     LogCell *m_left_output;
     LogCell *m_right_output;
