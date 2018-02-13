@@ -6,7 +6,6 @@
  */
 
 #include "CenterMirror.h"
-#include <iostream>
 CenterMirror::CenterMirror(PixelStateProcessor* processor, bool inverse) {
     this->processor = processor;
     this->inverse = inverse;
@@ -32,7 +31,5 @@ void CenterMirror::tick(PixelState& state) {
 void CenterMirror::pushToRightSide(PixelState& state) {
     for (std::size_t i = 0; i < previousNumLEDs / 2; i++) {
         state.pixels.at(previousNumLEDs / 2 + i) = state.pixels.at(i);
-        std::cout << "I: " << i << " New: " << previousNumLEDs / 2 + i
-                  << std::endl;
     }
 }
