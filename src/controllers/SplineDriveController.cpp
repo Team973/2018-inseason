@@ -107,13 +107,6 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
                                             DriveControlSignalReceiver *out) {
     double time = GetSecTime() - m_time_offset;
 
-    /* printf(
-         "Spline drive d %lf a %lf vel %lf acc %lf start %lf end "
-         "%lf\n",
-         m_dist, m_angle, m_max_vel, m_max_acc, m_start_vel, m_end_vel);
-     DBStringPrintf(DB_LINE3, "lo%0.3lf ro%0.3lf", m_left_output,
-                    m_right_output);*/
-
     m_leftDist = trajectories::GetLeftDist(m_trajectory, time);
     m_rightDist = trajectories::GetRightDist(m_trajectory, time);
     m_leftVel = trajectories::GetLeftDriveVelocity(m_trajectory, time);
@@ -157,14 +150,27 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
         m_done = true;
     }
 
+    DBStringPrintf(DB_LINE1, "lo%0.3lf ro%0.3lf", m_left_output,
+                   m_right_output);
+    DBStringPrintf(DB_LINE2, "lpset%2.2lf lp%2.2lf", m_leftDist,
+                   LeftDistFromStart());
+    DBStringPrintf(DB_LINE3, "lvset%2.2lf lv%2.2lf", m_leftVel,
+                   state->GetLeftRate());
+    DBStringPrintf(DB_LINE4, "rpset%2.2lf rp%2.2lf", m_rightDist,
+                   RightDistFromStart());
+    DBStringPrintf(DB_LINE6, "rvset%2.2lf rv%2.2lf", m_rightVel,
+                   state->GetRightRate());
+    DBStringPrintf(DB_LINE7, "apset%2.2lf ap%2.2lf", m_heading,
+                   AngleFromStart());
+
     m_l_pos_setpt_log->LogDouble(m_leftDist);
     m_l_pos_real_log->LogDouble(LeftDistFromStart());
     m_l_vel_setpt_log->LogDouble(m_leftVel);
-    m_l_vel_real_log->LogDouble(state->GetRate());
+    m_l_vel_real_log->LogDouble(state->GetLeftRate());
     m_r_pos_setpt_log->LogDouble(m_rightDist);
     m_r_pos_real_log->LogDouble(RightDistFromStart());
     m_r_vel_setpt_log->LogDouble(m_rightVel);
-    m_r_vel_real_log->LogDouble(state->GetRate());
+    m_r_vel_real_log->LogDouble(state->GetRightRate());
     m_a_pos_setpt_log->LogDouble(m_heading);
     m_a_pos_real_log->LogDouble(AngleFromStart());
     m_left_dist_endgoal_log->LogDouble(m_leftDist);
