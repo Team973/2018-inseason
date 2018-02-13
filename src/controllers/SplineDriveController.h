@@ -62,9 +62,14 @@ private:
     LogCell *m_l_pos_real_log;
     LogCell *m_l_vel_setpt_log;
     LogCell *m_l_vel_real_log;
+    LogCell *m_r_pos_setpt_log;
+    LogCell *m_r_pos_real_log;
+    LogCell *m_r_vel_setpt_log;
+    LogCell *m_r_vel_real_log;
     LogCell *m_a_pos_setpt_log;
     LogCell *m_a_pos_real_log;
-    LogCell *m_dist_endgoal_log;
+    LogCell *m_left_dist_endgoal_log;
+    LogCell *m_right_dist_endgoal_log;
     LogCell *m_angle_endgoal_log;
     LogCell *m_left_output;
     LogCell *m_right_output;

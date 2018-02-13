@@ -48,13 +48,18 @@ SplineDriveController::SplineDriveController(DriveStateProvider *state,
         , m_r_vel_pid(RIGHT_VELOCITY_KP, RIGHT_VELOCITY_KI, RIGHT_VELOCITY_KD)
         , m_a_pos_pid(ANGULAR_POSITION_KP, ANGULAR_POSITION_KI,
                       ANGULAR_POSITION_KD)
-        , m_l_pos_setpt_log(new LogCell("s_linear pos incr goal"))
-        , m_l_pos_real_log(new LogCell("s_linear pos incr actual"))
-        , m_l_vel_setpt_log(new LogCell("s_linear vel incr goal"))
-        , m_l_vel_real_log(new LogCell("s_linear vel incr actual"))
+        , m_l_pos_setpt_log(new LogCell("s_left pos incr goal"))
+        , m_l_pos_real_log(new LogCell("s_left pos incr actual"))
+        , m_l_vel_setpt_log(new LogCell("s_left vel incr goal"))
+        , m_l_vel_real_log(new LogCell("s_left vel incr actual"))
+        , m_r_pos_setpt_log(new LogCell("s_right pos incr goal"))
+        , m_r_pos_real_log(new LogCell("s_right pos incr actual"))
+        , m_r_vel_setpt_log(new LogCell("s_right vel incr goal"))
+        , m_r_vel_real_log(new LogCell("s_right vel incr actual"))
         , m_a_pos_setpt_log(new LogCell("s_angular pos incr goal"))
         , m_a_pos_real_log(new LogCell("s_angular pos incr actual"))
-        , m_dist_endgoal_log(new LogCell("s_linear pos end goal"))
+        , m_left_dist_endgoal_log(new LogCell("s_left pos end goal"))
+        , m_right_dist_endgoal_log(new LogCell("s_right pos end goal"))
         , m_angle_endgoal_log(new LogCell("s_angle pos end goal"))
         , m_left_output(new LogCell("s_left output"))
         , m_right_output(new LogCell("s_right output")) {
@@ -69,9 +74,14 @@ SplineDriveController::SplineDriveController(DriveStateProvider *state,
         logger->RegisterCell(m_l_pos_real_log);
         logger->RegisterCell(m_l_vel_setpt_log);
         logger->RegisterCell(m_l_vel_real_log);
+        logger->RegisterCell(m_r_pos_setpt_log);
+        logger->RegisterCell(m_r_pos_real_log);
+        logger->RegisterCell(m_r_vel_setpt_log);
+        logger->RegisterCell(m_r_vel_real_log);
         logger->RegisterCell(m_a_pos_setpt_log);
         logger->RegisterCell(m_a_pos_real_log);
-        logger->RegisterCell(m_dist_endgoal_log);
+        logger->RegisterCell(m_left_dist_endgoal_log);
+        logger->RegisterCell(m_right_dist_endgoal_log);
         logger->RegisterCell(m_angle_endgoal_log);
         logger->RegisterCell(m_left_output);
         logger->RegisterCell(m_right_output);
@@ -147,16 +157,21 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
         m_done = true;
     }
 
-    /*m_l_pos_setpt_log->LogDouble(goal.linear_dist);
-    m_l_pos_real_log->LogDouble(DistFromStart());
-    m_l_vel_setpt_log->LogDouble(goal.linear_vel);
+    m_l_pos_setpt_log->LogDouble(m_leftDist);
+    m_l_pos_real_log->LogDouble(LeftDistFromStart());
+    m_l_vel_setpt_log->LogDouble(m_leftVel);
     m_l_vel_real_log->LogDouble(state->GetRate());
-    m_a_pos_setpt_log->LogDouble(goal.angular_dist);
+    m_r_pos_setpt_log->LogDouble(m_rightDist);
+    m_r_pos_real_log->LogDouble(RightDistFromStart());
+    m_r_vel_setpt_log->LogDouble(m_rightVel);
+    m_r_vel_real_log->LogDouble(state->GetRate());
+    m_a_pos_setpt_log->LogDouble(m_heading);
     m_a_pos_real_log->LogDouble(AngleFromStart());
-    m_dist_endgoal_log->LogDouble(m_dist);
-    m_angle_endgoal_log->LogDouble(m_angle);
+    m_left_dist_endgoal_log->LogDouble(m_leftDist);
+    m_right_dist_endgoal_log->LogDouble(m_rightDist);
+    m_angle_endgoal_log->LogDouble(m_heading);
     m_left_output->LogDouble(left_output);
-    m_right_output->LogDouble(right_output);*/
+    m_right_output->LogDouble(right_output);
 }
 
 void SplineDriveController::Start() {
