@@ -92,7 +92,8 @@ private:
 
     UsbCamera m_intakeCamera;
     UsbCamera m_forkCamera;
-    VideoSink m_cameraServer;
+    CameraServer *m_cameraServer;
+    VideoSink m_greyCam;
 
     Solenoid *m_cubeClamp;
     Solenoid *m_clawKicker;

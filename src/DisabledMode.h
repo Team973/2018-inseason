@@ -16,8 +16,8 @@ public:
     typedef enum routine { none, forward } SelectedAutoRoutine;
 
     Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
-             ObservableJoystick *tuning, UsbCamera forkCamera,
-             UsbCamera intakeCamera, VideoSink cameraServer);
+             ObservableJoystick *tuning, UsbCamera intakeCamera,
+             UsbCamera forkCamera, VideoSink greyCam);
     virtual ~Disabled();
 
     void DisabledInit();
@@ -36,8 +36,8 @@ private:
     ObservableJoystick *m_operatorJoystick;
     ObservableJoystick *m_tuningJoystick;
 
-    UsbCamera m_forkCamera;
     UsbCamera m_intakeCamera;
-    VideoSink m_cameraServer;
+    UsbCamera m_forkCamera;
+    VideoSink m_greyCam;
 };
 };
