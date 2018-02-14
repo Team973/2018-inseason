@@ -1,13 +1,13 @@
 {
     "name": "the_really_cool_trajectory",
     "timestep": 0.01,
-    "max_vel": 15.0,
+    "max_vel": 30.0,
     "max_accel": 10.0,
     "max_jerk": 60.0,
     "wheelbase_width": 23.0,
     "waypoints": [
-        { "x": -4, "y": -1, "angle": 45 },
-        { "x": -1, "y": 2, "angle": 0 },
-        { "x": 4, "y": 10, "angle": 0 }
+        { "x": -10, "y": -10, "angle": 45 },
+        { "x": -15, "y": 20, "angle": 0 },
+        { "x": 20, "y": 15, "angle": 0 }
     ]
 }

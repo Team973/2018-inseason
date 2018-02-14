@@ -8,15 +8,15 @@ namespace frc973 {
 using namespace Constants;
 using namespace trajectories;
 
-static constexpr double POSITION_KP = 0.1;
+static constexpr double POSITION_KP = 0.0;
 static constexpr double POSITION_KI = 0.0;
 static constexpr double POSITION_KD = 0.0;
 
-static constexpr double VELOCITY_KP = 0.1;
+static constexpr double VELOCITY_KP = 0.0;
 static constexpr double VELOCITY_KI = 0.0;
 static constexpr double VELOCITY_KD = 0.0;
 
-static constexpr double ANGULAR_POSITION_KP = 0.1;
+static constexpr double ANGULAR_POSITION_KP = 0.0;
 static constexpr double ANGULAR_POSITION_KI = 0.0;
 static constexpr double ANGULAR_POSITION_KD = 0.0;
 
@@ -132,7 +132,9 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
         m_done = false;
     }
     else {
+        printf("Done\n");
         m_done = true;
+        this->Stop();
     }
 
     DBStringPrintf(DB_LINE1, "lo%0.3lf ro%0.3lf", m_left_output,
@@ -143,9 +145,9 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
                    state->GetLeftRate());
     DBStringPrintf(DB_LINE4, "rpset%2.2lf rp%2.2lf", rightDist,
                    RightDistFromStart());
-    DBStringPrintf(DB_LINE6, "rvset%2.2lf rv%2.2lf", rightVel,
+    DBStringPrintf(DB_LINE5, "rvset%2.2lf rv%2.2lf", rightVel,
                    state->GetRightRate());
-    DBStringPrintf(DB_LINE7, "apset%2.2lf ap%2.2lf", heading, AngleFromStart());
+    DBStringPrintf(DB_LINE6, "apset%2.2lf ap%2.2lf", heading, AngleFromStart());
 
     m_l_pos_setpt_log->LogDouble(leftDist);
     m_l_pos_real_log->LogDouble(LeftDistFromStart());
