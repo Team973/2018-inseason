@@ -11,9 +11,11 @@
 #include "src/info/RobotInfo.h"
 #include "lib/bases/DriveBase.h"
 #include "networktables/NetworkTableInstance.h"
+#include "lib/trajectories/structs.h"
 
 using namespace frc;
 using namespace ctre;
+using namespace trajectories;
 
 namespace frc973 {
 class AssistedArcadeDriveController;
@@ -22,6 +24,7 @@ class HangerDriveController;
 class OpenloopArcadeDriveController;
 class PIDDriveController;
 class ConstantArcSplineDriveController;
+class SplineDriveController;
 class StraightDriveController;
 class TrapDriveController;
 class VelocityArcadeDriveController;
@@ -130,6 +133,13 @@ public:
     const ConstantArcSplineDriveController *
     GetConstantArcSplineDriveController() {
         return m_constantArcSplineDriveController;
+    }
+
+    SplineDriveController *SplineDrive(
+        trajectories::TrajectoryDescription *trajectory);
+
+    const SplineDriveController *GetSplineDriveController() {
+        return m_splineDriveController;
     }
 
     /**
@@ -242,6 +252,7 @@ private:
     OpenloopArcadeDriveController *m_openloopArcadeDriveController;
     PIDDriveController *m_pidDriveController;
     ConstantArcSplineDriveController *m_constantArcSplineDriveController;
+    SplineDriveController *m_splineDriveController;
     StraightDriveController *m_straightDriveController;
     TrapDriveController *m_trapDriveController;
     VelocityArcadeDriveController *m_velocityArcadeDriveController;

@@ -1,8 +1,6 @@
 #include "src/auto/ForwardAuto.h"
 #include "src/auto/AutoRoutine.h"
 
-#include "tools/pathtool/trajectory.h"
-
 using namespace frc;
 
 namespace frc973 {

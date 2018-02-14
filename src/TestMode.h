@@ -40,6 +40,7 @@ private:
         Hanger,
         Openloop,
         PID,
+        ConstantArcSpline,
         Spline,
         Straight,
         Trap,

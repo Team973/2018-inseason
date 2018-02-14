@@ -14,6 +14,7 @@
 #include "src/controllers/PIDDriveController.h"
 #include "src/controllers/StraightDriveController.h"
 #include "src/controllers/ConstantArcSplineDriveController.h"
+#include "src/controllers/SplineDriveController.h"
 #include "src/controllers/TrapDriveController.h"
 #include "src/controllers/VelocityArcadeDriveController.h"
 #include "src/info/RobotInfo.h"
@@ -21,9 +22,11 @@
 #include "lib/util/Util.h"
 #include "lib/util/WrapDash.h"
 #include "lib/logging/LogSpreadsheet.h"
+#include "lib/trajectories/structs.h"
 
 using namespace frc;
 using namespace ctre;
+using namespace trajectories;
 
 namespace frc973 {
 Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
@@ -57,6 +60,7 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
         , m_pidDriveController(new PIDDriveController())
         , m_constantArcSplineDriveController(
               new ConstantArcSplineDriveController(this, logger))
+        , m_splineDriveController(new SplineDriveController(this, logger))
         , m_straightDriveController(new StraightDriveController())
         , m_trapDriveController(new TrapDriveController(this, logger))
         , m_velocityArcadeDriveController(new VelocityArcadeDriveController())
@@ -200,6 +204,13 @@ ConstantArcSplineDriveController *Drive::ConstantArcSplineDrive(
     this->SetDriveController(m_constantArcSplineDriveController);
     m_constantArcSplineDriveController->SetTarget(relativity, dist, angle);
     return m_constantArcSplineDriveController;
+}
+
+SplineDriveController *Drive::SplineDrive(
+    trajectories::TrajectoryDescription *trajectory) {
+    this->SetDriveController(m_splineDriveController);
+    m_splineDriveController->SetTarget(trajectory);
+    return m_splineDriveController;
 }
 
 /**
