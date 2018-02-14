@@ -1,3 +1,4 @@
+
 py_library(
     name = "pypathfinder",
     srcs = [
@@ -19,13 +20,14 @@ py_test(
 )
 
 py_binary(
-    name = "generatePath",
+    name = "path_generator",
     srcs = [
-        "generatePath.py",
+        "path_generator.py",
     ],
     deps = [
         ":pypathfinder",
     ],
+    visibility = ["//visibility:public"],
 )
 
 genrule(
@@ -34,12 +36,12 @@ genrule(
         "trajectory.h",
     ],
     tools = [
-        ":generatePath",
+        ":path_generator",
         "//third_party/pathfinder:pathfinder_cdll.so",
     ],
     srcs = [
         "sample.json",
     ],
-    cmd = "$(location :generatePath) $(location sample.json) $@ $(location //third_party/pathfinder:pathfinder_cdll.so)",
+    cmd = "$(location :path_generator) $(location sample.json) $@ $(location //third_party/pathfinder:pathfinder_cdll.so)",
     visibility = ["//visibility:public"],
 )
