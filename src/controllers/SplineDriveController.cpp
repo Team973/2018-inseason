@@ -8,21 +8,22 @@ namespace frc973 {
 using namespace Constants;
 using namespace trajectories;
 
-static constexpr double POSITION_KP = 0.0;
+static constexpr double POSITION_KP = 0.1;
 static constexpr double POSITION_KI = 0.0;
 static constexpr double POSITION_KD = 0.0;
 
-static constexpr double VELOCITY_KP = 0.0;
+static constexpr double VELOCITY_KP = 0.1;
 static constexpr double VELOCITY_KI = 0.0;
 static constexpr double VELOCITY_KD = 0.0;
 
-static constexpr double ANGULAR_POSITION_KP = 0.0;
+static constexpr double ANGULAR_POSITION_KP = 0.1;
 static constexpr double ANGULAR_POSITION_KI = 0.0;
 static constexpr double ANGULAR_POSITION_KD = 0.0;
 
 SplineDriveController::SplineDriveController(DriveStateProvider *state,
                                              LogSpreadsheet *logger)
-        : m_state(state)
+        : DriveController()
+        , m_state(state)
         , m_trajectory(nullptr)
         , m_left_dist_offset(0.0)
         , m_right_dist_offset(0.0)
