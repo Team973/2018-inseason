@@ -1,5 +1,5 @@
 #include "src/TestMode.h"
-#include "tools/pathtool/trajectory.h"
+#include "src/auto/profiles/sample_trajectory.h"
 
 using namespace frc;
 using namespace generated_profiles;
