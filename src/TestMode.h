@@ -15,9 +15,8 @@ using namespace frc;
 namespace frc973 {
 class Test {
 public:
-    Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-         ObservableJoystick *tuning, Drive *drive, Elevator *elevator,
-         Claw *claw, Intake *intake);
+    Test(ObservableJoystick *driver, ObservableJoystick *codriver, Drive *drive,
+         Elevator *elevator, Claw *claw, Intake *intake);
     virtual ~Test();
 
     void TestInit();

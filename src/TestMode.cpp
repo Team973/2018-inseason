@@ -4,8 +4,7 @@ using namespace frc;
 
 namespace frc973 {
 Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-           ObservableJoystick *tuning, Drive *drive, Elevator *elevator,
-           Claw *claw, Intake *intake)
+           Drive *drive, Elevator *elevator, Claw *claw, Intake *intake)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_drive(drive)
@@ -44,8 +43,8 @@ void Test::TestPeriodic() {
 
     if (m_driverJoystick->GetRawButton(DualAction::RightBumper)) {
     }
-        x /= 3.0;
-        y /= 3.0;
+    x /= 3.0;
+    y /= 3.0;
 
     if (m_driveMode == DriveMode::AssistedArcade) {
         m_drive->AssistedArcadeDrive(y, x);

@@ -13,12 +13,13 @@ using namespace frc;
 
 namespace frc973 {
 Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
-               Claw *claw, Drive *drive, Elevator *elevator)
+               Claw *claw, Drive *drive, Elevator *elevator, Intake *intake)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_claw(claw)
         , m_drive(drive)
         , m_elevator(elevator)
+        , m_intake(intake)
         , m_elevatorMode(ElevatorMode::percentOutput) {
 }
 
@@ -182,10 +183,24 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
+                    m_intake->RegularPull();
+                    m_intake->LowerIntake();
+                    m_claw->open();
+                }
+                else {
+                    m_intake->Stop();
+                    m_claw->grab();
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
+                    m_intake->Eject();
+                    m_intake->LowerIntake();
+                    m_claw->open();
+                }
+                else {
+                    m_intake->Stop();
+                    m_claw->grab();
                 }
                 break;
             case DualAction::RightTrigger:
@@ -216,12 +231,12 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
-                    // intake down
+                    m_intake->LowerIntake();
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
-                    // intake up
+                    m_intake->RaiseIntake();
                 }
                 break;
             case DualAction::Back:

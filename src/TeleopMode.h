@@ -15,6 +15,7 @@
 #include "src/subsystems/Drive.h"
 #include "src/subsystems/Elevator.h"
 #include "src/subsystems/Claw.h"
+#include "src/subsystems/Intake.h"
 
 using namespace frc;
 
@@ -29,7 +30,7 @@ public:
     };
 
     Teleop(ObservableJoystick *driver, ObservableJoystick *codriver, Claw *claw,
-           Drive *drive, Elevator *elevator);
+           Drive *drive, Elevator *elevator, Intake *intake);
     virtual ~Teleop();
 
     void TeleopInit();
@@ -53,6 +54,7 @@ private:
     DriveMode m_driveMode;
 
     Elevator *m_elevator;
+    Intake *m_intake;
 
     ElevatorMode m_elevatorMode;
     double m_elevatorPosition;
