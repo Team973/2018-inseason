@@ -5,7 +5,7 @@ namespace trajectories {
 double GetLeftDriveVelocity(TrajectoryDescription *trajectory, double time) {
     int index = (int)(time / trajectory->left_trajectory->dt);
     if (index >= GetLength(trajectory)) {
-        return trajectory->left_trajectory[GetLength(trajectory)].velocity;
+        return trajectory->left_trajectory[GetLength(trajectory) - 1].velocity;
     }
     return trajectory->left_trajectory[index].velocity;
 }
