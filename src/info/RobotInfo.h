@@ -28,6 +28,7 @@ static const int PCM_CAN_ID = 17;
 static const int CUBE_CLAMP_PCM_ID = 1;
 static const int CLAW_KICKER_PCM_ID = 2;
 static const int HANGER_PTO_PCM_ID = 0;
+static const int INTAKE_POSITION_PCM_ID = 3;
 
 // Claw
 static const int CLAW_LEFT_ROLLER_CAN_ID = 5;

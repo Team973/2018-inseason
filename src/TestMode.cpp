@@ -4,12 +4,14 @@ using namespace frc;
 
 namespace frc973 {
 Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-           Drive *drive, Elevator *elevator, Claw *claw)
+           ObservableJoystick *tuning, Drive *drive, Elevator *elevator,
+           Claw *claw, Intake *intake)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_drive(drive)
         , m_elevator(elevator)
         , m_claw(claw)
+        , m_intake(intake)
         , m_elevatorMode(ElevatorMode::percentOutput) {
 }
 
@@ -41,9 +43,9 @@ void Test::TestPeriodic() {
     bool quickturn = m_driverJoystick->GetRawButton(DualAction::LeftBumper);
 
     if (m_driverJoystick->GetRawButton(DualAction::RightBumper)) {
+    }
         x /= 3.0;
         y /= 3.0;
-    }
 
     if (m_driveMode == DriveMode::AssistedArcade) {
         m_drive->AssistedArcadeDrive(y, x);
@@ -187,10 +189,24 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
+                    m_intake->RegularPull();
+                    m_intake->LowerIntake();
+                    m_claw->open();
+                }
+                else {
+                    m_intake->Stop();
+                    m_claw->grab();
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
+                    m_intake->Eject();
+                    m_intake->LowerIntake();
+                    m_claw->open();
+                }
+                else {
+                    m_intake->Stop();
+                    m_claw->grab();
                 }
                 break;
             case DualAction::BtnA:
