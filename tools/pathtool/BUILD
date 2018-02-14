@@ -29,19 +29,3 @@ py_binary(
     ],
     visibility = ["//visibility:public"],
 )
-
-genrule(
-    name = "generate_path_header",
-    outs = [
-        "trajectory.h",
-    ],
-    tools = [
-        ":path_generator",
-        "//third_party/pathfinder:pathfinder_cdll.so",
-    ],
-    srcs = [
-        "sample.json",
-    ],
-    cmd = "$(location :path_generator) $(location sample.json) $@ $(location //third_party/pathfinder:pathfinder_cdll.so)",
-    visibility = ["//visibility:public"],
-)
