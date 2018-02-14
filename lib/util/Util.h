@@ -131,12 +131,17 @@ inline double max(double a, double b) {
     }
 }
 
+/* Return the limit of the two given numbers */
+inline double limit(double x, double maxMagnitude) {
+    return fmin(maxMagnitude, fmax(-maxMagnitude, x));
+}
+
 /**
  * Return 0 if |n| is within +/- |threshold|, otherwise return |n|
  * Useful for joysticks that aren't quite centered at zero
  */
 inline double deadband(double n, double threshold) {
-    if (abs(n) > threshold) {
+    if (fabs(n) > threshold) {
         return n;
     }
     else {
@@ -145,13 +150,13 @@ inline double deadband(double n, double threshold) {
 }
 
 /**
- * Return |n| if abs(n) > threshold... otherwise return threshold
+ * Return |n| if fabs(n) > threshold... otherwise return threshold
  * with the sign of |n|.
  *
  * If |n| is 0.0, return |threshold|.
  */
 inline double antideadband(double n, double threshold) {
-    if (abs(n) < threshold) {
+    if (fabs(n) < threshold) {
         if (n < 0.0) {
             return -threshold;
         }
@@ -196,7 +201,7 @@ inline double square(double n) {
 
 /* returns true if a and b are close (within epsilon) to each other */
 inline bool close(double a, double b, double epsilon = 0.00001) {
-    return abs(a - b) < epsilon;
+    return fabs(a - b) < epsilon;
 }
 
 /*
