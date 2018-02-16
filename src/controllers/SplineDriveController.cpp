@@ -1,7 +1,16 @@
+/*
+ * SplineDriveController.h
+ *
+ *  Created on: 2017
+ *      Author: Kyle
+ */
+
 #include "src/controllers/SplineDriveController.h"
 #include "lib/profiles/TrapProfile.h"
 #include "src/info/RobotInfo.h"
 #include "lib/util/Util.h"
+
+using namespace frc;
 
 namespace frc973 {
 
@@ -24,7 +33,6 @@ SplineDriveController::SplineDriveController(DriveStateProvider *state,
         , m_a_pos_pid(1.9, 0.0, 0.0)
         , m_a_vel_pid(0.2, 0.0, 0.0)
         , m_done(false)
-        , m_needSetControlMode(false)
         , m_l_pos_setpt_log(new LogCell("linear pos incr goal"))
         , m_l_pos_real_log(new LogCell("linear pos incr actual"))
         , m_l_vel_setpt_log(new LogCell("linear vel incr goal"))
@@ -105,12 +113,6 @@ SplineDriveController *SplineDriveController::SetConstraints(double max_vel,
 
 void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
                                             DriveControlSignalReceiver *out) {
-    if (m_needSetControlMode == true) {
-        out->SetDriveControlMode(
-            ctre::phoenix::motorcontrol::ControlMode::Velocity);
-        m_needSetControlMode = false;
-    }
-
     double time = GetSecTime() - m_time_offset;
 
     Profiler::Waypoint goal = Profiler::TrapProfileUnsafe(
@@ -121,7 +123,7 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
 
     if (goal.error) {
         printf("trap drive error\n");
-        out->SetDriveOutput(1.0, -1.0);
+        out->SetDriveOutputIPS(1.0, -1.0);
         return;
     }
 
@@ -154,7 +156,7 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     double left_output = left_l_vel_ff + left_a_vel_ff + linear_dist_term +
                          linear_vel_term - angular_dist_term - angular_vel_term;
 
-    out->SetDriveOutput(left_output, right_output);
+    out->SetDriveOutputIPS(left_output, right_output);
 
     m_done = goal.done;
 
@@ -172,13 +174,6 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
 
     printf("SplineDriveController active time %lf pos %lf\n", time,
            goal.linear_dist);
-}
-
-void SplineDriveController::Start() {
-    m_needSetControlMode = true;
-}
-
-void SplineDriveController::Stop() {
 }
 
 double SplineDriveController::DistFromStart() const {
