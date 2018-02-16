@@ -162,7 +162,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::BtnA:
                 if (pressedP) {
                     m_elevatorMode = ElevatorMode::motionMagic;
-                    m_elevator->SetPosition(Elevator::VAULT);
+                    m_elevator->SetPosition(Elevator::GROUND);
                 }
                 else {
                 }
