@@ -79,10 +79,10 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_leftDriveTalonA->SetSensorPhase(false);
     m_leftDriveTalonA->SetInverted(false);
     m_leftDriveTalonA->SelectProfileSlot(0, 0);
-    m_leftDriveTalonA->Config_kP(0, 0.08, 10);
+    m_leftDriveTalonA->Config_kP(0, 0.3, 10);
     m_leftDriveTalonA->Config_kI(0, 0, 10);
-    m_leftDriveTalonA->Config_kD(0, 0, 10);     // 0.7
-    m_leftDriveTalonA->Config_kF(0, 0.28, 10);  // 0.2
+    m_leftDriveTalonA->Config_kD(0, 0, 10);    // 0.7
+    m_leftDriveTalonA->Config_kF(0, 0.3, 10);  // 0.2
 
     m_leftDriveVictorB->Follow(*m_leftDriveTalonA);
     m_leftDriveVictorB->SetInverted(false);
@@ -95,10 +95,10 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_rightDriveTalonA->SetSensorPhase(false);
     m_rightDriveTalonA->SetInverted(false);
     m_rightDriveTalonA->SelectProfileSlot(0, 0);
-    m_rightDriveTalonA->Config_kP(0, 0.08, 10);
+    m_rightDriveTalonA->Config_kP(0, 0.3, 10);
     m_rightDriveTalonA->Config_kI(0, 0, 10);
-    m_rightDriveTalonA->Config_kD(0, 0, 10);     // 0.7
-    m_rightDriveTalonA->Config_kF(0, 0.28, 10);  // 0.2
+    m_rightDriveTalonA->Config_kD(0, 0, 10);    // 0.7
+    m_rightDriveTalonA->Config_kF(0, 0.3, 10);  // 0.2
 
     m_rightDriveVictorB->Follow(*m_rightDriveTalonA);
     m_rightDriveVictorB->SetInverted(false);

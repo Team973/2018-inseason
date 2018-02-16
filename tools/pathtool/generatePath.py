@@ -15,7 +15,7 @@ def openPointStructs(source):
             waypoints.append(Waypoint(x = waypoint["x"], y = waypoint["y"], angle = waypoint["angle"]))
         left, right = generate_tank_trajectory(waypoints, sourceJSON["timestep"],
                 sourceJSON["max_vel"], sourceJSON["max_accel"],
-                sourceJSON["max_jerk"], 16)
+                sourceJSON["max_jerk"], sourceJSON["wheelbase_width"])
         return left, right, sourceJSON
 
 def writeHeader(target):
