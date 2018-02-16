@@ -25,6 +25,10 @@ public:
 
     virtual ~Intake();
 
+    enum class IntakeState{
+      Intaking, Idle
+    };
+
     /**
      * Starts the wheels to pull things in with the aid of beam breaker sensor
      **/
@@ -56,7 +60,7 @@ public:
 
     void RaiseIntake();
 
-    void TaskPeriodic(RobotMode mode);
+    void TaskPeriodic(RobotMode mode) override;
 
 private:
     TaskMgr *m_scheduler;
@@ -64,5 +68,6 @@ private:
     TalonSRX *m_rightRoller;
     DigitalInput *m_cubeSensor;
     Solenoid *m_position;
+    IntakeState m_intakeState;
 };
 }

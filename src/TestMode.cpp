@@ -233,6 +233,7 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::BtnY:
                 if (pressedP) {
+                  m_intake->AutomatedPull();
                 }
                 break;
             case DualAction::Start:
@@ -241,6 +242,7 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::Back:
                 if (pressedP) {
+                  m_intake->Stop();
                 }
                 break;
         }

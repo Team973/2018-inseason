@@ -40,7 +40,7 @@ static const int FORKLIFT_TALON_CAN_ID = 6;
 static const int FORKLIFT_VICTOR_ID = 11;
 
 // Digital
-static const int INTAKE_BEAM_BREAKER_SENSOR_DIN = 0;
+static const int INTAKE_BEAM_BREAKER_SENSOR_DIN = 3;
 
 // Digital
 static const int PRESSURE_DIN_ID = 1;
