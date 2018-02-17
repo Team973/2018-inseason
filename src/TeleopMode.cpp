@@ -219,14 +219,14 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
-                    // hang fork up
+                    m_intake->Open();
                 }
                 else {
                 }
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
-                    // hang fork down
+                    m_intake->Close();
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:

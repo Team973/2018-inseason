@@ -29,6 +29,7 @@ static const int CUBE_CLAMP_PCM_ID = 1;
 static const int CLAW_KICKER_PCM_ID = 2;
 static const int HANGER_PTO_PCM_ID = 0;
 static const int INTAKE_POSITION_PCM_ID = 3;
+static const int INTAKE_OPENCLOSE_PCM_ID = 4;
 
 // Claw
 static const int CLAW_LEFT_ROLLER_CAN_ID = 5;
@@ -40,7 +41,7 @@ static const int FORKLIFT_TALON_CAN_ID = 6;
 static const int FORKLIFT_VICTOR_ID = 11;
 
 // Digital
-static const int INTAKE_BEAM_BREAKER_SENSOR_DIN = 0;
+static const int INTAKE_BEAM_BREAKER_SENSOR_DIN = 3;
 
 // Digital
 static const int PRESSURE_DIN_ID = 1;
