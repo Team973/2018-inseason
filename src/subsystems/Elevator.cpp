@@ -18,7 +18,7 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor)
         ctre::phoenix::motorcontrol::FeedbackDevice::QuadEncoder, 0,
         10);  // 0 = Not cascaded PID Loop; 10 = in constructor, not in a loop
     m_elevatorMotor->SetSensorPhase(true);
-    m_elevatorMotor->SetNeutralMode(NeutralMode::Brake);
+    m_elevatorMotor->SetNeutralMode(NeutralMode::Coast);
     m_elevatorMotor->SetInverted(true);
 
     m_elevatorMotor->Config_kP(0, 1.5, 10);

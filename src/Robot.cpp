@@ -20,8 +20,6 @@ Robot::Robot()
               new ObservableJoystick(DRIVER_JOYSTICK_PORT, this, this))
         , m_operatorJoystick(
               new ObservableJoystick(OPERATOR_JOYSTICK_PORT, this, this))
-        , m_tuningJoystick(
-              new ObservableJoystick(TUNING_JOYSTICK_PORT, this, this))
         , m_leftDriveTalonA(new GreyTalonSRX(LEFT_DRIVE_A_CAN_ID))
         , m_leftDriveVictorB(new VictorSPX(LEFT_DRIVE_B_VICTOR_ID))
         , m_leftDriveVictorC(new VictorSPX(LEFT_DRIVE_C_VICTOR_ID))
@@ -52,14 +50,12 @@ Robot::Robot()
               new Relay(COMPRESSOR_RELAY, Relay::Direction::kForwardOnly))
         , m_compressor(
               new GreyCompressor(m_airPressureSwitch, m_compressorRelay, this))
-        , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick,
-                                  m_tuningJoystick))
+        , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick))
         , m_autonomous(new Autonomous(m_disabled))
-        , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick,
-                              m_tuningJoystick, m_intake))
-        , m_test(new Test(m_driverJoystick, m_operatorJoystick,
-                          m_tuningJoystick, m_drive, m_elevator, m_claw,
-                          m_intake)) {
+        , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick, m_claw,
+                              m_drive, m_elevator, m_intake))
+        , m_test(new Test(m_driverJoystick, m_operatorJoystick, m_drive,
+                          m_elevator, m_claw, m_intake)) {
     std::cout << "Constructed a Robot!" << std::endl;
 }
 

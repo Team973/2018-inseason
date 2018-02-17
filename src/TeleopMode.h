@@ -1,9 +1,20 @@
+/*
+ * TeleopMode.h
+ *
+ *  Created on: January 7, 2018
+ *      Authors: Kyle, Chris
+ *
+ *  Control map available at: https://goo.gl/MrViHA
+ */
 #pragma once
 
 #include "WPILib.h"
 #include <iostream>
 #include "src/info/RobotInfo.h"
 #include "lib/helpers/JoystickHelper.h"
+#include "src/subsystems/Drive.h"
+#include "src/subsystems/Elevator.h"
+#include "src/subsystems/Claw.h"
 #include "src/subsystems/Intake.h"
 
 using namespace frc;
@@ -11,8 +22,15 @@ using namespace frc;
 namespace frc973 {
 class Teleop {
 public:
-    Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
-           ObservableJoystick *tuning, Intake *intake);
+    enum ElevatorMode
+    {
+        percentOutput,
+        motionMagic,
+        zero
+    };
+
+    Teleop(ObservableJoystick *driver, ObservableJoystick *codriver, Claw *claw,
+           Drive *drive, Elevator *elevator, Intake *intake);
     virtual ~Teleop();
 
     void TeleopInit();
@@ -24,7 +42,21 @@ public:
 private:
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
-    ObservableJoystick *m_tuningJoystick;
+
+    Claw *m_claw;
+
+    Drive *m_drive;
+    enum DriveMode
+    {
+        Cheesy,
+        Hanger
+    };
+    DriveMode m_driveMode;
+
+    Elevator *m_elevator;
     Intake *m_intake;
+
+    ElevatorMode m_elevatorMode;
+    double m_elevatorPosition;
 };
 };

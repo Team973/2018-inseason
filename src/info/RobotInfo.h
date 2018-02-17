@@ -52,7 +52,6 @@ static const int COMPRESSOR_RELAY = 0;
 // Joysticks
 static const int DRIVER_JOYSTICK_PORT = 0;
 static const int OPERATOR_JOYSTICK_PORT = 1;
-static const int TUNING_JOYSTICK_PORT = 2;
 
 // Drive
 static constexpr double DRIVE_WIDTH = 25.205;
