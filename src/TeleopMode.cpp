@@ -5,10 +5,11 @@ using namespace frc;
 
 namespace frc973 {
 Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
-               ObservableJoystick *tuning)
+               ObservableJoystick *tuning, Intake *intake)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
-        , m_tuningJoystick(tuning) {
+        , m_tuningJoystick(tuning)
+        , m_intake(intake) {
 }
 
 Teleop::~Teleop() {
@@ -144,12 +145,14 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
+                    m_intake->Open();
                 }
                 else {
                 }
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
+                    m_intake->Close();
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:

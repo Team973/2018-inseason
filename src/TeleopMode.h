@@ -4,6 +4,7 @@
 #include <iostream>
 #include "src/info/RobotInfo.h"
 #include "lib/helpers/JoystickHelper.h"
+#include "src/subsystems/Intake.h"
 
 using namespace frc;
 
@@ -11,7 +12,7 @@ namespace frc973 {
 class Teleop {
 public:
     Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
-           ObservableJoystick *tuning);
+           ObservableJoystick *tuning, Intake *intake);
     virtual ~Teleop();
 
     void TeleopInit();
@@ -24,5 +25,6 @@ private:
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
     ObservableJoystick *m_tuningJoystick;
+    Intake *m_intake;
 };
 };

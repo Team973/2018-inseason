@@ -21,7 +21,8 @@ class LogSpreadsheet;
 class Intake : public CoopTask {
 public:
     Intake(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *rightRoller,
-           TalonSRX *leftRoller, DigitalInput *cubeSensor, Solenoid *position);
+           TalonSRX *leftRoller, DigitalInput *cubeSensor, Solenoid *position,
+           Solenoid *m_openClose);
 
     virtual ~Intake();
 
@@ -60,6 +61,10 @@ public:
 
     void RaiseIntake();
 
+    void Open();
+
+    void Close();
+
     void TaskPeriodic(RobotMode mode) override;
 
 private:
@@ -68,6 +73,7 @@ private:
     TalonSRX *m_rightRoller;
     DigitalInput *m_cubeSensor;
     Solenoid *m_position;
+    Solenoid *m_openClose;
     IntakeState m_intakeState;
 };
 }

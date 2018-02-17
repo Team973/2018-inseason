@@ -8,12 +8,13 @@ using namespace frc;
 namespace frc973 {
 Intake::Intake(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *leftRoller,
                TalonSRX *rightRoller, DigitalInput *cubeSensor,
-               Solenoid *position)
+               Solenoid *position, Solenoid *openClose)
         : m_scheduler(scheduler)
         , m_leftRoller(leftRoller)
         , m_rightRoller(rightRoller)
         , m_cubeSensor(cubeSensor)
         , m_position(position)
+        , m_openClose(openClose)
         , m_intakeState(IntakeState::Idle) {
     this->m_scheduler->RegisterTask("Intake", this, TASK_PERIODIC);
     m_leftRoller->SetNeutralMode(NeutralMode::Brake);
@@ -66,6 +67,13 @@ void Intake::RaiseIntake() {
     m_position->Set(false);
 }
 
+void Intake::Open() {
+    m_openClose->Set(true);
+}
+
+void Intake::Close() {
+    m_openClose->Set(false);
+}
 void Intake::TaskPeriodic(RobotMode mode) {
   switch (m_intakeState) {
     case IntakeState::Idle:
