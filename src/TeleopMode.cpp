@@ -22,7 +22,7 @@ Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_elevator(elevator)
         , m_intake(intake)
         , m_elevatorMode(ElevatorMode::percentOutput)
-        , m_intakeMode(IntakeMode::Manual) {
+        , m_intakeMode(IntakeMode::manual) {
 }
 
 Teleop::~Teleop() {
@@ -30,7 +30,7 @@ Teleop::~Teleop() {
 
 void Teleop::TeleopInit() {
     std::cout << "Teleop Start" << std::endl;
-    m_intakeMode = IntakeMode::Manual;
+    m_intakeMode = IntakeMode::manual;
     m_intake->Stop();
     m_intake->LowerIntake();
 }
@@ -73,33 +73,75 @@ void Teleop::TeleopPeriodic() {
     else if (m_elevatorMode == ElevatorMode::motionMagic) {
     }
 
+    double intakePosition =
+        -m_operatorJoystick->GetRawAxis(DualAction::RightYAxis);
+
+    if (intakePosition > 0.8) {
+        m_intakeMode = IntakeMode::manual;
+        m_intake->RaiseIntake();
+    }
+    else if (intakePosition < -0.8) {
+        m_intakeMode = IntakeMode::manual;
+        m_intake->LowerIntake();
+    }
+
     switch (m_intakeMode) {
-        case IntakeMode::Manual:
+        case IntakeMode::manual:
             break;
-        case IntakeMode::Intaking:
+        case IntakeMode::switchIntaking:
+            m_elevatorMode = ElevatorMode::motionMagic;
+            m_elevator->SetPosition(Elevator::GROUND);
             m_intake->Close();
+            m_intake->LowerIntake();
             m_intake->RegularPull();
-            if (m_intake->IsCubeIn() && m_elevator->GetPosition() < 2) {
-                m_intakeMode = IntakeMode::Grabbing;
+            m_claw->open();
+            m_claw->kickOff();
+            if (m_intake->IsCubeIn() &&
+                fabs(Elevator::GROUND - m_elevator->GetPosition()) < 1.0) {
+                m_intakeMode = IntakeMode::switchGrabbing;
                 m_intakeModeTimer = GetMsecTime();
             }
             break;
-        case IntakeMode::Grabbing:
+        case IntakeMode::switchGrabbing:
             m_intake->Stop();
             m_intake->Open();
+            m_intake->LowerIntake();
             m_claw->grab();
+            m_claw->kickOff();
             if ((GetMsecTime() - m_intakeModeTimer) > 300) {
-                m_intakeMode = IntakeMode::Raising;
-                m_intakeModeTimer = GetMsecTime();
-                m_elevatorMode = ElevatorMode::motionMagic;
-                m_elevator->SetPosition(Elevator::LOW_GOAL);
+                m_intakeMode = IntakeMode::switchStandby;
+                m_intake->Close();
             }
             break;
-        case IntakeMode::Raising:
-            if (m_elevator->GetPosition() > 14) {
+        case IntakeMode::switchStandby:
+            m_intake->Stop();
+            m_intake->LowerIntake();
+            m_intake->Close();
+            m_claw->grab();
+            m_claw->kickOff();
+            m_elevatorMode = ElevatorMode::motionMagic;
+            m_elevator->SetPosition(Elevator::LOW_GOAL);
+            break;
+        case IntakeMode::vaultStart:
+            m_intake->Stop();
+            m_intake->Close();
+            m_intake->LowerIntake();
+            m_intakeModeTimer = GetMsecTime();
+            m_intakeMode = IntakeMode::vaultIntaking;
+            break;
+        case IntakeMode::vaultIntaking:
+            if (fabs(Elevator::GROUND - m_elevator->GetPosition()) < 1.0 &&
+                (GetMsecTime() - m_intakeModeTimer) > 300) {
+                m_elevatorMode = ElevatorMode::motionMagic;
+                m_elevator->SetPosition(Elevator::GROUND);
+                m_intake->RegularPull();
                 m_intake->Close();
-                m_intakeMode = IntakeMode::Manual;
+                m_intake->LowerIntake();
+                m_claw->grab();
+                m_claw->kickOff();
             }
+            break;
+        default:
             break;
     }
 
@@ -136,7 +178,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::Manual;
+                    m_intakeMode = IntakeMode::manual;
                     m_claw->drop();
                 }
                 else {
@@ -144,7 +186,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::Manual;
+                    m_intakeMode = IntakeMode::manual;
                     m_claw->cubeLaunch();
                 }
                 break;
@@ -223,29 +265,17 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::Manual;
-                    m_intake->RegularPull();
-                    m_intake->LowerIntake();
-                    m_claw->open();
-                }
-                else {
-                    m_intake->Stop();
+                    m_intakeMode = IntakeMode::switchIntaking;
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::Manual;
-                    m_intake->Eject();
-                    m_intake->LowerIntake();
-                    m_claw->open();
-                }
-                else {
-                    m_intake->Stop();
+                    m_intakeMode = IntakeMode::vaultStart;
                 }
                 break;
             case DualAction::RightTrigger:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::Manual;
+                    m_intakeMode = IntakeMode::manual;
                     m_claw->grab();
                 }
                 else {
@@ -253,7 +283,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::RightBumper:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::Manual;
+                    m_intakeMode = IntakeMode::manual;
                     m_claw->open();
                 }
                 else {
@@ -261,7 +291,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::Manual;
+                    m_intakeMode = IntakeMode::manual;
                     m_intake->Open();
                 }
                 else {
@@ -269,25 +299,25 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::Manual;
+                    m_intakeMode = IntakeMode::manual;
                     m_intake->Close();
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::Manual;
+                    m_intakeMode = IntakeMode::manual;
                     m_intake->LowerIntake();
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::Manual;
+                    m_intakeMode = IntakeMode::manual;
                     m_intake->RaiseIntake();
                 }
                 break;
             case DualAction::Back:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::Intaking;
+                    m_intakeMode = IntakeMode::switchIntaking;
                 }
                 break;
             case DualAction::Start:

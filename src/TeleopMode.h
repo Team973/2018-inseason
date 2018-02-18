@@ -61,10 +61,12 @@ private:
 
     enum class IntakeMode
     {
-        Manual,
-        Intaking,
-        Grabbing,
-        Raising
+        manual,
+        switchIntaking,
+        switchGrabbing,
+        switchStandby,
+        vaultStart,
+        vaultIntaking
     };
     IntakeMode m_intakeMode;
     uint32_t m_intakeModeTimer;
