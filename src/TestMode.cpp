@@ -23,6 +23,7 @@ Test::~Test() {
 void Test::TestInit() {
     std::cout << "Test Start" << std::endl;
     m_driveMode = DriveMode::Openloop;
+    m_hanger->DisengagePTO();
 }
 
 void Test::TestPeriodic() {
@@ -122,6 +123,7 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::BtnA:
                 if (pressedP) {
                     m_driveMode = DriveMode::Velocity;
+                    m_hanger->DisengagePTO();
                 }
                 break;
             case DualAction::BtnB:
@@ -231,6 +233,7 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::BtnY:
                 if (pressedP) {
                     m_driveMode = DriveMode::Hanger;
+                    m_hanger->EngagePTO();
                 }
                 break;
             case DualAction::Start:
