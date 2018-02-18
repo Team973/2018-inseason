@@ -39,7 +39,8 @@ Robot::Robot()
         , m_elevator(new Elevator(this, m_logger, m_elevatorMotor))
         , m_claw(new Claw(this, m_logger, m_cubeClamp, m_clawKicker))
         , m_intake(new Intake(this, m_logger, m_rightRoller, m_leftRoller,
-                              m_cubeSensor, m_intakePosition, m_intakeOpenClose))
+                              m_cubeSensor, m_intakePosition,
+                              m_intakeOpenClose))
         , m_drive(new Drive(this, m_logger, m_leftDriveTalonA,
                             m_leftDriveVictorB, m_leftDriveVictorC,
                             m_rightDriveTalonA, m_rightDriveVictorB,

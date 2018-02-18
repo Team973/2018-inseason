@@ -32,7 +32,7 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor)
     m_elevatorMotor->EnableCurrentLimit(true);
     m_elevatorMotor->ConfigPeakCurrentDuration(0, 10);
     m_elevatorMotor->ConfigPeakCurrentLimit(0, 10);
-    m_elevatorMotor->ConfigContinuousCurrentLimit(5, 10);
+    m_elevatorMotor->ConfigContinuousCurrentLimit(10, 10);
     m_elevatorMotor->EnableVoltageCompensation(false);
     m_elevatorMotor->ConfigForwardSoftLimitThreshold(
         ELEVATOR_SOFT_HEIGHT_LIMIT / ELEVATOR_INCHES_PER_CLICK, 10);
@@ -69,6 +69,7 @@ float Elevator::GetPosition() {
 
 void Elevator::TaskPeriodic(RobotMode mode) {
     m_positionCell->LogDouble(GetPosition());
+    SmartDashboard::PutNumber("elevator/encoders/encoder", GetPosition());
     switch (m_elevatorState) {
         case manual:
             break;

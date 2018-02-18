@@ -26,8 +26,10 @@ public:
 
     virtual ~Intake();
 
-    enum class IntakeState{
-      Intaking, Idle
+    enum class IntakeState
+    {
+        Intaking,
+        Idle
     };
 
     /**

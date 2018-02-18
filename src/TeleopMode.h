@@ -58,5 +58,15 @@ private:
 
     ElevatorMode m_elevatorMode;
     double m_elevatorPosition;
+
+    enum class IntakeMode
+    {
+        Manual,
+        Intaking,
+        Grabbing,
+        Raising
+    };
+    IntakeMode m_intakeMode;
+    uint32_t m_intakeModeTimer;
 };
 };

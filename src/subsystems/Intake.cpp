@@ -31,11 +31,11 @@ Intake::~Intake() {
 }
 
 void Intake::AutomatedPull() {
-  m_intakeState = IntakeState::Intaking;
+    m_intakeState = IntakeState::Intaking;
 }
 
 void Intake::RegularPull() {
-  m_intakeState = IntakeState::Idle;
+    m_intakeState = IntakeState::Idle;
     m_leftRoller->Set(ControlMode::PercentOutput,
                       -0.7);  // Negative output will cause intake to intake
     m_rightRoller->Set(ControlMode::PercentOutput, -0.7);
@@ -75,23 +75,22 @@ void Intake::Close() {
     m_openClose->Set(false);
 }
 void Intake::TaskPeriodic(RobotMode mode) {
-  switch (m_intakeState) {
-    case IntakeState::Idle:
-        break;
-    case IntakeState::Intaking:
-        if(IsCubeIn()){
-          m_intakeState = IntakeState::Idle;
-          m_leftRoller->Set(ControlMode::PercentOutput, 0.0);
-          m_rightRoller->Set(ControlMode::PercentOutput, 0.0);
-
-        }
-        else{
-          m_leftRoller->Set(ControlMode::PercentOutput, -0.7);
-          m_rightRoller->Set(ControlMode::PercentOutput, -0.7);
-        }
-        break;
-  }
-  printf("cubeS %d\n", IsCubeIn());
-
+    SmartDashboard::PutBoolean("intake/sensors/bannersensor", IsCubeIn());
+    switch (m_intakeState) {
+        case IntakeState::Idle:
+            break;
+        case IntakeState::Intaking:
+            if (IsCubeIn()) {
+                m_intakeState = IntakeState::Idle;
+                m_leftRoller->Set(ControlMode::PercentOutput, 0.0);
+                m_rightRoller->Set(ControlMode::PercentOutput, 0.0);
+            }
+            else {
+                m_leftRoller->Set(ControlMode::PercentOutput, -0.7);
+                m_rightRoller->Set(ControlMode::PercentOutput, -0.7);
+            }
+            break;
+    }
+    printf("cubeS %d\n", IsCubeIn());
 }
 }
