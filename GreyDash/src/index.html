@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>GreyDash</title>
+    <link href="css/style.css" rel="stylesheet">
+    <link href="fonts/fonts.css" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div id="timer">2:15</div>
+    </header>
+    <!-- The graph section of the dashboard. -->
+    <section id="charts" class="charts">
+    </section>
+    <!-- The list section of the dashboard -->
+    <section id="indicators" class="indicators">
+    </section>
+    <!-- The sidebar of the dashboard. Designed for smaller control elements like selection boxes and small buttons. -->
+    <section class="graphicalIndicators">
+        <!-- Tells whether robot is connected to dashboard. -->
+        <div id="robotState">Unknown state</div>
+        <!-- Autonomous selector -->
+        <!-- Gyroscope -->
+        <svg id="gyro">
+            <circle cx="85" cy="85" r="83"></circle>
+            <circle cx="85" cy="85" r="50"></circle>
+            <rect id="gyroDial" x="80" y="5" width="10" height="80"></rect>
+            <text id="gyroNumber" x="90" y="115">0º</text>
+        </svg>
+    </section>
+    <div id="login">
+        <input id="connectAddress" type="text" value="localhost" disabled>
+        <button id="connect" disabled>Connecting</button>
+    </div>
+    <script src="networktables/networktables.js"></script>
+    <script src="connection.js"></script>
+    <script src="ui.js"></script>
+</body>
+
+</html>
