@@ -5,14 +5,14 @@ using namespace frc;
 
 namespace frc973 {
 Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-           ObservableJoystick *tuning, Drive *drive, Elevator *elevator,
-           Claw *claw, Hanger *hanger)
+           Drive *drive, Elevator *elevator, Intake *intake, Claw *claw,
+           Hanger *hanger)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
-        , m_tuningJoystick(tuning)
         , m_drive(drive)
         , m_elevator(elevator)
         , m_claw(claw)
+        , m_intake(intake)
         , m_hanger(hanger)
         , m_elevatorMode(ElevatorMode::percentOutput) {
 }
@@ -46,9 +46,9 @@ void Test::TestPeriodic() {
     bool quickturn = m_driverJoystick->GetRawButton(DualAction::LeftBumper);
 
     if (m_driverJoystick->GetRawButton(DualAction::RightBumper)) {
-        x /= 3.0;
-        y /= 3.0;
     }
+    x /= 3.0;
+    y /= 3.0;
 
     if (m_driveMode == DriveMode::AssistedArcade) {
         m_drive->AssistedArcadeDrive(y, x);
@@ -195,18 +195,24 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
-                    m_hanger->SetForkliftPower(0.3);
+                    m_intake->RegularPull();
+                    m_intake->LowerIntake();
+                    m_claw->open();
                 }
                 else {
-                    m_hanger->SetForkliftPower(0);
+                    m_intake->Stop();
+                    m_claw->grab();
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
-                    m_hanger->SetForkliftPower(-0.3);
+                    m_intake->Eject();
+                    m_intake->LowerIntake();
+                    m_claw->open();
                 }
                 else {
-                    m_hanger->SetForkliftPower(0);
+                    m_intake->Stop();
+                    m_claw->grab();
                 }
                 break;
             case DualAction::BtnA:
@@ -242,70 +248,7 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::Back:
                 if (pressedP) {
-                }
-                break;
-        }
-    }
-    else if (port == TUNING_JOYSTICK_PORT) {
-        switch (button) {
-            case DualAction::DPadUpVirtBtn:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::DPadDownVirtBtn:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::DPadRightVirtBtn:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::DPadLeftVirtBtn:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::RightTrigger:
-                if (pressedP) {
-                }
-                else {
-                }
-                break;
-            case DualAction::RightBumper:
-                if (pressedP) {
-                }
-                else {
-                }
-                break;
-            case DualAction::LeftBumper:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::LeftTrigger:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::BtnA:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::BtnB:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::BtnX:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::BtnY:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::Start:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::Back:
-                if (pressedP) {
+                    m_intake->Stop();
                 }
                 break;
         }

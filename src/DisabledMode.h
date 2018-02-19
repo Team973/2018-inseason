@@ -14,8 +14,7 @@ class Disabled {
 public:
     typedef enum routine { none, forward } SelectedAutoRoutine;
 
-    Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
-             ObservableJoystick *tuning);
+    Disabled(ObservableJoystick *driver, ObservableJoystick *codriver);
     virtual ~Disabled();
 
     void DisabledInit();
@@ -32,6 +31,5 @@ private:
 
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
-    ObservableJoystick *m_tuningJoystick;
 };
 };
