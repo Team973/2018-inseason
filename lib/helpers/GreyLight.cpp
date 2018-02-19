@@ -15,7 +15,7 @@ GreyLight::GreyLight(int numLEDs) {
     state.numLEDs = numLEDs;
     state.pixels = std::vector<Color>(numLEDs);
     strip = new APA102(numLEDs);
-    processor = new Static({0, 0, 0});
+    processor = new Static({0, 0, 0});  // start with all lights off
     worker = std::thread(&GreyLight::loop, this);
 }
 
