@@ -8,14 +8,16 @@ Adafruit library written by Limor Fried/Ladyada for Adafruit Industries.
 #ifndef _GreyOLED_H_
 #define _GreyOLED_H_
 #include "WPILib.h"
-#include <Adafruit_GFX.h>
+#include "Adafruit_GFX.h"
+#include <stdint.h>
 
 #define BLACK 0
 #define WHITE 1
 #define INVERSE 2
 
-#define SSD1306_I2C_ADDRESS 0x3C  // 011110+SA0+RW - 0x3C or 0x3D
-                                  // Address for 128x32 is 0x3C
+#define SSD1306_I2C_ADDRESS \
+    0x3C  // 011110+SA0+RW - 0x3C or 0x3D
+          // Address for 128x32 is 0x3C
 // Address for 128x64 is 0x3D (default) or 0x3C (if SA0 is grounded)
 
 /*=========================================================================
@@ -88,7 +90,7 @@ Adafruit library written by Limor Fried/Ladyada for Adafruit Industries.
 
 class GreyOLED : public Adafruit_GFX {
 public:
-    GreyOLED(int8_t RST = -1);
+    GreyOLED(int8_t RST = -1, frc::I2C::Port PORT = frc::I2C::Port::kMXP);
 
     void begin(uint8_t switchvcc = SSD1306_SWITCHCAPVCC,
                uint8_t i2caddr = SSD1306_I2C_ADDRESS, bool reset = true);
@@ -105,7 +107,7 @@ public:
     void startscrolldiagleft(uint8_t start, uint8_t stop);
     void stopscroll(void);
 
-    void dim(boolean dim);
+    void dim(bool dim);
 
     void drawPixel(int16_t x, int16_t y, uint16_t color);
 
@@ -114,6 +116,9 @@ public:
 
 private:
     int8_t _i2caddr, _vccstate;
+    DigitalOutput* rst;
+    frc::I2C* i2c;
+    frc::I2C::Port PORT;
     inline void drawFastVLineInternal(int16_t x, int16_t y, int16_t h,
                                       uint16_t color)
         __attribute__((always_inline));

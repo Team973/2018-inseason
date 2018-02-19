@@ -144,28 +144,30 @@ void GreyOLED::drawPixel(int16_t x, int16_t y, uint16_t color) {
 }
 
 // initializer for I2C - we only indicate the reset pin!
-GreyOLED::GreyOLED(int8_t reset)
+GreyOLED::GreyOLED(int8_t reset, frc::I2C::Port port)
         : Adafruit_GFX(SSD1306_LCDWIDTH, SSD1306_LCDHEIGHT) {
-    sclk = dc = cs = sid = -1;
     rst = new DigitalOutput(reset);
+    PORT = port;
 }
 
 void GreyOLED::begin(uint8_t vccstate, uint8_t i2caddr, bool reset) {
     _vccstate = vccstate;
     _i2caddr = i2caddr;
-    i2c = frc::I2C(PORT, _i2caddr);
+    i2c = new frc::I2C(PORT, _i2caddr);
 
     if ((reset) && (rst >= 0)) {
         // Setup reset pin direction (used by both SPI and I2C)
-        rst.Set(true);
+        rst->Set(true);
         // VDD (3.3V) goes high at start, lets just chill for a ms
-        delay(1);
+        // delay(1);
+        // TO-DO: test and check if a delay is needed
         // bring reset low
-        rst.Set(false);
+        rst->Set(false);
         // wait 10ms
-        delay(10);
+        // delay(10);
+        // TO-DO: test and check if a delay is needed
         // bring out of reset
-        rst.Set(true);
+        rst->Set(true);
         // turn on VCC (9V?)
     }
 
@@ -175,8 +177,7 @@ void GreyOLED::begin(uint8_t vccstate, uint8_t i2caddr, bool reset) {
     ssd1306_command(0x80);                        // the suggested ratio 0x80
 
     ssd1306_command(SSD1306_SETMULTIPLEX);  // 0xA8
-    ssd1306_commandigitalWrite(rst, HIGH);
-    d(SSD1306_LCDHEIGHT - 1);
+    ssd1306_command(SSD1306_LCDHEIGHT - 1);
 
     ssd1306_command(SSD1306_SETDISPLAYOFFSET);    // 0xD3
     ssd1306_command(0x0);                         // no offset
@@ -229,8 +230,8 @@ void GreyOLED::invertDisplay(uint8_t i) {
 
 void GreyOLED::ssd1306_command(uint8_t c) {
     // I2C
-    uint8_t control = 0x00;  // Co = 0, D/C = 0
-    i2c->WriteBulk({control, c}, sizeof(control) + sizeof(c));
+    uint8_t command[] = {0x00, c};  // Co = 0, D/C = 0
+    i2c->WriteBulk(command, sizeof(command));
 }
 
 // startscrollright
@@ -304,7 +305,7 @@ void GreyOLED::stopscroll(void) {
 // Dim the display
 // dim = true: display is dimmed
 // dim = false: display is normal
-void GreyOLED::dim(boolean dim) {
+void GreyOLED::dim(bool dim) {
     uint8_t contrast;
 
     if (dim) {
@@ -353,11 +354,13 @@ void GreyOLED::display(void) {
     // I2C
     for (uint16_t i = 0; i < (SSD1306_LCDWIDTH * SSD1306_LCDHEIGHT / 8); i++) {
         // send a bunch of data in one xmission
-        i2c->WriteBulk({0x40}, sizeof(0x40));
+        uint8_t command[17];
+        command[0] = 0x40;
         for (uint8_t x = 0; x < 16; x++) {
-            i2c->WriteBulk({buffer[i]}, sizeof(buffer[i]));
+            command[i] = buffer[i];
             i++;
         }
+        i2c->WriteBulk(command, sizeof(command));
         i--;
     }
 #ifdef TWBR
@@ -371,7 +374,7 @@ void GreyOLED::clearDisplay(void) {
 }
 
 void GreyOLED::drawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color) {
-    boolean bSwap = false;
+    bool bSwap = false;
     switch (rotation) {
         case 0:
             // 0 degree rotation, do nothing
