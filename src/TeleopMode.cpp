@@ -33,6 +33,7 @@ void Teleop::TeleopInit() {
     m_intakeMode = IntakeMode::manual;
     m_intake->Stop();
     m_intake->LowerIntake();
+    m_intake->Close();
 }
 
 void Teleop::TeleopPeriodic() {
@@ -73,14 +74,14 @@ void Teleop::TeleopPeriodic() {
     else if (m_elevatorMode == ElevatorMode::motionMagic) {
     }
 
-    double intakePosition =
+    double intakeControl =
         -m_operatorJoystick->GetRawAxis(DualAction::RightYAxis);
 
-    if (intakePosition > 0.8) {
+    if (intakeControl > 0.8) {
         m_intakeMode = IntakeMode::manual;
         m_intake->RaiseIntake();
     }
-    else if (intakePosition < -0.8) {
+    else if (intakeControl < -0.8) {
         m_intakeMode = IntakeMode::manual;
         m_intake->LowerIntake();
     }
@@ -125,6 +126,8 @@ void Teleop::TeleopPeriodic() {
             }
             break;
         case IntakeMode::vaultStart:
+            m_claw->grab();
+            m_claw->kickOff();
             m_intake->Stop();
             m_intake->Close();
             m_intake->LowerIntake();

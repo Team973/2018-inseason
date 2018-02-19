@@ -22,13 +22,6 @@ using namespace frc;
 namespace frc973 {
 class Teleop {
 public:
-    enum ElevatorMode
-    {
-        percentOutput,
-        motionMagic,
-        zero
-    };
-
     Teleop(ObservableJoystick *driver, ObservableJoystick *codriver, Claw *claw,
            Drive *drive, Elevator *elevator, Intake *intake);
     virtual ~Teleop();
@@ -46,12 +39,19 @@ private:
     Claw *m_claw;
 
     Drive *m_drive;
-    enum DriveMode
+    enum class DriveMode
     {
         Cheesy,
         Hanger
     };
     DriveMode m_driveMode;
+
+    enum class ElevatorMode
+    {
+        percentOutput,
+        motionMagic,
+        zero
+    };
 
     Elevator *m_elevator;
     Intake *m_intake;
