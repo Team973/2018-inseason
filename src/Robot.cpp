@@ -50,6 +50,7 @@ Robot::Robot()
               new Relay(COMPRESSOR_RELAY, Relay::Direction::kForwardOnly))
         , m_compressor(
               new GreyCompressor(m_airPressureSwitch, m_compressorRelay, this))
+        , m_greylight(new GreyLight(NUM_LED))
         , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick,
                                   m_tuningJoystick))
         , m_autonomous(new Autonomous(m_disabled))

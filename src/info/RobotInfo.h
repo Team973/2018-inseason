@@ -53,7 +53,7 @@ static const int OPERATOR_JOYSTICK_PORT = 1;
 static const int TUNING_JOYSTICK_PORT = 2;
 
 // LEDs
-static const int NUM_LED = 44;
+static const int NUM_LED = 26;
 
 // Drive
 static constexpr double DRIVE_WIDTH = 25.205;

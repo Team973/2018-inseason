@@ -20,8 +20,8 @@ public:
 
 private:
     void pushToRightSide(PixelState& state);
-    bool inverse;
-    uint8_t previousNumLEDs;
+    bool m_inverse;
+    uint8_t m_previousNumLEDs;
 };
 
 #endif /* SRC_MODULES_PIXELPROCESSORS_CENTERMIRROR_H_ */
