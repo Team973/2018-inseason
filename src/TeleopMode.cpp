@@ -97,8 +97,8 @@ void Teleop::TeleopPeriodic() {
             m_intake->RegularPull();
             m_claw->open();
             m_claw->kickOff();
-            if ((m_intake->IsCubeIn() && m_elevator->GetPosition() < 1.0) ||
-                m_driverJoystick->GetRawButton(10)) {
+            if ((m_intake->IsCubeIn() && m_elevator->GetPosition() < 2.0) ||
+                m_driverJoystick->GetRawButton(DualAction::Start)) {
                 m_intakeMode = IntakeMode::switchGrabbing;
                 m_intakeModeTimer = GetMsecTime();
             }
@@ -111,7 +111,6 @@ void Teleop::TeleopPeriodic() {
             m_claw->kickOff();
             if ((GetMsecTime() - m_intakeModeTimer) > 300) {
                 m_intakeMode = IntakeMode::switchStandby;
-                m_intake->Close();
             }
             break;
         case IntakeMode::switchStandby:
@@ -303,6 +302,10 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                     m_intakeMode = IntakeMode::manual;
                     m_claw->open();
                     m_intake->Eject();
+                }
+                else {
+                    m_intake->Close();
+                    m_claw->open();
                 }
                 break;
             case DualAction::DPadUpVirtBtn:
