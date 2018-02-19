@@ -36,6 +36,8 @@ Robot::Robot()
         , m_leftRoller(new GreyTalonSRX(CLAW_LEFT_ROLLER_CAN_ID))
         , m_cubeSensor(new DigitalInput(INTAKE_BEAM_BREAKER_SENSOR_DIN))
         , m_elevatorMotor(new TalonSRX(ELEVATOR_CAN_ID))
+        , m_hangerpto(new Solenoid(PCM_CAN_ID, HANGER_PTO_PCM_ID))
+        , m_forkliftTalon(new GreyTalonSRX(FORKLIFT_TALON_CAN_ID))
         , m_elevator(new Elevator(this, m_logger, m_elevatorMotor))
         , m_claw(new Claw(this, m_logger, m_cubeClamp, m_clawKicker))
         , m_intake(new Intake(this, m_logger, m_rightRoller, m_leftRoller,
@@ -44,7 +46,8 @@ Robot::Robot()
                             m_leftDriveVictorB, m_leftDriveVictorC,
                             m_rightDriveTalonA, m_rightDriveVictorB,
                             m_rightDriveVictorC, m_gyro))
-        , m_hanger(new Hanger(this, m_logger))
+        , m_hanger(new Hanger(this, m_logger, m_drive, m_elevator, m_hangerpto,
+                              m_forkliftTalon))
         , m_airPressureSwitch(new DigitalInput(PRESSURE_DIN_ID))
         , m_compressorRelay(
               new Relay(COMPRESSOR_RELAY, Relay::Direction::kForwardOnly))
@@ -56,7 +59,8 @@ Robot::Robot()
         , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick,
                               m_tuningJoystick))
         , m_test(new Test(m_driverJoystick, m_operatorJoystick,
-                          m_tuningJoystick, m_drive, m_elevator, m_claw)) {
+                          m_tuningJoystick, m_drive, m_elevator, m_claw,
+                          m_hanger)) {
     std::cout << "Constructed a Robot!" << std::endl;
 }
 
