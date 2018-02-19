@@ -12,7 +12,7 @@ static constexpr double POSITION_KP = 0.0;
 static constexpr double POSITION_KI = 0.0;
 static constexpr double POSITION_KD = 0.0;
 
-static constexpr double VELOCITY_KP = 0.0;
+static constexpr double VELOCITY_KP = 2.0;
 static constexpr double VELOCITY_KI = 0.0;
 static constexpr double VELOCITY_KD = 0.0;
 
