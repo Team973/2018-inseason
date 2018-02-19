@@ -7,11 +7,11 @@
 #ifndef SRC_MODULES_GREYLIGHT_H_
 #define SRC_MODULES_GREYLIGHT_H_
 
-// #include <Settings.h>
 #include <chrono>
 #include <mutex>
 #include <thread>
 #include "lib/pixelprocessors/GreyLightTypes.h"
+#include "lib/helpers/APA102.h"
 #include "lib/pixelprocessors/PixelStateProcessor.h"
 
 class GreyLight {
@@ -26,8 +26,7 @@ public:
     PixelStateProcessor* processor;
 
 private:
-    void writeFrame(std::vector<Color> pixels);
-
+    APA102* strip;
     std::thread worker;
 };
 

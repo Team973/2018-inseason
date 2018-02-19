@@ -22,12 +22,16 @@ cc_library(
     name = "greylight",
     srcs = glob([
         "GreyLight.cpp",
+        "APA102.cpp"
     ]),
     hdrs = glob([
         "GreyLight.h",
+        "APA102.h"
     ]),
     deps = [
-        "//lib/pixelprocessors:pixelprocessors"
+        "//lib/pixelprocessors:pixelprocessors",
+        "//third_party/wpilibsuite:wpilib"
+
     ],
     visibility = ["//visibility:public"],
 )
