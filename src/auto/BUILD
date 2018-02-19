@@ -6,9 +6,7 @@ cc_library(
     ]),
     hdrs = glob([
         "*.h",
-    ]) + [
-        "//tools/pathtool:generate_path_header",
-    ],
+    ]),
     deps = [
         "//third_party/wpilibsuite:wpilib",
         "//third_party/ctre:ctre",

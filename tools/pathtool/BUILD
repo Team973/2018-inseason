@@ -1,3 +1,4 @@
+
 py_library(
     name = "pypathfinder",
     srcs = [
@@ -19,27 +20,12 @@ py_test(
 )
 
 py_binary(
-    name = "generatePath",
+    name = "path_generator",
     srcs = [
-        "generatePath.py",
+        "path_generator.py",
     ],
     deps = [
         ":pypathfinder",
     ],
-)
-
-genrule(
-    name = "generate_path_header",
-    outs = [
-        "trajectory.h",
-    ],
-    tools = [
-        ":generatePath",
-        "//third_party/pathfinder:pathfinder_cdll.so",
-    ],
-    srcs = [
-        "sample.json",
-    ],
-    cmd = "$(location :generatePath) $(location sample.json) $@ $(location //third_party/pathfinder:pathfinder_cdll.so)",
     visibility = ["//visibility:public"],
 )
