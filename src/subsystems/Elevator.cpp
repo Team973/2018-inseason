@@ -67,6 +67,10 @@ float Elevator::GetPosition() {
            ((float)m_elevatorMotor->GetSelectedSensorPosition(0));
 }
 
+void Elevator::ZeroPosition() {
+    m_elevatorMotor->GetSensorCollection().SetQuadraturePosition(0, 0);
+}
+
 void Elevator::TaskPeriodic(RobotMode mode) {
     m_positionCell->LogDouble(GetPosition());
     SmartDashboard::PutNumber("elevator/encoders/encoder", GetPosition());
@@ -75,19 +79,10 @@ void Elevator::TaskPeriodic(RobotMode mode) {
         case manual:
             break;
         case zeroing_start:
-            m_zeroingTime = GetMsecTime();
             m_elevatorState = ElevatorState::zeroing_goDown;
             break;
         case zeroing_goDown:
             m_elevatorMotor->Set(ControlMode::PercentOutput, -0.2);
-            if (GetMsecTime() - m_zeroingTime > 1500) {
-                m_elevatorState = ElevatorState::zeroing_stop;
-            }
-            break;
-        case zeroing_stop:
-            m_elevatorMotor->GetSensorCollection().SetQuadraturePosition(0, 0);
-            m_elevatorMotor->Set(ControlMode::PercentOutput, 0.0);
-            m_elevatorState = ElevatorState::manual;
             break;
         case position:
             break;

@@ -36,17 +36,15 @@ void Intake::AutomatedPull() {
 
 void Intake::RegularPull() {
     m_intakeState = IntakeState::Idle;
-    m_leftRoller->Set(ControlMode::PercentOutput,
-                      -0.5);  // Negative output will cause intake to intake
-    m_rightRoller->Set(ControlMode::PercentOutput, -0.5);
+    m_leftRoller->Set(ControlMode::PercentOutput, 0.3);
+    m_rightRoller->Set(ControlMode::PercentOutput, 0.7);
 }
 
 void Intake::Eject() {
     m_intakeState = IntakeState::Idle;
     printf("Ejecting\n");
-    m_leftRoller->Set(ControlMode::PercentOutput,
-                      0.5);  // Positive output will cause intake to spit out
-    m_rightRoller->Set(ControlMode::PercentOutput, 0.5);
+    m_leftRoller->Set(ControlMode::PercentOutput, -0.3);
+    m_rightRoller->Set(ControlMode::PercentOutput, -0.7);
 }
 
 void Intake::Stop() {
@@ -56,7 +54,7 @@ void Intake::Stop() {
 }
 
 bool Intake::IsCubeIn() {
-    return !m_cubeSensor->Get();
+    return m_cubeSensor->Get();
 }
 
 void Intake::LowerIntake() {

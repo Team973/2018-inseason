@@ -66,8 +66,10 @@ private:
         switchIntaking,
         switchGrabbing,
         switchStandby,
+        switchEjecting,
         vaultStart,
-        vaultIntaking
+        vaultIntaking,
+        vaultEjecting
     };
     IntakeMode m_intakeMode;
     uint32_t m_intakeModeTimer;

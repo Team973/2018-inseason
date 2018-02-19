@@ -123,7 +123,7 @@ void Teleop::TeleopPeriodic() {
             m_elevatorMode = ElevatorMode::motionMagic;
             m_elevator->SetPosition(Elevator::LOW_GOAL);
             if (m_elevator->GetPosition() > 14.0) {
-                m_intake->Close();
+                m_intake->Open();
             }
             break;
         case IntakeMode::vaultStart:
@@ -290,31 +290,24 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::RightTrigger:
                 if (pressedP) {
                     m_intakeMode = IntakeMode::manual;
-                    m_claw->open();
-                    m_intake->LowerIntake();
                     m_intake->RegularPull();
                 }
                 else {
                     m_intake->Stop();
-                    m_claw->grab();
                 }
                 break;
             case DualAction::RightBumper:
                 if (pressedP) {
                     m_intakeMode = IntakeMode::manual;
-                    m_claw->open();
                     m_intake->Eject();
                 }
                 else {
-                    m_intakeMode = IntakeMode::manual;
-                    m_intake->Close();
                     m_intake->Stop();
-                    m_claw->open();
                 }
                 break;
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
-                    m_hanger->SetForkliftPower(0.3);
+                    m_hanger->SetForkliftPower(1.0);
                 }
                 else {
                     m_hanger->SetForkliftPower(0);
@@ -322,7 +315,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
-                    m_hanger->SetForkliftPower(-0.3);
+                    m_hanger->SetForkliftPower(-1.0);
                 }
                 else {
                     m_hanger->SetForkliftPower(0);
@@ -346,9 +339,14 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 }
                 break;
             case DualAction::Start:
-                if (pressedP) {
+                if (pressedP && m_elevatorMode != ElevatorMode::zero) {
                     m_elevatorMode = ElevatorMode::zero;
                     m_elevator->Reset();
+                }
+                else if (!pressedP && m_elevatorMode == ElevatorMode::zero) {
+                    m_elevatorMode = ElevatorMode::percentOutput;
+                    m_elevator->ZeroPosition();
+                    m_elevator->SetPower(0.0);
                 }
                 break;
         }
