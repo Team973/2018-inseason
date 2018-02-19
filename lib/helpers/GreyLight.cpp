@@ -1,6 +1,7 @@
 /*
  * GreyLight.cpp
- *
+ * Updated version of FRC 114's HellaDees from 2017
+ * Handles pixel manipulation then sends it to the APA102 interface to write
  *  Created on: Feb 5, 2018
  *      Author: Cole Brinsfield
  */

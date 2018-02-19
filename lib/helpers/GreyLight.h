@@ -17,7 +17,6 @@
 class GreyLight {
 public:
     GreyLight(int numLEDs);
-
     void setPixelStateProcessor(PixelStateProcessor* processor);
     std::mutex stateLock;
     // only access with stateLock acquired

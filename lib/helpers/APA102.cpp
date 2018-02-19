@@ -1,5 +1,14 @@
+/*
+ * APA102.cpp
+ * Interface to control APA102s from the roboRio
+ * Based on code written by Adafruit and FRC team 1736
+ *  Created on: Feb 19, 2018
+ *      Author: Cole Brinsfield
+ */
+
 #include "APA102.h"
 #include <iostream>
+
 APA102::APA102(int numLEDs, frc::SPI::Port port)
         : numLEDs(numLEDs), port(port) {
     int numBytesForStrip =

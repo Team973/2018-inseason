@@ -1,6 +1,5 @@
 /*
  * APA102.h
- *
  *  Created on: Feb 5, 2018
  *      Author: Cole Brinsfield
  */
