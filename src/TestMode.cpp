@@ -1,17 +1,19 @@
 #include "src/TestMode.h"
+#include "src/subsystems/Hanger.h"
 
 using namespace frc;
 
 namespace frc973 {
 Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
            ObservableJoystick *tuning, Drive *drive, Elevator *elevator,
-           Claw *claw)
+           Claw *claw, Hanger *hanger)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_tuningJoystick(tuning)
         , m_drive(drive)
         , m_elevator(elevator)
         , m_claw(claw)
+        , m_hanger(hanger)
         , m_elevatorMode(ElevatorMode::percentOutput) {
 }
 
@@ -21,6 +23,7 @@ Test::~Test() {
 void Test::TestInit() {
     std::cout << "Test Start" << std::endl;
     m_driveMode = DriveMode::Openloop;
+    m_hanger->DisengagePTO();
 }
 
 void Test::TestPeriodic() {
@@ -90,6 +93,8 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
                 }
+                else {
+                }
                 break;
             case DualAction::RightTrigger:
                 if (pressedP) {
@@ -118,6 +123,7 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::BtnA:
                 if (pressedP) {
                     m_driveMode = DriveMode::Velocity;
+                    m_hanger->DisengagePTO();
                 }
                 break;
             case DualAction::BtnB:
@@ -189,10 +195,18 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
+                    m_hanger->SetForkliftPower(0.3);
+                }
+                else {
+                    m_hanger->SetForkliftPower(0);
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
+                    m_hanger->SetForkliftPower(-0.3);
+                }
+                else {
+                    m_hanger->SetForkliftPower(0);
                 }
                 break;
             case DualAction::BtnA:
@@ -218,6 +232,8 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::BtnY:
                 if (pressedP) {
+                    m_driveMode = DriveMode::Hanger;
+                    m_hanger->EngagePTO();
                 }
                 break;
             case DualAction::Start:
