@@ -304,7 +304,9 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                     m_intake->Eject();
                 }
                 else {
+                    m_intakeMode = IntakeMode::manual;
                     m_intake->Close();
+                    m_intake->Stop();
                     m_claw->open();
                 }
                 break;
