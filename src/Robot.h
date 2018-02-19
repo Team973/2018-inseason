@@ -97,7 +97,6 @@ private:
     TalonSRX *m_elevatorMotor;
     Solenoid *m_hangerpto;
     TalonSRX *m_forkliftTalon;
-    VictorSPX *m_forkliftVictor;
 
     Elevator *m_elevator;
     Claw *m_claw;
