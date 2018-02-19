@@ -76,7 +76,6 @@ private:
 
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
-    ObservableJoystick *m_tuningJoystick;
 
     TalonSRX *m_leftDriveTalonA;
     VictorSPX *m_leftDriveVictorB;
@@ -91,6 +90,8 @@ private:
 
     Solenoid *m_cubeClamp;
     Solenoid *m_clawKicker;
+    Solenoid *m_intakePosition;
+    Solenoid *m_intakeOpenClose;
     TalonSRX *m_rightRoller;
     TalonSRX *m_leftRoller;
     DigitalInput *m_cubeSensor;

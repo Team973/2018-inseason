@@ -5,12 +5,10 @@
 using namespace frc;
 
 namespace frc973 {
-Disabled::Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
-                   ObservableJoystick *tuning)
+Disabled::Disabled(ObservableJoystick *driver, ObservableJoystick *codriver)
         : m_routine(SelectedAutoRoutine::none)
         , m_driverJoystick(driver)
-        , m_operatorJoystick(codriver)
-        , m_tuningJoystick(tuning) {
+        , m_operatorJoystick(codriver) {
 }
 
 Disabled::~Disabled() {
