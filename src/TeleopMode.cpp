@@ -116,11 +116,13 @@ void Teleop::TeleopPeriodic() {
         case IntakeMode::switchStandby:
             m_intake->Stop();
             m_intake->LowerIntake();
-            m_intake->Close();
             m_claw->grab();
             m_claw->kickOff();
             m_elevatorMode = ElevatorMode::motionMagic;
             m_elevator->SetPosition(Elevator::LOW_GOAL);
+            if (fabs(Elevator::LOW_GOAL - m_elevator->GetPosition()) < 14.0) {
+                m_intake->Close();
+            }
             break;
         case IntakeMode::vaultStart:
             m_intake->Stop();
@@ -246,8 +248,6 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                     m_elevatorMode = ElevatorMode::motionMagic;
                     m_elevator->SetPosition(Elevator::GROUND);
                 }
-                else {
-                }
                 break;
             case DualAction::BtnX:
                 if (pressedP) {
@@ -267,26 +267,37 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 if (pressedP) {
                     m_intakeMode = IntakeMode::switchIntaking;
                 }
+                else {
+                    m_intakeMode = IntakeMode::manual;
+                    m_intake->Stop();
+                }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
                     m_intakeMode = IntakeMode::vaultStart;
                 }
+                else {
+                    m_intakeMode = IntakeMode::manual;
+                    m_intake->Stop();
+                }
                 break;
             case DualAction::RightTrigger:
                 if (pressedP) {
                     m_intakeMode = IntakeMode::manual;
-                    m_claw->grab();
+                    m_claw->open();
+                    m_intake->LowerIntake();
+                    m_intake->RegularPull();
                 }
                 else {
+                    m_intake->Stop();
+                    m_claw->grab();
                 }
                 break;
             case DualAction::RightBumper:
                 if (pressedP) {
                     m_intakeMode = IntakeMode::manual;
                     m_claw->open();
-                }
-                else {
+                    m_intake->Eject();
                 }
                 break;
             case DualAction::DPadUpVirtBtn:
