@@ -9,6 +9,7 @@
 #include "src/subsystems/Elevator.h"
 #include "src/subsystems/Claw.h"
 #include "src/subsystems/Intake.h"
+#include "src/subsystems/Hanger.h"
 
 using namespace frc;
 
@@ -16,7 +17,7 @@ namespace frc973 {
 class Test {
 public:
     Test(ObservableJoystick *driver, ObservableJoystick *codriver, Drive *drive,
-         Elevator *elevator, Claw *claw, Intake *intake);
+         Elevator *elevator, Intake *intake, Claw *claw, Hanger *hanger);
     virtual ~Test();
 
     void TestInit();
@@ -26,14 +27,14 @@ public:
     void HandleTestButton(uint32_t port, uint32_t button, bool pressedP);
 
 private:
-    enum ElevatorMode
+    enum class ElevatorMode
     {
         percentOutput,
         motionMagic,
         zero
     };
 
-    enum DriveMode
+    enum class DriveMode
     {
         AssistedArcade,
         Cheesy,
@@ -48,13 +49,13 @@ private:
 
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
+
     Drive *m_drive;
-
     DriveMode m_driveMode;
-
     Elevator *m_elevator;
     Claw *m_claw;
     Intake *m_intake;
+    Hanger *m_hanger;
 
     ElevatorMode m_elevatorMode;
 };

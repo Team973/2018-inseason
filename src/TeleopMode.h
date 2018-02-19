@@ -16,6 +16,7 @@
 #include "src/subsystems/Elevator.h"
 #include "src/subsystems/Claw.h"
 #include "src/subsystems/Intake.h"
+#include "src/subsystems/Hanger.h"
 
 using namespace frc;
 
@@ -23,7 +24,7 @@ namespace frc973 {
 class Teleop {
 public:
     Teleop(ObservableJoystick *driver, ObservableJoystick *codriver, Claw *claw,
-           Drive *drive, Elevator *elevator, Intake *intake);
+           Drive *drive, Elevator *elevator, Intake *intake, Hanger *hanger);
     virtual ~Teleop();
 
     void TeleopInit();
@@ -70,5 +71,7 @@ private:
     };
     IntakeMode m_intakeMode;
     uint32_t m_intakeModeTimer;
+
+    Hanger *m_hanger;
 };
 };

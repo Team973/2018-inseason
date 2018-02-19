@@ -70,6 +70,7 @@ float Elevator::GetPosition() {
 void Elevator::TaskPeriodic(RobotMode mode) {
     m_positionCell->LogDouble(GetPosition());
     SmartDashboard::PutNumber("elevator/encoders/encoder", GetPosition());
+    DBStringPrintf(DBStringPos::DB_LINE0, "e %f", GetPosition());
     switch (m_elevatorState) {
         case manual:
             break;
