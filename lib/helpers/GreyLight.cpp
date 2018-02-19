@@ -15,9 +15,9 @@ GreyLight::GreyLight(int numLEDs) {
     state.fps = 60;
     state.numLEDs = numLEDs;
     state.pixels = std::vector<Color>(numLEDs);
-    strip = new APA102(numLEDs);
+    m_strip = new APA102(numLEDs);
     processor = new Static({0, 0, 0});  // start with all lights off
-    worker = std::thread(&GreyLight::loop, this);
+    m_worker = std::thread(&GreyLight::loop, this);
 }
 
 void GreyLight::loop() {
@@ -30,7 +30,7 @@ void GreyLight::loop() {
         state.delta = (now - lastTick) / 1000;
         lastTick = now;
         processor->tick(state);
-        strip->show(state.pixels);
+        m_strip->show(state.pixels);
         stateLock.unlock();
         std::this_thread::sleep_for(
             std::chrono::milliseconds(30));  // TO-DO, fps delay math

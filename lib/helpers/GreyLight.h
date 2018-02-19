@@ -25,8 +25,8 @@ public:
     PixelStateProcessor* processor;
 
 private:
-    APA102* strip;
-    std::thread worker;
+    APA102* m_strip;
+    std::thread m_worker;
 };
 
 #endif /* SRC_MODULES_GREYLIGHT_H_ */
