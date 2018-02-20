@@ -25,8 +25,8 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor)
     m_elevatorMotor->Config_kI(0, 0.0, 10);
     m_elevatorMotor->Config_kD(0, 0.0, 10);
     m_elevatorMotor->Config_kF(0, 0.0, 10);
-    m_elevatorMotor->ConfigMotionCruiseVelocity(2000.0, 10);
-    m_elevatorMotor->ConfigMotionAcceleration(1600.0, 10);
+    m_elevatorMotor->ConfigMotionCruiseVelocity(3750.0, 10);
+    m_elevatorMotor->ConfigMotionAcceleration(4200.0, 10);
     m_elevatorMotor->SelectProfileSlot(0, 0);
 
     m_elevatorMotor->EnableCurrentLimit(true);
