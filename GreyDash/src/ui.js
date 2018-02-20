@@ -64,6 +64,7 @@ for (let i = 0; i < config.charts.length; i += 1) {
   config.charts[i].displayTitle.innerText = `${config.charts[i].title}`;
 
   config.charts[i].displayChart = document.createElement('canvas');
+  config.charts[i].displayChart.setAttribute('width', '600px');
 
   config.charts[i].chart = new smoothie.SmoothieChart({
     tooltip: config.charts[i].settings.tooltip,
