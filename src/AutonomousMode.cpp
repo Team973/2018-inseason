@@ -10,6 +10,7 @@ namespace frc973 {
 Autonomous::Autonomous(Disabled *disabled)
         : m_noAuto(new NoAuto())
         , m_forwardAuto(new ForwardAuto())
+        , m_switchAuto(new SwitchAuto())
         , m_disabled(disabled) {
 }
 

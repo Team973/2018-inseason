@@ -428,6 +428,11 @@ void Drive::TaskPeriodic(RobotMode mode) {
     SmartDashboard::PutNumber("drive/outputs/leftrateactual",
                               Drive::GetLeftRate());
 
+    SmartDashboard::PutNumber("drive/outputs/rightratesetpoint",
+                              m_rightDriveOutput * DRIVE_IPS_FROM_CPDS);
+    SmartDashboard::PutNumber("drive/outputs/rightrateactual",
+                              Drive::GetRightRate());
+
     // NetworkTable Gyro
     SmartDashboard::PutNumber("drive/gyro/angle", this->GetAngle());
 

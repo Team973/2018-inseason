@@ -13,6 +13,7 @@
 #include "lib/trajectories/SplineProfile.h"
 #include "ctre/Phoenix.h"
 #include "lib/trajectories/structs.h"
+#include "WPILib.h"
 #include <stdio.h>
 
 using namespace frc;

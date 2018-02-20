@@ -7,6 +7,7 @@ cc_library(
         "*.h",
     ]),
     deps = [
+        "//lib/util:util",
     ],
     visibility = ["//visibility:public"],
 )
