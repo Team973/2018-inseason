@@ -66,6 +66,7 @@ for (let i = 0; i < config.charts.length; i += 1) {
   config.charts[i].displayChart = document.createElement('canvas');
 
   config.charts[i].chart = new smoothie.SmoothieChart({
+    interpolation: 'step',
     tooltip: config.charts[i].settings.tooltip,
     minValue: config.charts[i].settings.minValue,
     maxValue: config.charts[i].settings.maxValue,
@@ -151,4 +152,8 @@ ui.custom.drive.gyro.container.addEventListener('click', () => {
   ui.custom.drive.gyro.offset = ui.custom.drive.gyro.val;
   // Trigger the gyro to recalculate value.
   updateGyro('/SmartDashboard/drive/gyro/angle', ui.custom.drive.gyro.val);
+});
+
+addEventListener('error', (ev) => {
+  ipc.send('windowError', { mesg: ev.message, file: ev.filename, lineNumber: ev.lineno });
 });
