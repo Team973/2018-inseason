@@ -216,12 +216,14 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 if (pressedP) {
                     m_driveMode = DriveMode::Hanger;
                     m_hanger->EngagePTO();
+                    m_elevatorMode = ElevatorMode::percentOutput;
                 }
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
                     m_driveMode = DriveMode::Hanger;
                     m_hanger->DisengagePTO();
+                    m_elevatorMode = ElevatorMode::percentOutput;
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:
