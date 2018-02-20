@@ -30,9 +30,10 @@ public:
     void AutonomousPeriodic();
     void AutonomousStop();
 
-    static constexpr double DRIVER_STATION_TO_AUTO_LINE =
+    static constexpr double DRIVER_STATION_TO_AUTO_LINE = 48.0;
 
-        private : NoAuto * m_noAuto;
+private:
+    NoAuto *m_noAuto;
     ForwardAuto *m_forwardAuto;
     SwitchAuto *m_switchAuto;
 

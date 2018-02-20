@@ -18,7 +18,6 @@ cc_binary(
         "//src/controllers:controllers",
         "//src/info:info",
         "//src/subsystems:subsystems",
-        "//src/auto/profiles:sample_header",
     ],
     visibility = ["//visibility:public"],
 )

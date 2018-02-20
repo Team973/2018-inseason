@@ -21,7 +21,8 @@ def openPointStructs(source):
 def writeHeader(target):
     header = open(target, "w+")
     leftTraj, rightTraj, sourceJSON = openPointStructs(jsonPath)
-    header.write('''#include "lib/trajectories/structs.h"
+    header.write('''#pragma once
+#include "lib/trajectories/structs.h"
 
 using namespace trajectories;
 
@@ -56,3 +57,4 @@ def printSegments(trajectory, file):
     file.write("\n};\n")
 
 writeHeader(headerPath)
+print(headerPath)

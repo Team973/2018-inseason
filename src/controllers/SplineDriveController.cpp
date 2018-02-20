@@ -2,6 +2,7 @@
 #include "src/info/RobotInfo.h"
 #include "lib/util/Util.h"
 #include "lib/util/WrapDash.h"
+#include <cmath>
 
 namespace frc973 {
 
@@ -12,11 +13,11 @@ static constexpr double POSITION_KP = 0.5;
 static constexpr double POSITION_KI = 0.0;
 static constexpr double POSITION_KD = 0.0;
 
-static constexpr double VELOCITY_KP = 0.2;
+static constexpr double VELOCITY_KP = 1.2;
 static constexpr double VELOCITY_KI = 0.0;
 static constexpr double VELOCITY_KD = 0.0;
 
-static constexpr double ANGULAR_POSITION_KP = 0.0;
+static constexpr double ANGULAR_POSITION_KP = 1.2;
 static constexpr double ANGULAR_POSITION_KI = 0.0;
 static constexpr double ANGULAR_POSITION_KD = 0.0;
 
@@ -101,7 +102,9 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     m_r_pos_pid.SetTarget(rightDist);
     m_l_vel_pid.SetTarget(leftVel);
     m_r_vel_pid.SetTarget(rightVel);
-    m_a_pos_pid.SetTarget(heading);
+    // m_a_pos_pid.SetTarget(heading);
+    double angle_error =
+        std::fmod(heading - AngleFromStart() + 180.0, 360.0) - 180.0;
 
     /* vel feed forward for linear term */
     double right_l_vel_ff =
@@ -116,7 +119,9 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
         m_r_pos_pid.CalcOutput(RightDistFromStart());
     double right_linear_vel_term =
         m_r_vel_pid.CalcOutput(state->GetRightRate());
-    double angular_dist_term = m_a_pos_pid.CalcOutput(AngleFromStart());
+    double angular_dist_term =
+        ANGULAR_POSITION_KP *
+        angle_error;  // m_a_pos_pid.CalcOutput(AngleFromStart());
 
     /* right side receives positive angle correction */
     double right_output = right_l_vel_ff + right_linear_dist_term +

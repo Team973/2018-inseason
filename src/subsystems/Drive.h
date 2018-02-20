@@ -12,6 +12,7 @@
 #include "lib/bases/DriveBase.h"
 #include "networktables/NetworkTableInstance.h"
 #include "lib/trajectories/structs.h"
+#include "lib/logging/LogSpreadsheet.h"
 
 using namespace frc;
 using namespace ctre;

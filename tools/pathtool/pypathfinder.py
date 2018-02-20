@@ -95,22 +95,11 @@ def set_cdll_path(path=None):
                     ("v", ctypes.c_double),
                     ("impulse", ctypes.c_double)]
 
-
-    class _TrajectoryCandidate(ctypes.Structure):
-        _fields_ = [("filter1", ctypes.c_int),
-                    ("filter2", ctypes.c_int),
-                    ("length", ctypes.c_int),
-                    ("dt", ctypes.c_double),
-                    ("u", ctypes.c_double),
-                    ("v", ctypes.c_double),
-                    ("impulse", ctypes.c_double)]
-
-
     class _TrajectoryCandidate(ctypes.Structure):
         _fields_ = [("saptr", ctypes.POINTER(_Spline)),
                     ("laptr", ctypes.POINTER(ctypes.c_double)),
                     ("totalLength", ctypes.c_double),
-                    ("length", ctypes.c_int),
+                    ("length", ctypes.c_uint),
                     ("path_length", ctypes.c_int),
                     ("info", _TrajectoryInfo),
                     ("config", _TrajectoryConfig)]
