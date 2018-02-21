@@ -7,6 +7,8 @@
 
 #include "LinearScale.h"
 
+namespace LightPattern {
+
 LinearScale::LinearScale(Color minColor, Color maxColor, double minVal,
                          double maxVal, PixelStateProcessor* modulator) {
     this->processor = modulator;
@@ -29,4 +31,5 @@ void LinearScale::tick(PixelState& state) {
         state.pixels.at(i) =
             m_minColor.gradientTo(m_maxColor, ((double)i / state.numLEDs));
     }
+}
 }

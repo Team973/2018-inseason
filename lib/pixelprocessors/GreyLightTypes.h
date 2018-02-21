@@ -11,6 +11,8 @@
 #include <cmath>
 #include <vector>
 
+namespace GreyLightType {
+
 struct Color {
     // 0-255
     uint8_t r;
@@ -45,5 +47,5 @@ struct PixelState {
     // the array of pixels (this gets displayed)
     std::vector<Color> pixels;
 };
-
+}
 #endif /* SRC_MODULES_GREYLIGHTTYPES_H_ */

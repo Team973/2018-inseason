@@ -10,6 +10,8 @@
 #ifndef SRC_MODULES_PIXELPROCESSORS_LINEARSCALE_H_
 #define SRC_MODULES_PIXELPROCESSORS_LINEARSCALE_H_
 
+namespace LightPattern {
+
 class LinearScale : public PixelStateProcessorModulator {
 public:
     LinearScale(Color minColor, Color maxColor, double minVal, double maxVal,
@@ -22,5 +24,6 @@ private:
     Color m_maxColor;
     double m_minVal, m_maxVal, m_currentValue;
 };
+}
 
 #endif /* SRC_MODULES_PIXELPROCESSORS_LINEARSCALE_H_ */

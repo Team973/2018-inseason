@@ -12,6 +12,7 @@
 #include "PixelStateProcessor.h"
 #include <vector>
 
+namespace LightPattern {
 class Siren : public PixelStateProcessor {
 public:
     Siren(Color first, Color second, int frameDuration = 4);
@@ -24,5 +25,6 @@ private:
     Color m_first, m_second;
     int m_frameDuration;
 };
+}
 
 #endif /* SRC_MODULES_PIXELPROCESSORS_SIREN_H_ */

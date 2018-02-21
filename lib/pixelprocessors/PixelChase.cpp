@@ -7,6 +7,8 @@
 
 #include "PixelChase.h"
 
+namespace LightPattern {
+
 PixelChase::PixelChase(PixelStateProcessor* processor, Color background) {
     this->processor = processor;
     this->m_background = background;
@@ -45,6 +47,7 @@ uint16_t PixelChase::getFrame(int n) {
                 used);  // return first word all off, second word is animation
     }
     else {
-        return ((used << 8) ^ 0x00ff);
+        return uint16_t(used << 8);
     }
+}
 }

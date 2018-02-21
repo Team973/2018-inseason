@@ -8,6 +8,8 @@
 
 #include "APA102.h"
 
+using namespace GreyLightType;
+
 APA102::APA102(int numLEDs, frc::SPI::Port port) : m_numLEDs(numLEDs) {
     int numBytesForStrip =
         4 * m_numLEDs + 4 + 4;  // 4*numLeds+startFrame length + endFrame length
@@ -18,10 +20,10 @@ APA102::APA102(int numLEDs, frc::SPI::Port port) : m_numLEDs(numLEDs) {
      * B for each LED, and then 4 0xFF bytes
      */
     for (int i = 0; i < 4; i++) {
-        m_ledBuffer.at(i) = m_startFrame[i];
+        m_ledBuffer.at(i) = START_FRAME[i];
     }
     for (int i = 0; i < 4; i++) {
-        m_ledBuffer.at(i + m_endFrameOffset) = m_endFrame[i];
+        m_ledBuffer.at(i + m_endFrameOffset) = END_FRAME[i];
     }
     m_spi = new frc::SPI(port);
     m_spi->SetMSBFirst();
@@ -30,19 +32,19 @@ APA102::APA102(int numLEDs, frc::SPI::Port port) : m_numLEDs(numLEDs) {
     m_spi->SetSampleDataOnFalling();
 }
 
-void APA102::show(std::vector<Color> pixels) {
+void APA102::Show(std::vector<Color> pixels) {
     std::reverse(pixels.begin(),
                  pixels.end());  // the strip on the bot is wired
                                  // with 0 on the rightmost side
     int CHUNK_SIZE = 127;        // max TX size
     for (int i = 0; i < m_numLEDs; i++) {
-        m_ledBuffer.at(i * m_bytesPerLED + m_led0Offset + m_globalOffset) =
+        m_ledBuffer.at(i * BYTES_PER_LED + LED_ZERO_OFFSET + GLOBAL_OFFSET) =
             0xFF;
-        m_ledBuffer.at(i * m_bytesPerLED + m_led0Offset + m_redOffset) =
+        m_ledBuffer.at(i * BYTES_PER_LED + LED_ZERO_OFFSET + RED_OFFSET) =
             pixels.at(i).r;
-        m_ledBuffer.at(i * m_bytesPerLED + m_led0Offset + m_greenOffset) =
+        m_ledBuffer.at(i * BYTES_PER_LED + LED_ZERO_OFFSET + GREEN_OFFSET) =
             pixels.at(i).g;
-        m_ledBuffer.at(i * m_bytesPerLED + m_led0Offset + m_blueOffset) =
+        m_ledBuffer.at(i * BYTES_PER_LED + LED_ZERO_OFFSET + BLUE_OFFSET) =
             pixels.at(i).b;
     }
     int ledBufferLength = m_ledBuffer.size();

@@ -7,6 +7,8 @@
 
 #include "Siren.h"
 
+namespace LightPattern {
+
 Siren::Siren(Color first, Color second, int frameDuration)
         : m_first(first), m_second(second), m_frameDuration(frameDuration) {
 }
@@ -26,6 +28,8 @@ void Siren::tick(PixelState& state) {
     if (m_color) {
         std::fill(state.pixels.begin(), state.pixels.end(), m_first);
     }
-    else
+    else {
         std::fill(state.pixels.begin(), state.pixels.end(), m_second);
+    }
+}
 }

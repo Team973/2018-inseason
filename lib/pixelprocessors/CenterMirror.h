@@ -13,6 +13,8 @@
 #include "GreyLightTypes.h"
 #include "PixelStateProcessor.h"
 
+namespace LightPattern {
+
 class CenterMirror : public PixelStateProcessorModulator {
 public:
     CenterMirror(PixelStateProcessor* processor, bool inverse = false);
@@ -23,5 +25,5 @@ private:
     bool m_inverse;
     uint8_t m_previousNumLEDs;
 };
-
+}
 #endif /* SRC_MODULES_PIXELPROCESSORS_CENTERMIRROR_H_ */

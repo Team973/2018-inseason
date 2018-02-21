@@ -7,38 +7,40 @@
  */
 
 #include "GreyLight.h"
-#include "lib/pixelprocessors/Static.h"
+#include "lib/pixelprocessors/SolidColor.h"
 #include <iostream>
 
+using namespace GreyLightType;
+
 GreyLight::GreyLight(int numLEDs) {
-    g_state = PixelState{};
-    g_state.fps = 60;
-    g_state.numLEDs = numLEDs;
-    g_state.pixels = std::vector<Color>(numLEDs);
+    m_state = PixelState{};
+    m_state.fps = 60;
+    m_state.numLEDs = numLEDs;
+    m_state.pixels = std::vector<Color>(numLEDs);
     m_strip = new APA102(numLEDs);
-    g_processor = new Static({0, 0, 0});  // start with all lights off
-    m_worker = std::thread(&GreyLight::loop, this);
+    m_processor = new SolidColor({0, 0, 0});  // start with all lights off
+    m_worker = std::thread(&GreyLight::Loop, this);
 }
 
-void GreyLight::loop() {
+void GreyLight::Loop() {
     // clock is in seconds
     int lastTick = clock();
     while (true) {
         m_stateLock.lock();
-        g_state.frame++;
+        m_state.frame++;
         int now = clock();
-        g_state.delta = (now - lastTick) / 1000;
+        m_state.delta = (now - lastTick) / 1000;
         lastTick = now;
-        g_processor->tick(g_state);
-        m_strip->show(g_state.pixels);
+        m_processor->tick(m_state);
+        m_strip->Show(m_state.pixels);
         m_stateLock.unlock();
         std::this_thread::sleep_for(
             std::chrono::milliseconds(30));  // TO-DO, fps delay math
     }
 }
 
-void GreyLight::setPixelStateProcessor(PixelStateProcessor* processor) {
+void GreyLight::SetPixelStateProcessor(PixelStateProcessor* processor) {
     m_stateLock.lock();
-    this->g_processor = processor;
+    this->m_processor = processor;
     m_stateLock.unlock();
 }

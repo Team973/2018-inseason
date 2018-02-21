@@ -6,6 +6,9 @@
  */
 
 #include "CenterMirror.h"
+
+namespace LightPattern {
+
 CenterMirror::CenterMirror(PixelStateProcessor* processor, bool inverse) {
     this->processor = processor;
     this->m_inverse = inverse;
@@ -32,4 +35,5 @@ void CenterMirror::pushToRightSide(PixelState& state) {
     for (std::size_t i = 0; i < m_previousNumLEDs / 2; i++) {
         state.pixels.at(m_previousNumLEDs / 2 + i) = state.pixels.at(i);
     }
+}
 }

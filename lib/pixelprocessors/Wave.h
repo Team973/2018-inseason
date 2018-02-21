@@ -14,14 +14,16 @@
 #include <math.h>
 #include <algorithm>
 
+namespace LightPattern {
 class Wave : public PixelStateProcessor {
 public:
     Wave(Color background, Color foreground, int period);
     void tick(PixelState& state);
-    int g_period;
 
 private:
+    int m_period;
     Color m_background, m_foreground;
 };
+}
 
 #endif /* SRC_MODULES_PIXELPROCESSORS_WAVE_H_ */

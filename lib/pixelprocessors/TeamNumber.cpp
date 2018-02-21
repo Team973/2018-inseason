@@ -6,6 +6,9 @@
  */
 
 #include "TeamNumber.h"
+
+namespace LightPattern {
+
 TeamNumber::TeamNumber() : TeamNumber(Color{255, 0, 0}, Color{0, 0, 255}) {
 }
 TeamNumber::TeamNumber(Color foreground, Color background)
@@ -29,4 +32,5 @@ void TeamNumber::tick(PixelState& state) {
     for (std::size_t i = 9 + 7 + spacing * 2; i < state.numLEDs; i++) {
         state.pixels.at(i) = m_foreground;
     }
+}
 }

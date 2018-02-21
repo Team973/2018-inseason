@@ -14,15 +14,18 @@
 #include "lib/helpers/APA102.h"
 #include "lib/pixelprocessors/PixelStateProcessor.h"
 
+using namespace GreyLightType;
+using namespace LightPattern;
+
 class GreyLight {
 public:
     GreyLight(int numLEDs);
-    void setPixelStateProcessor(PixelStateProcessor* processor);
-    void loop();
-    PixelState g_state;
-    PixelStateProcessor* g_processor;
+    void SetPixelStateProcessor(PixelStateProcessor* processor);
+    void Loop();
 
 private:
+    PixelStateProcessor* m_processor;
+    PixelState m_state;
     APA102* m_strip;
     std::thread m_worker;
     std::mutex m_stateLock;

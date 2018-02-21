@@ -13,6 +13,8 @@
 #include "GreyLightTypes.h"
 #include "PixelStateProcessor.h"
 
+namespace LightPattern {
+
 class LoopModulator : public PixelStateProcessorModulator {
 public:
     LoopModulator(PixelStateProcessor* processor);
@@ -21,5 +23,6 @@ public:
 private:
     void rotate(std::vector<Color>& pixels, int amount, int numLEDs);
 };
+}
 
 #endif /* SRC_MODULES_PIXELPROCESSORS_LOOPMODULATOR_H_ */

@@ -7,10 +7,11 @@
 #ifndef SRC_MODULES_PIXELSTATEPROCESSOR_H_
 #define SRC_MODULES_PIXELSTATEPROCESSOR_H_
 
-// #include <Settings.h>
-
 #include <vector>
 #include "GreyLightTypes.h"
+
+using namespace GreyLightType;
+namespace LightPattern {
 
 class PixelStateProcessor {
 public:
@@ -29,5 +30,6 @@ public:
     }
     PixelStateProcessor* processor;
 };
+}
 
 #endif /* SRC_MODULES_PIXELSTATEPROCESSOR_H_ */
