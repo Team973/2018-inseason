@@ -18,10 +18,27 @@ void Disabled::DisabledInit() {
 }
 
 void Disabled::DisabledPeriodic() {
-    DBStringPrintf(DB_LINE0, "Start %d", m_startPos);
+    DBStringPrintf(DB_LINE0, "Start %s", RobotStartPosToString(m_startPos));
 }
 
 void Disabled::DisabledStop() {
+}
+
+const char *Disabled::RobotStartPosToString(RobotStartPosition position) {
+    switch (position) {
+        case RobotStartPosition::Left:
+            return "Left";
+            break;
+        case RobotStartPosition::Center:
+            return "Center";
+            break;
+        case RobotStartPosition::Right:
+            return "Right";
+            break;
+        default:
+            return "Error!";
+            break;
+    }
 }
 
 void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,

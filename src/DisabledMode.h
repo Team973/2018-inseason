@@ -13,7 +13,7 @@ using namespace frc;
 namespace frc973 {
 class Disabled {
 public:
-    enum RobotStartPosition
+    enum class RobotStartPosition
     {
         Left,
         Center,
@@ -26,6 +26,8 @@ public:
     void DisabledInit();
     void DisabledPeriodic();
     void DisabledStop();
+
+    const char *RobotStartPosToString(RobotStartPosition position);
 
     void HandleDisabledButton(uint32_t port, uint32_t button, bool pressedP);
 

@@ -22,20 +22,12 @@ class Claw;
 
 class Autonomous {
 public:
-    enum SwitchScalePosition
+    enum class SwitchScalePosition
     {
         LL,
         LR,
         RR,
         RL
-    };
-
-    enum SelectedAutoRoutine
-    {
-        noAuto,
-        forward,
-        lowGoal,
-        highGoal
     };
 
     Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator, Claw *claw,
@@ -47,9 +39,18 @@ public:
     void AutonomousStop();
 
     SwitchScalePosition GetSwitchScalePosition(std::string message);
+
     const char *GetRoutineName();
 
 private:
+    enum class SelectedAutoRoutine
+    {
+        noAuto,
+        forward,
+        lowGoal,
+        highGoal
+    };
+
     NoAuto *m_noAuto;
     ForwardAuto *m_forwardAuto;
     SwitchAuto *m_switchAuto;
@@ -58,7 +59,7 @@ private:
     Disabled *m_disabled;
 
     std::string m_scoringLocations;
-    SwitchScalePosition m_switchScalePosition;
+    Autonomous::SwitchScalePosition m_switchScalePosition;
     SelectedAutoRoutine m_routine;
 
     Drive *m_drive;

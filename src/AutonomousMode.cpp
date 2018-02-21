@@ -39,19 +39,19 @@ void Autonomous::AutonomousInit() {
     switch (m_disabled->GetStartPosition()) {
         case Disabled::RobotStartPosition::Left:
             switch (GetSwitchScalePosition(m_scoringLocations)) {
-                case LL:
+                case SwitchScalePosition::LL:
                     m_switchAuto->Reset();
                     m_routine = SelectedAutoRoutine::lowGoal;
                     break;
-                case LR:
+                case SwitchScalePosition::LR:
                     m_switchAuto->Reset();
                     m_routine = SelectedAutoRoutine::lowGoal;
                     break;
-                case RL:
+                case SwitchScalePosition::RL:
                     m_scaleAuto->Reset();
                     m_routine = SelectedAutoRoutine::highGoal;
                     break;
-                case RR:
+                case SwitchScalePosition::RR:
                     m_scaleAuto->Reset();
                     m_routine = SelectedAutoRoutine::highGoal;
                     break;
@@ -62,20 +62,20 @@ void Autonomous::AutonomousInit() {
         case Disabled::RobotStartPosition::Center:
             printf("Center Auto\n");
             switch (GetSwitchScalePosition(m_scoringLocations)) {
-                case LL:
+                case SwitchScalePosition::LL:
                     m_switchAuto->Reset();
                     m_routine = SelectedAutoRoutine::lowGoal;
                     break;
-                case LR:
+                case SwitchScalePosition::LR:
                     printf("Forward Auto\n");
                     m_forwardAuto->Reset();
                     m_routine = SelectedAutoRoutine::forward;
                     break;
-                case RL:
+                case SwitchScalePosition::RL:
                     m_forwardAuto->Reset();
                     m_routine = SelectedAutoRoutine::forward;
                     break;
-                case RR:
+                case SwitchScalePosition::RR:
                     m_forwardAuto->Reset();
                     m_routine = SelectedAutoRoutine::forward;
                     break;
@@ -85,19 +85,19 @@ void Autonomous::AutonomousInit() {
             break;
         case Disabled::RobotStartPosition::Right:
             switch (GetSwitchScalePosition(m_scoringLocations)) {
-                case LL:
+                case SwitchScalePosition::LL:
                     m_scaleAuto->Reset();
                     m_routine = SelectedAutoRoutine::highGoal;
                     break;
-                case LR:
+                case SwitchScalePosition::LR:
                     m_scaleAuto->Reset();
                     m_routine = SelectedAutoRoutine::highGoal;
                     break;
-                case RL:
+                case SwitchScalePosition::RL:
                     m_switchAuto->Reset();
                     m_routine = SelectedAutoRoutine::highGoal;
                     break;
-                case RR:
+                case SwitchScalePosition::RR:
                     m_switchAuto->Reset();
                     m_routine = SelectedAutoRoutine::highGoal;
                     break;
@@ -108,7 +108,6 @@ void Autonomous::AutonomousInit() {
         default:
             break;
     }
-    printf("Auto Routine %d\n", m_routine);
 }
 
 void Autonomous::AutonomousPeriodic() {
@@ -136,16 +135,16 @@ void Autonomous::AutonomousStop() {
 Autonomous::SwitchScalePosition Autonomous::GetSwitchScalePosition(
     std::string message) {
     if (message[0] == 'L' && message[1] == 'L') {
-        m_switchScalePosition = LL;
+        m_switchScalePosition = SwitchScalePosition::LL;
     }
     else if (message[0] == 'L' && message[1] == 'R') {
-        m_switchScalePosition = LR;
+        m_switchScalePosition = SwitchScalePosition::LR;
     }
     else if (message[0] == 'R' && message[1] == 'L') {
-        m_switchScalePosition = RL;
+        m_switchScalePosition = SwitchScalePosition::RL;
     }
     else if (message[0] == 'R' && message[1] == 'R') {
-        m_switchScalePosition = RR;
+        m_switchScalePosition = SwitchScalePosition::RR;
     }
     return m_switchScalePosition;
 }
