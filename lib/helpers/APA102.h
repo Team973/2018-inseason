@@ -7,6 +7,7 @@
 #define SRC_MODULES_APA102_H_
 #include <stdint.h>
 #include "WPILib.h"
+#include <algorithm>
 #include "lib/pixelprocessors/GreyLightTypes.h"
 #include <cmath>
 class APA102 {
