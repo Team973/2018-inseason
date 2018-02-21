@@ -8,24 +8,24 @@
 #include "Siren.h"
 
 Siren::Siren(Color first, Color second, int frameDuration)
-        : first(first), second(second), frameDuration(frameDuration) {
+        : m_first(first), m_second(second), m_frameDuration(frameDuration) {
 }
 
 void Siren::setColors(Color first, Color second) {
-    this->first = first;
-    this->second = second;
+    this->m_first = first;
+    this->m_second = second;
 }
 
 void Siren::setFrameDuration(int frameDuration) {
-    this->frameDuration = frameDuration;
+    this->m_frameDuration = frameDuration;
 }
 
 void Siren::tick(PixelState& state) {
-    if (state.frame % frameDuration == 0)
-        color = !color;
-    if (color) {
-        std::fill(state.pixels.begin(), state.pixels.end(), first);
+    if (state.frame % m_frameDuration == 0)
+        m_color = !m_color;
+    if (m_color) {
+        std::fill(state.pixels.begin(), state.pixels.end(), m_first);
     }
     else
-        std::fill(state.pixels.begin(), state.pixels.end(), second);
+        std::fill(state.pixels.begin(), state.pixels.end(), m_second);
 }

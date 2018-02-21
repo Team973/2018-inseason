@@ -9,7 +9,7 @@
 
 PixelChase::PixelChase(PixelStateProcessor* processor, Color background) {
     this->processor = processor;
-    this->background = background;
+    this->m_background = background;
 }
 
 void PixelChase::tick(PixelState& state) {
@@ -23,7 +23,7 @@ void PixelChase::tick(PixelState& state) {
         if ((frame & (1 << k)) >
             0) {  // get the kth bit of frame, if its 1 (OFF)
             state.pixels.at(i) =
-                background;  // set the pixel in that position to off
+                m_background;  // set the pixel in that position to off
         }
     }
 }

@@ -21,8 +21,8 @@ public:
     void tick(PixelState& state);
 
 private:
-    Color gradientStart;
-    Color gradientEnd;
+    Color m_gradientStart;
+    Color m_gradientEnd;
 };
 
 #endif /* SRC_MODULES_PIXELPROCESSORS_GRADIENT_H_ */

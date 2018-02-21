@@ -11,12 +11,12 @@ Static::Static() {
     Static(Color{0, 255, 0});
 }
 Static::Static(Color color) {
-    currentColor = color;
+    m_currentColor = color;
 }
 void Static::setColor(Color color) {
-    currentColor = color;
+    m_currentColor = color;
 }
 
 void Static::tick(PixelState& state) {
-    std::fill(state.pixels.begin(), state.pixels.end(), currentColor);
+    std::fill(state.pixels.begin(), state.pixels.end(), m_currentColor);
 }

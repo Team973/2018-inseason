@@ -20,9 +20,9 @@ public:
     void setFrameDuration(int frameDuration);
 
 private:
-    bool color = false;
-    Color first, second;
-    int frameDuration;
+    bool m_color = false;
+    Color m_first, m_second;
+    int m_frameDuration;
 };
 
 #endif /* SRC_MODULES_PIXELPROCESSORS_SIREN_H_ */

@@ -21,7 +21,7 @@ public:
     void setColor(Color color);
 
 private:
-    Color currentColor;
+    Color m_currentColor;
 };
 
 #endif /* SRC_MODULES_PIXELPROCESSORS_STATIC_H_ */

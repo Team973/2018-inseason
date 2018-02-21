@@ -7,19 +7,19 @@
 
 #include "Wave.h"
 Wave::Wave(Color background, Color foreground, int period) {
-    this->foreground = foreground;
-    this->background = background;
-    this->period = period;
-    this->offset = 0;
+    this->m_foreground = foreground;
+    this->m_background = background;
+    this->g_period = period;
 }
 
 void Wave::tick(PixelState& state) {
     for (unsigned int i = 0; i < state.numLEDs; i++) {
-        state.pixels.at(i) = background;
+        state.pixels.at(i) = m_background;
     }
 
     for (unsigned int i = 0; i < state.numLEDs; i++) {
-        state.pixels.at(i) = background.gradientTo(
-            foreground, (cos((i + state.frame) * (2 * M_PI / period)) + 1) / 2);
+        state.pixels.at(i) = m_background.gradientTo(
+            m_foreground,
+            (cos((i + state.frame) * (2 * M_PI / g_period)) + 1) / 2);
     }
 }

@@ -20,7 +20,7 @@ public:
 
 private:
     uint16_t getFrame(int n);
-    Color background;
+    Color m_background;
 };
 
 #endif /* SRC_MODULES_PIXELPROCESSORS_PIXELCHASE_H_ */

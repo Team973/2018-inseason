@@ -18,11 +18,10 @@ class Wave : public PixelStateProcessor {
 public:
     Wave(Color background, Color foreground, int period);
     void tick(PixelState& state);
-    int period;
+    int g_period;
 
 private:
-    Color background, foreground;
-    double offset;
+    Color m_background, m_foreground;
 };
 
 #endif /* SRC_MODULES_PIXELPROCESSORS_WAVE_H_ */
