@@ -8,9 +8,13 @@
 #include "src/auto/ForwardAuto.h"
 #include "src/auto/SwitchAuto.h"
 #include "src/auto/ScaleAuto.h"
+#include "lib/util/WrapDash.h"
 #include "src/DisabledMode.h"
 #include "src/Robot.h"
-#include "lib/util/WrapDash.h"
+#include "src/subsystems/Drive.h"
+#include "src/subsystems/Elevator.h"
+#include "src/subsystems/Intake.h"
+#include "src/subsystems/Claw.h"
 
 using namespace frc;
 
@@ -30,8 +34,8 @@ public:
         RL
     };
 
-    Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator, Claw *claw,
-               ADXRS450_Gyro *gyro);
+    Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
+               Intake *intake, Claw *claw, ADXRS450_Gyro *gyro);
     virtual ~Autonomous();
 
     void AutonomousInit();
@@ -64,6 +68,7 @@ private:
 
     Drive *m_drive;
     Elevator *m_elevator;
+    Intake *m_intake;
     Claw *m_claw;
     ADXRS450_Gyro *m_gyro;
 };

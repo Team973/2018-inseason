@@ -8,16 +8,17 @@ using namespace frc;
 
 namespace frc973 {
 Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
-                       Claw *claw, ADXRS450_Gyro *gyro)
+                       Intake *intake, Claw *claw, ADXRS450_Gyro *gyro)
         : m_noAuto(new NoAuto())
         , m_forwardAuto(new ForwardAuto(drive))
-        , m_switchAuto(new SwitchAuto(drive, elevator, claw))
+        , m_switchAuto(new SwitchAuto(drive, elevator, intake, claw))
         , m_disabled(disabled)
         , m_scoringLocations("")
         , m_switchScalePosition(SwitchScalePosition::LL)
         , m_routine(SelectedAutoRoutine::noAuto)
         , m_drive(drive)
         , m_elevator(elevator)
+        , m_intake(intake)
         , m_claw(claw)
         , m_gyro(gyro) {
 }
@@ -111,22 +112,7 @@ void Autonomous::AutonomousInit() {
 }
 
 void Autonomous::AutonomousPeriodic() {
-    switch (m_routine) {
-        case SelectedAutoRoutine::noAuto:
-            m_noAuto->Execute();
-            break;
-        case SelectedAutoRoutine::forward:
-            m_forwardAuto->Execute();
-            break;
-        case SelectedAutoRoutine::lowGoal:
-            m_switchAuto->Execute();
-            break;
-        case SelectedAutoRoutine::highGoal:
-            m_scaleAuto->Execute();
-            break;
-        default:
-            break;
-    }
+    m_switchAuto->Execute();
 }
 
 void Autonomous::AutonomousStop() {

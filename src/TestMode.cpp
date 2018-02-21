@@ -1,5 +1,4 @@
 #include "src/TestMode.h"
-#include "src/subsystems/Hanger.h"
 
 using namespace frc;
 
@@ -67,6 +66,8 @@ void Test::TestPeriodic() {
     else if (m_driveMode == DriveMode::Velocity) {
         m_drive->VelocityArcadeDrive(y, x);
     }
+    else if (m_driveMode == DriveMode::Spline) {
+    }
 }
 
 void Test::TestStop() {
@@ -104,6 +105,9 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::RightBumper:
                 if (pressedP) {
+                    /*m_driveMode = DriveMode::Spline;
+                    m_drive->SplineDrive(
+                        &generated_profiles::the_really_cool_trajectory);*/
                 }
                 else {
                 }

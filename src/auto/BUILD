@@ -10,9 +10,10 @@ cc_library(
     deps = [
         "//third_party/wpilibsuite:wpilib",
         "//third_party/ctre:ctre",
-        "//lib/logging:logging",
+        "//lib/trajectories:trajectories",
         "//src/subsystems:subsystems",
-        "//lib/managers:managers",
+        "//src/auto/profiles:leftswitch_header",
+        "//src/auto/profiles:rightswitch_header",
     ],
     visibility = ["//visibility:public"],
 )

@@ -12,6 +12,7 @@ cc_library(
         "//third_party/ctre:ctre",
         "//lib/managers:managers",
         "//lib/logging:logging",
+        "//lib/trajectories:trajectories",
         "//src/controllers:controllers",
         "//src/info:info",
     ],
