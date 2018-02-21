@@ -71,7 +71,7 @@ void Teleop::TeleopPeriodic() {
         m_elevatorMode = ElevatorMode::percentOutput;
         m_elevator->SetPower(elevatorManualPower);
     }
-    else if (m_elevatorMode == ElevatorMode::zero) {
+    else if (m_elevatorMode == ElevatorMode::zeroingDown) {
     }
     else if (m_elevatorMode == ElevatorMode::motionMagic) {
     }
@@ -100,7 +100,7 @@ void Teleop::TeleopPeriodic() {
             m_claw->open();
             m_claw->kickOff();
             if ((m_intake->IsCubeIn() && m_elevator->GetPosition() < 2.0) ||
-                m_driverJoystick->GetRawButton(DualAction::Start)) {
+                m_driverJoystick->GetRawButton(DualAction::Back)) {
                 m_intakeMode = IntakeMode::switchGrabbing;
                 m_intakeModeTimer = GetMsecTime();
             }
@@ -237,7 +237,8 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 }
                 break;
             case DualAction::Back:
-
+                if (pressedP) {
+                }
                 break;
         }
     }
@@ -338,16 +339,15 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::Back:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::switchIntaking;
+                    // override banner sensor for switch automated pull
                 }
                 break;
             case DualAction::Start:
-                if (pressedP && m_elevatorMode != ElevatorMode::zero) {
-                    m_elevatorMode = ElevatorMode::zero;
+                if (pressedP) {
+                    m_elevatorMode = ElevatorMode::zeroingDown;
                     m_elevator->Reset();
                 }
-                else if (!pressedP && m_elevatorMode == ElevatorMode::zero) {
-                    m_elevatorMode = ElevatorMode::percentOutput;
+                else {
                     m_elevator->ZeroPosition();
                     m_elevator->SetPower(0.0);
                 }

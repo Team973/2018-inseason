@@ -51,7 +51,7 @@ private:
     {
         percentOutput,
         motionMagic,
-        zero
+        zeroingDown
     };
 
     Elevator *m_elevator;
