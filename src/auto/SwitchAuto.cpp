@@ -1,8 +1,10 @@
 #include "src/auto/SwitchAuto.h"
+#include "src/auto/profiles/rightswitch_trajectory.h"
 #include "src/auto/profiles/leftswitch_trajectory.h"
 
 using namespace frc;
-using namespace generated_profiles;
+using namespace left_switch;
+using namespace right_switch;
 
 namespace frc973 {
 SwitchAuto::SwitchAuto(Drive *drive, Elevator *elevator, Intake *intake,
@@ -22,7 +24,7 @@ void SwitchAuto::Execute(void) {
     std::cout << "No Auto" << std::endl;
     switch (m_autoState) {
         case 0:
-            m_drive->SplineDrive(&generated_profiles::left_switch);
+            m_drive->SplineDrive(&left_switch::left_switch);
             m_elevator->SetPosition(Elevator::LOW_GOAL);
             m_autoTimer = GetMsecTime();
             m_autoState++;

@@ -26,9 +26,9 @@ def writeHeader(target):
 
 using namespace trajectories;
 
-namespace generated_profiles {
+namespace {} {{
 
-Segment leftTrajectory[] = {\n''')
+Segment leftTrajectory[] = {{\n'''.format(sourceJSON["name"]))
     printSegments(leftTraj, header)
     header.write("Segment rightTrajectory[] = {\n")
     printSegments(rightTraj, header)

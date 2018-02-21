@@ -13,6 +13,7 @@ cc_library(
         "//lib/trajectories:trajectories",
         "//src/subsystems:subsystems",
         "//src/auto/profiles:leftswitch_header",
+        "//src/auto/profiles:rightswitch_header",
     ],
     visibility = ["//visibility:public"],
 )
