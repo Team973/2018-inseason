@@ -4,6 +4,9 @@
 
 This section will go over the usage of GreyDash.
 
+### Installing dependencies
+Install [Yarn](https://yarnpkg.com/en/docs/install), then cd to the GreyDash directory. Then, run `yarn install` to install dependencies. The main dependencies are listed in package.json.
+
 ### Starting
 
 To start, run `yarn start`.
