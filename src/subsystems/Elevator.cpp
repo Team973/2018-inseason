@@ -18,21 +18,21 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor)
         ctre::phoenix::motorcontrol::FeedbackDevice::QuadEncoder, 0,
         10);  // 0 = Not cascaded PID Loop; 10 = in constructor, not in a loop
     m_elevatorMotor->SetSensorPhase(true);
-    m_elevatorMotor->SetNeutralMode(NeutralMode::Brake);
+    m_elevatorMotor->SetNeutralMode(NeutralMode::Coast);
     m_elevatorMotor->SetInverted(true);
 
     m_elevatorMotor->Config_kP(0, 1.5, 10);
     m_elevatorMotor->Config_kI(0, 0.0, 10);
     m_elevatorMotor->Config_kD(0, 0.0, 10);
     m_elevatorMotor->Config_kF(0, 0.0, 10);
-    m_elevatorMotor->ConfigMotionCruiseVelocity(2000.0, 10);
-    m_elevatorMotor->ConfigMotionAcceleration(1600.0, 10);
+    m_elevatorMotor->ConfigMotionCruiseVelocity(3750.0, 10);
+    m_elevatorMotor->ConfigMotionAcceleration(4200.0, 10);
     m_elevatorMotor->SelectProfileSlot(0, 0);
 
     m_elevatorMotor->EnableCurrentLimit(true);
     m_elevatorMotor->ConfigPeakCurrentDuration(0, 10);
     m_elevatorMotor->ConfigPeakCurrentLimit(0, 10);
-    m_elevatorMotor->ConfigContinuousCurrentLimit(5, 10);
+    m_elevatorMotor->ConfigContinuousCurrentLimit(15, 10);
     m_elevatorMotor->EnableVoltageCompensation(false);
     m_elevatorMotor->ConfigForwardSoftLimitThreshold(
         ELEVATOR_SOFT_HEIGHT_LIMIT / ELEVATOR_INCHES_PER_CLICK, 10);
@@ -67,26 +67,22 @@ float Elevator::GetPosition() {
            ((float)m_elevatorMotor->GetSelectedSensorPosition(0));
 }
 
+void Elevator::ZeroPosition() {
+    m_elevatorMotor->GetSensorCollection().SetQuadraturePosition(0, 0);
+}
+
 void Elevator::TaskPeriodic(RobotMode mode) {
     m_positionCell->LogDouble(GetPosition());
+    SmartDashboard::PutNumber("elevator/encoders/encoder", GetPosition());
     DBStringPrintf(DBStringPos::DB_LINE0, "e %f", GetPosition());
     switch (m_elevatorState) {
         case manual:
             break;
         case zeroing_start:
-            m_zeroingTime = GetMsecTime();
             m_elevatorState = ElevatorState::zeroing_goDown;
             break;
         case zeroing_goDown:
             m_elevatorMotor->Set(ControlMode::PercentOutput, -0.2);
-            if (GetMsecTime() - m_zeroingTime > 1500) {
-                m_elevatorState = ElevatorState::zeroing_stop;
-            }
-            break;
-        case zeroing_stop:
-            m_elevatorMotor->GetSensorCollection().SetQuadraturePosition(0, 0);
-            m_elevatorMotor->Set(ControlMode::PercentOutput, 0.0);
-            m_elevatorState = ElevatorState::manual;
             break;
         case position:
             break;

@@ -8,6 +8,7 @@
 #include "src/subsystems/Drive.h"
 #include "src/subsystems/Elevator.h"
 #include "src/subsystems/Claw.h"
+#include "src/subsystems/Intake.h"
 #include "src/subsystems/Hanger.h"
 
 using namespace frc;
@@ -15,9 +16,8 @@ using namespace frc;
 namespace frc973 {
 class Test {
 public:
-    Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-         ObservableJoystick *tuning, Drive *drive, Elevator *elevator,
-         Claw *claw, Hanger *hanger);
+    Test(ObservableJoystick *driver, ObservableJoystick *codriver, Drive *drive,
+         Elevator *elevator, Intake *intake, Claw *claw, Hanger *hanger);
     virtual ~Test();
 
     void TestInit();
@@ -50,14 +50,14 @@ private:
 
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
-    ObservableJoystick *m_tuningJoystick;
 
     Drive *m_drive;
     DriveMode m_driveMode;
     Elevator *m_elevator;
     Claw *m_claw;
+    Intake *m_intake;
     Hanger *m_hanger;
 
     ElevatorMode m_elevatorMode;
 };
-};
+}

@@ -81,7 +81,7 @@ void Claw::TaskPeriodic(RobotMode mode) {
             }
             break;
         case ClawState::launchReset:
-            goToState(grabbed);
+            goToState(released);
             break;
     }
 }
@@ -115,14 +115,14 @@ void Claw::goToState(ClawState newState) {
             break;
         case ClawState::preLaunch:
             m_cubeClamp->Set(clawClosed);
-            m_clawKicker->Set(active);
+            m_clawKicker->Set(kickIdle);
             break;
         case ClawState::launch:
             m_cubeClamp->Set(clawOpen);
             m_clawKicker->Set(active);
             break;
         case ClawState::launchReset:
-            m_cubeClamp->Set(clawClosed);
+            m_cubeClamp->Set(clawOpen);
             m_clawKicker->Set(kickIdle);
             break;
     }
