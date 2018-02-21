@@ -57,7 +57,7 @@ void Teleop::TeleopPeriodic() {
             false);  // gear set to false until solenoids get set up
     }
     else if (m_driveMode == DriveMode::Hanger) {
-        m_drive->HangerDrive(y);
+        m_hanger->SetHangerPower(y);
     }
 
     /**
