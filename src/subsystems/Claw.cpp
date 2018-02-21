@@ -46,6 +46,14 @@ void Claw::manualKickOff() {
     goToState(manual);
 }
 
+void Claw::manualClawOn() {
+    goToState(clawManual);
+}
+
+void Claw::manualClawOff() {
+    goToState(manual);
+}
+
 void Claw::TaskPeriodic(RobotMode mode) {
     DBStringPrintf(DB_LINE7, "cs %d", m_clawState);
     switch (m_clawState) {
@@ -83,6 +91,8 @@ void Claw::TaskPeriodic(RobotMode mode) {
             goToState(grabbed);
             break;
         case ClawState::kickManual:
+            break;
+        case ClawState::clawManual:
             break;
         case ClawState::manual:
             break;
@@ -130,6 +140,9 @@ void Claw::goToState(ClawState newState) {
             break;
         case ClawState::kickManual:
             m_clawKicker->Set(active);
+            break;
+        case ClawState::clawManual:
+            m_cubeClamp->Set(clawOpen);
             break;
         case ClawState::manual:
             m_cubeClamp->Set(clawClosed);
