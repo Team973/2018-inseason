@@ -21,14 +21,26 @@ class LogSpreadsheet;
 class Intake : public CoopTask {
 public:
     Intake(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *rightRoller,
-           TalonSRX *leftRoller, DigitalInput *cubeSensor);
+           TalonSRX *leftRoller, DigitalInput *cubeSensor, Solenoid *position,
+           Solenoid *m_openClose);
 
     virtual ~Intake();
+
+    enum class IntakeState
+    {
+        Intaking,
+        Idle
+    };
+
+    /**
+     * Starts the wheels to pull things in with the aid of beam breaker sensor
+     **/
+    void AutomatedPull();
 
     /**
      * Starts the wheels to pull things in
      **/
-    void Pull();
+    void RegularPull();
 
     /**
      * Starts spitting whatever's in the Intake, out.
@@ -47,12 +59,23 @@ public:
      **/
     bool IsCubeIn();
 
-    void TaskPeriodic(RobotMode mode);
+    void LowerIntake();
+
+    void RaiseIntake();
+
+    void Open();
+
+    void Close();
+
+    void TaskPeriodic(RobotMode mode) override;
 
 private:
     TaskMgr *m_scheduler;
     TalonSRX *m_leftRoller;
     TalonSRX *m_rightRoller;
     DigitalInput *m_cubeSensor;
+    Solenoid *m_position;
+    Solenoid *m_openClose;
+    IntakeState m_intakeState;
 };
 }

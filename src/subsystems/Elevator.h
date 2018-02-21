@@ -67,6 +67,8 @@ public:
      **/
     float GetPosition();
 
+    void ZeroPosition();
+
     /**
      * Update function synonymous to TeleopContinuous that gets called
      *continuously

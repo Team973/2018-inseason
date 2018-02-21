@@ -6,12 +6,11 @@ using namespace frc;
 
 namespace frc973 {
 Disabled::Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
-                   ObservableJoystick *tuning, UsbCamera intakeCamera,
-                   UsbCamera forkCamera, VideoSink greyCam)
+                   UsbCamera intakeCamera, UsbCamera forkCamera,
+                   VideoSink greyCam)
         : m_routine(SelectedAutoRoutine::none)
         , m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
-        , m_tuningJoystick(tuning)
         , m_intakeCamera(intakeCamera)
         , m_forkCamera(forkCamera)
         , m_greyCam(greyCam) {

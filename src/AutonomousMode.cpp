@@ -7,9 +7,11 @@
 using namespace frc;
 
 namespace frc973 {
-Autonomous::Autonomous(Disabled *disabled)
+Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
+                       Intake *intake, Claw *claw)
         : m_noAuto(new NoAuto())
         , m_forwardAuto(new ForwardAuto())
+        , m_switchAuto(new SwitchAuto(drive, elevator, intake, claw))
         , m_disabled(disabled) {
 }
 
@@ -32,16 +34,18 @@ void Autonomous::AutonomousInit() {
 }
 
 void Autonomous::AutonomousPeriodic() {
-    switch (m_disabled->GetRoutine()) {
+    m_switchAuto->Execute();
+    /*switch (m_disabled->GetRoutine()) {
         case Disabled::SelectedAutoRoutine::none:
             m_noAuto->Execute();
             break;
         case Disabled::SelectedAutoRoutine::forward:
             m_forwardAuto->Execute();
             break;
+        case Disabled::SelectedAutoRoutine::
         default:
             break;
-    }
+    }*/
 }
 
 void Autonomous::AutonomousStop() {

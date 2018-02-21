@@ -13,6 +13,7 @@ cc_binary(
         "//third_party/ctre:ctre",
         "//third_party/wpilibsuite:wpilib",
         "//lib/helpers:helpers",
+        "//lib/trajectories:trajectories",
         "//src/auto:auto",
         "//src/controllers:controllers",
         "//src/info:info",

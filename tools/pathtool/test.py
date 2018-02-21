@@ -1,5 +1,5 @@
 import unittest
-from pypathfinder import generate_tank_trajectory, generate_trajectory, Waypoint
+from pypathfinder import set_cdll_path
 import math
 from itertools import tee
 
@@ -12,6 +12,8 @@ def pairwise(iterable):
 
 
 class TestPyPathfinder(unittest.TestCase):
+
+
     def validate_trajectory(self, trajectory, timestep, max_vel, max_accel,
                             max_jerk):
         """
@@ -34,6 +36,7 @@ class TestPyPathfinder(unittest.TestCase):
         all the points to make sure they nominally satisfy the constraints
         of generation
         """
+        Waypoint, Segment, generate_trajectory, generate_tank_trajectory = set_cdll_path()
 
         trajectory = generate_trajectory([
             Waypoint(x=-4, y=-1, angle=math.radians(45)),
@@ -54,6 +57,7 @@ class TestPyPathfinder(unittest.TestCase):
         constraints so what I'll do for now is just check that the
         function call doesn't crash
         """
+        Waypoint, Segment, generate_trajectory, generate_tank_trajectory = set_cdll_path()
 
         lTraj, rTraj = generate_tank_trajectory([
             Waypoint(x=-4, y=-1, angle=math.radians(45)),
