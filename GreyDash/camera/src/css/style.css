@@ -1,0 +1,40 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    font: 16px sans-serif;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: white;
+    overflow: hidden;
+    background: #222;
+}
+
+/* Major interface panes, aside, article, header, etc. */
+
+body>* {
+    padding: 10px;
+    position: fixed;
+    overflow: scroll;
+    background: #222;
+}
+
+#camera {
+    padding: 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vw;
+    overflow: hidden;
+    background-color: #333;
+}
