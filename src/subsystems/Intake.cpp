@@ -36,15 +36,15 @@ void Intake::AutomatedPull() {
 
 void Intake::RegularPull() {
     m_intakeState = IntakeState::Idle;
-    m_leftRoller->Set(ControlMode::PercentOutput, 0.3);
-    m_rightRoller->Set(ControlMode::PercentOutput, 0.7);
+    m_leftRoller->Set(ControlMode::PercentOutput, 0.5);
+    m_rightRoller->Set(ControlMode::PercentOutput, 0.9);
 }
 
 void Intake::Eject() {
     m_intakeState = IntakeState::Idle;
     printf("Ejecting\n");
-    m_leftRoller->Set(ControlMode::PercentOutput, -0.3);
-    m_rightRoller->Set(ControlMode::PercentOutput, -0.7);
+    m_leftRoller->Set(ControlMode::PercentOutput, -1.0);
+    m_rightRoller->Set(ControlMode::PercentOutput, -1.0);
 }
 
 void Intake::Stop() {
@@ -84,8 +84,8 @@ void Intake::TaskPeriodic(RobotMode mode) {
                 m_rightRoller->Set(ControlMode::PercentOutput, 0.0);
             }
             else {
-                m_leftRoller->Set(ControlMode::PercentOutput, -0.7);
-                m_rightRoller->Set(ControlMode::PercentOutput, -0.7);
+                m_leftRoller->Set(ControlMode::PercentOutput, 0.5);
+                m_rightRoller->Set(ControlMode::PercentOutput, 0.9);
             }
             break;
     }
