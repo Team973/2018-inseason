@@ -11,12 +11,12 @@
 #include <iostream>
 
 GreyLight::GreyLight(int numLEDs) {
-    state = PixelState{};
-    state.fps = 60;
-    state.numLEDs = numLEDs;
-    state.pixels = std::vector<Color>(numLEDs);
+    g_state = PixelState{};
+    g_state.fps = 60;
+    g_state.numLEDs = numLEDs;
+    g_state.pixels = std::vector<Color>(numLEDs);
     m_strip = new APA102(numLEDs);
-    processor = new Static({0, 0, 0});  // start with all lights off
+    g_processor = new Static({0, 0, 0});  // start with all lights off
     m_worker = std::thread(&GreyLight::loop, this);
 }
 
@@ -24,21 +24,21 @@ void GreyLight::loop() {
     // clock is in seconds
     int lastTick = clock();
     while (true) {
-        stateLock.lock();
-        state.frame++;
+        m_stateLock.lock();
+        g_state.frame++;
         int now = clock();
-        state.delta = (now - lastTick) / 1000;
+        g_state.delta = (now - lastTick) / 1000;
         lastTick = now;
-        processor->tick(state);
-        m_strip->show(state.pixels);
-        stateLock.unlock();
+        g_processor->tick(g_state);
+        m_strip->show(g_state.pixels);
+        m_stateLock.unlock();
         std::this_thread::sleep_for(
             std::chrono::milliseconds(30));  // TO-DO, fps delay math
     }
 }
 
 void GreyLight::setPixelStateProcessor(PixelStateProcessor* processor) {
-    stateLock.lock();
-    this->processor = processor;
-    stateLock.unlock();
+    m_stateLock.lock();
+    this->g_processor = processor;
+    m_stateLock.unlock();
 }

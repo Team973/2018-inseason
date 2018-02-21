@@ -18,15 +18,14 @@ class GreyLight {
 public:
     GreyLight(int numLEDs);
     void setPixelStateProcessor(PixelStateProcessor* processor);
-    std::mutex stateLock;
-    // only access with stateLock acquired
-    PixelState state;
     void loop();
-    PixelStateProcessor* processor;
+    PixelState g_state;
+    PixelStateProcessor* g_processor;
 
 private:
     APA102* m_strip;
     std::thread m_worker;
+    std::mutex m_stateLock;
 };
 
 #endif /* SRC_MODULES_GREYLIGHT_H_ */
