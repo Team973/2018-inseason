@@ -31,7 +31,9 @@ APA102::APA102(int numLEDs, frc::SPI::Port port) : m_numLEDs(numLEDs) {
 }
 
 void APA102::show(std::vector<Color> pixels) {
-    int CHUNK_SIZE = 127;  // max TX size
+    std::reverse(pixels.start(), pixels.end())  // the strip on the bot is wired
+                                                // with 0 on the rightmost side
+        int CHUNK_SIZE = 127;                   // max TX size
     for (int i = 0; i < m_numLEDs; i++) {
         m_ledBuffer.at(i * m_bytesPerLED + m_led0Offset + m_globalOffset) =
             0xFF;
