@@ -5,8 +5,8 @@
 #include "src/auto/AutoRoutine.h"
 #include "src/subsystems/Drive.h"
 #include "src/subsystems/Elevator.h"
-#include "src/subsystems/Intake.h"
 #include "src/subsystems/Claw.h"
+#include "src/subsystems/Intake.h"
 
 using namespace frc;
 namespace frc973 {

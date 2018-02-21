@@ -23,5 +23,4 @@ struct TrajectoryDescription {
     Segment *left_trajectory;
     Segment *right_trajectory;
 };
-
 }

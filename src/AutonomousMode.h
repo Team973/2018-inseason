@@ -7,6 +7,8 @@
 #include "src/auto/NoAuto.h"
 #include "src/auto/ForwardAuto.h"
 #include "src/auto/SwitchAuto.h"
+#include "src/auto/ScaleAuto.h"
+#include "lib/util/WrapDash.h"
 #include "src/DisabledMode.h"
 #include "src/Robot.h"
 #include "src/subsystems/Drive.h"
@@ -17,26 +19,57 @@
 using namespace frc;
 
 namespace frc973 {
-class AutoRoutine;
 class Disabled;
+class Drive;
+class Elevator;
+class Claw;
 
 class Autonomous {
 public:
+    enum class SwitchScalePosition
+    {
+        LL,
+        LR,
+        RR,
+        RL
+    };
+
     Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
-               Intake *intake, Claw *claw);
+               Intake *intake, Claw *claw, ADXRS450_Gyro *gyro);
     virtual ~Autonomous();
 
     void AutonomousInit();
     void AutonomousPeriodic();
     void AutonomousStop();
 
-    static constexpr double DRIVER_STATION_TO_AUTO_LINE = 48.0;
+    SwitchScalePosition GetSwitchScalePosition(std::string message);
+
+    const char *GetRoutineName();
 
 private:
+    enum class SelectedAutoRoutine
+    {
+        noAuto,
+        forward,
+        lowGoal,
+        highGoal
+    };
+
     NoAuto *m_noAuto;
     ForwardAuto *m_forwardAuto;
     SwitchAuto *m_switchAuto;
+    ScaleAuto *m_scaleAuto;
 
     Disabled *m_disabled;
+
+    std::string m_scoringLocations;
+    Autonomous::SwitchScalePosition m_switchScalePosition;
+    SelectedAutoRoutine m_routine;
+
+    Drive *m_drive;
+    Elevator *m_elevator;
+    Intake *m_intake;
+    Claw *m_claw;
+    ADXRS450_Gyro *m_gyro;
 };
 };
