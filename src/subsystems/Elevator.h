@@ -37,7 +37,8 @@ public:
     static constexpr double LOW_GOAL = 30.0;
     static constexpr double SCALE_LOW = 64.0;
     static constexpr double SCALE_MID = 70.0;
-    static constexpr double SCALE_HIGH = 78.0;
+    static constexpr double SCALE_HIGH = 80.0;
+    static constexpr double HANGING = 70.0;
 
     Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor);
     virtual ~Elevator();
