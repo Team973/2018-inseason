@@ -78,6 +78,7 @@ private:
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
     ObservableJoystick *m_tuningJoystick;
+
     TalonSRX *m_leftDriveTalonA;
     VictorSPX *m_leftDriveVictorB;
     VictorSPX *m_leftDriveVictorC;
@@ -105,7 +106,6 @@ private:
     DigitalInput *m_airPressureSwitch;
     Relay *m_compressorRelay;
     GreyCompressor *m_compressor;
-    GreyLight *m_greylight;
 
     Disabled *m_disabled;
     Autonomous *m_autonomous;
