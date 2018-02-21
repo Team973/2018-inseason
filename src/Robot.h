@@ -96,7 +96,7 @@ private:
     TalonSRX *m_leftRoller;
     DigitalInput *m_cubeSensor;
     TalonSRX *m_elevatorMotor;
-    Solenoid *m_hangerpto;
+    Solenoid *m_hangerPTO;
     TalonSRX *m_forkliftTalon;
 
     Elevator *m_elevator;

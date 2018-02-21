@@ -31,7 +31,7 @@ void HangerDriveController::CalcDriveOutput(DriveStateProvider *state,
 }
 
 void HangerDriveController::SetJoysticks(double throttle) {
-    throttle = Util::bound(throttle, -1.0, 1.0);
+    throttle = fabs(Util::bound(throttle, -1.0, 1.0));
 
     m_leftOutput = throttle;
     m_rightOutput = throttle;
