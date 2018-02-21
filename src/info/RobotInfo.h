@@ -28,6 +28,8 @@ static const int PCM_CAN_ID = 17;
 static const int CUBE_CLAMP_PCM_ID = 1;
 static const int CLAW_KICKER_PCM_ID = 2;
 static const int HANGER_PTO_PCM_ID = 0;
+static const int INTAKE_POSITION_PCM_ID = 3;
+static const int INTAKE_OPENCLOSE_PCM_ID = 4;
 
 // Claw
 static const int CLAW_LEFT_ROLLER_CAN_ID = 5;
@@ -36,12 +38,9 @@ static const int CUBE_BANNER_SENSOR_DIN = 0;
 
 // Hanger
 static const int FORKLIFT_TALON_CAN_ID = 6;
-static const int FORKLIFT_VICTOR_ID = 11;
 
 // Digital
-static const int INTAKE_BEAM_BREAKER_SENSOR_DIN = 0;
-
-// Digital
+static const int INTAKE_BEAM_BREAKER_SENSOR_DIN = 3;
 static const int PRESSURE_DIN_ID = 1;
 
 // Relays
@@ -50,7 +49,6 @@ static const int COMPRESSOR_RELAY = 0;
 // Joysticks
 static const int DRIVER_JOYSTICK_PORT = 0;
 static const int OPERATOR_JOYSTICK_PORT = 1;
-static const int TUNING_JOYSTICK_PORT = 2;
 
 // Drive
 static constexpr double DRIVE_WIDTH = 25.205;
