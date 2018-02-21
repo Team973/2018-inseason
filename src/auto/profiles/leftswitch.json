@@ -7,7 +7,6 @@
     "wheelbase_width": 25.205,
     "waypoints": [
         { "x": 0, "y": 0, "angle": 0 },
-        { "x": 78, "y": 65, "angle": 0 },
-        { "x": 87, "y": 65, "angle": 0 }
+        { "x": 99, "y": 60, "angle": 0 }
     ]
 }
