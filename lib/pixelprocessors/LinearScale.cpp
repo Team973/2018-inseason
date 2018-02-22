@@ -18,12 +18,12 @@ LinearScale::LinearScale(Color minColor, Color maxColor, double minVal,
     this->m_maxVal = maxVal;
 }
 
-void LinearScale::updateValue(double value) {
+void LinearScale::UpdateValue(double value) {
     this->m_currentValue = value;
 }
 
-void LinearScale::tick(PixelState& state) {
-    PixelStateProcessorModulator::tick(state);
+void LinearScale::Tick(PixelState& state) {
+    PixelStateProcessorModulator::Tick(state);
     uint8_t ledsToFill = std::fmin(
         (m_currentValue - m_minVal) / (m_maxVal - m_minVal) * state.numLEDs,
         state.numLEDs);

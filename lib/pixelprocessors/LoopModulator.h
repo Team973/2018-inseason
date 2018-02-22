@@ -18,10 +18,10 @@ namespace LightPattern {
 class LoopModulator : public PixelStateProcessorModulator {
 public:
     LoopModulator(PixelStateProcessor* processor);
-    void tick(PixelState& state);
+    void Tick(PixelState& state);
 
 private:
-    void rotate(std::vector<Color>& pixels, int amount, int numLEDs);
+    void Rotate(std::vector<Color>& pixels, int amount, int numLEDs);
 };
 }
 

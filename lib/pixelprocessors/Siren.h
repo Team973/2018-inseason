@@ -16,9 +16,9 @@ namespace LightPattern {
 class Siren : public PixelStateProcessor {
 public:
     Siren(Color first, Color second, int frameDuration = 4);
-    void tick(PixelState& state);
-    void setColors(Color first, Color second);
-    void setFrameDuration(int frameDuration);
+    void Tick(PixelState& state) override;
+    void SetColors(Color first, Color second);
+    void SetFrameDuration(int frameDuration);
 
 private:
     bool m_color = false;

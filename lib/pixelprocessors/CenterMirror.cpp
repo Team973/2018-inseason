@@ -14,24 +14,24 @@ CenterMirror::CenterMirror(PixelStateProcessor* processor, bool inverse) {
     this->m_inverse = inverse;
 }
 
-void CenterMirror::tick(PixelState& state) {
+void CenterMirror::Tick(PixelState& state) {
     m_previousNumLEDs = state.numLEDs;
     state.numLEDs = state.numLEDs / 2;
-    PixelStateProcessorModulator::tick(state);
+    PixelStateProcessorModulator::Tick(state);
     if (m_inverse) {
-        pushToRightSide(state);
+        PushToRightSide(state);
         std::reverse(state.pixels.begin(),
                      state.pixels.begin() + m_previousNumLEDs / 2);
     }
     else {
-        pushToRightSide(state);
+        PushToRightSide(state);
         std::reverse(state.pixels.begin() + m_previousNumLEDs / 2,
                      state.pixels.end());
     }
     state.numLEDs = m_previousNumLEDs;
 }
 
-void CenterMirror::pushToRightSide(PixelState& state) {
+void CenterMirror::PushToRightSide(PixelState& state) {
     for (std::size_t i = 0; i < m_previousNumLEDs / 2; i++) {
         state.pixels.at(m_previousNumLEDs / 2 + i) = state.pixels.at(i);
     }

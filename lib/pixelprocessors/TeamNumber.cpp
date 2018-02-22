@@ -15,7 +15,7 @@ TeamNumber::TeamNumber(Color foreground, Color background)
         : m_foreground(foreground), m_background(background) {
 }
 
-void TeamNumber::tick(PixelState& state) {
+void TeamNumber::Tick(PixelState& state) {
     int spacing = (state.numLEDs - 9 - 7 - 3) / 2;
     for (std::size_t i = 0; i < state.numLEDs - 7 - 3 - spacing * 2; i++) {
         state.pixels.at(i) = m_foreground;

@@ -14,10 +14,10 @@ PixelChase::PixelChase(PixelStateProcessor* processor, Color background) {
     this->m_background = background;
 }
 
-void PixelChase::tick(PixelState& state) {
-    PixelStateProcessorModulator::tick(state);
+void PixelChase::Tick(PixelState& state) {
+    PixelStateProcessorModulator::Tick(state);
 
-    uint16_t frame = getFrame(state.frame);
+    uint16_t frame = GetFrame(state.frame);
 
     int k;
     for (std::size_t i = 0; i < state.numLEDs; i++) {
@@ -31,7 +31,7 @@ void PixelChase::tick(PixelState& state) {
 }
 
 // 0 is led ON, 1 is led OFF
-uint16_t PixelChase::getFrame(int n) {
+uint16_t PixelChase::GetFrame(int n) {
     int k = n % 16;
     uint8_t used;
     if (k < 8) {  // n 0-8
@@ -47,7 +47,7 @@ uint16_t PixelChase::getFrame(int n) {
                 used);  // return first word all off, second word is animation
     }
     else {
-        return uint16_t(used << 8);
+        return (((uint16_t)used << 8) ^ 0x00ff);
     }
 }
 }

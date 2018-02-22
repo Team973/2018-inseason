@@ -16,10 +16,10 @@ namespace LightPattern {
 class PixelChase : public PixelStateProcessorModulator {
 public:
     PixelChase(PixelStateProcessor* processor, Color background);
-    void tick(PixelState& state);
+    void Tick(PixelState& state);
 
 private:
-    uint16_t getFrame(int n);
+    uint16_t GetFrame(int n);
     Color m_background;
 };
 }

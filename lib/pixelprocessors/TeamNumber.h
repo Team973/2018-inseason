@@ -16,7 +16,7 @@ class TeamNumber : public PixelStateProcessor {
 public:
     TeamNumber();
     TeamNumber(Color foreground, Color background);
-    void tick(PixelState& state);
+    void Tick(PixelState& state) override;
 
 private:
     Color m_foreground;

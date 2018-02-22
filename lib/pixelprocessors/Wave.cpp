@@ -15,7 +15,7 @@ Wave::Wave(Color background, Color foreground, int period) {
     this->m_period = period;
 }
 
-void Wave::tick(PixelState& state) {
+void Wave::Tick(PixelState& state) {
     for (unsigned int i = 0; i < state.numLEDs; i++) {
         state.pixels.at(i) = m_background;
     }

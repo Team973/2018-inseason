@@ -16,8 +16,8 @@ class LinearScale : public PixelStateProcessorModulator {
 public:
     LinearScale(Color minColor, Color maxColor, double minVal, double maxVal,
                 PixelStateProcessor* modulator);
-    void tick(PixelState& state);
-    void updateValue(double value);
+    void Tick(PixelState& state);
+    void UpdateValue(double value);
 
 private:
     Color m_minColor;

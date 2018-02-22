@@ -17,7 +17,7 @@ namespace LightPattern {
 class Gradient : public PixelStateProcessor {
 public:
     Gradient(Color gradientStart, Color gradientEnd);
-    void tick(PixelState& state);
+    void Tick(PixelState& state) override;
 
 private:
     Color m_gradientStart;

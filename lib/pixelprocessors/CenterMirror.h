@@ -18,10 +18,10 @@ namespace LightPattern {
 class CenterMirror : public PixelStateProcessorModulator {
 public:
     CenterMirror(PixelStateProcessor* processor, bool inverse = false);
-    void tick(PixelState& state);
+    void Tick(PixelState& state);
 
 private:
-    void pushToRightSide(PixelState& state);
+    void PushToRightSide(PixelState& state);
     bool m_inverse;
     uint8_t m_previousNumLEDs;
 };

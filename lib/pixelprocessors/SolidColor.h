@@ -18,8 +18,8 @@ class SolidColor : public PixelStateProcessor {
 public:
     SolidColor();
     SolidColor(Color color);
-    void tick(PixelState& state);
-    void setColor(Color color);
+    void Tick(PixelState& state) override;
+    void SetColor(Color color);
 
 private:
     Color m_currentColor;

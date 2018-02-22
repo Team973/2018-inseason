@@ -13,7 +13,7 @@ Gradient::Gradient(Color m_gradientStart, Color m_gradientEnd)
         : m_gradientStart(m_gradientStart), m_gradientEnd(m_gradientEnd) {
 }
 
-void Gradient::tick(PixelState& state) {
+void Gradient::Tick(PixelState& state) {
     for (std::size_t i = 0; i < state.numLEDs / 2; i++) {
         double percentage = double(i) / (state.numLEDs / 2);
         Color gradientIndex = {

@@ -14,11 +14,11 @@ SolidColor::SolidColor() {
 SolidColor::SolidColor(Color color) {
     m_currentColor = color;
 }
-void SolidColor::setColor(Color color) {
+void SolidColor::SetColor(Color color) {
     m_currentColor = color;
 }
 
-void SolidColor::tick(PixelState& state) {
+void SolidColor::Tick(PixelState& state) {
     std::fill(state.pixels.begin(), state.pixels.end(), m_currentColor);
 }
 }

@@ -35,7 +35,7 @@ void GreyLight::Loop() {
         int now = clock();
         m_state.delta = (now - lastTick) / 1000;
         lastTick = now;
-        m_processor->tick(m_state);
+        m_processor->Tick(m_state);
 #ifndef USING_LED_SIMULATOR
         m_strip->Show(m_state.pixels);
 #endif

@@ -18,7 +18,7 @@ namespace LightPattern {
 class Wave : public PixelStateProcessor {
 public:
     Wave(Color background, Color foreground, int period);
-    void tick(PixelState& state);
+    void Tick(PixelState& state) override;
 
 private:
     int m_period;

@@ -12,16 +12,16 @@ LoopModulator::LoopModulator(PixelStateProcessor* processor) {
     this->processor = processor;
 }
 
-void LoopModulator::tick(PixelState& state) {
-    PixelStateProcessorModulator::tick(state);
+void LoopModulator::Tick(PixelState& state) {
+    PixelStateProcessorModulator::Tick(state);
 
     // every frame, rotate (frame % count) times, so that
     // it completes a rotation every (count) frames
     int amount = state.frame % state.numLEDs;
-    this->rotate(state.pixels, amount, state.numLEDs);
+    this->Rotate(state.pixels, amount, state.numLEDs);
 }
 
-void LoopModulator::rotate(std::vector<Color>& pixels, int amount,
+void LoopModulator::Rotate(std::vector<Color>& pixels, int amount,
                            int numLEDs) {
     // rotation has to be inline, but since that's
     // pretty much impossible we make a copy
