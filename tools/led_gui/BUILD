@@ -13,5 +13,4 @@ cc_binary(
     "-lpthread",
     "-lm"
   ],
-  copts = ["-DUSING_SIMULATOR"]
 )

@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "lib/helpers/GreyLight.h"
 #include "lib/pixelprocessors/LinearScale.h"
-#include "lib/pixelprocessors/Static.h"
+#include "lib/pixelprocessors/SolidColor.h"
 
 #include <stdio.h>
 #include <iostream>
@@ -56,8 +56,8 @@ int main(int argc, char* argv[]) {
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-        led->loop();
-        updateAndDraw(led->state.pixels, window, LEDs, numLEDs);
+        led->Loop();
+        updateAndDraw(led->GetState().pixels, window, LEDs, numLEDs);
         nanosleep(&tim, &tim2);
     }
 

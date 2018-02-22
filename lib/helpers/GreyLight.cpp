@@ -17,26 +17,38 @@ GreyLight::GreyLight(int numLEDs) {
     m_state.fps = 60;
     m_state.numLEDs = numLEDs;
     m_state.pixels = std::vector<Color>(numLEDs);
-    m_strip = new APA102(numLEDs);
     m_processor = new SolidColor({0, 0, 0});  // start with all lights off
+#ifndef USING_LED_SIMULATOR
+    m_strip = new APA102(numLEDs);
     m_worker = std::thread(&GreyLight::Loop, this);
+#endif
 }
 
 void GreyLight::Loop() {
     // clock is in seconds
     int lastTick = clock();
+#ifndef USING_LED_SIMULATOR
     while (true) {
+#endif
         m_stateLock.lock();
         m_state.frame++;
         int now = clock();
         m_state.delta = (now - lastTick) / 1000;
         lastTick = now;
         m_processor->tick(m_state);
+#ifndef USING_LED_SIMULATOR
         m_strip->Show(m_state.pixels);
+#endif
         m_stateLock.unlock();
         std::this_thread::sleep_for(
             std::chrono::milliseconds(30));  // TO-DO, fps delay math
+#ifndef USING_LED_SIMULATOR
     }
+#endif
+}
+
+PixelState GreyLight::GetState() {
+    return m_state;
 }
 
 void GreyLight::SetPixelStateProcessor(PixelStateProcessor* processor) {
