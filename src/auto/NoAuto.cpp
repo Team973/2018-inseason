@@ -9,10 +9,6 @@ NoAuto::NoAuto(void) {
 NoAuto::~NoAuto(void) {
 }
 
-void NoAuto::Execute(void) {
-    std::cout << "No Auto" << std::endl;
-}
-
 void NoAuto::Reset(void) {
 }
 };

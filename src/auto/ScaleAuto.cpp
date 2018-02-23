@@ -9,7 +9,11 @@ ScaleAuto::ScaleAuto(void) {
 ScaleAuto::~ScaleAuto(void) {
 }
 
-void ScaleAuto::Execute(void) {
+void ScaleAuto::ExecuteLeft(void) {
+    std::cout << "Scale Auto" << std::endl;
+}
+
+void ScaleAuto::ExecuteRight(void) {
     std::cout << "Scale Auto" << std::endl;
 }
 

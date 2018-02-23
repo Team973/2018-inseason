@@ -15,7 +15,9 @@ public:
     SwitchAuto(Drive *drive, Elevator *elevator, Intake *intake, Claw *claw);
     virtual ~SwitchAuto(void);
 
-    void Execute(void) override;
+    void ExecuteLeft(void) override;
+    void ExecuteRight(void) override;
+
     void Reset(void);
 
 private:

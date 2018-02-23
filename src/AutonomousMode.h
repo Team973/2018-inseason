@@ -5,7 +5,6 @@
 #include "src/info/RobotInfo.h"
 #include "src/auto/AutoRoutine.h"
 #include "src/auto/NoAuto.h"
-#include "src/auto/ForwardAuto.h"
 #include "src/auto/SwitchAuto.h"
 #include "src/auto/ScaleAuto.h"
 #include "lib/util/WrapDash.h"
@@ -50,13 +49,11 @@ private:
     enum class SelectedAutoRoutine
     {
         noAuto,
-        forward,
         lowGoal,
         highGoal
     };
 
     NoAuto *m_noAuto;
-    ForwardAuto *m_forwardAuto;
     SwitchAuto *m_switchAuto;
     ScaleAuto *m_scaleAuto;
 

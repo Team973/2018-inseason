@@ -11,7 +11,9 @@ public:
     ScaleAuto(void);
     virtual ~ScaleAuto(void);
 
-    void Execute(void) override;
+    void ExecuteLeft(void) override;
+    void ExecuteRight(void) override;
+
     void Reset(void);
 };
 };

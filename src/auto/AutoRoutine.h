@@ -11,7 +11,9 @@ public:
     AutoRoutine();
     virtual ~AutoRoutine();
 
-    virtual void Execute(void);
+    virtual void ExecuteLeft(void);
+    virtual void ExecuteRight(void);
+
     virtual void Reset(void);
 
 protected:

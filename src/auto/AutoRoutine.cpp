@@ -9,7 +9,11 @@ AutoRoutine::AutoRoutine() : m_autoState(0) {
 AutoRoutine::~AutoRoutine() {
 }
 
-void AutoRoutine::Execute(void) {
+void AutoRoutine::ExecuteLeft(void) {
+    std::cout << "Routine Start" << std::endl;
+}
+
+void AutoRoutine::ExecuteRight(void) {
     std::cout << "Routine Start" << std::endl;
 }
 

@@ -1,6 +1,4 @@
 #include "src/AutonomousMode.h"
-#include "src/auto/NoAuto.h"
-#include "src/auto/ForwardAuto.h"
 #include "src/DisabledMode.h"
 #include "src/Robot.h"
 
@@ -10,7 +8,6 @@ namespace frc973 {
 Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
                        Intake *intake, Claw *claw, ADXRS450_Gyro *gyro)
         : m_noAuto(new NoAuto())
-        , m_forwardAuto(new ForwardAuto(drive))
         , m_switchAuto(new SwitchAuto(drive, elevator, intake, claw))
         , m_disabled(disabled)
         , m_scoringLocations("")
@@ -68,17 +65,10 @@ void Autonomous::AutonomousInit() {
                     m_routine = SelectedAutoRoutine::lowGoal;
                     break;
                 case SwitchScalePosition::LR:
-                    printf("Forward Auto\n");
-                    m_forwardAuto->Reset();
-                    m_routine = SelectedAutoRoutine::forward;
                     break;
                 case SwitchScalePosition::RL:
-                    m_forwardAuto->Reset();
-                    m_routine = SelectedAutoRoutine::forward;
                     break;
                 case SwitchScalePosition::RR:
-                    m_forwardAuto->Reset();
-                    m_routine = SelectedAutoRoutine::forward;
                     break;
                 default:
                     break;
@@ -112,7 +102,6 @@ void Autonomous::AutonomousInit() {
 }
 
 void Autonomous::AutonomousPeriodic() {
-    m_switchAuto->Execute();
 }
 
 void Autonomous::AutonomousStop() {
@@ -139,9 +128,6 @@ const char *Autonomous::GetRoutineName() {
     switch (m_routine) {
         case SelectedAutoRoutine::noAuto:
             return "NoAuto";
-            break;
-        case SelectedAutoRoutine::forward:
-            return "ForwardAuto";
             break;
         case SelectedAutoRoutine::lowGoal:
             return "SwitchAuto";

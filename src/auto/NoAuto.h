@@ -11,7 +11,6 @@ public:
     NoAuto(void);
     virtual ~NoAuto(void);
 
-    void Execute(void) override;
     void Reset(void);
 };
 };
