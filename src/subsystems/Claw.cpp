@@ -54,6 +54,14 @@ void Claw::manualClawOff() {
     goToState(manual);
 }
 
+void Claw::kickOn() {
+    m_clawKicker->Set(active);
+}
+
+void Claw::kickOff() {
+    m_clawKicker->Set(kickIdle);
+}
+
 void Claw::TaskPeriodic(RobotMode mode) {
     DBStringPrintf(DB_LINE7, "cs %d", m_clawState);
     switch (m_clawState) {

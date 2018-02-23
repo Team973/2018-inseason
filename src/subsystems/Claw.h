@@ -99,6 +99,16 @@ public:
      */
     void manualClawOff();
 
+    /*
+     * Activates the kicker
+     */
+    void kickOn();
+
+    /*
+     * Deactivates the kicker
+     */
+    void kickOff();
+
     void TaskPeriodic(RobotMode mode);
 
 private:
