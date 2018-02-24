@@ -9,6 +9,7 @@
 #include "src/auto/ScaleAuto.h"
 #include "src/auto/SwitchOpposite.h"
 #include "src/auto/ScaleOpposite.h"
+#include "src/auto/SideSwitch.h"
 #include "lib/util/WrapDash.h"
 #include "src/DisabledMode.h"
 #include "src/Robot.h"
@@ -47,6 +48,7 @@ private:
     CenterSwitchAuto *m_centerSwitchAuto;
     ScaleAuto *m_scaleAuto;
     ScaleOpposite *m_scaleOpposite;
+    SideSwitch *m_sideSwitch;
     SwitchOpposite *m_switchOpposite;
 
     Disabled *m_disabled;

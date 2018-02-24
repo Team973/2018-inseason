@@ -1,14 +1,14 @@
-#include "src/auto/ScaleAuto.h"
-#include "src/auto/profiles/rightscale_trajectory.h"
-#include "src/auto/profiles/leftscale_trajectory.h"
+#include "src/auto/SwitchOpposite.h"
+#include "src/auto/profiles/rightswitchopposite_trajectory.h"
+#include "src/auto/profiles/leftswitchopposite_trajectory.h"
 
 using namespace frc;
-using namespace left_scale;
-using namespace right_scale;
+using namespace left_switch_opposite;
+using namespace right_switch_opposite;
 
 namespace frc973 {
-ScaleAuto::ScaleAuto(Drive *drive, Elevator *elevator, Intake *intake,
-                     Claw *claw)
+SwitchOpposite::SwitchOpposite(Drive *drive, Elevator *elevator, Intake *intake,
+                               Claw *claw)
         : m_drive(drive)
         , m_elevator(elevator)
         , m_intake(intake)
@@ -16,69 +16,45 @@ ScaleAuto::ScaleAuto(Drive *drive, Elevator *elevator, Intake *intake,
         , m_autoTimer(0) {
 }
 
-ScaleAuto::~ScaleAuto(void) {
+SwitchOpposite::~SwitchOpposite(void) {
 }
 
-void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
+void SwitchOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
     std::cout << "Scale Auto" << std::endl;
-    if (direction == AutoRoutineBase::AutoDirection::Left) {
-        switch (m_autoState) {
-            case 0:
-                m_drive->SplineDrive(&left_scale::left_scale);
-                m_intake->Open();
-                m_intake->LowerIntake();
-                m_claw->grab();
-                m_claw->kickOff();
+    switch (m_autoState) {
+        case 0:
+            if (direction == AutoRoutineBase::AutoDirection::Left) {
+                m_drive->SplineDrive(
+                    &left_switch_opposite::left_switch_opposite);
+            }
+            else if (direction == AutoRoutineBase::AutoDirection::Left) {
+                m_drive->SplineDrive(
+                    &right_switch_opposite::right_switch_opposite);
+            }
+            m_intake->Open();
+            m_intake->LowerIntake();
+            m_claw->grab();
+            m_claw->kickOff();
+            m_autoTimer = GetMsecTime();
+            m_autoState++;
+            break;
+        case 1:
+            if (GetMsecTime() - m_autoTimer > 1000) {
+                m_elevator->SetPosition(Elevator::LOW_GOAL);
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
-                break;
-            case 1:
-                if (GetMsecTime() - m_autoTimer > 500) {
-                    m_elevator->SetPosition(Elevator::LOW_GOAL);
-                    m_autoTimer = GetMsecTime();
-                    m_autoState++;
-                }
-                break;
-            case 2:
-                if (m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
-                    m_claw->cubeLaunch();
-                    m_autoState++;
-                }
-                break;
-            default:
-                break;
-        }
-    }
-    if (direction == AutoRoutineBase::AutoDirection::Right) {
-        switch (m_autoState) {
-            case 0:
-                m_drive->SplineDrive(&right_scale::right_scale);
-                m_intake->Open();
-                m_intake->LowerIntake();
-                m_claw->grab();
-                m_claw->kickOff();
-                m_autoTimer = GetMsecTime();
+            }
+            break;
+        case 2:
+            if (m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 5000) {
+                m_claw->cubeLaunch();
                 m_autoState++;
-                break;
-            case 1:
-                if (GetMsecTime() - m_autoTimer > 500) {
-                    m_elevator->SetPosition(Elevator::LOW_GOAL);
-                    m_autoTimer = GetMsecTime();
-                    m_autoState++;
-                }
-                break;
-            case 2:
-                if (m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
-                    m_claw->cubeLaunch();
-                    m_autoState++;
-                }
-                break;
-            default:
-                break;
-        }
+            }
+            break;
+        default:
+            break;
     }
 }
-
-void ScaleAuto::Reset(void) {
+void SwitchOpposite::Reset(void) {
 }
 };

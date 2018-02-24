@@ -14,8 +14,9 @@ class Disabled;
 
 class SwitchOpposite : public AutoRoutineBase {
 public:
-    ScaleAuto(Drive *drive, Elevator *elevator, Intake *intake, Claw *claw);
-    virtual ~ScaleAuto(void);
+    SwitchOpposite(Drive *drive, Elevator *elevator, Intake *intake,
+                   Claw *claw);
+    virtual ~SwitchOpposite(void);
 
     void Execute(AutoRoutineBase::AutoDirection direction) override;
 

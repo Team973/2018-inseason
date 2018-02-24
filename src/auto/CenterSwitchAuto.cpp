@@ -36,7 +36,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             m_autoState++;
             break;
         case 1:
-            if (GetMsecTime() - m_autoTimer > 500) {
+            if (GetMsecTime() - m_autoTimer > 1000) {
                 m_elevator->SetPosition(Elevator::LOW_GOAL);
                 m_autoTimer = GetMsecTime();
                 m_autoState++;

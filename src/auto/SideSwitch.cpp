@@ -1,14 +1,14 @@
-#include "src/auto/CenterSwitchAuto.h"
-#include "src/auto/profiles/centerrightswitch_trajectory.h"
-#include "src/auto/profiles/centerleftswitch_trajectory.h"
+#include "src/auto/SideSwitch.h"
+#include "src/auto/profiles/rightsideswitch_trajectory.h"
+#include "src/auto/profiles/leftsideswitch_trajectory.h"
 
 using namespace frc;
-using namespace center_left_switch;
-using namespace center_right_switch;
+using namespace left_side_switch;
+using namespace right_side_switch;
 
 namespace frc973 {
-CenterSwitchAuto::CenterSwitchAuto(Drive *drive, Elevator *elevator,
-                                   Intake *intake, Claw *claw)
+SideSwitch::SideSwitch(Drive *drive, Elevator *elevator, Intake *intake,
+                       Claw *claw)
         : m_drive(drive)
         , m_elevator(elevator)
         , m_intake(intake)
@@ -16,17 +16,17 @@ CenterSwitchAuto::CenterSwitchAuto(Drive *drive, Elevator *elevator,
         , m_autoTimer(0) {
 }
 
-CenterSwitchAuto::~CenterSwitchAuto(void) {
+SideSwitch::~SideSwitch(void) {
 }
 
-void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
+void SideSwitch::Execute(AutoRoutineBase::AutoDirection direction) {
     switch (m_autoState) {
         case 0:
             if (direction == AutoRoutineBase::AutoDirection::Left) {
-                m_drive->SplineDrive(&center_left_switch::center_left_switch);
+                m_drive->SplineDrive(&left_side_switch::left_side_switch);
             }
             else if (direction == AutoRoutineBase::AutoDirection::Right) {
-                m_drive->SplineDrive(&center_right_switch::center_right_switch);
+                m_drive->SplineDrive(&right_side_switch::right_side_switch);
             }
             m_intake->Open();
             m_intake->LowerIntake();
@@ -36,7 +36,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             m_autoState++;
             break;
         case 1:
-            if (GetMsecTime() - m_autoTimer > 500) {
+            if (GetMsecTime() - m_autoTimer > 1000) {
                 m_elevator->SetPosition(Elevator::LOW_GOAL);
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
@@ -53,6 +53,6 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
     }
 }
 
-void CenterSwitchAuto::Reset(void) {
+void SideSwitch::Reset(void) {
 }
 }
