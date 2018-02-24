@@ -1,6 +1,7 @@
 const loginDialog = document.getElementById('loginDialog');
 const connectAddress = document.getElementById('connectAddress');
 const connectButton = document.getElementById('connectButton');
+const connectLoadingBar = document.getElementById('connectLoadingBar');
 const closeButton = document.getElementById('closeButton');
 
 let loginShown = true;
@@ -23,7 +24,9 @@ closeButton.addEventListener('click', () => {
 
 function connectRobot() {
   ipc.send('connect', connectAddress.value);
-  connectAddress.disabled = connectButton.disabled = true;
+  connectAddress.disabled = true;
+  connectButton.disabled = true;
+  connectLoadingBar.hidden = false;
   connectButton.textContent = 'Connecting...';
 }
 
@@ -32,6 +35,7 @@ function setLogin() {
   // Enable the input and the button
   connectAddress.disabled = false;
   connectButton.disabled = false;
+  connectLoadingBar.hidden = true;
   connectButton.textContent = 'Connect';
   // Add the default address and select 973
   connectAddress.value = 'roborio-973-frc.local';
