@@ -121,7 +121,7 @@ void Teleop::TeleopPeriodic() {
             m_claw->grab();
             m_claw->kickOff();
             m_elevatorMode = ElevatorMode::motionMagic;
-            m_elevator->SetPosition(Elevator::LOW_GOAL);
+            m_elevator->SetPosition(Elevator::VAULT);
             if (m_elevator->GetPosition() > 14.0) {
                 m_intake->Open();
             }
@@ -234,6 +234,8 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::Start:
                 if (pressedP) {
+                    m_elevatorMode = ElevatorMode::motionMagic;
+                    m_elevator->SetPosition(Elevator::HANGING);
                 }
                 break;
             case DualAction::Back:

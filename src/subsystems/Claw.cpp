@@ -54,9 +54,6 @@ void Claw::TaskPeriodic(RobotMode mode) {
         case ClawState::grabbed:
             break;
         case ClawState::dropOpen:
-            if (GetMsecTime() - m_stateStartTimeMs > 1000) {
-                goToState(dropClosed);
-            }
             break;
         case ClawState::dropClosed:
             goToState(grabbed);
