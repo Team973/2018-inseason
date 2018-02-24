@@ -8,6 +8,7 @@
 
 #include "GreyLight.h"
 #include "lib/pixelprocessors/SolidColor.h"
+#include "lib/pixelprocessors/Flash.h"
 #include <iostream>
 
 using namespace GreyLightType;
