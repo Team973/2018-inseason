@@ -69,7 +69,7 @@ void Teleop::TeleopPeriodic() {
     if (fabs(elevatorManualPower) > 0.1 ||
         m_elevatorMode == ElevatorMode::percentOutput) {
         m_elevatorMode = ElevatorMode::percentOutput;
-        m_elevator->SetPower(elevatorManualPower);
+        m_elevator->SetPower(elevatorManualPower + ELEVATOR_FEED_FORWARD);
     }
     else if (m_elevatorMode == ElevatorMode::zeroingDown) {
     }
