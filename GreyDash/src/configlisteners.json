@@ -141,6 +141,22 @@
             "title": "Intake Mode",
             "unit": "",
             "key": "/SmartDashboard/intake/modes/currentmode"
+        },
+        {
+            "settings": {
+                "fixedDecimals": false
+            },
+            "title": "Compressor on?",
+            "unit": "",
+            "key": "/SmartDashboard/misc/compressor/status"
+        },
+        {
+            "settings": {
+                "fixedDecimals": false
+            },
+            "title": "Air Pressure",
+            "unit": "",
+            "key": "/SmartDashboard/misc/compressor/pressure"
         }
     ]
 }

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>GreyDash</title>
 
     <!-- Material Design Lite -->
@@ -26,43 +26,86 @@
                 </div>
             </form>
         </div>
-        <div id="connectLoadingBar" class="mdl-progress mdl-js-progress mdl-progress__indeterminate" hidden></div>
+        <div id="connectLoadingBar" class="mdl-progress mdl-js-progress mdl-progress--indeterminate" hidden></div>
         <div class="mdl-dialog__actions">
             <button id="connectButton" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" disabled>Connecting</button>
             <button id="closeButton" type="button" class="mdl-button close">Close</button>
         </div>
     </dialog>
-    <div class="layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
-        <main class="mdl-layout__content mdl-color--grey-800">
-            <div class="mdl-grid content">
-                <div class="mdl-color--grey-400 mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
-                    <p>Robot Status: <span id="robotState">Unknown State</span></p>
-                </div>
-
-                <div id="charts" class="charts mdl-shadow--2dp mdl-color--grey-400 mdl-cell mdl-cell--8-col">
-                </div>
-
-                <div class="cards mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing">
-                    <div id="timer" class="mdl-color--grey-400 mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--12-col-desktop mdl-typography--title">2:15</div>
-
-                    <div class="separator mdl-cell--1-col"></div>
-
-                    <div id="indicators" class="indicators mdl-color--grey-400 mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--4-col-tablet mdl-cell--12-col-desktop">
-                    </div>
-
-                    <div class="separator mdl-cell--1-col"></div>
-
-                    <div class="graphicalIndicators mdl-color--grey-400 mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--3-col-tablet mdl-cell--12-col-desktop">
-                        <!-- Gyroscope -->
-                        <svg id="gyro">
-                            <circle cx="85" cy="85" r="83"></circle>
-                            <circle cx="85" cy="85" r="50"></circle>
-                            <rect id="gyroDial" x="80" y="5" width="10" height="80"></rect>
-                            <text id="gyroNumber" x="90" y="115">0º</text>
-                        </svg>
-                    </div>
-                </div>
+    <div class="layout mdl-layout mdl-js-layout mdl-layout--fixed-tabs">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+                <a href="#default" class="mdl-layout__tab is-active">Default Dash</a>
+                <a href="#debug" class="mdl-layout__tab">Debug Dash</a>
             </div>
+        </header>
+
+        <main class="mdl-layout__content mdl-color--grey-800">
+            <!--
+            Default tab
+            Use this tab for high priority graphs to be shown to the drivers.
+            In the JSON, make sure that in settings debug = false to be shown here.
+            -->
+            <section class="mdl-layout__tab-panel is-active" id="default">
+                <div class="mdl-grid content">
+
+                    <div id="charts" class="charts mdl-card mdl-cell mdl-cell--8-col mdl-color--grey-400">
+                    </div>
+
+                    <div class="cards mdl-cell mdl-cell--4-col">
+                        <div id="timer" class="timer mdl-card mdl-cell mdl-cell--12-col mdl-color--grey-400">2:15</div>
+
+                        <div id="indicators" class="indicators mdl-card mdl-cell mdl-cell--12-col mdl-color--grey-400"><span>Robot Status: <span id="robotState">Unknown State</span></span>
+                        </div>
+
+                        <div class="mdl-card mdl-cell mdl-cell--12-col mdl-color--grey-400">
+                            <!-- Gyroscope -->
+                            <svg id="gyro" class="gyro">
+                                <circle cx="85" cy="85" r="83"></circle>
+                                <circle cx="85" cy="85" r="50"></circle>
+                                <rect id="gyroDial" class="gyroDial" x="80" y="5" width="10" height="80"></rect>
+                                <text id="gyroNumber" class="gyroNumber" x="90" y="115">0º</text>
+                            </svg>
+                        </div>
+                        <div class="airPressure mdl-card mdl-cell mdl-cell--12-col mdl-color--grey-400">
+                            <div id="airPressure" class="200x160px"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!--
+            Debug tab
+            Use this tab for on demand charts and indicators for debugging.
+            In the JSON, make sure that in settings debug = true to be shown here.
+            -->
+            <section class="mdl-layout__tab-panel" id="debug">
+                <div class="mdl-grid content">
+
+                    <div id="debugCharts" class="charts mdl-card mdl-cell mdl-cell--8-col mdl-color--grey-400">
+                    </div>
+
+                    <div class="cards mdl-cell mdl-cell--4-col">
+                        <div id="timer" class="timer mdl-card mdl-cell mdl-cell--12-col mdl-color--grey-400">2:15</div>
+
+                        <div id="debugIndicators" class="indicators mdl-card mdl-cell mdl-cell--12-col mdl-color--grey-400"><span>Robot Status: <span id="robotState">Unknown State</span></span>
+                        </div>
+
+                        <div class="mdl-card mdl-cell mdl-cell--12-col mdl-color--grey-400">
+                            <!-- Gyroscope -->
+                            <svg id="debugGyro" class="gyro">
+                                <circle cx="85" cy="85" r="83"></circle>
+                                <circle cx="85" cy="85" r="50"></circle>
+                                <rect id="debugGyroDial" class="gyroDial" x="80" y="5" width="10" height="80"></rect>
+                                <text id="debugGyroNumber" class="gyroNumber" x="90" y="115">0º</text>
+                            </svg>
+                        </div>
+                        <div class="airPressure mdl-card mdl-cell mdl-cell--12-col mdl-color--grey-400">
+                            <div id="debugAirPressure" class="200x160px"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
     <script src="networktables/networktables.js"></script>
