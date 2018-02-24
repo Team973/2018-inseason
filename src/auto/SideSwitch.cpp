@@ -23,10 +23,10 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
     switch (m_autoState) {
         case 0:
             if (direction == AutoRoutineBase::AutoDirection::Left) {
-                m_drive->SplineDrive(&left_switch::left_switch);
+                m_drive->SplineDrive(&center_left_switch::center_left_switch);
             }
             else if (direction == AutoRoutineBase::AutoDirection::Right) {
-                m_drive->SplineDrive(&right_switch::right_switch);
+                m_drive->SplineDrive(&center_right_switch::center_right_switch);
             }
             m_intake->Open();
             m_intake->LowerIntake();
