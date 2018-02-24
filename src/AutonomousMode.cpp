@@ -37,7 +37,7 @@ void Autonomous::AutonomousInit() {
     printf("%s\n", m_scoringLocations.c_str());
 
     switch (m_disabled->GetStartPosition()) {
-        case Disabled::RobotStartPosition::Left:
+        case AutoRoutineBase::RobotStartPosition::Left:
             switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case SwitchScalePosition::LL:
                     m_scaleAuto->Reset();
@@ -63,7 +63,7 @@ void Autonomous::AutonomousInit() {
                     break;
             }
             break;
-        case Disabled::RobotStartPosition::Center:
+        case AutoRoutineBase::RobotStartPosition::Center:
             printf("Center Auto\n");
             switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case SwitchScalePosition::LL:
@@ -90,7 +90,7 @@ void Autonomous::AutonomousInit() {
                     break;
             }
             break;
-        case Disabled::RobotStartPosition::Right:
+        case AutoRoutineBase::RobotStartPosition::Right:
             switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case SwitchScalePosition::LL:
                     m_switchAuto->Reset();

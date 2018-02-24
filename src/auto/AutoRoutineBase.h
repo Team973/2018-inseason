@@ -13,6 +13,14 @@ public:
         Left,
         Right
     };
+
+    enum class RobotStartPosition
+    {
+        Left,
+        Center,
+        Right
+    };
+
     AutoRoutineBase();
     virtual ~AutoRoutineBase();
 
