@@ -34,13 +34,13 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 break;
             case 1:
                 if (GetMsecTime() - m_autoTimer > 500) {
-                    m_elevator->SetPosition(Elevator::LOW_GOAL);
+                    m_elevator->SetPosition(Elevator::SCALE_HIGH);
                     m_autoTimer = GetMsecTime();
                     m_autoState++;
                 }
                 break;
             case 2:
-                if (m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
+                if (m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 5000) {
                     m_claw->cubeLaunch();
                     m_autoState++;
                 }
@@ -62,13 +62,13 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 break;
             case 1:
                 if (GetMsecTime() - m_autoTimer > 500) {
-                    m_elevator->SetPosition(Elevator::LOW_GOAL);
+                    m_elevator->SetPosition(Elevator::SCALE_HIGH);
                     m_autoTimer = GetMsecTime();
                     m_autoState++;
                 }
                 break;
             case 2:
-                if (m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
+                if (m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 5000) {
                     m_claw->cubeLaunch();
                     m_autoState++;
                 }

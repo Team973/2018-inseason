@@ -18,7 +18,7 @@ void Disabled::DisabledInit() {
 }
 
 void Disabled::DisabledPeriodic() {
-    DBStringPrintf(DB_LINE0, "Start %s", RobotStartPosToString(m_startPos));
+    DBStringPrintf(DB_LINE1, "Start %s", RobotStartPosToString(m_startPos));
 }
 
 void Disabled::DisabledStop() {

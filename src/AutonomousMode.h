@@ -41,13 +41,6 @@ public:
     SwitchScalePosition GetSwitchScalePosition(std::string message);
 
 private:
-    enum class AutoRoutine
-    {
-        noAuto,
-        lowGoal,
-        highGoal
-    };
-
     NoAuto *m_noAuto;
     SwitchAuto *m_switchAuto;
     ScaleAuto *m_scaleAuto;
