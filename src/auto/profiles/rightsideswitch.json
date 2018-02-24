@@ -1,5 +1,5 @@
 {
-    "name": "left_switch",
+    "name": "right_side_switch",
     "timestep": 0.01,
     "max_vel": 120.0,
     "max_accel": 60.0,

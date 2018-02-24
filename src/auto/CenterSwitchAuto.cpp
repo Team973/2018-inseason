@@ -1,14 +1,14 @@
-#include "src/auto/SwitchAuto.h"
-#include "src/auto/profiles/rightswitch_trajectory.h"
-#include "src/auto/profiles/leftswitch_trajectory.h"
+#include "src/auto/CenterSwitchAuto.h"
+#include "src/auto/profiles/centerrightswitch_trajectory.h"
+#include "src/auto/profiles/centerleftswitch_trajectory.h"
 
 using namespace frc;
-using namespace left_switch;
-using namespace right_switch;
+using namespace center_left_switch;
+using namespace center_right_switch;
 
 namespace frc973 {
-SwitchAuto::SwitchAuto(Drive *drive, Elevator *elevator, Intake *intake,
-                       Claw *claw)
+CenterSwitchAuto::CenterSwitchAuto(Drive *drive, Elevator *elevator,
+                                   Intake *intake, Claw *claw)
         : m_drive(drive)
         , m_elevator(elevator)
         , m_intake(intake)
@@ -16,10 +16,10 @@ SwitchAuto::SwitchAuto(Drive *drive, Elevator *elevator, Intake *intake,
         , m_autoTimer(0) {
 }
 
-SwitchAuto::~SwitchAuto(void) {
+CenterSwitchAuto::~CenterSwitchAuto(void) {
 }
 
-void SwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
+void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
     switch (m_autoState) {
         case 0:
             if (direction == AutoRoutineBase::AutoDirection::Left) {
@@ -53,6 +53,6 @@ void SwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
     }
 }
 
-void SwitchAuto::Reset(void) {
+void CenterSwitchAuto::Reset(void) {
 }
 }

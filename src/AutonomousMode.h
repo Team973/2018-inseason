@@ -5,8 +5,10 @@
 #include "src/info/RobotInfo.h"
 #include "src/auto/AutoRoutineBase.h"
 #include "src/auto/NoAuto.h"
-#include "src/auto/SwitchAuto.h"
+#include "src/auto/CenterSwitchAuto.h"
 #include "src/auto/ScaleAuto.h"
+#include "src/auto/SwitchOpposite.h"
+#include "src/auto/ScaleOpposite.h"
 #include "lib/util/WrapDash.h"
 #include "src/DisabledMode.h"
 #include "src/Robot.h"
@@ -42,8 +44,10 @@ public:
 
 private:
     NoAuto *m_noAuto;
-    SwitchAuto *m_switchAuto;
+    CenterSwitchAuto *m_centerSwitchAuto;
     ScaleAuto *m_scaleAuto;
+    ScaleOpposite *m_scaleOpposite;
+    SwitchOpposite *m_switchOpposite;
 
     Disabled *m_disabled;
 
