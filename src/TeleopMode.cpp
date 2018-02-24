@@ -57,7 +57,6 @@ void Teleop::TeleopPeriodic() {
             false);  // gear set to false until solenoids get set up
     }
     else if (m_driveMode == DriveMode::Hanger) {
-        m_drive->HangerDrive(y);
     }
 
     /**
@@ -230,12 +229,14 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
+                    m_drive->HangerDrive(1.0);
+                }
+                else {
+                    m_drive->HangerDrive(0.0);
                 }
                 break;
             case DualAction::Start:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::motionMagic;
-                    m_elevator->SetPosition(Elevator::HANGING);
                 }
                 break;
             case DualAction::Back:
