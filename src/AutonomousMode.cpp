@@ -9,6 +9,7 @@ Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
                        Intake *intake, Claw *claw, ADXRS450_Gyro *gyro)
         : m_noAuto(new NoAuto())
         , m_switchAuto(new SwitchAuto(drive, elevator, intake, claw))
+        , m_scaleAuto(new ScaleAuto(drive, elevator, intake, claw))
         , m_disabled(disabled)
         , m_scoringLocations("")
         , m_switchScalePosition(SwitchScalePosition::LL)

@@ -13,7 +13,6 @@ SwitchAuto::SwitchAuto(Drive *drive, Elevator *elevator, Intake *intake,
         , m_elevator(elevator)
         , m_intake(intake)
         , m_claw(claw)
-        , m_autoState(0)
         , m_autoTimer(0) {
 }
 

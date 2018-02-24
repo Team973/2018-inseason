@@ -25,7 +25,6 @@ private:
     Intake *m_intake;
     Claw *m_claw;
 
-    int m_autoState;
     uint32_t m_autoTimer;
 };
 };
