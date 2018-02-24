@@ -20,61 +20,62 @@ SwitchAuto::SwitchAuto(Drive *drive, Elevator *elevator, Intake *intake,
 SwitchAuto::~SwitchAuto(void) {
 }
 
-void SwitchAuto::ExecuteLeft(void) {
-    switch (m_autoState) {
-        case 0:
-            m_drive->SplineDrive(&left_switch::left_switch);
-            m_intake->Open();
-            m_intake->LowerIntake();
-            m_claw->grab();
-            m_claw->kickOff();
-            m_autoTimer = GetMsecTime();
-            m_autoState++;
-            break;
-        case 1:
-            if (GetMsecTime() - m_autoTimer > 500) {
-                m_elevator->SetPosition(Elevator::LOW_GOAL);
+void SwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
+    if (direction == AutoRoutineBase::AutoDirection::Left) {
+        switch (m_autoState) {
+            case 0:
+                m_drive->SplineDrive(&left_switch::left_switch);
+                m_intake->Open();
+                m_intake->LowerIntake();
+                m_claw->grab();
+                m_claw->kickOff();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
-            }
-            break;
-        case 2:
-            if (m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
-                m_claw->cubeLaunch();
-                m_autoState++;
-            }
-            break;
-        default:
-            break;
+                break;
+            case 1:
+                if (GetMsecTime() - m_autoTimer > 500) {
+                    m_elevator->SetPosition(Elevator::LOW_GOAL);
+                    m_autoTimer = GetMsecTime();
+                    m_autoState++;
+                }
+                break;
+            case 2:
+                if (m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
+                    m_claw->cubeLaunch();
+                    m_autoState++;
+                }
+                break;
+            default:
+                break;
+        }
     }
-}
-
-void SwitchAuto::ExecuteRight(void) {
-    switch (m_autoState) {
-        case 0:
-            m_drive->SplineDrive(&right_switch::right_switch);
-            m_intake->Open();
-            m_intake->LowerIntake();
-            m_claw->grab();
-            m_claw->kickOff();
-            m_autoTimer = GetMsecTime();
-            m_autoState++;
-            break;
-        case 1:
-            if (GetMsecTime() - m_autoTimer > 500) {
-                m_elevator->SetPosition(Elevator::LOW_GOAL);
+    if (direction == AutoRoutineBase::AutoDirection::Right) {
+        switch (m_autoState) {
+            case 0:
+                m_drive->SplineDrive(&right_switch::right_switch);
+                m_intake->Open();
+                m_intake->LowerIntake();
+                m_claw->grab();
+                m_claw->kickOff();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
-            }
-            break;
-        case 2:
-            if (m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
-                m_claw->cubeLaunch();
-                m_autoState++;
-            }
-            break;
-        default:
-            break;
+                break;
+            case 1:
+                if (GetMsecTime() - m_autoTimer > 500) {
+                    m_elevator->SetPosition(Elevator::LOW_GOAL);
+                    m_autoTimer = GetMsecTime();
+                    m_autoState++;
+                }
+                break;
+            case 2:
+                if (m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
+                    m_claw->cubeLaunch();
+                    m_autoState++;
+                }
+                break;
+            default:
+                break;
+        }
     }
 }
 

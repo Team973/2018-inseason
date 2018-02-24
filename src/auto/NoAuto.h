@@ -2,11 +2,11 @@
 
 #include "WPILib.h"
 #include <iostream>
-#include "src/auto/AutoRoutine.h"
+#include "src/auto/AutoRoutineBase.h"
 
 using namespace frc;
 namespace frc973 {
-class NoAuto : public AutoRoutine {
+class NoAuto : public AutoRoutineBase {
 public:
     NoAuto(void);
     virtual ~NoAuto(void);

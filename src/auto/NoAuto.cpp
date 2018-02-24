@@ -1,5 +1,4 @@
 #include "src/auto/NoAuto.h"
-#include "src/auto/AutoRoutine.h"
 using namespace frc;
 
 namespace frc973 {
