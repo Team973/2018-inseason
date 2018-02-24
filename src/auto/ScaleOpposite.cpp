@@ -23,10 +23,10 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
     std::cout << "Scale Auto" << std::endl;
     switch (m_autoState) {
         case 0:
-            if (direction == AutoRoutineBase::AutoDirection::Left) {
+            if (direction == AutoRoutineBase::AutoDirection::Right) {
                 m_drive->SplineDrive(&left_scale_opposite::left_scale_opposite);
             }
-            else if (direction == AutoRoutineBase::AutoDirection::Right) {
+            else if (direction == AutoRoutineBase::AutoDirection::Leftt) {
                 m_drive->SplineDrive(
                     &right_scale_opposite::right_scale_opposite);
             }

@@ -25,11 +25,11 @@ void SwitchOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
         case 0:
             if (direction == AutoRoutineBase::AutoDirection::Left) {
                 m_drive->SplineDrive(
-                    &left_switch_opposite::left_switch_opposite);
-            }
-            else if (direction == AutoRoutineBase::AutoDirection::Left) {
-                m_drive->SplineDrive(
                     &right_switch_opposite::right_switch_opposite);
+            }
+            else if (direction == AutoRoutineBase::AutoDirection::Right) {
+                m_drive->SplineDrive(
+                    &left_switch_opposite::left_switch_opposite);
             }
             m_intake->Open();
             m_intake->LowerIntake();
