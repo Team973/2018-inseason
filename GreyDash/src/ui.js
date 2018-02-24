@@ -28,7 +28,7 @@ window.addEventListener('keypress', (ev) => {
   }
 });
 
-/*
+/**
  * Define UI Elements
  */
 const ui = {
@@ -59,14 +59,17 @@ const ui = {
 for (let i = 0; i < config.charts.length; i += 1) {
   config.charts[i].div = document.createElement('div');
   config.charts[i].div.setAttribute('id', `chart${i}`);
+  config.charts[i].div.setAttribute('class', 'chartContainer');
 
   config.charts[i].displayTitle = document.createElement('span');
   config.charts[i].displayTitle.innerText = `${config.charts[i].title}`;
 
   config.charts[i].displayChart = document.createElement('canvas');
+  config.charts[i].displayChart.setAttribute('class', 'responsiveCharts');
 
   config.charts[i].chart = new smoothie.SmoothieChart({
     interpolation: 'step',
+    responsive: 'true',
     tooltip: config.charts[i].settings.tooltip,
     minValue: config.charts[i].settings.minValue,
     maxValue: config.charts[i].settings.maxValue,
@@ -154,6 +157,6 @@ ui.custom.drive.gyro.container.addEventListener('click', () => {
   updateGyro('/SmartDashboard/drive/gyro/angle', ui.custom.drive.gyro.val);
 });
 
-addEventListener('error', (ev) => {
+window.addEventListener('error', (ev) => {
   ipc.send('windowError', { mesg: ev.message, file: ev.filename, lineNumber: ev.lineno });
 });
