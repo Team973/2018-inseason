@@ -21,9 +21,9 @@
     },
     "homepage": "https://github.com/Team973",
     "build": {
-        "appId": "com.greybots.${name}",
-        "productName": "${name}",
-        "copyright": "Copyright © 2018 ${author}",
+        "appId": "com.greybots.GreyDash",
+        "productName": "GreyDash",
+        "copyright": "Copyright © 2018 Team 973",
         "mac": {
             "category": "public.app-category.utilities"
         },
