@@ -37,15 +37,15 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             m_autoState++;
             break;
         case 1:
-            if (GetMsecTime() - m_autoTimer > 500) {
+            if (GetMsecTime() - m_autoTimer > 1000) {
                 m_elevator->SetPosition(Elevator::SCALE_HIGH);
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
         case 2:
-            if (m_drive->GetSplinePercentComplete() > 0.95 ||
-                m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 5000) {
+            if (m_drive->GetSplinePercentComplete() > 0.80 ||
+                m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
                 m_claw->cubeLaunch();
                 m_autoState++;
             }

@@ -1,4 +1,5 @@
 #include "src/auto/SwitchOpposite.h"
+#include "lib/util/WrapDash.h"
 #include "src/auto/profiles/rightswitchopposite_trajectory.h"
 #include "src/auto/profiles/leftswitchopposite_trajectory.h"
 
@@ -46,7 +47,7 @@ void SwitchOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 2:
-            if (m_drive->GetSplinePercentComplete() > 0.95 ||
+            if (m_drive->GetSplinePercentComplete() > 0.7 ||
                 m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 5000) {
                 m_claw->cubeLaunch();
                 m_autoState++;
@@ -55,6 +56,7 @@ void SwitchOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
         default:
             break;
     }
+    DBStringPrintf(DB_LINE7, "Done %.2lf", m_drive->GetSplinePercentComplete());
 }
 void SwitchOpposite::Reset(void) {
 }

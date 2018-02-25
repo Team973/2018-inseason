@@ -72,8 +72,8 @@ void Autonomous::AutonomousInit() {
             printf("Center Auto\n");
             switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case SwitchScalePosition::LL:
-                    m_centerSwitchAuto->Reset();
-                    m_routine = m_centerSwitchAuto;
+                    m_scaleAuto->Reset();
+                    m_routine = m_scaleAuto;
                     m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::LR:
@@ -113,8 +113,8 @@ void Autonomous::AutonomousInit() {
                     m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::RR:
-                    m_twoCubeAuto->Reset();
-                    m_routine = m_twoCubeAuto;
+                    m_scaleAuto->Reset();
+                    m_routine = m_scaleAuto;
                     m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
                 default:
