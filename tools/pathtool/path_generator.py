@@ -29,11 +29,11 @@ using namespace trajectories;
 
 namespace {} {{
 
-Segment leftTrajectory[] = {{\n'''.format(sourceJSON["name"]))
+static Segment leftTrajectory[] = {{\n'''.format(sourceJSON["name"]))
     printSegments(leftTraj, header)
-    header.write("Segment rightTrajectory[] = {\n")
+    header.write("static Segment rightTrajectory[] = {\n")
     printSegments(rightTraj, header)
-    header.write('''TrajectoryDescription {} {{
+    header.write('''static TrajectoryDescription {} {{
         .timestep = {},
         .max_vel = {},
         .max_accel = {},

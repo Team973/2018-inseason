@@ -1,6 +1,6 @@
 #include "src/auto/TwoCubeAuto.h"
-//#include "src/auto/profiles/rightscale_trajectory.h"
-//#include "src/auto/profiles/leftscale_trajectory.h"
+#include "src/auto/profiles/rightscale_trajectory.h"
+#include "src/auto/profiles/leftscale_trajectory.h"
 #include "src/auto/profiles/righttwocube_trajectory.h"
 #include "src/auto/profiles/lefttwocube_trajectory.h"
 
