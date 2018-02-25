@@ -22,6 +22,7 @@ def writeHeader(target):
     header = open(target, "w+")
     leftTraj, rightTraj, sourceJSON = openPointStructs(jsonPath)
     header.write('''#pragma once
+
 #include "lib/trajectories/structs.h"
 
 using namespace trajectories;
@@ -42,7 +43,7 @@ Segment leftTrajectory[] = {{\n'''.format(sourceJSON["name"]))
         .left_trajectory = leftTrajectory,
         .right_trajectory = rightTrajectory
             }};
-        }}'''.format(sourceJSON["name"], sourceJSON["timestep"], sourceJSON["max_vel"], sourceJSON["max_accel"],
+}}'''.format(sourceJSON["name"], sourceJSON["timestep"], sourceJSON["max_vel"], sourceJSON["max_accel"],
                 sourceJSON["max_jerk"], sourceJSON["wheelbase_width"], len(leftTraj)))
     header.close()
 

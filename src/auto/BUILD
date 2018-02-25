@@ -22,6 +22,8 @@ cc_library(
         "//src/auto/profiles:leftswitchopposite_header",
         "//src/auto/profiles:leftsideswitch_header",
         "//src/auto/profiles:rightsideswitch_header",
+        "//src/auto/profiles:righttwocube_header",
+        "//src/auto/profiles:lefttwocube_header",
     ],
     visibility = ["//visibility:public"],
 )

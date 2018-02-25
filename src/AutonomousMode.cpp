@@ -14,6 +14,7 @@ Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
         , m_scaleOpposite(new ScaleOpposite(drive, elevator, intake, claw))
         , m_sideSwitch(new SideSwitch(drive, elevator, intake, claw))
         , m_switchOpposite(new SwitchOpposite(drive, elevator, intake, claw))
+        , m_twoCubeAuto(new TwoCubeAuto(drive, elevator, intake, claw))
         , m_disabled(disabled)
         , m_scoringLocations("")
         , m_switchScalePosition(SwitchScalePosition::LL)
@@ -44,8 +45,8 @@ void Autonomous::AutonomousInit() {
         case AutoRoutineBase::RobotStartPosition::Left:
             switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case SwitchScalePosition::LL:
-                    m_scaleAuto->Reset();
-                    m_routine = m_scaleAuto;
+                    m_twoCubeAuto->Reset();
+                    m_routine = m_twoCubeAuto;
                     m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::LR:
@@ -112,8 +113,8 @@ void Autonomous::AutonomousInit() {
                     m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::RR:
-                    m_sideSwitch->Reset();
-                    m_routine = m_sideSwitch;
+                    m_twoCubeAuto->Reset();
+                    m_routine = m_twoCubeAuto;
                     m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
                 default:
