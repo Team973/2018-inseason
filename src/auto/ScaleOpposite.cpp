@@ -26,7 +26,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             if (direction == AutoRoutineBase::AutoDirection::Right) {
                 m_drive->SplineDrive(&left_scale_opposite::left_scale_opposite);
             }
-            else if (direction == AutoRoutineBase::AutoDirection::Leftt) {
+            else if (direction == AutoRoutineBase::AutoDirection::Left) {
                 m_drive->SplineDrive(
                     &right_scale_opposite::right_scale_opposite);
             }
@@ -38,14 +38,14 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             m_autoState++;
             break;
         case 1:
-            if (GetMsecTime() - m_autoTimer > 1000) {
+            if (GetMsecTime() - m_autoTimer > 4500) {
                 m_elevator->SetPosition(Elevator::SCALE_HIGH);
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
         case 2:
-            if (m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 5000) {
+            if (m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 6000) {
                 m_claw->cubeLaunch();
                 m_autoState++;
             }

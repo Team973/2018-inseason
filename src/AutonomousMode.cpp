@@ -51,7 +51,7 @@ void Autonomous::AutonomousInit() {
                 case SwitchScalePosition::LR:
                     m_sideSwitch->Reset();
                     m_routine = m_scaleOpposite;
-                    m_direction = AutoRoutineBase::AutoDirection::Left;
+                    m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
                 case SwitchScalePosition::RL:
                     m_switchOpposite->Reset();
@@ -109,7 +109,7 @@ void Autonomous::AutonomousInit() {
                 case SwitchScalePosition::RL:
                     m_sideSwitch->Reset();
                     m_routine = m_scaleOpposite;
-                    m_direction = AutoRoutineBase::AutoDirection::Right;
+                    m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::RR:
                     m_sideSwitch->Reset();

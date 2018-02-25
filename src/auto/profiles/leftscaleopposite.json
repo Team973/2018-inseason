@@ -6,7 +6,8 @@
     "max_jerk": 60.0,
     "wheelbase_width": 25.205,
     "waypoints": [
-        { "x": 0, "y": 0, "angle": 0 },
-        { "x": 106, "y": 192, "angle": 0}
+      { "x": 0, "y": 0, "angle": 0 },
+      { "x": 192, "y": -108, "angle": -1.57},
+      { "x": 230, "y": -162, "angle": 0}
     ]
 }
