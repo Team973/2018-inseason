@@ -75,6 +75,11 @@ void Teleop::TeleopPeriodic() {
     else if (m_elevatorMode == ElevatorMode::motionMagic) {
     }
 
+    double intakeSpinDirection =
+        -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
+
+    m_intake->SpinCube(intakeSpinDirection);
+
     double intakeControl =
         -m_operatorJoystick->GetRawAxis(DualAction::RightYAxis);
 

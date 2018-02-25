@@ -36,8 +36,8 @@ void Intake::AutomatedPull() {
 
 void Intake::RegularPull() {
     m_intakeState = IntakeState::Idle;
-    m_leftRoller->Set(ControlMode::PercentOutput, 0.5);
-    m_rightRoller->Set(ControlMode::PercentOutput, 0.9);
+    m_leftRoller->Set(ControlMode::PercentOutput, 0.4);
+    m_rightRoller->Set(ControlMode::PercentOutput, 0.8);
 }
 
 void Intake::Eject() {
@@ -72,8 +72,28 @@ void Intake::Open() {
 void Intake::Close() {
     m_openClose->Set(false);
 }
+
+void Intake::SpinCube(int direction) {
+    m_intakeState = IntakeState::Idle;
+    if (direction < 0) {
+        m_leftRoller->Set(ControlMode::PercentOutput, -0.3);
+        m_rightRoller->Set(ControlMode::PercentOutput, 0.5);
+    }
+    else if (direction > 0) {
+        m_leftRoller->Set(ControlMode::PercentOutput, 0.5);
+        m_rightRoller->Set(ControlMode::PercentOutput, -0.3);
+    }
+    else {
+        m_leftRoller->Set(ControlMode::PercentOutput, 0.0);
+        m_rightRoller->Set(ControlMode::PercentOutput, 0.0);
+    }
+}
+
 void Intake::TaskPeriodic(RobotMode mode) {
     SmartDashboard::PutBoolean("intake/sensors/bannersensor", IsCubeIn());
+    DBStringPrintf(DB_LINE1, "ric %.2lf lif %.2lf",
+                   m_rightRoller->GetOutputCurrent(),
+                   m_leftRoller->GetOutputCurrent());
     switch (m_intakeState) {
         case IntakeState::Idle:
             break;
