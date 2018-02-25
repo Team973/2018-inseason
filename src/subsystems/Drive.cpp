@@ -213,6 +213,10 @@ SplineDriveController *Drive::SplineDrive(
     return m_splineDriveController;
 }
 
+double Drive::GetSplinePercentComplete() {
+    return m_splineDriveController->GetPercentComplete();
+}
+
 /**
  * Set a drive to drive straight
  *
