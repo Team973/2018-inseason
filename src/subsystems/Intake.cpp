@@ -77,10 +77,10 @@ void Intake::SpinCube(int direction) {
     m_intakeState = IntakeState::Idle;
     if (direction < 0) {
         m_leftRoller->Set(ControlMode::PercentOutput, -0.3);
-        m_rightRoller->Set(ControlMode::PercentOutput, 0.5);
+        m_rightRoller->Set(ControlMode::PercentOutput, 0.6);
     }
     else if (direction > 0) {
-        m_leftRoller->Set(ControlMode::PercentOutput, 0.5);
+        m_leftRoller->Set(ControlMode::PercentOutput, 0.6);
         m_rightRoller->Set(ControlMode::PercentOutput, -0.3);
     }
     else {

@@ -9,6 +9,7 @@
 #include "lib/util/WrapDash.h"
 
 using namespace frc;
+using namespace cs;
 
 namespace frc973 {
 class Disabled {
@@ -20,7 +21,8 @@ public:
         Right
     };
 
-    Disabled(ObservableJoystick *driver, ObservableJoystick *codriver);
+    Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
+             UsbCamera intakeCamera, UsbCamera forkCamera, VideoSink greyCam);
     virtual ~Disabled();
 
     void DisabledInit();
@@ -38,5 +40,9 @@ private:
     ObservableJoystick *m_operatorJoystick;
 
     RobotStartPosition m_startPos;
+
+    UsbCamera m_intakeCamera;
+    UsbCamera m_forkCamera;
+    VideoSink m_greyCam;
 };
 };

@@ -4,10 +4,15 @@
 using namespace frc;
 
 namespace frc973 {
-Disabled::Disabled(ObservableJoystick *driver, ObservableJoystick *codriver)
+Disabled::Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
+                   UsbCamera intakeCamera, UsbCamera forkCamera,
+                   VideoSink greyCam)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
-        , m_startPos(RobotStartPosition::Center) {
+        , m_startPos(RobotStartPosition::Center)
+        , m_intakeCamera(intakeCamera)
+        , m_forkCamera(forkCamera)
+        , m_greyCam(greyCam) {
 }
 
 Disabled::~Disabled() {
@@ -63,12 +68,16 @@ void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
+                    printf("Setting fork camera\n");
+                    m_greyCam.SetSource(m_forkCamera);
                 }
                 else {
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
+                    printf("Setting intake camera\n");
+                    m_greyCam.SetSource(m_intakeCamera);
                 }
                 else {
                 }

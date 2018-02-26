@@ -78,7 +78,9 @@ void Teleop::TeleopPeriodic() {
     double intakeSpinDirection =
         -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
 
-    m_intake->SpinCube(intakeSpinDirection);
+    if (fabs(intakeSpinDirection) > 0.5) {
+        m_intake->SpinCube(intakeSpinDirection);
+    }
 
     double intakeControl =
         -m_operatorJoystick->GetRawAxis(DualAction::RightYAxis);

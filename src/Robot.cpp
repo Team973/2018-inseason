@@ -28,6 +28,10 @@ Robot::Robot()
         , m_rightDriveVictorC(new VictorSPX(RIGHT_DRIVE_C_VICTOR_ID))
         , m_gyro(new ADXRS450_Gyro())
         , m_logger(new LogSpreadsheet(this))
+        , m_intakeCamera(UsbCamera("USB Camera 0", 0))
+        , m_forkCamera(UsbCamera("USB Camera 1", 1))
+        , m_cameraServer(CameraServer::GetInstance())
+        , m_greyCam(m_cameraServer->AddServer("serve_GreyCam", 1181))
         , m_cubeClamp(new Solenoid(PCM_CAN_ID, CUBE_CLAMP_PCM_ID))
         , m_clawKicker(new Solenoid(PCM_CAN_ID, CLAW_KICKER_PCM_ID))
         , m_intakePosition(new Solenoid(PCM_CAN_ID, INTAKE_POSITION_PCM_ID))
@@ -54,7 +58,8 @@ Robot::Robot()
               new Relay(COMPRESSOR_RELAY, Relay::Direction::kForwardOnly))
         , m_compressor(
               new GreyCompressor(m_airPressureSwitch, m_compressorRelay, this))
-        , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick))
+        , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick,
+                                  m_intakeCamera, m_forkCamera, m_greyCam))
         , m_autonomous(new Autonomous(m_disabled, m_drive, m_elevator, m_intake,
                                       m_claw, m_gyro))
         , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick, m_claw,
@@ -69,6 +74,11 @@ Robot::~Robot() {
 
 void Robot::Initialize() {
     m_compressor->Enable();
+    m_cameraServer->AddCamera(m_intakeCamera);
+    m_cameraServer->AddCamera(m_forkCamera);
+    m_intakeCamera.SetVideoMode(VideoMode::PixelFormat::kMJPEG, 640, 360, 30);
+    m_forkCamera.SetVideoMode(VideoMode::PixelFormat::kMJPEG, 640, 360, 30);
+    m_greyCam.SetSource(m_intakeCamera);
 }
 
 void Robot::DisabledStart() {

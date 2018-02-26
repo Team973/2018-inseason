@@ -35,6 +35,7 @@
 
 using namespace frc;
 using namespace ctre;
+using namespace cs;
 
 namespace frc973 {
 class Disabled;
@@ -87,6 +88,11 @@ private:
     ADXRS450_Gyro *m_gyro;
 
     LogSpreadsheet *m_logger;
+
+    UsbCamera m_intakeCamera;
+    UsbCamera m_forkCamera;
+    CameraServer *m_cameraServer;
+    VideoSink m_greyCam;
 
     Solenoid *m_cubeClamp;
     Solenoid *m_clawKicker;
