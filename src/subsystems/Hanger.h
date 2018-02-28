@@ -23,7 +23,8 @@ class LogSpreadsheet;
 class Hanger : public CoopTask {
 public:
     Hanger(TaskMgr *scheduler, LogSpreadsheet *logger, Drive *drive,
-           Elevator *elevator, Solenoid *hangerpto, TalonSRX *forkliftTalon);
+           Elevator *elevator, Solenoid *hangerpto, TalonSRX *forkliftTalon,
+           UsbCamera intakeCamera, UsbCamera forkCamera, VideoSink greyCam);
     virtual ~Hanger();
 
     /**
@@ -50,5 +51,9 @@ private:
     Elevator *m_elevator;
     Solenoid *m_hangerpto;
     TalonSRX *m_forkliftTalon;
+
+    UsbCamera m_intakeCamera;
+    UsbCamera m_forkCamera;
+    VideoSink m_greyCam;
 };
 }

@@ -15,8 +15,7 @@ using namespace cs;
 namespace frc973 {
 class Disabled {
 public:
-    Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
-             UsbCamera intakeCamera, UsbCamera forkCamera, VideoSink greyCam);
+    Disabled(ObservableJoystick *driver, ObservableJoystick *codriver);
     virtual ~Disabled();
 
     void DisabledInit();
@@ -34,9 +33,6 @@ private:
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
 
-    UsbCamera m_intakeCamera;
-    UsbCamera m_forkCamera;
-    VideoSink m_greyCam;
     AutoRoutineBase::RobotStartPosition m_startPos;
 };
 };
