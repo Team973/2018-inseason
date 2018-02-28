@@ -17,7 +17,7 @@ SwitchOpposite::SwitchOpposite(Drive *drive, Elevator *elevator, Intake *intake,
         , m_autoTimer(0) {
 }
 
-SwitchOpposite::~SwitchOpposite(void) {
+SwitchOpposite::~SwitchOpposite() {
 }
 
 void SwitchOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
@@ -58,6 +58,6 @@ void SwitchOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
     }
     DBStringPrintf(DB_LINE7, "Done %.2lf", m_drive->GetSplinePercentComplete());
 }
-void SwitchOpposite::Reset(void) {
+void SwitchOpposite::Reset() {
 }
 };

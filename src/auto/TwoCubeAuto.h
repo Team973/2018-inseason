@@ -15,11 +15,11 @@ class Disabled;
 class TwoCubeAuto : public AutoRoutineBase {
 public:
     TwoCubeAuto(Drive *drive, Elevator *elevator, Intake *intake, Claw *claw);
-    virtual ~TwoCubeAuto(void);
+    virtual ~TwoCubeAuto();
 
     void Execute(AutoRoutineBase::AutoDirection direction) override;
 
-    void Reset(void);
+    void Reset() override;
 
 private:
     Drive *m_drive;

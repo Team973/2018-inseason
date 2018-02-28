@@ -16,7 +16,7 @@ ScaleOpposite::ScaleOpposite(Drive *drive, Elevator *elevator, Intake *intake,
         , m_autoTimer(0) {
 }
 
-ScaleOpposite::~ScaleOpposite(void) {
+ScaleOpposite::~ScaleOpposite() {
 }
 
 void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
@@ -56,6 +56,6 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
     }
 }
 
-void ScaleOpposite::Reset(void) {
+void ScaleOpposite::Reset() {
 }
 };

@@ -14,11 +14,11 @@ class CenterSwitchAuto : public AutoRoutineBase {
 public:
     CenterSwitchAuto(Drive *drive, Elevator *elevator, Intake *intake,
                      Claw *claw);
-    virtual ~CenterSwitchAuto(void);
+    virtual ~CenterSwitchAuto();
 
     void Execute(AutoRoutineBase::AutoDirection direction) override;
 
-    void Reset(void);
+    void Reset() override;
 
 private:
     Drive *m_drive;

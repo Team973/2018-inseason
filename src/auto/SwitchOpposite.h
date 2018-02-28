@@ -16,11 +16,11 @@ class SwitchOpposite : public AutoRoutineBase {
 public:
     SwitchOpposite(Drive *drive, Elevator *elevator, Intake *intake,
                    Claw *claw);
-    virtual ~SwitchOpposite(void);
+    virtual ~SwitchOpposite();
 
     void Execute(AutoRoutineBase::AutoDirection direction) override;
 
-    void Reset(void);
+    void Reset() override;
 
 private:
     Drive *m_drive;

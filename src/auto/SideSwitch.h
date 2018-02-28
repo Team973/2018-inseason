@@ -13,11 +13,11 @@ namespace frc973 {
 class SideSwitch : public AutoRoutineBase {
 public:
     SideSwitch(Drive *drive, Elevator *elevator, Intake *intake, Claw *claw);
-    virtual ~SideSwitch(void);
+    virtual ~SideSwitch();
 
     void Execute(AutoRoutineBase::AutoDirection direction) override;
 
-    void Reset(void);
+    void Reset() override;
 
 private:
     Drive *m_drive;

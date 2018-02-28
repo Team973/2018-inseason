@@ -16,7 +16,7 @@ ScaleAuto::ScaleAuto(Drive *drive, Elevator *elevator, Intake *intake,
         , m_autoTimer(0) {
 }
 
-ScaleAuto::~ScaleAuto(void) {
+ScaleAuto::~ScaleAuto() {
 }
 
 void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
@@ -55,6 +55,6 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
     }
 }
 
-void ScaleAuto::Reset(void) {
+void ScaleAuto::Reset() {
 }
 };

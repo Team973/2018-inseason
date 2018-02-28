@@ -15,11 +15,11 @@ class Disabled;
 class ScaleOpposite : public AutoRoutineBase {
 public:
     ScaleOpposite(Drive *drive, Elevator *elevator, Intake *intake, Claw *claw);
-    virtual ~ScaleOpposite(void);
+    virtual ~ScaleOpposite();
 
     void Execute(AutoRoutineBase::AutoDirection direction) override;
 
-    void Reset(void);
+    void Reset() override;
 
 private:
     Drive *m_drive;

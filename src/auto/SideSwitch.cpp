@@ -16,7 +16,7 @@ SideSwitch::SideSwitch(Drive *drive, Elevator *elevator, Intake *intake,
         , m_autoTimer(0) {
 }
 
-SideSwitch::~SideSwitch(void) {
+SideSwitch::~SideSwitch() {
 }
 
 void SideSwitch::Execute(AutoRoutineBase::AutoDirection direction) {
@@ -54,6 +54,6 @@ void SideSwitch::Execute(AutoRoutineBase::AutoDirection direction) {
     }
 }
 
-void SideSwitch::Reset(void) {
+void SideSwitch::Reset() {
 }
 }

@@ -8,9 +8,9 @@ using namespace frc;
 namespace frc973 {
 class NoAuto : public AutoRoutineBase {
 public:
-    NoAuto(void);
-    virtual ~NoAuto(void);
+    NoAuto();
+    virtual ~NoAuto();
 
-    void Reset(void);
+    void Reset() override;
 };
 };

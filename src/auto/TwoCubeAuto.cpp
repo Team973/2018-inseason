@@ -16,7 +16,7 @@ TwoCubeAuto::TwoCubeAuto(Drive *drive, Elevator *elevator, Intake *intake,
         , m_autoTimer(0) {
 }
 
-TwoCubeAuto::~TwoCubeAuto(void) {
+TwoCubeAuto::~TwoCubeAuto() {
 }
 
 void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
@@ -97,6 +97,6 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
     }
 }
 
-void TwoCubeAuto::Reset(void) {
+void TwoCubeAuto::Reset() {
 }
 };
