@@ -14,6 +14,8 @@ cc_library(
         "//src/subsystems:subsystems",
         "//src/auto/profiles:leftswitch_header",
         "//src/auto/profiles:rightswitch_header",
+        "//src/auto/profiles:leftscale_header",
+        "//src/auto/profiles:rightscale_header",
     ],
     visibility = ["//visibility:public"],
 )
