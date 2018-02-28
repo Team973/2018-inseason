@@ -10,7 +10,6 @@
 #include "lib/util/WrapDash.h"
 
 using namespace frc;
-using namespace cs;
 
 namespace frc973 {
 class Disabled {

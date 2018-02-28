@@ -15,6 +15,7 @@
 #include "src/subsystems/Elevator.h"
 
 using namespace frc;
+using namespace cs;
 
 namespace frc973 {
 class TaskMgr;
