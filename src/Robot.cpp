@@ -76,8 +76,8 @@ void Robot::Initialize() {
     m_compressor->Enable();
     m_cameraServer->AddCamera(m_intakeCamera);
     m_cameraServer->AddCamera(m_forkCamera);
-    m_intakeCamera.SetVideoMode(VideoMode::PixelFormat::kMJPEG, 640, 360, 30);
-    m_forkCamera.SetVideoMode(VideoMode::PixelFormat::kMJPEG, 640, 360, 30);
+    m_intakeCamera.SetVideoMode(VideoMode::PixelFormat::kMJPEG, 160, 120, 24);
+    m_forkCamera.SetVideoMode(VideoMode::PixelFormat::kMJPEG, 160, 120, 24);
     m_greyCam.SetSource(m_intakeCamera);
 }
 

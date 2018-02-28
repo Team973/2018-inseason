@@ -99,25 +99,26 @@ void Teleop::TeleopPeriodic() {
             break;
         case IntakeMode::switchIntaking:
             m_elevatorMode = ElevatorMode::motionMagic;
-            m_elevator->SetPosition(Elevator::GROUND);
+            m_elevator->SetPosition(Elevator::VAULT);
             m_intake->Close();
             m_intake->LowerIntake();
             m_intake->RegularPull();
             m_claw->open();
             m_claw->kickOff();
-            if ((m_intake->IsCubeIn() && m_elevator->GetPosition() < 2.0) ||
+            if ((m_intake->IsCubeIn() && m_elevator->GetPosition() < 5.0) ||
                 m_driverJoystick->GetRawButton(DualAction::Back)) {
                 m_intakeMode = IntakeMode::switchGrabbing;
                 m_intakeModeTimer = GetMsecTime();
             }
             break;
         case IntakeMode::switchGrabbing:
+            m_elevator->SetPosition(Elevator::GROUND);
             m_intake->Stop();
-            m_intake->Open();
             m_intake->LowerIntake();
-            m_claw->grab();
             m_claw->kickOff();
             if ((GetMsecTime() - m_intakeModeTimer) > 350) {
+                m_claw->grab();
+                m_intake->Open();
                 m_intakeMode = IntakeMode::switchStandby;
             }
             break;
@@ -128,7 +129,7 @@ void Teleop::TeleopPeriodic() {
             m_claw->kickOff();
             m_elevatorMode = ElevatorMode::motionMagic;
             m_elevator->SetPosition(Elevator::VAULT);
-            if (m_elevator->GetPosition() > 14.0) {
+            if (m_elevator->GetPosition() > 2.0) {
                 m_intake->Open();
             }
             break;
