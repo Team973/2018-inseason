@@ -115,7 +115,7 @@ private:
     /**
      * In deg/sec
      */
-    static constexpr double DEFAULT_ANGLE_TOLERANCE = 2.0;
+    static constexpr double DEFAULT_ANGLE_TOLERANCE = 3.0;
     static constexpr double DEFAULT_ANGLE_RATE_TOLERANCE = 5.0;
 };
 }
