@@ -87,6 +87,8 @@ private:
     ADXRS450_Gyro *m_gyro;
 
     LogSpreadsheet *m_logger;
+    LogCell *m_matchIdentifier;
+    LogCell *m_gameSpecificMessage;
 
     Solenoid *m_cubeClamp;
     Solenoid *m_clawKicker;
