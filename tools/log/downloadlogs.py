@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 Copy ALL the logs from the roborio to this directory
 """
