@@ -39,7 +39,7 @@ public:
 
     void Stop() override;
 
-    double GetPercentComplete() const;
+    double GetSplinePercentComplete() const;
 
     double LeftDistFromStart() const;
     double RightDistFromStart() const;
@@ -49,7 +49,7 @@ private:
     DriveStateProvider *m_state;
     TrajectoryDescription *m_trajectory;
     double m_left_dist_offset, m_right_dist_offset, m_angle_offset,
-        m_time_offset, m_percentComplete;
+        m_time_offset;
     bool m_done;
 
     /* pid for linear {pos,vel} */

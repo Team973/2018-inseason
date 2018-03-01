@@ -51,6 +51,6 @@ int GetLength(TrajectoryDescription *trajectory) {
 
 double GetPercentComplete(TrajectoryDescription *trajectory, double time) {
     int index = (int)(time / trajectory->left_trajectory->dt);
-    return index / GetLength(trajectory);
+    return (float)(index) / (float)(GetLength(trajectory));
 }
 }

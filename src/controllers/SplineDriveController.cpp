@@ -30,7 +30,6 @@ SplineDriveController::SplineDriveController(DriveStateProvider *state,
         , m_right_dist_offset(0.0)
         , m_angle_offset(0.0)
         , m_time_offset(0.0)
-        , m_percentComplete(0.0)
         , m_done(false)
         , m_l_pos_pid(POSITION_KP, POSITION_KI, VELOCITY_KD)
         , m_l_vel_pid(VELOCITY_KP, VELOCITY_KI, VELOCITY_KD)
@@ -98,8 +97,6 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     double rightVel = trajectories::GetRightDriveVelocity(m_trajectory, time);
     double heading = trajectories::GetHeadingDegrees(m_trajectory, time);
 
-    m_percentComplete = trajectories::GetPercentComplete(m_trajectory, time);
-
     m_l_pos_pid.SetTarget(leftDist);
     m_r_pos_pid.SetTarget(rightDist);
     m_l_vel_pid.SetTarget(leftVel);
@@ -160,6 +157,7 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     DBStringPrintf(DB_LINE5, "rvset%2.2lf rv%2.2lf", rightVel,
                    state->GetRightRate());
     DBStringPrintf(DB_LINE6, "apset%2.2lf ap%2.2lf", heading, AngleFromStart());
+    DBStringPrintf(DB_LINE7, "Done %.2lf", this->GetSplinePercentComplete());
 
     m_l_pos_setpt_log->LogDouble(leftDist);
     m_l_pos_real_log->LogDouble(LeftDistFromStart());
@@ -182,8 +180,9 @@ void SplineDriveController::Start() {
 void SplineDriveController::Stop() {
 }
 
-double SplineDriveController::GetPercentComplete() const {
-    return m_percentComplete;
+double SplineDriveController::GetSplinePercentComplete() const {
+    return trajectories::GetPercentComplete(m_trajectory,
+                                            GetSecTime() - m_time_offset);
 }
 
 double SplineDriveController::LeftDistFromStart() const {

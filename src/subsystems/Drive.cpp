@@ -214,7 +214,7 @@ SplineDriveController *Drive::SplineDrive(
 }
 
 double Drive::GetSplinePercentComplete() {
-    return m_splineDriveController->GetPercentComplete();
+    return m_splineDriveController->GetSplinePercentComplete();
 }
 
 /**

@@ -47,7 +47,6 @@ void Claw::cubeLaunch() {
 }
 
 void Claw::TaskPeriodic(RobotMode mode) {
-    DBStringPrintf(DB_LINE7, "cs %d", m_clawState);
     switch (m_clawState) {
         case ClawState::released:
             break;

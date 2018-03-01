@@ -12,6 +12,7 @@ cc_library(
         "//third_party/ctre:ctre",
         "//lib/trajectories:trajectories",
         "//src/subsystems:subsystems",
+        "//src/auto/profiles:sample_header",
         "//src/auto/profiles:centerleftswitch_header",
         "//src/auto/profiles:centerrightswitch_header",
         "//src/auto/profiles:leftscale_header",
