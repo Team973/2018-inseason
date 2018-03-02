@@ -25,7 +25,7 @@ void DBStringPrintf(DBStringPos position, const char *formatstring, ...) {
 }
 
 const char *matchTypeStrings[] = {
-    "N/A", "Prac", "Qual", "Elim",
+    "None", "Prac", "Qual", "Elim",
 };
 
 const char *MatchTypeToString(frc::DriverStation::MatchType matchType) {

@@ -3,6 +3,6 @@
 # Clear all the logfiles on the rio
 
 TEAM_NUMBER=973
-TARGET="roborio-$TEAM_NUMBER-frc.local"
+TARGET="lvuser@roborio-$TEAM_NUMBER-frc.local"
 
-ssh lvuser@$TARGET "rm /home/lvuser/log-*.txt"
+ssh -4 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $TARGET "rm log-*.txt"

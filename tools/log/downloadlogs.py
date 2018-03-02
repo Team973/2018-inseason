@@ -22,18 +22,18 @@ os.system('mkdir {}'.format(DESTINATION_DIR_PARENT))
 os.system('mkdir {}'.format(DESTINATION_DIR_RAW))
 os.system('mkdir {}'.format(DESTINATION_DIR_LABELED))
 
-os.system('scp -p lvuser@roborio-{}-frc.local:/home/lvuser/*.txt {}'.format(
+os.system('scp -4 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p lvuser@roborio-{}-frc.local:/home/lvuser/log-*.txt {}'.format(
     TEAM_NUMBER, DESTINATION_DIR_RAW))
 
 for filename in os.listdir(DESTINATION_DIR_RAW):
     matchLabel = None
-    with open(filename, 'r') as f:
+    with open(DESTINATION_DIR_RAW + filename, 'r') as f:
         reader = csv.DictReader(f)
         for row in reader:
             if row['Match Identifier']:
                 matchLabel = row['Match Identifier']
-                break
 
-    os.system('cp {} "{}"'.format(
-        filename,
-        DESTINATION_DIR_LABELED + matchLabel + '.csv'))
+    if matchLabel:
+        os.system('cp {} "{}"'.format(
+            DESTINATION_DIR_RAW + filename,
+            DESTINATION_DIR_LABELED + matchLabel + '.csv'))
