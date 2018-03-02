@@ -7,7 +7,7 @@ namespace frc973 {
 Disabled::Disabled(ObservableJoystick *driver, ObservableJoystick *codriver)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
-        , m_startPos(RobotStartPosition::Center) {
+        , m_startPos(AutoRoutineBase::RobotStartPosition::Center) {
 }
 
 Disabled::~Disabled() {
@@ -18,21 +18,22 @@ void Disabled::DisabledInit() {
 }
 
 void Disabled::DisabledPeriodic() {
-    DBStringPrintf(DB_LINE0, "Start %s", RobotStartPosToString(m_startPos));
+    DBStringPrintf(DB_LINE1, "Start %s", RobotStartPosToString(m_startPos));
 }
 
 void Disabled::DisabledStop() {
 }
 
-const char *Disabled::RobotStartPosToString(RobotStartPosition position) {
+const char *Disabled::RobotStartPosToString(
+    AutoRoutineBase::RobotStartPosition position) {
     switch (position) {
-        case RobotStartPosition::Left:
+        case AutoRoutineBase::RobotStartPosition::Left:
             return "Left";
             break;
-        case RobotStartPosition::Center:
+        case AutoRoutineBase::RobotStartPosition::Center:
             return "Center";
             break;
-        case RobotStartPosition::Right:
+        case AutoRoutineBase::RobotStartPosition::Right:
             return "Right";
             break;
         default:
@@ -87,7 +88,7 @@ void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,
                 break;
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
-                    m_startPos = RobotStartPosition::Center;
+                    m_startPos = AutoRoutineBase::RobotStartPosition::Center;
                 }
                 break;
             case DualAction::DPadDownVirtBtn:
@@ -96,12 +97,12 @@ void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,
                 break;
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
-                    m_startPos = RobotStartPosition::Left;
+                    m_startPos = AutoRoutineBase::RobotStartPosition::Left;
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
-                    m_startPos = RobotStartPosition::Right;
+                    m_startPos = AutoRoutineBase::RobotStartPosition::Right;
                 }
                 break;
             default:
@@ -114,7 +115,7 @@ void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,
  * @return m_startPos: The starting position of the robot selected
  * by the driver
  **/
-Disabled::RobotStartPosition Disabled::GetStartPosition() {
+AutoRoutineBase::RobotStartPosition Disabled::GetStartPosition() {
     return m_startPos;
 }
 };

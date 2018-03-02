@@ -2,7 +2,7 @@
 
 #include "WPILib.h"
 #include <iostream>
-#include "src/auto/AutoRoutine.h"
+#include "src/auto/AutoRoutineBase.h"
 #include "src/subsystems/Drive.h"
 #include "src/subsystems/Elevator.h"
 #include "src/subsystems/Claw.h"
@@ -10,12 +10,13 @@
 
 using namespace frc;
 namespace frc973 {
-class SwitchAuto : public AutoRoutine {
+class SwitchAuto : public AutoRoutineBase {
 public:
     SwitchAuto(Drive *drive, Elevator *elevator, Intake *intake, Claw *claw);
     virtual ~SwitchAuto(void);
 
-    void Execute(void) override;
+    void Execute(AutoRoutineBase::AutoDirection direction) override;
+
     void Reset(void);
 
 private:
@@ -24,7 +25,6 @@ private:
     Intake *m_intake;
     Claw *m_claw;
 
-    int m_autoState;
     uint32_t m_autoTimer;
 };
 };
