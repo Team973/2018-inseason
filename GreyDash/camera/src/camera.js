@@ -2,9 +2,9 @@ const cameraUrl = 'http://roborio-973-frc.local:1181/stream.mjpg';
 const cameraContainer = document.getElementById('cameraContainer');
 
 function reloadCamera() {
-    let content = cameraContainer.innerHTML;
-    cameraContainer.innerHTML = content;
-    console.log('reloaded camera');
+  const content = cameraContainer.innerHTML;
+  cameraContainer.innerHTML = content;
+  console.log('reloaded camera');
 }
 
 function createCamera(url) {
