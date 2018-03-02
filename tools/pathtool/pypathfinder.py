@@ -7,6 +7,7 @@ Check the bottom of this file for exports.
 from ctypes import cdll
 import ctypes
 from collections import namedtuple
+import math
 
 def set_cdll_path(path=None):
     if not path:
@@ -150,7 +151,8 @@ def set_cdll_path(path=None):
                                      "acceleration", "jerk", "heading"])
 
 
-    def generate_trajectory(waypoints, timestep, max_vel, max_accel, max_jerk):
+    def generate_trajectory(waypoints, timestep, max_vel, max_accel, max_jerk,
+                            reverse=False):
         """
         Generate a trajectory by calling into the Pathfinder library
         let |waypoints| be a list of Waypoint namedtuple types
@@ -180,11 +182,18 @@ def set_cdll_path(path=None):
             segmentBuff,
         )
 
-        return [segment.toPySegment() for segment in segmentBuff]
+        if reverse:
+            def flip(seg):
+                return Segment(seg.dt, seg.x, seg.y, -seg.position,
+                               -seg.velocity, -seg.acceleration, -seg.jerk,
+                               math.pi + seg.heading)
+            return [flip(segment.toPySegment()) for segment in segmentBuff]
+        else:
+            return [segment.toPySegment() for segment in segmentBuff]
 
 
     def generate_tank_trajectory(waypoints, timestep, max_vel, max_accel, max_jerk,
-                                 wheelbase_width):
+                                 wheelbase_width, reverse=False):
         """
         Generate a trajectory for the left and the right wheels
         """
@@ -194,6 +203,7 @@ def set_cdll_path(path=None):
             max_vel=max_vel,
             max_accel=max_accel,
             max_jerk=max_jerk,
+            reverse=reverse,
         )
 
         traj_buff = (_Segment * len(trajectory))()
