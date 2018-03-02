@@ -139,7 +139,7 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     else {
         printf("Done\n");
         m_done = true;
-        this->Stop();
+        this->Stop(out);
     }
 
     SmartDashboard::PutNumber("drive/outputs/anglesetpoint", heading);
@@ -172,12 +172,6 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     m_angle_endgoal_log->LogDouble(heading);
     m_left_output->LogDouble(left_output);
     m_right_output->LogDouble(right_output);
-}
-
-void SplineDriveController::Start() {
-}
-
-void SplineDriveController::Stop() {
 }
 
 double SplineDriveController::LeftDistFromStart() const {

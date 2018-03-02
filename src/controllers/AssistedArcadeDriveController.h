@@ -39,11 +39,11 @@ public:
      */
     void SetJoysticks(double throttle, double turn);
 
-    void Start() override {
+    void Start(DriveControlSignalReceiver *out) override {
         printf("Turning on Assisted Arcade Mode\n");
     }
 
-    void Stop() override {
+    void Stop(DriveControlSignalReceiver *out) override {
         printf("Turning off Assisted Arcade Mode\n");
     }
 

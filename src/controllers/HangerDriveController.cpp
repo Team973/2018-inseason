@@ -38,4 +38,12 @@ void HangerDriveController::SetJoysticks(double throttle) {
 
     // printf("left %lf  right %lf\n", m_leftOutput, m_rightOutput);
 }
+
+void HangerDriveController::Start(DriveControlSignalReceiver *out) {
+    out->ConfigDriveCurrentLimit(20);
+}
+
+void HangerDriveController::Stop(DriveControlSignalReceiver *out) {
+    out->DisableDriveCurrentLimit();
+}
 }
