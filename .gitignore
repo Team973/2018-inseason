@@ -5,7 +5,6 @@ test/build/*
 bazel-*
 *.pyc
 __pycache__/*
-tags
 
 ############
 # GreyDash #
