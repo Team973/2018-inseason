@@ -2,6 +2,10 @@
 
 """
 Copy ALL the logs from the roborio to this directory
+For each logfile, check the contents and see if there's a match number.  If
+there is a match number, copy the file into the labeled directory and change
+the name of the file to the match number (makes portmortem log-checking much
+easier).
 """
 
 import csv, os, sys
