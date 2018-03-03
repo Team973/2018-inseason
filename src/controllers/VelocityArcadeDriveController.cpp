@@ -28,7 +28,9 @@ void VelocityArcadeDriveController::CalcDriveOutput(
     out->SetDriveOutputIPS(m_leftOutput, m_rightOutput);
     DBStringPrintf(DBStringPos::DB_LINE4, "vAr l=%1.2lf r=%1.2lf", m_leftOutput,
                    m_rightOutput);
-    printf("velocity l=%1.2lf r=%1.2lf\n", m_leftOutput, m_rightOutput);
+    // printf("velocity l=%1.2lf r=%1.2lf\n", m_leftOutput, m_rightOutput);
+    DBStringPrintf(DB_LINE3, "lsp %.0f  a %.0f\n", m_leftOutput,
+                   state->GetLeftRate());
 }
 
 void VelocityArcadeDriveController::SetJoysticks(double throttle, double turn) {
@@ -38,6 +40,6 @@ void VelocityArcadeDriveController::SetJoysticks(double throttle, double turn) {
     m_leftOutput =
         (throttle - turn) * 144.0;  // 37522 = full throttle ticks per second
     m_rightOutput = (throttle + turn) * 144.0;
-    printf("left %lf  right %lf\n", m_leftOutput, m_rightOutput);
+    // printf("left %lf  right %lf\n", m_leftOutput, m_rightOutput);
 }
 }

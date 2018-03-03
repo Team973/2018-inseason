@@ -1,22 +1,15 @@
-/*
- * TrapDriveController.cpp
- *
- *  Created on: Nov 5, 2015
- *      Author: Andrew
- */
-
-#include "src/controllers/TrapDriveController.h"
-#include "lib/profiles/TrapProfile.h"
+#include "src/controllers/ConstantArcSplineDriveController.h"
+#include "lib/profiles/MotionProfile.h"
 #include "src/info/RobotInfo.h"
 #include "lib/util/Util.h"
+#include "lib/util/WrapDash.h"
 
 namespace frc973 {
 
 using namespace Constants;
-using namespace frc;
 
-TrapDriveController::TrapDriveController(DriveStateProvider *state,
-                                         LogSpreadsheet *logger)
+ConstantArcSplineDriveController::ConstantArcSplineDriveController(
+    DriveStateProvider *state, LogSpreadsheet *logger)
         : m_state(state)
         , m_dist(0.0)
         , m_angle(0.0)
@@ -24,25 +17,28 @@ TrapDriveController::TrapDriveController(DriveStateProvider *state,
         , m_angle_offset(0.0)
         , m_time_offset(0.0)
         , m_max_vel(MAX_VELOCITY)
-        , m_max_acc(MAX_VELOCITY)
-        , m_start_halt(true)
-        , m_end_halt(true)
+        , m_max_acc(MAX_ACCELERATION)
+        , m_start_vel(0.0)
+        , m_end_vel(0.0)
         , m_l_pos_pid(1.0, 0.0, 0.0)
         , m_l_vel_pid(0.1, 0.0, 0.0)
         , m_a_pos_pid(1.9, 0.0, 0.0)
         , m_a_vel_pid(0.2, 0.0, 0.0)
         , m_done(false)
-        , m_l_pos_setpt_log(new LogCell("linear pos incr goal"))
-        , m_l_pos_real_log(new LogCell("linear pos incr actual"))
-        , m_l_vel_setpt_log(new LogCell("linear vel incr goal"))
-        , m_l_vel_real_log(new LogCell("linear vel incr actual"))
-        , m_a_pos_setpt_log(new LogCell("angular pos incr goal"))
-        , m_a_pos_real_log(new LogCell("angular pos incr actual"))
-        , m_a_vel_setpt_log(new LogCell("angular vel incr goal"))
-        , m_max_vel_log(new LogCell("trap max velocity"))
-        , m_max_acc_log(new LogCell("trap max accel"))
-        , m_dist_endgoal_log(new LogCell("linear pos end goal"))
-        , m_angle_endgoal_log(new LogCell("angle pos end goal")) {
+        , m_needSetControlMode(false)
+        , m_l_pos_setpt_log(new LogCell("s_linear pos incr goal"))
+        , m_l_pos_real_log(new LogCell("s_linear pos incr actual"))
+        , m_l_vel_setpt_log(new LogCell("s_linear vel incr goal"))
+        , m_l_vel_real_log(new LogCell("s_linear vel incr actual"))
+        , m_a_pos_setpt_log(new LogCell("s_angular pos incr goal"))
+        , m_a_pos_real_log(new LogCell("s_angular pos incr actual"))
+        , m_a_vel_setpt_log(new LogCell("s_angular vel incr goal"))
+        , m_max_vel_log(new LogCell("ConstantArcSpline max velocity"))
+        , m_max_acc_log(new LogCell("ConstantArcSpline max accel"))
+        , m_dist_endgoal_log(new LogCell("s_linear pos end goal"))
+        , m_angle_endgoal_log(new LogCell("s_angle pos end goal"))
+        , m_left_output(new LogCell("s_left output"))
+        , m_right_output(new LogCell("s_right output")) {
     m_l_pos_pid.SetBounds(-100, 100);
     m_l_vel_pid.SetBounds(-100, 100);
     m_a_pos_pid.SetBounds(-100, 100);
@@ -60,15 +56,17 @@ TrapDriveController::TrapDriveController(DriveStateProvider *state,
         logger->RegisterCell(m_max_acc_log);
         logger->RegisterCell(m_dist_endgoal_log);
         logger->RegisterCell(m_angle_endgoal_log);
+        logger->RegisterCell(m_left_output);
+        logger->RegisterCell(m_right_output);
     }
 }
 
-TrapDriveController::~TrapDriveController() {
+ConstantArcSplineDriveController::~ConstantArcSplineDriveController() {
     ;
 }
 
-void TrapDriveController::SetTarget(DriveBase::RelativeTo relativeTo,
-                                    double dist, double angle) {
+void ConstantArcSplineDriveController::SetTarget(
+    DriveBase::RelativeTo relativeTo, double dist, double angle) {
     m_time_offset = GetSecTime();
 
     switch (relativeTo) {
@@ -92,34 +90,48 @@ void TrapDriveController::SetTarget(DriveBase::RelativeTo relativeTo,
     m_max_vel = MAX_VELOCITY;
     m_max_acc = MAX_ACCELERATION;
 
-    m_start_halt = true;
-    m_end_halt = true;
+    m_start_vel = 0.0;
+    m_end_vel = 0.0;
 }
 
-TrapDriveController *TrapDriveController::SetHalt(bool start_halt,
-                                                  bool end_halt) {
-    m_start_halt = start_halt;
-    m_end_halt = end_halt;
-    return this;
-}
-
-TrapDriveController *TrapDriveController::SetConstraints(double max_vel,
-                                                         double max_acc) {
+ConstantArcSplineDriveController *
+ConstantArcSplineDriveController::SetMaxVelAccel(double max_vel,
+                                                 double max_acc) {
     m_max_vel = max_vel;
     m_max_acc = max_acc;
     return this;
 }
 
-void TrapDriveController::CalcDriveOutput(DriveStateProvider *state,
-                                          DriveControlSignalReceiver *out) {
+ConstantArcSplineDriveController *
+ConstantArcSplineDriveController::SetStartEndVel(double start_vel,
+                                                 double end_vel) {
+    m_start_vel = start_vel;
+    m_end_vel = end_vel;
+    return this;
+}
+
+void ConstantArcSplineDriveController::CalcDriveOutput(
+    DriveStateProvider *state, DriveControlSignalReceiver *out) {
     double time = GetSecTime() - m_time_offset;
 
-    Profiler::Waypoint goal = Profiler::TrapProfileUnsafe(
-        time, m_dist, m_angle, m_max_vel, m_max_acc, m_start_halt, m_end_halt);
+    Profiler::NewWaypoint goal;
 
-    // printf("trap drive d %lf a %lf vel %lf acc %lf start %d end %d\n",
-    // m_dist,
-    //       m_angle, m_max_vel, m_max_acc, m_start_halt, m_end_halt);
+    if ((Util::square(m_max_vel) / m_max_acc) < fabs(m_dist) ||
+        m_max_acc == 0.0) {
+        goal =
+            Profiler::TrapezoidProfileUnsafe(time, m_dist, m_angle, m_max_vel,
+                                             m_max_acc, m_start_vel, m_end_vel);
+    }
+    else {
+        goal = Profiler::TriProfileUnsafe(time, m_dist, m_angle, m_max_vel,
+                                          m_max_acc, m_start_vel, m_end_vel);
+    }
+    printf(
+        "ConstantArcSpline drive d %lf a %lf vel %lf acc %lf start %lf end "
+        "%lf\n",
+        m_dist, m_angle, m_max_vel, m_max_acc, m_start_vel, m_end_vel);
+    DBStringPrintf(DB_LINE3, "lo%0.3lf ro%0.3lf", m_left_output,
+                   m_right_output);
 
     if (goal.error) {
         printf("trap drive error\n");
@@ -171,16 +183,26 @@ void TrapDriveController::CalcDriveOutput(DriveStateProvider *state,
     m_max_acc_log->LogDouble(m_max_acc);
     m_dist_endgoal_log->LogDouble(m_dist);
     m_angle_endgoal_log->LogDouble(m_angle);
+    m_left_output->LogDouble(left_output);
+    m_right_output->LogDouble(right_output);
 
-    printf("TrapDriveController active time %lf pos %lf\n", time,
-           goal.linear_dist);
+    // printf("ConstantArcSplineDriveController active time %lf pos %lf\n",
+    // time,
+    //        goal.linear_dist);
 }
 
-double TrapDriveController::DistFromStart() const {
+void ConstantArcSplineDriveController::Start() {
+    m_needSetControlMode = true;
+}
+
+void ConstantArcSplineDriveController::Stop() {
+}
+
+double ConstantArcSplineDriveController::DistFromStart() const {
     return m_state->GetDist() - m_dist_offset;
 }
 
-double TrapDriveController::AngleFromStart() const {
+double ConstantArcSplineDriveController::AngleFromStart() const {
     return m_state->GetAngle() - m_angle_offset;
 }
 }
