@@ -116,7 +116,7 @@ void Teleop::TeleopPeriodic() {
             m_intake->Stop();
             m_intake->LowerIntake();
             m_claw->kickOff();
-            if ((GetMsecTime() - m_intakeModeTimer) > 350) {
+            if (m_elevator->GetPosition() < 1.0) {
                 m_claw->grab();
                 m_intake->Open();
                 m_intakeMode = IntakeMode::switchStandby;
