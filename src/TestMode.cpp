@@ -87,7 +87,6 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
                     m_greylight->SetPixelStateProcessor(m_flashSignal);
-                    m_flashSignal->ResetCount();
                 }
                 break;
             case DualAction::DPadRightVirtBtn:

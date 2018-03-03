@@ -16,7 +16,7 @@ namespace LightPattern {
 class PixelStateProcessor {
 public:
     virtual void Tick(PixelState& state) = 0;
-    virtual void Reset() = 0;
+    virtual void Reset(){};
     // empty virtual to stop compiler warnings
 };
 
