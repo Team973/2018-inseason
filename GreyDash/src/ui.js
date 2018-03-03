@@ -1,4 +1,5 @@
-require('../node_modules/justgage/justgage.js');
+const path = require('path');
+require(path.normalize('../node_modules/justgage/justgage.js'));
 const smoothie = require('smoothie');
 const fs = require('fs');
 
