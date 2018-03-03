@@ -18,7 +18,7 @@ void Flash::SetColors(Color first, Color second) {
     this->m_first = first;
     this->m_second = second;
 }
-void Flash::ResetCount() {
+void Flash::Reset() {
     m_loopCount = 0;
 }
 void Flash::SetFrequency(int hz) {

@@ -55,5 +55,6 @@ PixelState GreyLight::GetState() {
 void GreyLight::SetPixelStateProcessor(PixelStateProcessor* processor) {
     m_stateLock.lock();
     this->m_processor = processor;
+    this->m_processor->Reset();
     m_stateLock.unlock();
 }

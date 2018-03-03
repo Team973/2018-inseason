@@ -16,6 +16,7 @@ namespace LightPattern {
 class PixelStateProcessor {
 public:
     virtual void Tick(PixelState& state) = 0;
+    virtual void Reset() = 0;
     // empty virtual to stop compiler warnings
 };
 
@@ -27,6 +28,10 @@ public:
 
     void SetProcessor(PixelStateProcessor* processor) {
         this->processor = processor;
+    }
+
+    void Reset() {
+        this->processor->Reset();
     }
     PixelStateProcessor* processor;
 };

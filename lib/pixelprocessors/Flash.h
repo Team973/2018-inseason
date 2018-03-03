@@ -20,7 +20,7 @@ public:
     void Tick(PixelState& state) override;
     void SetColors(Color first, Color second);
     void SetFrequency(int hz);
-    void ResetCount();
+    void Reset() override;
 
 private:
     bool m_color = false;
