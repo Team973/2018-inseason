@@ -89,8 +89,8 @@ private:
 
     LogSpreadsheet *m_logger;
 
-    UsbCamera m_intakeCamera;
     UsbCamera m_forkCamera;
+    UsbCamera m_intakeCamera;
     CameraServer *m_cameraServer;
     VideoSink m_greyCam;
 

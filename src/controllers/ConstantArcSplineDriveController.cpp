@@ -157,8 +157,8 @@ void ConstantArcSplineDriveController::CalcDriveOutput(
     double linear_vel_term = m_l_vel_pid.CalcOutput(state->GetRate());
     double angular_dist_term = m_a_pos_pid.CalcOutput(AngleFromStart());
     double angular_vel_term = m_a_vel_pid.CalcOutput(state->GetAngularRate());
-    printf("angle_dist_term: %lf angle_from_start %lf angle_goal %lf\n",
-           angular_dist_term, AngleFromStart(), goal.angular_dist);
+    // printf("angle_dist_term: %lf angle_from_start %lf angle_goal %lf\n",
+    //        angular_dist_term, AngleFromStart(), goal.angular_dist);
 
     /* right side receives positive angle correction */
     double right_output = right_l_vel_ff + right_a_vel_ff + linear_dist_term +
@@ -186,8 +186,9 @@ void ConstantArcSplineDriveController::CalcDriveOutput(
     m_left_output->LogDouble(left_output);
     m_right_output->LogDouble(right_output);
 
-    printf("ConstantArcSplineDriveController active time %lf pos %lf\n", time,
-           goal.linear_dist);
+    // printf("ConstantArcSplineDriveController active time %lf pos %lf\n",
+    // time,
+    //        goal.linear_dist);
 }
 
 void ConstantArcSplineDriveController::Start() {
