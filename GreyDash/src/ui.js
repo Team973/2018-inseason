@@ -1,9 +1,12 @@
 const path = require('path');
-require(path.normalize('../node_modules/justgage/justgage.js'));
-const smoothie = require('smoothie');
 const fs = require('fs');
 
-const config = JSON.parse(fs.readFileSync(`${__dirname}/configlisteners.json`, 'utf-8'));
+const smoothie = require('smoothie');
+
+const Raphael = require(path.normalize(path.join(path.resolve('.'), 'node_modules', 'raphael', 'raphael.js')));
+require(path.normalize(path.join(path.resolve('.'), 'node_modules', 'justgage', 'justgage.js')));
+
+const config = JSON.parse(fs.readFileSync(path.join(path.resolve('.'), 'src', 'configlisteners.json'), 'utf-8'));
 
 // Set Defaults
 for (let i = 0; i < config.charts.length; i += 1) {
