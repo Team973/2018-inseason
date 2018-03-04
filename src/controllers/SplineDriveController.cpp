@@ -93,6 +93,8 @@ void SplineDriveController::SetTarget(TrajectoryDescription *trajectory,
             m_angle_offset = m_state->GetAngle();
             break;
         case DriveBase::RelativeTo::SetPoint:
+            // m_angle_offset = trajectories::GetHeadingDegrees(m_trajectory,
+            // 0.0);
             break;
         case DriveBase::RelativeTo::Absolute:
             break;

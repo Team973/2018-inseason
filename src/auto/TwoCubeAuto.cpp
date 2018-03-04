@@ -83,12 +83,12 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
                         &two_cube_intaking_left::two_cube_intaking_left,
-                        Drive::RelativeTo::SetPoint);
+                        Drive::RelativeTo::Now);
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(
                         &two_cube_intaking_right::two_cube_intaking_right,
-                        Drive::RelativeTo::SetPoint);
+                        Drive::RelativeTo::Now);
                 }
                 m_intake->Open();
                 m_intake->LowerIntake();
@@ -116,7 +116,7 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             break;
         case 6:
             m_elevator->SetPosition(Elevator::LOW_GOAL);
-            if (m_elevator->GetPosition() > 14.0) {
+            if (m_elevator->GetPosition() > 20.0) {
                 m_claw->cubeLaunch();
                 m_autoState++;
             }

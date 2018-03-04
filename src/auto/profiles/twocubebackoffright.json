@@ -1,13 +1,13 @@
 {
     "name": "two_cube_backoff_right",
     "timestep": 0.01,
-    "max_vel": 120.0,
-    "max_accel": 60.0,
+    "max_vel": 80.0,
+    "max_accel": 40.0,
     "max_jerk": 60.0,
     "wheelbase_width": 25.205,
     "reverse": true,
     "waypoints": [
         { "x": 260, "y": 50, "angle": 30 },
-        { "x": 225, "y": 75, "angle": 87 }
+        { "x": 215, "y": 75, "angle": 110 }
     ]
 }

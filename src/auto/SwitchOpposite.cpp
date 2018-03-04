@@ -39,14 +39,15 @@ void SwitchOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             m_intake->Open();
             m_intake->LowerIntake();
+            m_elevator->SetPosition(Elevator::LOW_GOAL);
             m_claw->grab();
             m_claw->kickOff();
             m_autoTimer = GetMsecTime();
             m_autoState++;
             break;
         case 1:
-            if (GetMsecTime() - m_autoTimer > 1000) {
-                m_elevator->SetPosition(Elevator::LOW_GOAL);
+            if (GetMsecTime() - m_autoTimer > 2000) {
+                m_intake->RaiseIntake();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
@@ -69,6 +70,12 @@ void SwitchOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
                         &right_switch_reset::right_switch_reset,
                         Drive::RelativeTo::SetPoint);
                 }
+                m_autoState++;
+            }
+            break;
+        case 4:
+            if (m_drive->GetSplinePercentComplete() > 1.0) {
+                m_drive->OpenloopArcadeDrive(0.0, 0.0);
                 m_autoState++;
             }
             break;
