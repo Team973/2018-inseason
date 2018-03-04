@@ -46,7 +46,7 @@ void Autonomous::AutonomousInit() {
             switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case SwitchScalePosition::LL:
                     m_twoCubeAuto->Reset();
-                    m_routine = m_scaleAuto;
+                    m_routine = m_twoCubeAuto;
                     m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::LR:
