@@ -79,14 +79,24 @@ SplineDriveController::~SplineDriveController() {
     ;
 }
 
-void SplineDriveController::SetTarget(TrajectoryDescription *trajectory) {
+void SplineDriveController::SetTarget(TrajectoryDescription *trajectory,
+                                      DriveBase::RelativeTo relativity) {
     m_time_offset = GetSecTime();
 
     m_left_dist_offset = m_state->GetLeftDist();
     m_right_dist_offset = m_state->GetRightDist();
 
-    m_angle_offset = m_state->GetAngle();
     m_trajectory = trajectory;
+
+    switch (relativity) {
+        case DriveBase::RelativeTo::Now:
+            m_angle_offset = m_state->GetAngle();
+            break;
+        case DriveBase::RelativeTo::SetPoint:
+            break;
+        case DriveBase::RelativeTo::Absolute:
+            break;
+    }
 }
 
 void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,

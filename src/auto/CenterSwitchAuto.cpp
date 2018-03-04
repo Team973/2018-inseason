@@ -28,10 +28,12 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
     switch (m_autoState) {
         case 0:
             if (direction == AutoRoutineBase::AutoDirection::Left) {
-                m_drive->SplineDrive(&center_left_switch::center_left_switch);
+                m_drive->SplineDrive(&center_left_switch::center_left_switch,
+                                     Drive::RelativeTo::Now);
             }
             else if (direction == AutoRoutineBase::AutoDirection::Right) {
-                m_drive->SplineDrive(&center_right_switch::center_right_switch);
+                m_drive->SplineDrive(&center_right_switch::center_right_switch,
+                                     Drive::RelativeTo::Now);
             }
             m_intake->Open();
             m_intake->LowerIntake();
@@ -57,11 +59,13 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
         case 3:
             if (m_drive->GetSplinePercentComplete() > 1.0) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
-                    m_drive->SplineDrive(&left_switch_reset::left_switch_reset);
+                    m_drive->SplineDrive(&left_switch_reset::left_switch_reset,
+                                         Drive::RelativeTo::SetPoint);
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(
-                        &right_switch_reset::right_switch_reset);
+                        &right_switch_reset::right_switch_reset,
+                        Drive::RelativeTo::SetPoint);
                 }
                 m_autoState++;
             }

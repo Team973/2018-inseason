@@ -32,10 +32,12 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
     switch (m_autoState) {
         case 0:
             if (direction == AutoRoutineBase::AutoDirection::Left) {
-                m_drive->SplineDrive(&left_scale::left_scale);
+                m_drive->SplineDrive(&left_scale::left_scale,
+                                     Drive::RelativeTo::Now);
             }
             else if (direction == AutoRoutineBase::AutoDirection::Right) {
-                m_drive->SplineDrive(&right_scale::right_scale);
+                m_drive->SplineDrive(&right_scale::right_scale,
+                                     Drive::RelativeTo::Now);
             }
             m_intake->Open();
             m_intake->LowerIntake();
@@ -62,11 +64,13 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             if (GetMsecTime() - m_autoTimer > 500) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
-                        &two_cube_backoff_left::two_cube_backoff_left);
+                        &two_cube_backoff_left::two_cube_backoff_left,
+                        Drive::RelativeTo::SetPoint);
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(
-                        &two_cube_backoff_right::two_cube_backoff_right);
+                        &two_cube_backoff_right::two_cube_backoff_right,
+                        Drive::RelativeTo::SetPoint);
                 }
                 m_elevator->SetPosition(Elevator::GROUND);
                 m_autoTimer = GetMsecTime();
@@ -78,11 +82,13 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_drive->GetSplinePercentComplete() > 1.0) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
-                        &two_cube_intaking_left::two_cube_intaking_left);
+                        &two_cube_intaking_left::two_cube_intaking_left,
+                        Drive::RelativeTo::SetPoint);
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(
-                        &two_cube_intaking_right::two_cube_intaking_right);
+                        &two_cube_intaking_right::two_cube_intaking_right,
+                        Drive::RelativeTo::SetPoint);
                 }
                 m_intake->Open();
                 m_intake->LowerIntake();

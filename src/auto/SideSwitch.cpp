@@ -27,10 +27,12 @@ void SideSwitch::Execute(AutoRoutineBase::AutoDirection direction) {
     switch (m_autoState) {
         case 0:
             if (direction == AutoRoutineBase::AutoDirection::Left) {
-                m_drive->SplineDrive(&left_side_switch::left_side_switch);
+                m_drive->SplineDrive(&left_side_switch::left_side_switch,
+                                     Drive::RelativeTo::Now);
             }
             else if (direction == AutoRoutineBase::AutoDirection::Right) {
-                m_drive->SplineDrive(&right_side_switch::right_side_switch);
+                m_drive->SplineDrive(&right_side_switch::right_side_switch,
+                                     Drive::RelativeTo::Now);
             }
             m_intake->Open();
             m_intake->LowerIntake();
@@ -56,11 +58,13 @@ void SideSwitch::Execute(AutoRoutineBase::AutoDirection direction) {
         case 3:
             if (m_drive->GetSplinePercentComplete() > 1.0) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
-                    m_drive->SplineDrive(&left_switch_reset::left_switch_reset);
+                    m_drive->SplineDrive(&left_switch_reset::left_switch_reset,
+                                         Drive::RelativeTo::SetPoint);
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(
-                        &right_switch_reset::right_switch_reset);
+                        &right_switch_reset::right_switch_reset,
+                        Drive::RelativeTo::SetPoint);
                 }
                 m_autoState++;
             }
