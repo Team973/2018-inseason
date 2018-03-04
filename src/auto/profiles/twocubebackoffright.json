@@ -7,7 +7,7 @@
     "wheelbase_width": 25.205,
     "reverse": true,
     "waypoints": [
-        { "x": 0, "y": 0, "angle": 0 },
-        { "x": 48, "y": -36, "angle": 90 }
+        { "x": 260, "y": 50, "angle": 30 },
+        { "x": 220, "y": 80, "angle": 87 }
     ]
 }
