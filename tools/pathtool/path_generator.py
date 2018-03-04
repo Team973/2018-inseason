@@ -9,6 +9,7 @@ Arg 3: path to the pathfinder shared library
 import sys
 import json
 import textwrap
+import math
 from pypathfinder import set_cdll_path
 
 jsonPath = sys.argv[1]
@@ -28,7 +29,7 @@ def openPointStructs(source):
         for waypoint in sourceJSON["waypoints"]:
             waypoints.append(
                 Waypoint(x=waypoint["x"], y=waypoint["y"],
-                         angle=waypoint["angle"])
+                         angle= (math.pi / 180.0) * waypoint["angle"])
             )
 
         left, right = generate_tank_trajectory(

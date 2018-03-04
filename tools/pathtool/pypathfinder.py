@@ -203,7 +203,6 @@ def set_cdll_path(path=None):
             max_vel=max_vel,
             max_accel=max_accel,
             max_jerk=max_jerk,
-            reverse=reverse,
         )
 
         traj_buff = (_Segment * len(trajectory))()
@@ -220,9 +219,20 @@ def set_cdll_path(path=None):
             ctypes.c_double(wheelbase_width),
         )
 
-        return (
-            [segment.toPySegment() for segment in leftBuff],
-            [segment.toPySegment() for segment in rightBuff],
-        )
+        if reverse:
+            def flip(seg):
+                return Segment(seg.dt, seg.x, seg.y, -seg.position,
+                               -seg.velocity, -seg.acceleration, -seg.jerk,
+                               math.pi - seg.heading)
+            return (
+                [flip(segment.toPySegment()) for segment in leftBuff],
+                [flip(segment.toPySegment()) for segment in rightBuff],
+            )
+        else:
+            return (
+                [segment.toPySegment() for segment in leftBuff],
+                [segment.toPySegment() for segment in rightBuff],
+            )
+
 
     return (Waypoint, Segment, generate_trajectory, generate_tank_trajectory)
