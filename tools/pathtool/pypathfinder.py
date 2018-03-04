@@ -234,5 +234,4 @@ def set_cdll_path(path=None):
                 [segment.toPySegment() for segment in rightBuff],
             )
 
-
     return (Waypoint, Segment, generate_trajectory, generate_tank_trajectory)
