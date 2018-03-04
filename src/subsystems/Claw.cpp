@@ -112,11 +112,10 @@ void Claw::goToState(ClawState newState) {
             break;
         case ClawState::preLaunch:
             m_cubeClamp->Set(clawClosed);
-            m_clawKicker->Set(kickIdle);
+            m_clawKicker->Set(active);
             break;
         case ClawState::launch:
             m_cubeClamp->Set(clawOpen);
-            m_clawKicker->Set(active);
             break;
         case ClawState::launchReset:
             m_cubeClamp->Set(clawOpen);
