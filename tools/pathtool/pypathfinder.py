@@ -220,10 +220,11 @@ def set_cdll_path(path=None):
         )
 
         if reverse:
+            heading_offset = waypoints[0].angle
             def flip(seg):
                 return Segment(seg.dt, seg.x, seg.y, -seg.position,
                                -seg.velocity, -seg.acceleration, -seg.jerk,
-                               math.pi - seg.heading)
+                               math.pi - seg.heading + 2 * heading_offset)
             return (
                 [flip(segment.toPySegment()) for segment in leftBuff],
                 [flip(segment.toPySegment()) for segment in rightBuff],

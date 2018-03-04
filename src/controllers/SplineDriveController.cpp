@@ -79,14 +79,26 @@ SplineDriveController::~SplineDriveController() {
     ;
 }
 
-void SplineDriveController::SetTarget(TrajectoryDescription *trajectory) {
+void SplineDriveController::SetTarget(TrajectoryDescription *trajectory,
+                                      DriveBase::RelativeTo relativity) {
     m_time_offset = GetSecTime();
 
     m_left_dist_offset = m_state->GetLeftDist();
     m_right_dist_offset = m_state->GetRightDist();
 
-    m_angle_offset = m_state->GetAngle();
     m_trajectory = trajectory;
+
+    switch (relativity) {
+        case DriveBase::RelativeTo::Now:
+            m_angle_offset = m_state->GetAngle();
+            break;
+        case DriveBase::RelativeTo::SetPoint:
+            // m_angle_offset = trajectories::GetHeadingDegrees(m_trajectory,
+            // 0.0);
+            break;
+        case DriveBase::RelativeTo::Absolute:
+            break;
+    }
 }
 
 void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
@@ -104,8 +116,7 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     m_l_vel_pid.SetTarget(leftVel);
     m_r_vel_pid.SetTarget(rightVel);
     // m_a_pos_pid.SetTarget(heading);
-    double angle_error =
-        std::fmod(heading - AngleFromStart() + 180.0, 360.0) - 180.0;
+    double angle_error = Util::CalcAngleError(heading, AngleFromStart());
 
     /* vel feed forward for linear term */
     double right_l_vel_ff =

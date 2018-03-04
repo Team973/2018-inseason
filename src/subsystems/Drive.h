@@ -137,7 +137,7 @@ public:
     }
 
     SplineDriveController *SplineDrive(
-        trajectories::TrajectoryDescription *trajectory);
+        trajectories::TrajectoryDescription *trajectory, RelativeTo relativity);
 
     const SplineDriveController *GetSplineDriveController() {
         return m_splineDriveController;

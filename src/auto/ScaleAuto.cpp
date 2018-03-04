@@ -24,10 +24,12 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
     switch (m_autoState) {
         case 0:
             if (direction == AutoRoutineBase::AutoDirection::Left) {
-                m_drive->SplineDrive(&left_scale::left_scale);
+                m_drive->SplineDrive(&left_scale::left_scale,
+                                     Drive::RelativeTo::Now);
             }
             else if (direction == AutoRoutineBase::AutoDirection::Right) {
-                m_drive->SplineDrive(&right_scale::right_scale);
+                m_drive->SplineDrive(&right_scale::right_scale,
+                                     Drive::RelativeTo::Now);
             }
             m_intake->Open();
             m_intake->LowerIntake();
