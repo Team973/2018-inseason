@@ -1,3 +1,4 @@
+
 py_library(
     name = "pypathfinder",
     srcs = [
@@ -16,4 +17,15 @@ py_test(
     deps = [
         ":pypathfinder",
     ],
+)
+
+py_binary(
+    name = "path_generator",
+    srcs = [
+        "path_generator.py",
+    ],
+    deps = [
+        ":pypathfinder",
+    ],
+    visibility = ["//visibility:public"],
 )

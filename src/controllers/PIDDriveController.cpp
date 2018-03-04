@@ -22,7 +22,7 @@ static constexpr double DRIVE_PID_KI = 0.0;
 static constexpr double DRIVE_PID_KD = 0.05;
 
 // Turn pid takes in error in degrees and outputs velocity in degrees/sec
-static constexpr double TURN_PID_KP = 8.0;
+static constexpr double TURN_PID_KP = 10.0;
 static constexpr double TURN_PID_KI = 0.0;
 static constexpr double TURN_PID_KD = 0.0;
 
@@ -83,12 +83,6 @@ void PIDDriveController::CalcDriveOutput(DriveStateProvider *state,
     }
 
     DBStringPrintf(DBStringPos::DB_LINE3, "p %2.2lf t %2.2lf", throttle, turn);
-
-    printf("dt %lf, dc %lf, de: %lf \n", m_targetDist, m_prevDist,
-           m_targetDist - m_prevDist);
-    printf("angle target %lf, angle curr %lf, turn error %lf\n", m_targetAngle,
-           m_prevAngle, m_targetAngle - m_prevAngle);
-    printf("throttle %lf  turn %lf\n", throttle, turn);
 
     DBStringPrintf(DBStringPos::DB_LINE5, "dt %5.0lf, dc %5.0lf", m_targetDist,
                    m_prevDist);

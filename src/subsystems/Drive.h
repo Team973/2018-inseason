@@ -11,9 +11,12 @@
 #include "src/info/RobotInfo.h"
 #include "lib/bases/DriveBase.h"
 #include "networktables/NetworkTableInstance.h"
+#include "lib/logging/LogSpreadsheet.h"
+#include "lib/trajectories/structs.h"
 
 using namespace frc;
 using namespace ctre;
+using namespace trajectories;
 
 namespace frc973 {
 class AssistedArcadeDriveController;
@@ -21,6 +24,7 @@ class CheesyDriveController;
 class HangerDriveController;
 class OpenloopArcadeDriveController;
 class PIDDriveController;
+class ConstantArcSplineDriveController;
 class SplineDriveController;
 class StraightDriveController;
 class TrapDriveController;
@@ -118,18 +122,28 @@ public:
                                 double powerCap);
 
     /**
-     * Set a drive to use spline drive controller
+     * Set a drive to use ConstantArcSpline drive controller
      *
      * @param relativity What is that angle metric relative to?
      * @param dist Distance in inches to go
      * @param angle Angle in degrees to go
      */
-    SplineDriveController *SplineDrive(RelativeTo relativity, double dist,
-                                       double angle);
+    ConstantArcSplineDriveController *ConstantArcSplineDrive(
+        RelativeTo relativity, double dist, double angle);
+
+    const ConstantArcSplineDriveController *
+    GetConstantArcSplineDriveController() {
+        return m_constantArcSplineDriveController;
+    }
+
+    SplineDriveController *SplineDrive(
+        trajectories::TrajectoryDescription *trajectory);
 
     const SplineDriveController *GetSplineDriveController() {
         return m_splineDriveController;
     }
+
+    double GetSplinePercentComplete();
 
     /**
      * Set a drive to drive straight
@@ -240,6 +254,7 @@ private:
     HangerDriveController *m_hangerDriveController;
     OpenloopArcadeDriveController *m_openloopArcadeDriveController;
     PIDDriveController *m_pidDriveController;
+    ConstantArcSplineDriveController *m_constantArcSplineDriveController;
     SplineDriveController *m_splineDriveController;
     StraightDriveController *m_straightDriveController;
     TrapDriveController *m_trapDriveController;

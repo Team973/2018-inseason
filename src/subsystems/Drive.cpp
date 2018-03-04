@@ -13,6 +13,7 @@
 #include "src/controllers/OpenloopArcadeDriveController.h"
 #include "src/controllers/PIDDriveController.h"
 #include "src/controllers/StraightDriveController.h"
+#include "src/controllers/ConstantArcSplineDriveController.h"
 #include "src/controllers/SplineDriveController.h"
 #include "src/controllers/TrapDriveController.h"
 #include "src/controllers/VelocityArcadeDriveController.h"
@@ -21,9 +22,11 @@
 #include "lib/util/Util.h"
 #include "lib/util/WrapDash.h"
 #include "lib/logging/LogSpreadsheet.h"
+#include "lib/trajectories/structs.h"
 
 using namespace frc;
 using namespace ctre;
+using namespace trajectories;
 
 namespace frc973 {
 Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
@@ -55,6 +58,8 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
         , m_hangerDriveController(new HangerDriveController())
         , m_openloopArcadeDriveController(new OpenloopArcadeDriveController())
         , m_pidDriveController(new PIDDriveController())
+        , m_constantArcSplineDriveController(
+              new ConstantArcSplineDriveController(this, logger))
         , m_splineDriveController(new SplineDriveController(this, logger))
         , m_straightDriveController(new StraightDriveController())
         , m_trapDriveController(new TrapDriveController(this, logger))
@@ -74,10 +79,10 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_leftDriveTalonA->SetSensorPhase(false);
     m_leftDriveTalonA->SetInverted(false);
     m_leftDriveTalonA->SelectProfileSlot(0, 0);
-    m_leftDriveTalonA->Config_kP(0, 0.08, 10);
+    m_leftDriveTalonA->Config_kP(0, 0.3, 10);
     m_leftDriveTalonA->Config_kI(0, 0, 10);
-    m_leftDriveTalonA->Config_kD(0, 0, 10);     // 0.7
-    m_leftDriveTalonA->Config_kF(0, 0.28, 10);  // 0.2
+    m_leftDriveTalonA->Config_kD(0, 0, 10);    // 0.7
+    m_leftDriveTalonA->Config_kF(0, 0.3, 10);  // 0.2
 
     m_leftDriveVictorB->Follow(*m_leftDriveTalonA);
     m_leftDriveVictorB->SetInverted(false);
@@ -90,10 +95,10 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_rightDriveTalonA->SetSensorPhase(false);
     m_rightDriveTalonA->SetInverted(false);
     m_rightDriveTalonA->SelectProfileSlot(0, 0);
-    m_rightDriveTalonA->Config_kP(0, 0.08, 10);
+    m_rightDriveTalonA->Config_kP(0, 0.3, 10);
     m_rightDriveTalonA->Config_kI(0, 0, 10);
-    m_rightDriveTalonA->Config_kD(0, 0, 10);     // 0.7
-    m_rightDriveTalonA->Config_kF(0, 0.28, 10);  // 0.2
+    m_rightDriveTalonA->Config_kD(0, 0, 10);    // 0.7
+    m_rightDriveTalonA->Config_kF(0, 0.3, 10);  // 0.2
 
     m_rightDriveVictorB->Follow(*m_rightDriveTalonA);
     m_rightDriveVictorB->SetInverted(false);
@@ -188,17 +193,28 @@ PIDDriveController *Drive::PIDTurn(double turn, RelativeTo relativity,
 }
 
 /**
- * Set a drive to use spline drive controller
+ * Set a drive to use ConstantArcSpline drive controller
  *
  * @param relativity What is that angle metric relative to?
  * @param dist Distance in inches to go
  * @param angle Angle in degrees to go
  */
-SplineDriveController *Drive::SplineDrive(RelativeTo relativity, double dist,
-                                          double angle) {
+ConstantArcSplineDriveController *Drive::ConstantArcSplineDrive(
+    RelativeTo relativity, double dist, double angle) {
+    this->SetDriveController(m_constantArcSplineDriveController);
+    m_constantArcSplineDriveController->SetTarget(relativity, dist, angle);
+    return m_constantArcSplineDriveController;
+}
+
+SplineDriveController *Drive::SplineDrive(
+    trajectories::TrajectoryDescription *trajectory) {
     this->SetDriveController(m_splineDriveController);
-    m_splineDriveController->SetTarget(relativity, dist, angle);
+    m_splineDriveController->SetTarget(trajectory);
     return m_splineDriveController;
+}
+
+double Drive::GetSplinePercentComplete() {
+    return m_splineDriveController->GetSplinePercentComplete();
 }
 
 /**
@@ -415,6 +431,11 @@ void Drive::TaskPeriodic(RobotMode mode) {
                               m_leftDriveOutput * DRIVE_IPS_FROM_CPDS);
     SmartDashboard::PutNumber("drive/outputs/leftrateactual",
                               Drive::GetLeftRate());
+
+    SmartDashboard::PutNumber("drive/outputs/rightratesetpoint",
+                              m_rightDriveOutput * DRIVE_IPS_FROM_CPDS);
+    SmartDashboard::PutNumber("drive/outputs/rightrateactual",
+                              Drive::GetRightRate());
 
     // NetworkTable Gyro
     SmartDashboard::PutNumber("drive/gyro/angle", this->GetAngle());

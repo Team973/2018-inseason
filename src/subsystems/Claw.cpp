@@ -47,7 +47,6 @@ void Claw::cubeLaunch() {
 }
 
 void Claw::TaskPeriodic(RobotMode mode) {
-    DBStringPrintf(DB_LINE7, "cs %d", m_clawState);
     switch (m_clawState) {
         case ClawState::released:
             break;
@@ -72,6 +71,7 @@ void Claw::TaskPeriodic(RobotMode mode) {
         case ClawState::preLaunch:
             if (GetMsecTime() - m_stateStartTimeMs > 300) {
                 goToState(launch);
+                m_cubeClamp->Set(clawOpen);
             }
             break;
         case ClawState::launch:
