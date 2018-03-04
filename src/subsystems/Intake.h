@@ -67,6 +67,8 @@ public:
 
     void Close();
 
+    void SpinCube(int direction);
+
     void TaskPeriodic(RobotMode mode) override;
 
 private:
