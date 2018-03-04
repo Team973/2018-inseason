@@ -223,7 +223,7 @@ def set_cdll_path(path=None):
             def flip(seg):
                 return Segment(seg.dt, seg.x, seg.y, -seg.position,
                                -seg.velocity, -seg.acceleration, -seg.jerk,
-                               math.pi + seg.heading)
+                               math.pi - seg.heading)
             return (
                 [flip(segment.toPySegment()) for segment in leftBuff],
                 [flip(segment.toPySegment()) for segment in rightBuff],

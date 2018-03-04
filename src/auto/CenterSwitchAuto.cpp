@@ -1,4 +1,5 @@
 #include "src/auto/CenterSwitchAuto.h"
+#include "lib/util/WrapDash.h"
 #include "src/auto/profiles/centerrightswitch_trajectory.h"
 #include "src/auto/profiles/centerleftswitch_trajectory.h"
 
@@ -43,7 +44,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 2:
-            if (m_drive->GetSplinePercentComplete() > 0.95 ||
+            if (m_drive->GetSplinePercentComplete() > 0.80 ||
                 m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
                 m_claw->cubeLaunch();
                 m_autoState++;
@@ -52,6 +53,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
         default:
             break;
     }
+    DBStringPrintf(DB_LINE7, "Done %.2lf", m_drive->GetSplinePercentComplete());
 }
 
 void CenterSwitchAuto::Reset(void) {
