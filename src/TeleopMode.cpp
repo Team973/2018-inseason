@@ -107,17 +107,22 @@ void Teleop::TeleopPeriodic() {
             m_claw->kickOff();
             if ((m_intake->IsCubeIn() && m_elevator->GetPosition() < 5.0) ||
                 m_driverJoystick->GetRawButton(DualAction::Back)) {
-                m_intakeMode = IntakeMode::switchGrabbing;
-                m_intakeModeTimer = GetMsecTime();
+                m_intakeMode = IntakeMode::switchTaking;
             }
             break;
-        case IntakeMode::switchGrabbing:
+        case IntakeMode::switchTaking:
             m_elevator->SetPosition(Elevator::GROUND);
             m_intake->Stop();
             m_intake->LowerIntake();
             m_claw->kickOff();
-            if (GetMsecTime() - m_intakeModeTimer > 200.0) {
+            if (m_elevator->GetPosition() < 2.0) {
                 m_claw->grab();
+                m_intakeModeTimer = GetMsecTime();
+                m_intakeMode = IntakeMode::switchGrabbing;
+            }
+            break;
+        case IntakeMode::switchGrabbing:
+            if (GetMsecTime() - m_intakeModeTimer > 200.0) {
                 m_intake->Open();
                 m_intakeMode = IntakeMode::switchStandby;
             }

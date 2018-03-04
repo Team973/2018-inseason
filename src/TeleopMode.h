@@ -64,6 +64,7 @@ private:
     {
         manual,
         switchIntaking,
+        switchTaking,
         switchGrabbing,
         switchStandby,
         switchEjecting,
