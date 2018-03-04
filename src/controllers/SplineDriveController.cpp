@@ -116,8 +116,7 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     m_l_vel_pid.SetTarget(leftVel);
     m_r_vel_pid.SetTarget(rightVel);
     // m_a_pos_pid.SetTarget(heading);
-    double angle_error =
-        std::fmod(heading - AngleFromStart() + 180.0, 360.0) - 180.0;
+    double angle_error = Util::CalcAngleError(heading, AngleFromStart());
 
     /* vel feed forward for linear term */
     double right_l_vel_ff =
