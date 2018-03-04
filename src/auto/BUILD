@@ -27,6 +27,8 @@ cc_library(
         "//src/auto/profiles:twocubebackoffright_header",
         "//src/auto/profiles:twocubeintakingleft_header",
         "//src/auto/profiles:twocubeintakingright_header",
+        "//src/auto/profiles:rightswitchreset_header",
+        "//src/auto/profiles:leftswitchreset_header",
     ],
     visibility = ["//visibility:public"],
 )

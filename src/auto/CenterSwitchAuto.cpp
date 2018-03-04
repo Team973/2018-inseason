@@ -2,10 +2,14 @@
 #include "lib/util/WrapDash.h"
 #include "src/auto/profiles/centerrightswitch_trajectory.h"
 #include "src/auto/profiles/centerleftswitch_trajectory.h"
+#include "src/auto/profiles/leftswitchreset_trajectory.h"
+#include "src/auto/profiles/rightswitchreset_trajectory.h"
 
 using namespace frc;
 using namespace center_left_switch;
 using namespace center_right_switch;
+using namespace right_switch_reset;
+using namespace left_switch_reset;
 
 namespace frc973 {
 CenterSwitchAuto::CenterSwitchAuto(Drive *drive, Elevator *elevator,
@@ -47,6 +51,18 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             if (m_drive->GetSplinePercentComplete() > 0.80 ||
                 m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
                 m_claw->cubeLaunch();
+                m_autoState++;
+            }
+            break;
+        case 3:
+            if (m_drive->GetSplinePercentComplete() > 1.0) {
+                if (direction == AutoRoutineBase::AutoDirection::Left) {
+                    m_drive->SplineDrive(&left_switch_reset::left_switch_reset);
+                }
+                else if (direction == AutoRoutineBase::AutoDirection::Right) {
+                    m_drive->SplineDrive(
+                        &right_switch_reset::right_switch_reset);
+                }
                 m_autoState++;
             }
             break;

@@ -1,10 +1,14 @@
 #include "src/auto/SideSwitch.h"
 #include "src/auto/profiles/rightsideswitch_trajectory.h"
 #include "src/auto/profiles/leftsideswitch_trajectory.h"
+#include "src/auto/profiles/leftswitchreset_trajectory.h"
+#include "src/auto/profiles/rightswitchreset_trajectory.h"
 
 using namespace frc;
 using namespace left_side_switch;
 using namespace right_side_switch;
+using namespace right_switch_reset;
+using namespace left_switch_reset;
 
 namespace frc973 {
 SideSwitch::SideSwitch(Drive *drive, Elevator *elevator, Intake *intake,
@@ -46,6 +50,18 @@ void SideSwitch::Execute(AutoRoutineBase::AutoDirection direction) {
             if (m_drive->GetSplinePercentComplete() > 0.8 ||
                 m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
                 m_claw->cubeLaunch();
+                m_autoState++;
+            }
+            break;
+        case 3:
+            if (m_drive->GetSplinePercentComplete() > 1.0) {
+                if (direction == AutoRoutineBase::AutoDirection::Left) {
+                    m_drive->SplineDrive(&left_switch_reset::left_switch_reset);
+                }
+                else if (direction == AutoRoutineBase::AutoDirection::Right) {
+                    m_drive->SplineDrive(
+                        &right_switch_reset::right_switch_reset);
+                }
                 m_autoState++;
             }
             break;
