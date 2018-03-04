@@ -13,4 +13,5 @@ double GetRightDist(TrajectoryDescription *trajectory, double time);
 
 double GetHeadingDegrees(TrajectoryDescription *trajectory, double time);
 int GetLength(TrajectoryDescription *trajectory);
+double GetPercentComplete(TrajectoryDescription *trajectory, double time);
 }

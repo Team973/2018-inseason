@@ -84,7 +84,6 @@ void SplineDriveController::SetTarget(TrajectoryDescription *trajectory) {
     m_right_dist_offset = m_state->GetRightDist();
 
     m_angle_offset = m_state->GetAngle();
-
     m_trajectory = trajectory;
 }
 
@@ -158,6 +157,7 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     DBStringPrintf(DB_LINE5, "rvset%2.2lf rv%2.2lf", rightVel,
                    state->GetRightRate());
     DBStringPrintf(DB_LINE6, "apset%2.2lf ap%2.2lf", heading, AngleFromStart());
+    DBStringPrintf(DB_LINE7, "Done %.2lf", this->GetSplinePercentComplete());
 
     m_l_pos_setpt_log->LogDouble(leftDist);
     m_l_pos_real_log->LogDouble(LeftDistFromStart());
@@ -178,6 +178,11 @@ void SplineDriveController::Start() {
 }
 
 void SplineDriveController::Stop() {
+}
+
+double SplineDriveController::GetSplinePercentComplete() const {
+    return trajectories::GetPercentComplete(m_trajectory,
+                                            GetSecTime() - m_time_offset);
 }
 
 double SplineDriveController::LeftDistFromStart() const {

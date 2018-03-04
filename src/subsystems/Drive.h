@@ -143,6 +143,8 @@ public:
         return m_splineDriveController;
     }
 
+    double GetSplinePercentComplete();
+
     /**
      * Set a drive to drive straight
      *

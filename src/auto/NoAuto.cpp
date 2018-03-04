@@ -2,12 +2,12 @@
 using namespace frc;
 
 namespace frc973 {
-NoAuto::NoAuto(void) {
+NoAuto::NoAuto() {
 }
 
-NoAuto::~NoAuto(void) {
+NoAuto::~NoAuto() {
 }
 
-void NoAuto::Reset(void) {
+void NoAuto::Reset() {
 }
 };

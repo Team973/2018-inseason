@@ -39,6 +39,8 @@ public:
 
     void Stop() override;
 
+    double GetSplinePercentComplete() const;
+
     double LeftDistFromStart() const;
     double RightDistFromStart() const;
     double AngleFromStart() const;

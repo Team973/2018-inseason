@@ -48,4 +48,9 @@ double GetHeadingDegrees(TrajectoryDescription *trajectory, double time) {
 int GetLength(TrajectoryDescription *trajectory) {
     return trajectory->length;
 }
+
+double GetPercentComplete(TrajectoryDescription *trajectory, double time) {
+    int index = (int)(time / trajectory->left_trajectory->dt);
+    return (float)(index) / (float)(GetLength(trajectory));
+}
 }
