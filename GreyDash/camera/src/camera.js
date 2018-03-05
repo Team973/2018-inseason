@@ -12,7 +12,7 @@ function createCamera(url) {
   camera.setAttribute('src', url);
   camera.setAttribute('id', 'camera');
   camera.setAttribute('onerror', 'reloadCamera()');
-  cameraContainer.appendChild(camera);
+  cameraContainer.insertBefore(camera, cameraContainer.firstChild);
 }
 // window.setInterval(new XMLHttpRequest().open('GET', cameraUrl), 10);
 window.setTimeout(createCamera(cameraUrl), 2000);
