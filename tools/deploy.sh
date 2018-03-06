@@ -49,6 +49,18 @@ deploy () {
             rm -rf $LIBRARY_TMP_DIR;
             " > /dev/null 2>&1
         fi
+        echo "Checking for mjpg-streamer..."
+        ssh -4 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$TARGET_USER@$TARGET" 'test ! $(which mjpg-streamer | grep mjpg_streamer | wc -l) -eq 17' > /dev/null 2>&1
+        if [ $? -eq 0 ]
+        then
+            ./mjpg-streamer/deploystreamer.sh $TARGET
+        fi
+        echo "Checking for keep alive scripts..."
+        ssh -4 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$TARGET_USER@$TARGET" 'test ! $(which keep_streamer_alive | grep keep_streamer_alive | wc -l) -eq 17' > /dev/null 2>&1
+        if [ $? -eq 0 ]
+        then
+            ./mjpg-streamer/deploykeepalive.sh $TARGET
+        fi
         echo "Cleaning up..."
         ssh -4 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$TARGET_USER@$TARGET" ". /etc/profile.d/natinst-path.sh;
         chown lvuser $TARGET_DIR/FRCUserProgram;

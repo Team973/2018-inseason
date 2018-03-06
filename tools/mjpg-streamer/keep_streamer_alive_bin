@@ -1,0 +1,23 @@
+#!/bin/sh
+
+source /etc/default/mjpg-streamer
+
+prev_video_status=0
+video_status=0
+update_video_status() {
+    video_status=`ls -l /dev/video*`
+}
+update_video_status
+
+while true; do
+    update_video_status
+    if [[ $video_status != $prev_video_status ]] ; then
+        echo "video device changed"
+        for i in $(seq 1 4); do
+            v4l2-ctl -c focus_auto=0 -d /dev/v4l/by-id/${ID[$i]}
+        done
+        /etc/init.d/mjpg-streamer restart
+        prev_video_status=$video_status
+    fi
+    sleep 1
+done
