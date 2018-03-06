@@ -59,7 +59,8 @@ Robot::Robot()
               new Relay(COMPRESSOR_RELAY, Relay::Direction::kForwardOnly))
         , m_compressor(
               new GreyCompressor(m_airPressureSwitch, m_compressorRelay, this))
-        , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick))
+        , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick,
+                                  m_intakeCamera, m_forkCamera, m_greyCam))
         , m_autonomous(new Autonomous(m_disabled, m_drive, m_elevator, m_intake,
                                       m_claw, m_gyro))
         , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick, m_claw,
@@ -76,8 +77,8 @@ void Robot::Initialize() {
     m_compressor->Enable();
     m_cameraServer->AddCamera(m_intakeCamera);
     m_cameraServer->AddCamera(m_forkCamera);
-    m_intakeCamera.SetVideoMode(VideoMode::PixelFormat::kMJPEG, 640, 360, 30);
-    m_forkCamera.SetVideoMode(VideoMode::PixelFormat::kMJPEG, 640, 360, 30);
+    m_intakeCamera.SetVideoMode(VideoMode::PixelFormat::kMJPEG, 160, 120, 10);
+    m_forkCamera.SetVideoMode(VideoMode::PixelFormat::kMJPEG, 160, 120, 10);
     m_greyCam.SetSource(m_intakeCamera);
 }
 

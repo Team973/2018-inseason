@@ -136,6 +136,16 @@ inline double limit(double x, double maxMagnitude) {
     return fmin(maxMagnitude, fmax(-maxMagnitude, x));
 }
 
+inline double CalcAngleError(double x, double y) {
+    double ret = std::fmod(x - y + 180.0, 360) - 180;
+    if (ret < -180) {
+        return ret + 360.0;
+    }
+    else {
+        return ret;
+    }
+}
+
 /**
  * Return 0 if |n| is within +/- |threshold|, otherwise return |n|
  * Useful for joysticks that aren't quite centered at zero
