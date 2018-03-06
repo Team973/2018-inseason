@@ -1,7 +1,7 @@
 {
     "name": "GreyDash",
-    "version": "2.1.0",
-    "description": "Robot control dashboard boilerplate for FRC.",
+    "version": "2018.1.0",
+    "description": "Team 973's 2018 Dashboard for PowerUp.",
     "main": "src/main.js",
     "scripts": {
         "start": "electron .",
@@ -12,18 +12,18 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Team973/GreyDash"
+        "url": "git+https://github.com/Team973/2018-inseason"
     },
     "author": "Team 973 The Greybots <973greybots@gmail.com>",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/Team973/GreyDash/issues"
+        "url": "https://github.com/Team973/2018-inseason/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+label%3Agreydash"
     },
     "homepage": "https://github.com/Team973",
     "build": {
         "appId": "com.greybots.GreyDash",
         "productName": "GreyDash",
-        "copyright": "Copyright © 2018 Team 973",
+        "copyright": "Copyright © 2018 Team 973 The Greybots",
         "mac": {
             "category": "public.app-category.utilities"
         },
