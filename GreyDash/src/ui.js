@@ -94,6 +94,7 @@ for (let i = 0; i < config.charts.length; i += 1) {
     tooltip: config.charts[i].settings.tooltip,
     minValue: config.charts[i].settings.minValue,
     maxValue: config.charts[i].settings.maxValue,
+    interpolation: 'step',
   });
   config.charts[i].chart.streamTo(config.charts[i].displayChart, 0);
 
