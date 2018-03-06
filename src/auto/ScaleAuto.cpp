@@ -16,7 +16,7 @@ ScaleAuto::ScaleAuto(Drive *drive, Elevator *elevator, Intake *intake,
         , m_autoTimer(0) {
 }
 
-ScaleAuto::~ScaleAuto(void) {
+ScaleAuto::~ScaleAuto() {
 }
 
 void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
@@ -24,10 +24,12 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
     switch (m_autoState) {
         case 0:
             if (direction == AutoRoutineBase::AutoDirection::Left) {
-                m_drive->SplineDrive(&left_scale::left_scale);
+                m_drive->SplineDrive(&left_scale::left_scale,
+                                     Drive::RelativeTo::Now);
             }
             else if (direction == AutoRoutineBase::AutoDirection::Right) {
-                m_drive->SplineDrive(&right_scale::right_scale);
+                m_drive->SplineDrive(&right_scale::right_scale,
+                                     Drive::RelativeTo::Now);
             }
             m_intake->Open();
             m_intake->LowerIntake();
@@ -37,14 +39,15 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             m_autoState++;
             break;
         case 1:
-            if (GetMsecTime() - m_autoTimer > 500) {
+            if (GetMsecTime() - m_autoTimer > 1000) {
                 m_elevator->SetPosition(Elevator::SCALE_HIGH);
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
         case 2:
-            if (m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 5000) {
+            if (m_drive->GetSplinePercentComplete() > 0.80 ||
+                m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
                 m_claw->cubeLaunch();
                 m_autoState++;
             }
@@ -54,6 +57,6 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
     }
 }
 
-void ScaleAuto::Reset(void) {
+void ScaleAuto::Reset() {
 }
 };

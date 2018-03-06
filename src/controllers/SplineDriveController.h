@@ -26,7 +26,8 @@ public:
     SplineDriveController(DriveStateProvider *state, LogSpreadsheet *logger);
     virtual ~SplineDriveController();
 
-    void SetTarget(TrajectoryDescription *trajectory);
+    void SetTarget(TrajectoryDescription *trajectory,
+                   DriveBase::RelativeTo relativity);
 
     void CalcDriveOutput(DriveStateProvider *state,
                          DriveControlSignalReceiver *out) override;
@@ -38,6 +39,8 @@ public:
     void Start() override;
 
     void Stop() override;
+
+    double GetSplinePercentComplete() const;
 
     double LeftDistFromStart() const;
     double RightDistFromStart() const;

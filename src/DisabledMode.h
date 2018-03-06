@@ -6,15 +6,17 @@
 #include "lib/helpers/JoystickHelper.h"
 #include "src/Robot.h"
 #include "src/AutonomousMode.h"
-#include "src/auto/AutoRoutineBase.h"
 #include "lib/util/WrapDash.h"
+#include "src/auto/AutoRoutineBase.h"
 
 using namespace frc;
+using namespace cs;
 
 namespace frc973 {
 class Disabled {
 public:
-    Disabled(ObservableJoystick *driver, ObservableJoystick *codriver);
+    Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
+             UsbCamera intakeCamera, UsbCamera forkCamera, VideoSink greyCam);
     virtual ~Disabled();
 
     void DisabledInit();
@@ -33,5 +35,8 @@ private:
     ObservableJoystick *m_operatorJoystick;
 
     AutoRoutineBase::RobotStartPosition m_startPos;
+    UsbCamera m_intakeCamera;
+    UsbCamera m_forkCamera;
+    VideoSink m_greyCam;
 };
 };
