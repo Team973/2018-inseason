@@ -15,11 +15,11 @@ class Disabled;
 class ScaleAuto : public AutoRoutineBase {
 public:
     ScaleAuto(Drive *drive, Elevator *elevator, Intake *intake, Claw *claw);
-    virtual ~ScaleAuto(void);
+    virtual ~ScaleAuto();
 
     void Execute(AutoRoutineBase::AutoDirection direction) override;
 
-    void Reset(void);
+    void Reset() override;
 
 private:
     Drive *m_drive;

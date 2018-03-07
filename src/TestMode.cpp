@@ -1,6 +1,8 @@
 #include "src/TestMode.h"
+#include "src/auto/profiles/sample_trajectory.h"
 
 using namespace frc;
+using namespace sample;
 
 namespace frc973 {
 Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
@@ -105,9 +107,9 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::RightBumper:
                 if (pressedP) {
-                    /*m_driveMode = DriveMode::Spline;
-                    m_drive->SplineDrive(
-                        &generated_profiles::the_really_cool_trajectory);*/
+                    m_driveMode = DriveMode::Spline;
+                    m_drive->SplineDrive(&sample::sample,
+                                         Drive::RelativeTo::Now);
                 }
                 else {
                 }
@@ -234,23 +236,16 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::BtnX:
                 if (pressedP) {
-                    m_claw->manualKickOn();
+                    m_claw->kickOn();
                 }
                 else {
-                    m_claw->manualKickOff();
+                    m_claw->kickOff();
                 }
                 break;
             case DualAction::BtnY:
                 if (pressedP) {
-<<<<<<< HEAD
                     m_driveMode = DriveMode::Hanger;
                     m_hanger->EngagePTO();
-=======
-                    m_claw->manualClawOn();
-                }
-                else {
-                    m_claw->manualClawOff();
->>>>>>> claw-edit
                 }
                 break;
             case DualAction::Start:
