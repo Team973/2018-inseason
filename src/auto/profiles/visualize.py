@@ -4,6 +4,9 @@ bazel rule to run as the "main" source file.
 
 Display a visualization of the given json file on a mock field.  Pass
 in the location os the .so file for pathfinder.
+
+Invoke with the following command:
+    bazel run //src/auto/profiles:visualize_{SPLINE_NAME}
 """
 
 import sys

@@ -136,7 +136,12 @@ def _gen_path(pathfile, cdllPath):
         x_offset = sourceJSON.get('visual_x_offset', 0)
         y_offset = sourceJSON.get('visual_y_offset', 0)
 
-    return waypoints, (x_offset, y_offset), 25.205, lTraj, rTraj
+    return (
+        waypoints,
+        (x_offset, y_offset),
+        sourceJSON["wheelbase_width"],
+        lTraj, rTraj
+    )
 
 def _pairwise(iterable):
     " s -> (s0, s1), (s1, s2), (s2, s3), ... "
