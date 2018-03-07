@@ -9,5 +9,7 @@
       { "x": 0, "y": 0, "angle": 0 },
       { "x": 192, "y": 108, "angle": 90},
       { "x": 230, "y": 162, "angle": 0}
-    ]
+    ],
+    "visual_y_offset": 48,
+    "visual_x_offset": 24
 }

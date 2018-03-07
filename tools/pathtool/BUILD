@@ -29,3 +29,14 @@ py_binary(
     ],
     visibility = ["//visibility:public"],
 )
+
+py_library(
+    name = "libvisualize",
+    srcs = [
+        "libvisualize.py",
+    ],
+    deps = [
+        ":pypathfinder",
+    ],
+    visibility = ["//visibility:public"],
+)
