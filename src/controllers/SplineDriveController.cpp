@@ -157,7 +157,6 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     else {
         printf("Done\n");
         m_done = true;
-        this->Stop(out);
     }
 
     SmartDashboard::PutNumber("drive/outputs/anglesetpoint", heading - 360.0);
