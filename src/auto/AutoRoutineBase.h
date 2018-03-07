@@ -26,7 +26,7 @@ public:
 
     virtual void Execute(AutoDirection direction);
 
-    virtual void Reset(void);
+    virtual void Reset();
 
 protected:
     int m_autoState;

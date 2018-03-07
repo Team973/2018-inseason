@@ -13,7 +13,7 @@ void AutoRoutineBase::Execute(AutoDirection direction) {
     std::cout << "Routine Start" << std::endl;
 }
 
-void AutoRoutineBase::Reset(void) {
+void AutoRoutineBase::Reset() {
     m_autoState = 0;
 }
 };

@@ -1,7 +1,7 @@
 const fs = require('fs');
 const smoothie = require('smoothie');
 
-const config = JSON.parse(fs.readFileSync('src/configlisteners.json', 'utf-8'));
+const config = JSON.parse(fs.readFileSync(`${__dirname}/configlisteners.json`, 'utf-8'));
 
 // Set Defaults
 for (let i = 0; i < config.charts.length; i += 1) {
@@ -70,6 +70,7 @@ for (let i = 0; i < config.charts.length; i += 1) {
     tooltip: config.charts[i].settings.tooltip,
     minValue: config.charts[i].settings.minValue,
     maxValue: config.charts[i].settings.maxValue,
+    interpolation: 'step',
   });
   config.charts[i].chart.streamTo(config.charts[i].displayChart, 0);
 

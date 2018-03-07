@@ -207,10 +207,14 @@ ConstantArcSplineDriveController *Drive::ConstantArcSplineDrive(
 }
 
 SplineDriveController *Drive::SplineDrive(
-    trajectories::TrajectoryDescription *trajectory) {
+    trajectories::TrajectoryDescription *trajectory, RelativeTo relativity) {
     this->SetDriveController(m_splineDriveController);
-    m_splineDriveController->SetTarget(trajectory);
+    m_splineDriveController->SetTarget(trajectory, relativity);
     return m_splineDriveController;
+}
+
+double Drive::GetSplinePercentComplete() {
+    return m_splineDriveController->GetSplinePercentComplete();
 }
 
 /**

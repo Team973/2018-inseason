@@ -10,14 +10,16 @@
 
 using namespace frc;
 namespace frc973 {
-class SwitchAuto : public AutoRoutineBase {
+class Disabled;
+
+class TwoCubeAuto : public AutoRoutineBase {
 public:
-    SwitchAuto(Drive *drive, Elevator *elevator, Intake *intake, Claw *claw);
-    virtual ~SwitchAuto(void);
+    TwoCubeAuto(Drive *drive, Elevator *elevator, Intake *intake, Claw *claw);
+    virtual ~TwoCubeAuto();
 
     void Execute(AutoRoutineBase::AutoDirection direction) override;
 
-    void Reset(void);
+    void Reset() override;
 
 private:
     Drive *m_drive;
