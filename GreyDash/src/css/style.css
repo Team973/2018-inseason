@@ -7,14 +7,14 @@ html, body {
 }
 
 .content {
-    max-width: 90%;
+    max-width: 95%;
 }
 
 
 /* Charts */
 
 .chartContainer {
-    padding: 0.5% 2.5% 0.5% 2.5%;
+    padding: 0.2% 2% 0.2% 2%;
 }
 
 .responsiveCharts {
@@ -22,12 +22,18 @@ html, body {
     height: 100px;
 }
 
+/* Indicators */
+.indicators {
+    padding: 0% 2% 0% 2%;
+}
+
 /* Gyro */
 
 .gyro {
     width: 175px;
     height: 175px;
-    margin-top: 15px;
+    display: block;
+    margin: auto;
 }
 
 .gyroDial {
@@ -48,4 +54,11 @@ svg {
     -webkit-transform-origin: center;
     -ms-transform-origin: center;
     transform-origin: center;
+}
+
+/* Timer */
+
+.timer {
+    text-align: center;
+    font: 125px Roboto, sans-serif;
 }
