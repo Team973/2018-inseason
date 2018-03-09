@@ -14,7 +14,7 @@ using namespace frc;
 namespace frc973 {
 Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
                Claw *claw, Drive *drive, Elevator *elevator, Intake *intake,
-               Hanger *hanger)
+               Hanger *hanger, GreyLight *greylight)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_claw(claw)
@@ -24,7 +24,10 @@ Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_intake(intake)
         , m_elevatorMode(ElevatorMode::percentOutput)
         , m_intakeMode(IntakeMode::manual)
-        , m_hanger(hanger) {
+        , m_hanger(hanger)
+        , m_greyLight(greylight)
+        , m_intakeSignal(
+              new LightPattern::Flash({0, 255, 0}, {0, 0, 0}, 50, 15)) {
 }
 
 Teleop::~Teleop() {
@@ -135,6 +138,10 @@ void Teleop::TeleopPeriodic() {
             m_claw->kickOff();
             m_elevatorMode = ElevatorMode::motionMagic;
             m_elevator->SetPosition(Elevator::VAULT);
+            m_greyLight->SetPixelStateProcessor(m_intakeSignal);
+            m_intakeMode = IntakeMode::switchRaising;
+            break;
+        case IntakeMode::switchRaising:
             if (m_elevator->GetPosition() > 2.0) {
                 m_intake->Open();
             }

@@ -8,6 +8,7 @@
 #include "Flash.h"
 
 using namespace std::chrono;
+#include <iostream>
 namespace LightPattern {
 
 Flash::Flash(Color first, Color second, int hz, int count)
@@ -26,6 +27,7 @@ void Flash::SetFrequency(int hz) {
 }
 
 void Flash::Tick(PixelState& state) {
+    std::cout << "Testing" << std::endl;
     if (m_count > 0 && m_loopCount > m_count) {
         std::fill(state.pixels.begin(), state.pixels.end(), m_second);
         return;
