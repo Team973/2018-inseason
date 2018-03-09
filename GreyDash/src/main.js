@@ -95,7 +95,6 @@ function createWindow() {
     console.log(error);
   });
   // Create the browser window.
-  const error = 8; // Electron seems to have an error of 8 px at 1080p
   const x = electron.screen.getPrimaryDisplay().bounds.x;
   const y = electron.screen.getPrimaryDisplay().bounds.y;
   const width = electron.screen.getPrimaryDisplay().bounds.width;
