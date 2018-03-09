@@ -214,6 +214,13 @@ app.on('ready', () => {
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
+  // On OS X it is common for applications and their menu bar
+  // to stay active until the user quits explicitly with Cmd + Q.
+  // Not like we're creating a consumer application though.
+  // Let's just kill it anyway.
+  // If you want to restore the standard behavior, uncomment the next line.
+
+  // if (process.platform !== 'darwin')
   app.quit();
 });
 
