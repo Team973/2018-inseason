@@ -79,11 +79,11 @@ public:
         m_onTarget = false;
     }
 
-    void Start() override {
+    void Start(DriveControlSignalReceiver *out) override {
         printf("Turning on PID Mode\n");
     }
 
-    void Stop() override {
+    void Stop(DriveControlSignalReceiver *out) override {
         printf("Turning off PID Mode\n");
     }
 

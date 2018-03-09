@@ -51,7 +51,7 @@ private:
     {
         percentOutput,
         motionMagic,
-        zero
+        zeroingDown
     };
 
     Elevator *m_elevator;
@@ -64,6 +64,7 @@ private:
     {
         manual,
         switchIntaking,
+        switchTaking,
         switchGrabbing,
         switchStandby,
         switchEjecting,

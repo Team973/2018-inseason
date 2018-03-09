@@ -26,7 +26,8 @@ public:
     SplineDriveController(DriveStateProvider *state, LogSpreadsheet *logger);
     virtual ~SplineDriveController();
 
-    void SetTarget(TrajectoryDescription *trajectory);
+    void SetTarget(TrajectoryDescription *trajectory,
+                   DriveBase::RelativeTo relativity);
 
     void CalcDriveOutput(DriveStateProvider *state,
                          DriveControlSignalReceiver *out) override;
@@ -35,9 +36,15 @@ public:
         return m_done;
     }
 
-    void Start() override;
+    void Start(DriveControlSignalReceiver *out) override {
+        printf("Turning on Spline Mode\n");
+    }
 
-    void Stop() override;
+    void Stop(DriveControlSignalReceiver *out) override {
+        printf("Turning off Spline Mode\n");
+    }
+
+    double GetSplinePercentComplete() const;
 
     double LeftDistFromStart() const;
     double RightDistFromStart() const;
@@ -46,6 +53,7 @@ public:
 private:
     DriveStateProvider *m_state;
     TrajectoryDescription *m_trajectory;
+    DriveControlSignalReceiver *m_driveOutput;
     double m_left_dist_offset, m_right_dist_offset, m_angle_offset,
         m_time_offset;
     bool m_done;

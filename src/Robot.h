@@ -37,6 +37,7 @@
 
 using namespace frc;
 using namespace ctre;
+using namespace cs;
 
 namespace frc973 {
 class Disabled;
@@ -90,6 +91,11 @@ private:
 
     LogSpreadsheet *m_logger;
 
+    UsbCamera m_forkCamera;
+    UsbCamera m_intakeCamera;
+    CameraServer *m_cameraServer;
+    VideoSink m_greyCam;
+
     Solenoid *m_cubeClamp;
     Solenoid *m_clawKicker;
     Solenoid *m_intakePosition;
@@ -98,7 +104,7 @@ private:
     TalonSRX *m_leftRoller;
     DigitalInput *m_cubeSensor;
     TalonSRX *m_elevatorMotor;
-    Solenoid *m_hangerpto;
+    Solenoid *m_hangerPTO;
     TalonSRX *m_forkliftTalon;
     Elevator *m_elevator;
     Claw *m_claw;

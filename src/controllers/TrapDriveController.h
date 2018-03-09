@@ -30,11 +30,11 @@ public:
         return m_done;
     }
 
-    void Start() override {
+    void Start(DriveControlSignalReceiver *out) override {
         printf("Turning on Trap Mode\n");
     }
 
-    void Stop() override {
+    void Stop(DriveControlSignalReceiver *out) override {
         printf("Turning off Trap Mode\n");
     }
 
