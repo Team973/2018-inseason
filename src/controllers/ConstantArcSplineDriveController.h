@@ -38,9 +38,9 @@ public:
         return m_done;
     }
 
-    void Start() override;
+    void Start(DriveControlSignalReceiver *out) override;
 
-    void Stop() override;
+    void Stop(DriveControlSignalReceiver *out) override;
 
     double DistFromStart() const;
     double AngleFromStart() const;
