@@ -7,6 +7,7 @@
  * - Allen
  * - Chris L
  * - Garrett R
+ * - Cole B
  **/
 
 #pragma once
@@ -32,6 +33,7 @@
 #include "lib/bases/CoopMTRobot.h"
 #include "ctre/Phoenix.h"
 #include "lib/helpers/GreyTalon.h"
+#include "lib/helpers/GreyLight.h"
 
 using namespace frc;
 using namespace ctre;
@@ -104,7 +106,6 @@ private:
     TalonSRX *m_elevatorMotor;
     Solenoid *m_hangerPTO;
     TalonSRX *m_forkliftTalon;
-
     Elevator *m_elevator;
     Claw *m_claw;
     Intake *m_intake;
@@ -114,7 +115,7 @@ private:
     DigitalInput *m_airPressureSwitch;
     Relay *m_compressorRelay;
     GreyCompressor *m_compressor;
-
+    GreyLight *m_greylight;
     Disabled *m_disabled;
     Autonomous *m_autonomous;
     Teleop *m_teleop;

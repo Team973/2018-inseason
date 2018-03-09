@@ -59,6 +59,7 @@ Robot::Robot()
               new Relay(COMPRESSOR_RELAY, Relay::Direction::kForwardOnly))
         , m_compressor(
               new GreyCompressor(m_airPressureSwitch, m_compressorRelay, this))
+        , m_greylight(new GreyLight(NUM_LED))
         , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick,
                                   m_intakeCamera, m_forkCamera, m_greyCam))
         , m_autonomous(new Autonomous(m_disabled, m_drive, m_elevator, m_intake,
@@ -66,7 +67,8 @@ Robot::Robot()
         , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick, m_claw,
                               m_drive, m_elevator, m_intake, m_hanger))
         , m_test(new Test(m_driverJoystick, m_operatorJoystick, m_drive,
-                          m_elevator, m_intake, m_claw, m_hanger)) {
+                          m_elevator, m_intake, m_claw, m_hanger,
+                          m_greylight)) {
     std::cout << "Constructed a Robot!" << std::endl;
 }
 
