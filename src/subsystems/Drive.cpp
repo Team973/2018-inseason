@@ -411,10 +411,10 @@ void Drive::SetDriveOutputVBus(double left, double right) {
 }
 void Drive::ConfigDriveCurrentLimit(double limit) {
     m_leftDriveTalonA->EnableCurrentLimit(true);
-    m_leftDriveTalonA->ConfigPeakCurrentLimit(limit, 10);
+    m_leftDriveTalonA->ConfigContinuousCurrentLimit(limit, 10);
 
     m_rightDriveTalonA->EnableCurrentLimit(true);
-    m_rightDriveTalonA->ConfigPeakCurrentLimit(limit, 10);
+    m_rightDriveTalonA->ConfigContinuousCurrentLimit(limit, 10);
 }
 void Drive::DisableDriveCurrentLimit() {
     m_leftDriveTalonA->EnableCurrentLimit(false);
