@@ -41,9 +41,11 @@ void Flash::Tick(PixelState& state) {
         m_loopCount++;
     }
     if (m_color) {
+        std::cout << "Foreground Color" << std::endl;
         std::fill(state.pixels.begin(), state.pixels.end(), m_first);
     }
     else {
+        std::cout << "Background Color" << std::endl;
         std::fill(state.pixels.begin(), state.pixels.end(), m_second);
     }
 }

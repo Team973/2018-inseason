@@ -2,6 +2,7 @@
 #include "lib/helpers/GreyLight.h"
 #include "lib/pixelprocessors/LinearScale.h"
 #include "lib/pixelprocessors/SolidColor.h"
+#include "lib/pixelprocessors/Flash.h"
 
 #include <stdio.h>
 #include <iostream>
@@ -50,7 +51,30 @@ int main(int argc, char* argv[]) {
         "LED Simulator");  // Window with label 'LED Simulator',
                            // x=numLed*diameter, y=diameter
     sf::CircleShape* LEDs = createCircles(numLEDs);
+    Flash *flash = new Flash({0,255,0},{0,0,0},50,15);
+    SolidColor *solid = new SolidColor({255,0,0});
+    led->SetPixelStateProcessor(flash);
+    int count = 1;
+    int state = 0;
     while (window.isOpen()) {
+        std::cout<<"count: "<<count<<" state: "<<state<<std::endl;
+        if(count++%50==0){
+          state++;
+        }
+        if(state==0){
+
+        }
+        if(state==1){
+          solid->SetColor({255,0,0});
+          led->SetPixelStateProcessor(solid);
+        }
+        if(state==2){
+          solid->SetColor({0,0,0});
+        }
+        if(state==3){
+          led->SetPixelStateProcessor(flash);
+          state=0;
+        }
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
