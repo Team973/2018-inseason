@@ -17,6 +17,9 @@ py_test(
     deps = [
         ":pypathfinder",
     ],
+    data = [
+        "test_spline_description.json",
+    ],
 )
 
 py_binary(

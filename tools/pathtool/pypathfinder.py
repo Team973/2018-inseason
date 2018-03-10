@@ -238,7 +238,7 @@ def set_cdll_path(path=None):
 
     return (Waypoint, Segment, generate_trajectory, generate_tank_trajectory)
 
-def parse_spline_file(source, cdllPath):
+def parse_spline_file(source, cdllPath=None):
     """
     Read in the spline description file and generate the waypoints
     described by that file

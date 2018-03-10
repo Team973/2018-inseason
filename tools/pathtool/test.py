@@ -1,5 +1,5 @@
 import unittest
-from pypathfinder import set_cdll_path
+from pypathfinder import set_cdll_path, parse_spline_file
 import math
 from itertools import tee
 
@@ -111,6 +111,19 @@ class TestPyPathfinder(unittest.TestCase):
         for segment in lTraj + rTraj:
             self.assertAlmostEqual(segment.dt, 0.05)
 
+    def test_file_parsing(self):
+        """
+        Parse a json file that describes the spline.  Mostly check that it
+        doesn't crash and that we can read most of the fields form the
+        description
+        """
+        lTraj, rTraj, waypoints, spline_desc = parse_spline_file(
+                'tools/pathtool/test_spline_description.json')
+
+        for segment in lTraj + rTraj:
+            self.assertAlmostEqual(segment.dt, spline_desc['timestep'])
+        self.assertEqual(len(spline_desc['waypoints']), 2)
+        self.assertEqual(spline_desc['name'], 'test_spline')
 
 if __name__ == '__main__':
     unittest.main()
