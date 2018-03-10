@@ -7,7 +7,7 @@ import math
 import json
 from itertools import tee
 from PIL import Image, ImageDraw
-from tools.pathtool.pypathfinder import set_cdll_path
+from tools.pathtool.pypathfinder import parse_spline_file
 
 PX_PER_INCH = 8
 FIELD_WIDTH = 54 * 12 // 2
@@ -22,8 +22,8 @@ def visualize_path(pathfile, cdllPath):
     """
     img = _create_field_img()
     _draw_field(img)
-    waypoints, offset, wheelbase_width, lTraj, rTraj = _gen_path(pathfile, cdllPath)
-    _draw_path(img, waypoints, offset, wheelbase_width, lTraj, rTraj)
+    lTraj, rTraj, waypoints, spline_desc = parse_spline_file(pathfile, cdllPath)
+    _draw_path(img, lTraj, rTraj, waypoints, spline_desc)
     _img_show_and_wait(img)
 
 def _create_field_img():
@@ -108,54 +108,20 @@ def _draw_field(img):
         bottomright = (208.313, cube_offset + cube_width)
         _draw_rect(img, cursor, topleft, bottomright, fill=(255, 255, 0))
 
-def _gen_path(pathfile, cdllPath):
-    """
-    Generate a trajectory based on the given json file
-    and grab some settings for how to visualize it
-
-    Visual_{x,y}_offset are settings in the json file that the user can
-    use to shift the spline around on fieldspace.
-    """
-    Waypoint, _, _, generate_tank_trajectory = set_cdll_path(cdllPath)
-
-    with open(pathfile) as inputFile:
-        sourceJSON = json.load(inputFile)
-        waypoints = []
-        for waypoint in sourceJSON["waypoints"]:
-            waypoints.append(
-                Waypoint(x=waypoint["x"], y=waypoint["y"],
-                         angle=(math.pi / 180.0) * waypoint["angle"])
-            )
-
-        lTraj, rTraj = generate_tank_trajectory(
-            waypoints, sourceJSON["timestep"],
-            sourceJSON["max_vel"], sourceJSON["max_accel"],
-            sourceJSON["max_jerk"], sourceJSON["wheelbase_width"],
-            reverse=sourceJSON.get('reverse', False))
-
-        x_offset = sourceJSON.get('visual_x_offset', 0)
-        y_offset = sourceJSON.get('visual_y_offset', 0)
-
-    return (
-        waypoints,
-        (x_offset, y_offset),
-        sourceJSON["wheelbase_width"],
-        lTraj, rTraj
-    )
-
 def _pairwise(iterable):
     " s -> (s0, s1), (s1, s2), (s2, s3), ... "
     a, b = tee(iterable)
     next(b, None)
     return zip(a, b)
 
-def _draw_path(img, waypoints, offset, wheelbase_width, lTraj, rTraj):
+def _draw_path(img, lTraj, rTraj, waypoints, spline_desc):
     """
     Draw the given path.
     Note that image coordinates start in the top-left while our standard
     is for the coordinates to start in the bottom-left.
     """
-    x_offset, y_offset = offset
+    x_offset, y_offset = (spline_desc.get('visual_x_offset', 0),
+                          spline_desc.get('visual_y_offset', 0))
 
     cursor = ImageDraw.Draw(img)
     for pointA, pointB in _pairwise(lTraj):
@@ -173,21 +139,21 @@ def _draw_path(img, waypoints, offset, wheelbase_width, lTraj, rTraj):
     for waypoint in waypoints:
         left_wheel = (
             waypoint.x + x_offset + (
-                wheelbase_width / 2 *
+                spline_desc['wheelbase_width'] / 2 *
                 math.cos(waypoint.angle + math.pi / 2)
             ),
             FIELD_HEIGHT - waypoint.y - y_offset + (
-                wheelbase_width / 2 *
+                spline_desc['wheelbase_width'] / 2 *
                 math.sin(waypoint.angle + math.pi / 2)
             )
         )
         right_wheel = (
             waypoint.x + x_offset + (
-                wheelbase_width / 2 *
+                spline_desc['wheelbase_width'] / 2 *
                 math.cos(waypoint.angle - math.pi / 2)
             ),
             FIELD_HEIGHT - waypoint.y - y_offset + (
-                wheelbase_width / 2 *
+                spline_desc['wheelbase_width'] / 2 *
                 math.sin(waypoint.angle - math.pi / 2)
             )
         )
