@@ -193,12 +193,6 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     m_right_output->LogDouble(right_output);
 }
 
-void SplineDriveController::Start() {
-}
-
-void SplineDriveController::Stop() {
-}
-
 double SplineDriveController::GetSplinePercentComplete() const {
     return trajectories::GetPercentComplete(m_trajectory,
                                             GetSecTime() - m_time_offset);

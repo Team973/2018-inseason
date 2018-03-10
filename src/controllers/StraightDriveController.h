@@ -31,11 +31,11 @@ public:
         return false;
     }
 
-    void Start() override {
+    void Start(DriveControlSignalReceiver *out) override {
         printf("Turning on Straight Mode\n");
     }
 
-    void Stop() override {
+    void Stop(DriveControlSignalReceiver *out) override {
         printf("Turning off Straight Mode\n");
     }
 

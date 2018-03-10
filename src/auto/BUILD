@@ -31,6 +31,8 @@ cc_library(
         "//src/auto/profiles:twocubeintakingright_header",
         "//src/auto/profiles:rightswitchreset_header",
         "//src/auto/profiles:leftswitchreset_header",
+        "//src/auto/profiles:rightsideswitchbackoff_header",
+        "//src/auto/profiles:leftsideswitchbackoff_header",
     ],
     visibility = ["//visibility:public"],
 )

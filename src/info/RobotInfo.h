@@ -51,6 +51,9 @@ static const int COMPRESSOR_RELAY = 0;
 static const int DRIVER_JOYSTICK_PORT = 0;
 static const int OPERATOR_JOYSTICK_PORT = 1;
 
+// LEDs
+static const int NUM_LED = 26;
+
 // Drive
 static constexpr double DRIVE_WIDTH = 25.205;
 static constexpr double DRIVE_WHEEL_DIAMETER = 5.0;

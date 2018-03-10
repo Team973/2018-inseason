@@ -91,9 +91,6 @@ void Intake::SpinCube(int direction) {
 
 void Intake::TaskPeriodic(RobotMode mode) {
     SmartDashboard::PutBoolean("intake/sensors/bannersensor", IsCubeIn());
-    DBStringPrintf(DB_LINE1, "ric %.2lf lif %.2lf",
-                   m_rightRoller->GetOutputCurrent(),
-                   m_leftRoller->GetOutputCurrent());
     switch (m_intakeState) {
         case IntakeState::Idle:
             break;

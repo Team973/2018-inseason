@@ -33,7 +33,7 @@ public:
     };
 
     static constexpr double GROUND = 0.0;
-    static constexpr double VAULT = 3.0;
+    static constexpr double VAULT = 4.5;
     static constexpr double LOW_GOAL = 30.0;
     static constexpr double HANGING = 55.0;
     static constexpr double SCALE_LOW = 64.0;

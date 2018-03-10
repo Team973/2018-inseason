@@ -3,12 +3,23 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GreyDash Camera</title>
+
+    <!-- Material Design Lite -->
+    <link rel="stylesheet" href="../../node_modules/material-design-lite/material.css">
+    <script src="../../node_modules/material-design-lite/material.js"></script>
+
     <link href="css/style.css" rel="stylesheet">
+    <link href="fonts/fonts.css" rel="stylesheet">
 </head>
 
 <body>
-    <div id="cameraContainer"></div>
+    <div id="cameraContainer">
+        <button id="refresh" class="mdl-button mdl-button--fab mdl-button--colored" onclick="location.reload();">
+            <i class="material-icons">autorenew</i>
+        </button>
+    </div>
     <script src="camera.js"></script>
 </body>
 
