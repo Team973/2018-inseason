@@ -7,6 +7,7 @@
  * - Allen
  * - Chris L
  * - Garrett R
+ * - Cole B
  **/
 
 #pragma once
@@ -32,9 +33,11 @@
 #include "lib/bases/CoopMTRobot.h"
 #include "ctre/Phoenix.h"
 #include "lib/helpers/GreyTalon.h"
+#include "lib/helpers/GreyLight.h"
 
 using namespace frc;
 using namespace ctre;
+using namespace cs;
 
 namespace frc973 {
 class Disabled;
@@ -90,6 +93,11 @@ private:
     LogCell *m_matchIdentifier;
     LogCell *m_gameSpecificMessage;
 
+    UsbCamera m_forkCamera;
+    UsbCamera m_intakeCamera;
+    CameraServer *m_cameraServer;
+    VideoSink m_greyCam;
+
     Solenoid *m_cubeClamp;
     Solenoid *m_clawKicker;
     Solenoid *m_intakePosition;
@@ -98,9 +106,8 @@ private:
     TalonSRX *m_leftRoller;
     DigitalInput *m_cubeSensor;
     TalonSRX *m_elevatorMotor;
-    Solenoid *m_hangerpto;
+    Solenoid *m_hangerPTO;
     TalonSRX *m_forkliftTalon;
-
     Elevator *m_elevator;
     Claw *m_claw;
     Intake *m_intake;
@@ -110,7 +117,7 @@ private:
     DigitalInput *m_airPressureSwitch;
     Relay *m_compressorRelay;
     GreyCompressor *m_compressor;
-
+    GreyLight *m_greylight;
     Disabled *m_disabled;
     Autonomous *m_autonomous;
     Teleop *m_teleop;

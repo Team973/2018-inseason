@@ -37,15 +37,39 @@ double GetRightDist(TrajectoryDescription *trajectory, double time) {
     return trajectory->right_trajectory[index].position;
 }
 
+double GetLeftAcceleration(TrajectoryDescription *trajectory, double time) {
+    int index = (int)(time / trajectory->left_trajectory->dt);
+    if (index >= GetLength(trajectory)) {
+        return trajectory->left_trajectory[GetLength(trajectory) - 1]
+            .acceleration;
+    }
+    return trajectory->left_trajectory[index].acceleration;
+}
+
+double GetRightAcceleration(TrajectoryDescription *trajectory, double time) {
+    int index = (int)(time / trajectory->right_trajectory->dt);
+    if (index >= GetLength(trajectory)) {
+        return trajectory->right_trajectory[GetLength(trajectory) - 1]
+            .acceleration;
+    }
+    return trajectory->right_trajectory[index].acceleration;
+}
+
 double GetHeadingDegrees(TrajectoryDescription *trajectory, double time) {
     int index = (int)(time / trajectory->left_trajectory->dt);
     if (index >= GetLength(trajectory)) {
-        return trajectory->left_trajectory[GetLength(trajectory) - 1].heading;
+        return trajectory->left_trajectory[GetLength(trajectory) - 1].heading *
+               180.0 / Constants::PI;
     }
     return trajectory->left_trajectory[index].heading * 180.0 / Constants::PI;
 }
 
 int GetLength(TrajectoryDescription *trajectory) {
     return trajectory->length;
+}
+
+double GetPercentComplete(TrajectoryDescription *trajectory, double time) {
+    int index = (int)(time / trajectory->left_trajectory->dt);
+    return (float)(index) / (float)(GetLength(trajectory));
 }
 }
