@@ -67,12 +67,23 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 3:
-            if (m_drive->GetSplinePercentComplete() > 0.95 ||
+            if (m_drive->GetSplinePercentComplete() > 0.85 ||
                 m_drive->OnTarget()) {
                 m_claw->cubeLaunch();
                 m_autoState++;
             }
             break;
+        case 4:
+            if (m_drive->GetSplinePercentComplete() > 1.0) {
+                m_drive->PIDDrive(-50.0, 0.0, Drive::RelativeTo::Now, 0.8);
+                m_autoState++;
+            }
+            break;
+        case 5:
+            if (m_drive->OnTarget()) {
+                m_elevator->SetPosition(Elevator::GROUND);
+                m_autoState++;
+            }
         default:
             break;
     }

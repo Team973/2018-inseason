@@ -73,8 +73,12 @@ void SideSwitch::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 4:
+            if (m_drive->GetSplinePercentComplete() > 0.5) {
+                m_intake->LowerIntake();
+            }
             if (m_drive->GetSplinePercentComplete() > 1.0) {
                 m_drive->OpenloopArcadeDrive(0.0, 0.0);
+                m_elevator->SetPosition(Elevator::GROUND);
                 m_autoState++;
             }
             break;
