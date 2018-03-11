@@ -146,8 +146,6 @@ void Claw::goToState(ClawState newState) {
             m_clawKicker->Set(kickIdle);
             break;
         case ClawState::manual:
-            m_cubeClamp->Set(clawClosed);
-            m_clawKicker->Set(kickIdle);
             break;
         case ClawState::manualClaw:
             m_cubeClamp->Set(clawOpen);
