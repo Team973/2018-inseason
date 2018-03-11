@@ -6,13 +6,15 @@ using namespace frc;
 namespace frc973 {
 Disabled::Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
                    UsbCamera intakeCamera, UsbCamera forkCamera,
-                   VideoSink greyCam)
+                   VideoSink greyCam, GreyLight *greylight)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_startPos(AutoRoutineBase::RobotStartPosition::Center)
         , m_intakeCamera(intakeCamera)
         , m_forkCamera(forkCamera)
-        , m_greyCam(greyCam) {
+        , m_greyCam(greyCam)
+        , m_greylight(greylight)
+        , m_disabledSignal(new LightPattern::SolidColor({223, 113, 37})) {
 }
 
 Disabled::~Disabled() {
@@ -20,6 +22,7 @@ Disabled::~Disabled() {
 
 void Disabled::DisabledInit() {
     std::cout << "Disabled Start" << std::endl;
+    m_greylight->SetPixelStateProcessor(m_disabledSignal);
 }
 
 void Disabled::DisabledPeriodic() {
