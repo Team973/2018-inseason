@@ -19,7 +19,6 @@ Hanger::Hanger(TaskMgr *scheduler, LogSpreadsheet *logger, Drive *drive,
         , m_greylight(greylight)
         , m_ptoSignal(new LightPattern::SolidColor({255, 0, 0})) {
     this->m_scheduler->RegisterTask("Hanger", this, TASK_PERIODIC);
-
     m_forkliftTalon->SetNeutralMode(NeutralMode::Brake);
 }
 

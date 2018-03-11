@@ -138,6 +138,7 @@ void Teleop::TeleopPeriodic() {
             m_claw->kickOff();
             m_elevatorMode = ElevatorMode::motionMagic;
             m_elevator->SetPosition(Elevator::VAULT);
+            m_intakeSignal->Reset();
             m_greyLight->SetPixelStateProcessor(m_intakeSignal);
             m_intakeMode = IntakeMode::switchRaising;
             break;
