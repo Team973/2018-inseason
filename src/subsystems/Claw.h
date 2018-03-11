@@ -33,7 +33,7 @@ public:
     enum kickState
     {
         active = true,
-        kickIdle = false,
+        kickIdle = false
     };
 
     enum ClawState
@@ -46,59 +46,39 @@ public:
         pushClosed,
         preLaunch,
         launch,
-        launchReset,
-        kickManual,
-        clawManual,
-        manual
+        launchReset
     };
 
+    void open();
     /*
      * When called, opens the claw arms
      */
-    void open();
-
+    void grab();
     /*
      * When called, closes claw arms, and
      * has all claw solenoids set to idle
      */
-    void grab();
-
+    void drop();
     /*
      * When called, opens claw arms to drop cube
      */
-    void drop();
-
+    void push();
     /*
      * When called, opens claw arms and
      * activates kicker
      */
-    void push();
-
-    /*
-     * When called, launches cube
-     */
-    void cubeLaunch();
-
+    void kickOn();
     /*
      * When called, activates kicker
      */
-    void manualKickOn();
-
+    void kickOff();
     /*
-     * When called, sets kick to manual
+     * When called, deactivates clawKicker
      */
-    void manualKickOff();
-
+    void cubeLaunch();
     /*
-     * When called, sets claw to open state
+     * When called, launches cube
      */
-    void manualClawOn();
-
-    /*
-     * When called, sets claw to manual
-     */
-    void manualClawOff();
-
     void TaskPeriodic(RobotMode mode);
 
 private:

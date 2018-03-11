@@ -203,7 +203,7 @@ public:
      * @param left Velocity to send to leftDriveTalon
      * @param right Velocity to send to rightDriveTalon
      */
-    void SetDriveOutputIPS(double left, double right);
+    void SetDriveOutputIPS(double left, double right) override;
 
     /*
      * Used by the DriveController to set motor values in inches
@@ -211,7 +211,7 @@ public:
      * @param left Position to send to leftDriveTalon
      * @param right Position to send to rightDriveTalon
      */
-    void SetDriveOutputPosInches(double left, double right);
+    void SetDriveOutputPosInches(double left, double right) override;
 
     /*
      * Used by the DriveController to set motor values in percent
@@ -219,9 +219,13 @@ public:
      * @param left Percent output to send to leftDriveTalon
      * @param right Percent output to send to rightDriveTalon
      */
-    void SetDriveOutputVBus(double left, double right);
+    void SetDriveOutputVBus(double left, double right) override;
 
-    void TaskPeriodic(RobotMode mode);
+    void ConfigDriveCurrentLimit(double limit);
+
+    void DisableDriveCurrentLimit();
+
+    void TaskPeriodic(RobotMode mode) override;
 
 private:
     LogSpreadsheet *m_logger;

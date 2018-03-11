@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include "WPILib.h"
+#include "ctre/Phoenix.h"
 #include "src/controllers/AssistedArcadeDriveController.h"
 #include "src/controllers/CheesyDriveController.h"
 #include "src/controllers/HangerDriveController.h"
@@ -407,6 +408,18 @@ void Drive::SetDriveOutputVBus(double left, double right) {
         m_leftDriveTalonA->Set(ControlMode::PercentOutput, -m_leftDriveOutput);
         m_rightDriveTalonA->Set(ControlMode::PercentOutput, m_rightDriveOutput);
     }
+}
+void Drive::ConfigDriveCurrentLimit(double limit) {
+    m_leftDriveTalonA->EnableCurrentLimit(true);
+    m_leftDriveTalonA->ConfigContinuousCurrentLimit(limit, 10);
+
+    m_rightDriveTalonA->EnableCurrentLimit(true);
+    m_rightDriveTalonA->ConfigContinuousCurrentLimit(limit, 10);
+}
+void Drive::DisableDriveCurrentLimit() {
+    m_leftDriveTalonA->EnableCurrentLimit(false);
+
+    m_rightDriveTalonA->EnableCurrentLimit(false);
 }
 
 void Drive::TaskPeriodic(RobotMode mode) {

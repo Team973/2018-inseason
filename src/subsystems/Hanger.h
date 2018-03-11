@@ -24,7 +24,7 @@ class LogSpreadsheet;
 class Hanger : public CoopTask {
 public:
     Hanger(TaskMgr *scheduler, LogSpreadsheet *logger, Drive *drive,
-           Elevator *elevator, Solenoid *hangerpto, TalonSRX *forkliftTalon,
+           Elevator *elevator, Solenoid *hangerPTO, TalonSRX *forkliftTalon,
            UsbCamera intakeCamera, UsbCamera forkCamera, VideoSink greyCam);
     virtual ~Hanger();
 
@@ -40,8 +40,16 @@ public:
 
     /**
      * Sets all forklift motors to a determined speed
+     * @param power Throttle from the joystick to set as forklift power
      **/
     void SetForkliftPower(double power);
+
+    /**
+     * Calls the HangerDriveController to drive the drive motors with PTO
+     *Engaged
+     * @param power Throttle from the joystick to set as PTO power
+     **/
+    void SetHangerPower(double power);
 
     void TaskPeriodic(RobotMode mode);
 
@@ -50,7 +58,7 @@ private:
     LogSpreadsheet *m_logger;
     Drive *m_drive;
     Elevator *m_elevator;
-    Solenoid *m_hangerpto;
+    Solenoid *m_hangerPTO;
     TalonSRX *m_forkliftTalon;
 
     UsbCamera m_intakeCamera;

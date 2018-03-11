@@ -40,11 +40,11 @@ public:
     void SetJoysticks(double throttle, double turn, bool isQuickTurn,
                       bool isHighGear);
 
-    void Start() override {
+    void Start(DriveControlSignalReceiver *out) override {
         printf("Turning on Cheesy Mode\n");
     }
 
-    void Stop() override {
+    void Stop(DriveControlSignalReceiver *out) override {
         printf("Turning off Cheesy Mode\n");
     }
 
