@@ -46,12 +46,12 @@ void Claw::cubeLaunch() {
     goToState(preLaunch);
 }
 
-void Claw::kickOn() {
-    m_clawKicker->Set(active);
+void Claw::manualClawOpen() {
+    m_cubeClamp->Set(clawOpen);
 }
 
-void Claw::kickOff() {
-    m_clawKicker->Set(kickIdle);
+void Claw::manualClawClosed() {
+    m_cubeClamp->Set(clawClosed);
 }
 
 void Claw::TaskPeriodic(RobotMode mode) {

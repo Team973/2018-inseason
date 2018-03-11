@@ -48,48 +48,52 @@ public:
         launch,
         launchReset
     };
-
-    void open();
     /*
      * When called, opens the claw arms
      */
-    void grab();
+    void open();
+
     /*
      * When called, closes claw arms, and
      * has all claw solenoids set to idle
      */
-    void drop();
+    void grab();
+
     /*
      * When called, opens claw arms to drop cube
      */
-    void push();
+    void drop();
+
     /*
      * When called, opens claw arms and
      * activates kicker
      */
-    void kickOn();
+    void push();
+
     /*
      * When called, activates kicker
      */
-    void kickOff();
-    /*
-     * When called, deactivates clawKicker
-     */
-    void cubeLaunch();
-    /*
-     * When called, launches cube
-     */
-    void manualClawOff();
-
-    /*
-     * Activates the kicker
-     */
     void kickOn();
 
     /*
-     * Deactivates the kicker
+     * When called, deactivates clawKicker
      */
     void kickOff();
+
+    /*
+     * When called, launches cube
+     */
+    void cubeLaunch();
+
+    /*
+     * When called, closes claw
+     */
+    void manualClawClosed();
+
+    /*
+     * Whe called, opens claw
+     */
+    void manualClawOpen();
 
     void TaskPeriodic(RobotMode mode);
 
