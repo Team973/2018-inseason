@@ -40,7 +40,6 @@ public:
 private:
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
-    uint32_t m_teleopTimer;
 
     Claw *m_claw;
 

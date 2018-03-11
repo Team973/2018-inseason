@@ -12,12 +12,14 @@
 using namespace frc;
 
 namespace frc973 {
+
+static bool g_hangingSignal = false;
+
 Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
                Claw *claw, Drive *drive, Elevator *elevator, Intake *intake,
                Hanger *hanger, GreyLight *greylight)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
-        , m_teleopTimer(0)
         , m_claw(claw)
         , m_drive(drive)
         , m_driveMode(DriveMode::Cheesy)
@@ -39,15 +41,14 @@ Teleop::~Teleop() {
 void Teleop::TeleopInit() {
     std::cout << "Teleop Start" << std::endl;
     m_intakeMode = IntakeMode::manual;
-    m_teleopTimer = GetSecTime();
     m_intake->Stop();
     m_intake->LowerIntake();
     m_intake->Close();
 }
 
 void Teleop::TeleopPeriodic() {
-    if (GetSecTime() - m_teleopTimer > 95 &&
-        GetSecTime() - m_teleopTimer < 100) {
+    if (!g_hangingSignal && Timer::GetMatchTime() < 40) {
+        g_hangingSignal = true;
         m_endGameSignal->Reset();
         m_greyLight->SetPixelStateProcessor(m_endGameSignal);
     }
