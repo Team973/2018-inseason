@@ -17,6 +17,7 @@ Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
                Hanger *hanger, GreyLight *greylight)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
+        , m_teleopTimer(0)
         , m_claw(claw)
         , m_drive(drive)
         , m_driveMode(DriveMode::Cheesy)
@@ -27,7 +28,9 @@ Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_hanger(hanger)
         , m_greyLight(greylight)
         , m_intakeSignal(
-              new LightPattern::Flash({0, 255, 0}, {0, 0, 0}, 50, 15)) {
+              new LightPattern::Flash({0, 255, 0}, {0, 0, 0}, 50, 15))
+        , m_endGameSignal(
+              new LightPattern::Flash({255, 0, 0}, {0, 0, 0}, 50, 15)) {
 }
 
 Teleop::~Teleop() {
@@ -36,12 +39,18 @@ Teleop::~Teleop() {
 void Teleop::TeleopInit() {
     std::cout << "Teleop Start" << std::endl;
     m_intakeMode = IntakeMode::manual;
+    m_teleopTimer = GetSecTime();
     m_intake->Stop();
     m_intake->LowerIntake();
     m_intake->Close();
 }
 
 void Teleop::TeleopPeriodic() {
+    if (GetSecTime() - m_teleopTimer > 95 &&
+        GetSecTime() - m_teleopTimer < 100) {
+        m_endGameSignal->Reset();
+        m_greyLight->SetPixelStateProcessor(m_endGameSignal);
+    }
     /**
      * Driver Joystick
      */

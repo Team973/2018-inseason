@@ -40,6 +40,7 @@ public:
 private:
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
+    uint32_t m_teleopTimer;
 
     Claw *m_claw;
 
@@ -82,6 +83,7 @@ private:
     Hanger *m_hanger;
     GreyLight *m_greyLight;
     LightPattern::Flash *m_intakeSignal;
+    LightPattern::Flash *m_endGameSignal;
     LightPattern::SolidColor *m_ptoSignal;
 };
 };
