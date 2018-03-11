@@ -26,9 +26,9 @@ class LogSpreadsheet;
 class Hanger : public CoopTask {
 public:
     Hanger(TaskMgr *scheduler, LogSpreadsheet *logger, Drive *drive,
-           Elevator *elevator, Solenoid *hangerPTO, TalonSRX *forkliftTalon,
-           UsbCamera intakeCamera, UsbCamera forkCamera, VideoSink greyCam,
-           GreyLight *greylight);
+           Elevator *elevator, Solenoid *hangerPTO, Solenoid *forkDeploy,
+           TalonSRX *forkliftTalon, UsbCamera intakeCamera,
+           UsbCamera forkCamera, VideoSink greyCam, GreyLight *greylight);
     virtual ~Hanger();
 
     /**
@@ -40,6 +40,8 @@ public:
      * Disengages the hanger PTO, stops drive + elevator motors
      **/
     void DisengagePTO();
+
+    void DeployForks();
 
     /**
      * Sets all forklift motors to a determined speed
@@ -62,6 +64,7 @@ private:
     Drive *m_drive;
     Elevator *m_elevator;
     Solenoid *m_hangerPTO;
+    Solenoid *m_forkDeploy;
     TalonSRX *m_forkliftTalon;
 
     UsbCamera m_intakeCamera;

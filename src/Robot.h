@@ -105,6 +105,7 @@ private:
     DigitalInput *m_cubeSensor;
     TalonSRX *m_elevatorMotor;
     Solenoid *m_hangerPTO;
+    Solenoid *m_forkDeploy;
     TalonSRX *m_forkliftTalon;
     GreyLight *m_greylight;
     Elevator *m_elevator;

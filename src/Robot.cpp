@@ -41,6 +41,7 @@ Robot::Robot()
         , m_cubeSensor(new DigitalInput(INTAKE_BEAM_BREAKER_SENSOR_DIN))
         , m_elevatorMotor(new GreyTalonSRX(ELEVATOR_CAN_ID))
         , m_hangerPTO(new Solenoid(PCM_CAN_ID, HANGER_PTO_PCM_ID))
+        , m_forkDeploy(new Solenoid(PCM_CAN_ID, FORK_DEPLOY_PCM_ID))
         , m_forkliftTalon(new GreyTalonSRX(FORKLIFT_TALON_CAN_ID))
         , m_greylight(new GreyLight(NUM_LED))
         , m_elevator(new Elevator(this, m_logger, m_elevatorMotor))
@@ -53,8 +54,8 @@ Robot::Robot()
                             m_rightDriveTalonA, m_rightDriveVictorB,
                             m_rightDriveVictorC, m_gyro))
         , m_hanger(new Hanger(this, m_logger, m_drive, m_elevator, m_hangerPTO,
-                              m_forkliftTalon, m_intakeCamera, m_forkCamera,
-                              m_greyCam, m_greylight))
+                              m_forkDeploy, m_forkliftTalon, m_intakeCamera,
+                              m_forkCamera, m_greyCam, m_greylight))
         , m_airPressureSwitch(new DigitalInput(PRESSURE_DIN_ID))
         , m_compressorRelay(
               new Relay(COMPRESSOR_RELAY, Relay::Direction::kForwardOnly))

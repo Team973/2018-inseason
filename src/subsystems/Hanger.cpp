@@ -4,14 +4,15 @@ using namespace frc;
 
 namespace frc973 {
 Hanger::Hanger(TaskMgr *scheduler, LogSpreadsheet *logger, Drive *drive,
-               Elevator *elevator, Solenoid *hangerPTO, TalonSRX *forkliftTalon,
-               UsbCamera intakeCamera, UsbCamera forkCamera, VideoSink greyCam,
-               GreyLight *greylight)
+               Elevator *elevator, Solenoid *hangerPTO, Solenoid *forkDeploy,
+               TalonSRX *forkliftTalon, UsbCamera intakeCamera,
+               UsbCamera forkCamera, VideoSink greyCam, GreyLight *greylight)
         : m_scheduler(scheduler)
         , m_logger(logger)
         , m_drive(drive)
         , m_elevator(elevator)
         , m_hangerPTO(hangerPTO)
+        , m_forkDeploy(forkDeploy)
         , m_forkliftTalon(forkliftTalon)
         , m_intakeCamera(intakeCamera)
         , m_forkCamera(forkCamera)
@@ -39,6 +40,10 @@ void Hanger::DisengagePTO() {
     printf("Setting intake camera\n");
     m_greyCam.SetSource(m_intakeCamera);
     m_ptoSignal->SetColor({0, 0, 0});
+}
+
+void Hanger::DeployForks() {
+    m_forkDeploy->Set(true);
 }
 
 void Hanger::SetForkliftPower(double power) {
