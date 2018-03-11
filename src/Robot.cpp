@@ -65,7 +65,7 @@ Robot::Robot()
                                   m_intakeCamera, m_forkCamera, m_greyCam,
                                   m_greylight))
         , m_autonomous(new Autonomous(m_disabled, m_drive, m_elevator, m_intake,
-                                      m_claw, m_gyro))
+                                      m_claw, m_gyro, m_greylight))
         , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick, m_claw,
                               m_drive, m_elevator, m_intake, m_hanger,
                               m_greylight))
