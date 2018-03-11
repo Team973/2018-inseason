@@ -31,7 +31,8 @@ public:
         LL,
         LR,
         RR,
-        RL
+        RL,
+        NOT_YET_RECEIVED
     };
 
     Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
