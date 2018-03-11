@@ -78,8 +78,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 4:
-            if (m_drive->OnTarget() ||
-                m_drive->GetSplinePercentComplete() > 1.0) {
+            if (m_drive->GetSplinePercentComplete() > 1.0) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
                         &two_cube_intaking_left::two_cube_intaking_left,

@@ -79,6 +79,8 @@ private:
     IntakeMode m_intakeMode;
     uint32_t m_intakeModeTimer;
 
+    bool m_endGameSignalSent;
+
     Hanger *m_hanger;
     GreyLight *m_greyLight;
     LightPattern::Flash *m_intakeSignal;

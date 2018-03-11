@@ -12,9 +12,6 @@
 using namespace frc;
 
 namespace frc973 {
-
-static bool g_hangingSignal = false;
-
 Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
                Claw *claw, Drive *drive, Elevator *elevator, Intake *intake,
                Hanger *hanger, GreyLight *greylight)
@@ -27,6 +24,7 @@ Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_intake(intake)
         , m_elevatorMode(ElevatorMode::percentOutput)
         , m_intakeMode(IntakeMode::manual)
+        , m_endGameSignalSent(false)
         , m_hanger(hanger)
         , m_greyLight(greylight)
         , m_intakeSignal(
@@ -47,8 +45,8 @@ void Teleop::TeleopInit() {
 }
 
 void Teleop::TeleopPeriodic() {
-    if (!g_hangingSignal && Timer::GetMatchTime() < 40) {
-        g_hangingSignal = true;
+    if (!m_endGameSignalSent && Timer::GetMatchTime() < 40) {
+        m_endGameSignalSent = true;
         m_endGameSignal->Reset();
         m_greyLight->SetPixelStateProcessor(m_endGameSignal);
     }
