@@ -1,8 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include "lib/helpers/GreyLight.h"
-#include "lib/pixelprocessors/LinearScale.h"
-#include "lib/pixelprocessors/SolidColor.h"
-#include "lib/pixelprocessors/Flash.h"
+#include "lib/pixelprocessors/AutoIndicator.h"
+
 
 #include <stdio.h>
 #include <iostream>
@@ -51,9 +50,8 @@ int main(int argc, char* argv[]) {
         "LED Simulator");  // Window with label 'LED Simulator',
                            // x=numLed*diameter, y=diameter
     sf::CircleShape* LEDs = createCircles(numLEDs);
-    Flash *flash = new Flash({0,255,0},{0,0,0},50,15);
-    SolidColor *solid = new SolidColor({255,0,0});
-    led->SetPixelStateProcessor(flash);
+    AutoIndicator* auto_i = new AutoIndicator();
+    led->SetPixelStateProcessor(auto_i);
     int count = 1;
     int state = 0;
     while (window.isOpen()) {
@@ -62,18 +60,17 @@ int main(int argc, char* argv[]) {
           state++;
         }
         if(state==0){
-
+          auto_i->SetData("RRM");
         }
         if(state==1){
-          solid->SetColor({255,0,0});
-          led->SetPixelStateProcessor(solid);
+          auto_i->SetData("LRL");
         }
         if(state==2){
-          solid->SetColor({0,0,0});
+          auto_i->SetData("RRL");
+
         }
         if(state==3){
-          led->SetPixelStateProcessor(flash);
-          state=0;
+          auto_i->SetData("RRLM");
         }
         sf::Event event;
         while (window.pollEvent(event)) {
