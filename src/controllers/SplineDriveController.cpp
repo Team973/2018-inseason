@@ -9,17 +9,19 @@ namespace frc973 {
 using namespace Constants;
 using namespace trajectories;
 
-static constexpr double POSITION_KP = 0.5;
+static constexpr double POSITION_KP = 1.5;
 static constexpr double POSITION_KI = 0.0;
 static constexpr double POSITION_KD = 0.0;
 
-static constexpr double VELOCITY_KP = 1.2;
+static constexpr double VELOCITY_KP = 1.0;
 static constexpr double VELOCITY_KI = 0.0;
 static constexpr double VELOCITY_KD = 0.0;
 
-static constexpr double ANGULAR_POSITION_KP = 1.2;
+static constexpr double ANGULAR_POSITION_KP = 3.6;
 static constexpr double ANGULAR_POSITION_KI = 0.0;
 static constexpr double ANGULAR_POSITION_KD = 0.0;
+
+static constexpr double ACCEL_FF = 0.4;
 
 SplineDriveController::SplineDriveController(DriveStateProvider *state,
                                              LogSpreadsheet *logger)
@@ -77,15 +79,26 @@ SplineDriveController::~SplineDriveController() {
     ;
 }
 
-void SplineDriveController::SetTarget(TrajectoryDescription *trajectory) {
+void SplineDriveController::SetTarget(TrajectoryDescription *trajectory,
+                                      DriveBase::RelativeTo relativity) {
     m_time_offset = GetSecTime();
 
     m_left_dist_offset = m_state->GetLeftDist();
     m_right_dist_offset = m_state->GetRightDist();
 
-    m_angle_offset = m_state->GetAngle();
-
     m_trajectory = trajectory;
+
+    switch (relativity) {
+        case DriveBase::RelativeTo::Now:
+            m_angle_offset = m_state->GetAngle();
+            break;
+        case DriveBase::RelativeTo::SetPoint:
+            // m_angle_offset = trajectories::GetHeadingDegrees(m_trajectory,
+            // 0.0);
+            break;
+        case DriveBase::RelativeTo::Absolute:
+            break;
+    }
 }
 
 void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
@@ -103,14 +116,17 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     m_l_vel_pid.SetTarget(leftVel);
     m_r_vel_pid.SetTarget(rightVel);
     // m_a_pos_pid.SetTarget(heading);
-    double angle_error =
-        std::fmod(heading - AngleFromStart() + 180.0, 360.0) - 180.0;
+    double angle_error = Util::CalcAngleError(heading, AngleFromStart());
 
     /* vel feed forward for linear term */
     double right_l_vel_ff =
         trajectories::GetRightDriveVelocity(m_trajectory, time);
     double left_l_vel_ff =
         trajectories::GetLeftDriveVelocity(m_trajectory, time);
+    double leftAccel_ff =
+        ACCEL_FF * trajectories::GetLeftAcceleration(m_trajectory, time);
+    double rightAccel_ff =
+        ACCEL_FF * trajectories::GetRightAcceleration(m_trajectory, time);
 
     /* correction terms for error in {linear,angular} {position,velocioty */
     double left_linear_dist_term = m_l_pos_pid.CalcOutput(LeftDistFromStart());
@@ -125,10 +141,12 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
 
     /* right side receives positive angle correction */
     double right_output = right_l_vel_ff + right_linear_dist_term +
-                          right_linear_vel_term + angular_dist_term;
+                          right_linear_vel_term + angular_dist_term +
+                          rightAccel_ff;
     /* left side receives negative angle correction */
     double left_output = left_l_vel_ff + left_linear_dist_term +
-                         left_linear_vel_term - angular_dist_term;
+                         left_linear_vel_term - angular_dist_term +
+                         leftAccel_ff;
 
     out->SetDriveOutputIPS(left_output, right_output);
 
@@ -139,13 +157,14 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     else {
         printf("Done\n");
         m_done = true;
-        this->Stop();
     }
 
-    SmartDashboard::PutNumber("drive/outputs/anglesetpoint", heading);
+    SmartDashboard::PutNumber("drive/outputs/anglesetpoint", heading - 360.0);
     SmartDashboard::PutNumber("drive/outputs/angleactual", AngleFromStart());
     SmartDashboard::PutNumber("drive/outputs/leftpossetpoint", leftDist);
     SmartDashboard::PutNumber("drive/outputs/rightpossetpoint", rightDist);
+    SmartDashboard::PutNumber("drive/outputs/leftvelff", left_l_vel_ff);
+    SmartDashboard::PutNumber("drive/outputs/rightvelff", right_l_vel_ff);
 
     DBStringPrintf(DB_LINE1, "lo%0.3lf ro%0.3lf", m_left_output,
                    m_right_output);
@@ -174,10 +193,9 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     m_right_output->LogDouble(right_output);
 }
 
-void SplineDriveController::Start() {
-}
-
-void SplineDriveController::Stop() {
+double SplineDriveController::GetSplinePercentComplete() const {
+    return trajectories::GetPercentComplete(m_trajectory,
+                                            GetSecTime() - m_time_offset);
 }
 
 double SplineDriveController::LeftDistFromStart() const {

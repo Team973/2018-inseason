@@ -110,7 +110,7 @@ void LogSpreadsheet::RegisterCell(LogCell *cell) {
     }
 }
 
-void LogSpreadsheet::InitializeTable() {
+void LogSpreadsheet::Start() {
     if (m_initialized) {
         printf("You can only initialize a table once\n");
         return;

@@ -34,24 +34,16 @@ void Claw::push() {
     goToState(pushOpen);
 }
 
+void Claw::kickOn() {
+    m_clawKicker->Set(active);
+}
+
+void Claw::kickOff() {
+    m_clawKicker->Set(kickIdle);
+}
+
 void Claw::cubeLaunch() {
     goToState(preLaunch);
-}
-
-void Claw::manualKickOn() {
-    goToState(kickManual);
-}
-
-void Claw::manualKickOff() {
-    goToState(manual);
-}
-
-void Claw::manualClawOn() {
-    goToState(clawManual);
-}
-
-void Claw::manualClawOff() {
-    goToState(manual);
 }
 
 void Claw::kickOn() {
@@ -63,16 +55,12 @@ void Claw::kickOff() {
 }
 
 void Claw::TaskPeriodic(RobotMode mode) {
-    DBStringPrintf(DB_LINE7, "cs %d", m_clawState);
     switch (m_clawState) {
         case ClawState::released:
             break;
         case ClawState::grabbed:
             break;
         case ClawState::dropOpen:
-            if (GetMsecTime() - m_stateStartTimeMs > 1000) {
-                goToState(dropClosed);
-            }
             break;
         case ClawState::dropClosed:
             goToState(grabbed);
@@ -98,12 +86,6 @@ void Claw::TaskPeriodic(RobotMode mode) {
             break;
         case ClawState::launchReset:
             goToState(released);
-            break;
-        case ClawState::kickManual:
-            break;
-        case ClawState::clawManual:
-            break;
-        case ClawState::manual:
             break;
     }
 }
@@ -137,24 +119,13 @@ void Claw::goToState(ClawState newState) {
             break;
         case ClawState::preLaunch:
             m_cubeClamp->Set(clawClosed);
-            m_clawKicker->Set(kickIdle);
+            m_clawKicker->Set(active);
             break;
         case ClawState::launch:
             m_cubeClamp->Set(clawOpen);
-            m_clawKicker->Set(active);
             break;
         case ClawState::launchReset:
             m_cubeClamp->Set(clawOpen);
-            m_clawKicker->Set(kickIdle);
-            break;
-        case ClawState::kickManual:
-            m_clawKicker->Set(active);
-            break;
-        case ClawState::clawManual:
-            m_cubeClamp->Set(clawOpen);
-            break;
-        case ClawState::manual:
-            m_cubeClamp->Set(clawClosed);
             m_clawKicker->Set(kickIdle);
             break;
     }

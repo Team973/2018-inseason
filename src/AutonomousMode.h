@@ -3,11 +3,14 @@
 #include "WPILib.h"
 #include <iostream>
 #include "src/info/RobotInfo.h"
-#include "src/auto/AutoRoutine.h"
+#include "src/auto/AutoRoutineBase.h"
 #include "src/auto/NoAuto.h"
-#include "src/auto/ForwardAuto.h"
-#include "src/auto/SwitchAuto.h"
+#include "src/auto/CenterSwitchAuto.h"
 #include "src/auto/ScaleAuto.h"
+#include "src/auto/SwitchOpposite.h"
+#include "src/auto/ScaleOpposite.h"
+#include "src/auto/SideSwitch.h"
+#include "src/auto/TwoCubeAuto.h"
 #include "lib/util/WrapDash.h"
 #include "src/DisabledMode.h"
 #include "src/Robot.h"
@@ -20,9 +23,6 @@ using namespace frc;
 
 namespace frc973 {
 class Disabled;
-class Drive;
-class Elevator;
-class Claw;
 
 class Autonomous {
 public:
@@ -44,27 +44,21 @@ public:
 
     SwitchScalePosition GetSwitchScalePosition(std::string message);
 
-    const char *GetRoutineName();
-
 private:
-    enum class SelectedAutoRoutine
-    {
-        noAuto,
-        forward,
-        lowGoal,
-        highGoal
-    };
-
     NoAuto *m_noAuto;
-    ForwardAuto *m_forwardAuto;
-    SwitchAuto *m_switchAuto;
+    CenterSwitchAuto *m_centerSwitchAuto;
     ScaleAuto *m_scaleAuto;
+    ScaleOpposite *m_scaleOpposite;
+    SideSwitch *m_sideSwitch;
+    SwitchOpposite *m_switchOpposite;
+    TwoCubeAuto *m_twoCubeAuto;
 
     Disabled *m_disabled;
 
     std::string m_scoringLocations;
     Autonomous::SwitchScalePosition m_switchScalePosition;
-    SelectedAutoRoutine m_routine;
+    AutoRoutineBase *m_routine;
+    AutoRoutineBase::AutoDirection m_direction;
 
     Drive *m_drive;
     Elevator *m_elevator;

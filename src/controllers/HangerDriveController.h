@@ -38,13 +38,9 @@ public:
      */
     void SetJoysticks(double throttle);
 
-    void Start() override {
-        printf("Turning on Hanger Mode\n");
-    }
+    void Start(DriveControlSignalReceiver *out) override;
 
-    void Stop() override {
-        printf("Turning off Hanger Mode\n");
-    }
+    void Stop(DriveControlSignalReceiver *out) override;
 
 private:
     double m_leftOutput;

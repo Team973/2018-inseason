@@ -1,11 +1,13 @@
 #include "src/TestMode.h"
+#include "src/auto/profiles/sample_trajectory.h"
 
 using namespace frc;
+using namespace sample;
 
 namespace frc973 {
 Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
            Drive *drive, Elevator *elevator, Intake *intake, Claw *claw,
-           Hanger *hanger)
+           Hanger *hanger, GreyLight *greylight)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_drive(drive)
@@ -13,7 +15,10 @@ Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_claw(claw)
         , m_intake(intake)
         , m_hanger(hanger)
-        , m_elevatorMode(ElevatorMode::percentOutput) {
+        , m_elevatorMode(ElevatorMode::percentOutput)
+        , m_greylight(greylight)
+        , m_flashSignal(
+              new LightPattern::Flash({0, 255, 0}, {0, 0, 0}, 50, 50)) {
 }
 
 Test::~Test() {
@@ -83,6 +88,7 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
+                    m_greylight->SetPixelStateProcessor(m_flashSignal);
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
@@ -105,9 +111,9 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::RightBumper:
                 if (pressedP) {
-                    /*m_driveMode = DriveMode::Spline;
-                    m_drive->SplineDrive(
-                        &generated_profiles::the_really_cool_trajectory);*/
+                    m_driveMode = DriveMode::Spline;
+                    m_drive->SplineDrive(&sample::sample,
+                                         Drive::RelativeTo::Now);
                 }
                 else {
                 }
@@ -234,10 +240,10 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::BtnX:
                 if (pressedP) {
-                    m_claw->manualKickOn();
+                    m_claw->kickOn();
                 }
                 else {
-                    m_claw->manualKickOff();
+                    m_claw->kickOff();
                 }
                 break;
             case DualAction::BtnY:

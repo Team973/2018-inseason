@@ -21,7 +21,8 @@ static const int RIGHT_DRIVE_C_VICTOR_ID = 3;
 // Elevator
 static const int ELEVATOR_CAN_ID = 4;
 static const double ELEVATOR_INCHES_PER_CLICK = 8.0 / 4096.0;
-static const int ELEVATOR_SOFT_HEIGHT_LIMIT = 80;
+static const double ELEVATOR_SOFT_HEIGHT_LIMIT = 80.5;
+static const double ELEVATOR_FEED_FORWARD = 0.05;
 
 // Solenoids
 static const int PCM_CAN_ID = 17;
@@ -49,6 +50,9 @@ static const int COMPRESSOR_RELAY = 0;
 // Joysticks
 static const int DRIVER_JOYSTICK_PORT = 0;
 static const int OPERATOR_JOYSTICK_PORT = 1;
+
+// LEDs
+static const int NUM_LED = 26;
 
 // Drive
 static constexpr double DRIVE_WIDTH = 25.205;

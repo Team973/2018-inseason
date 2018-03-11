@@ -1,6 +1,4 @@
 #include "src/AutonomousMode.h"
-#include "src/auto/NoAuto.h"
-#include "src/auto/ForwardAuto.h"
 #include "src/DisabledMode.h"
 #include "src/Robot.h"
 
@@ -10,12 +8,18 @@ namespace frc973 {
 Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
                        Intake *intake, Claw *claw, ADXRS450_Gyro *gyro)
         : m_noAuto(new NoAuto())
-        , m_forwardAuto(new ForwardAuto(drive))
-        , m_switchAuto(new SwitchAuto(drive, elevator, intake, claw))
+        , m_centerSwitchAuto(
+              new CenterSwitchAuto(drive, elevator, intake, claw))
+        , m_scaleAuto(new ScaleAuto(drive, elevator, intake, claw))
+        , m_scaleOpposite(new ScaleOpposite(drive, elevator, intake, claw))
+        , m_sideSwitch(new SideSwitch(drive, elevator, intake, claw))
+        , m_switchOpposite(new SwitchOpposite(drive, elevator, intake, claw))
+        , m_twoCubeAuto(new TwoCubeAuto(drive, elevator, intake, claw))
         , m_disabled(disabled)
         , m_scoringLocations("")
         , m_switchScalePosition(SwitchScalePosition::LL)
-        , m_routine(SelectedAutoRoutine::noAuto)
+        , m_routine(m_noAuto)
+        , m_direction(AutoRoutineBase::AutoDirection::Left)
         , m_drive(drive)
         , m_elevator(elevator)
         , m_intake(intake)
@@ -38,69 +42,80 @@ void Autonomous::AutonomousInit() {
     printf("%s\n", m_scoringLocations.c_str());
 
     switch (m_disabled->GetStartPosition()) {
-        case Disabled::RobotStartPosition::Left:
+        case AutoRoutineBase::RobotStartPosition::Left:
             switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case SwitchScalePosition::LL:
-                    m_switchAuto->Reset();
-                    m_routine = SelectedAutoRoutine::lowGoal;
+                    m_twoCubeAuto->Reset();
+                    m_routine = m_twoCubeAuto;
+                    m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::LR:
-                    m_switchAuto->Reset();
-                    m_routine = SelectedAutoRoutine::lowGoal;
+                    m_sideSwitch->Reset();
+                    m_routine = m_sideSwitch;
+                    m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::RL:
-                    m_scaleAuto->Reset();
-                    m_routine = SelectedAutoRoutine::highGoal;
+                    m_switchOpposite->Reset();
+                    m_routine = m_switchOpposite;
+                    m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
                 case SwitchScalePosition::RR:
-                    m_scaleAuto->Reset();
-                    m_routine = SelectedAutoRoutine::highGoal;
+                    m_switchOpposite->Reset();
+                    m_routine = m_scaleOpposite;
+                    m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
                 default:
                     break;
             }
             break;
-        case Disabled::RobotStartPosition::Center:
+        case AutoRoutineBase::RobotStartPosition::Center:
             printf("Center Auto\n");
             switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case SwitchScalePosition::LL:
-                    m_switchAuto->Reset();
-                    m_routine = SelectedAutoRoutine::lowGoal;
+                    m_scaleAuto->Reset();
+                    m_routine = m_centerSwitchAuto;
+                    m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::LR:
-                    printf("Forward Auto\n");
-                    m_forwardAuto->Reset();
-                    m_routine = SelectedAutoRoutine::forward;
+                    m_centerSwitchAuto->Reset();
+                    m_routine = m_centerSwitchAuto;
+                    m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::RL:
-                    m_forwardAuto->Reset();
-                    m_routine = SelectedAutoRoutine::forward;
+                    m_centerSwitchAuto->Reset();
+                    m_routine = m_centerSwitchAuto;
+                    m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
                 case SwitchScalePosition::RR:
-                    m_forwardAuto->Reset();
-                    m_routine = SelectedAutoRoutine::forward;
+                    m_centerSwitchAuto->Reset();
+                    m_routine = m_centerSwitchAuto;
+                    m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
                 default:
                     break;
             }
             break;
-        case Disabled::RobotStartPosition::Right:
+        case AutoRoutineBase::RobotStartPosition::Right:
             switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case SwitchScalePosition::LL:
-                    m_scaleAuto->Reset();
-                    m_routine = SelectedAutoRoutine::highGoal;
+                    m_switchOpposite->Reset();
+                    m_routine = m_scaleOpposite;
+                    m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::LR:
-                    m_scaleAuto->Reset();
-                    m_routine = SelectedAutoRoutine::highGoal;
+                    m_switchOpposite->Reset();
+                    m_routine = m_switchOpposite;
+                    m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::RL:
-                    m_switchAuto->Reset();
-                    m_routine = SelectedAutoRoutine::highGoal;
+                    m_sideSwitch->Reset();
+                    m_routine = m_sideSwitch;
+                    m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
                 case SwitchScalePosition::RR:
-                    m_switchAuto->Reset();
-                    m_routine = SelectedAutoRoutine::highGoal;
+                    m_scaleAuto->Reset();
+                    m_routine = m_twoCubeAuto;
+                    m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
                 default:
                     break;
@@ -112,7 +127,7 @@ void Autonomous::AutonomousInit() {
 }
 
 void Autonomous::AutonomousPeriodic() {
-    m_switchAuto->Execute();
+    m_routine->Execute(m_direction);
 }
 
 void Autonomous::AutonomousStop() {
@@ -133,25 +148,5 @@ Autonomous::SwitchScalePosition Autonomous::GetSwitchScalePosition(
         m_switchScalePosition = SwitchScalePosition::RR;
     }
     return m_switchScalePosition;
-}
-
-const char *Autonomous::GetRoutineName() {
-    switch (m_routine) {
-        case SelectedAutoRoutine::noAuto:
-            return "NoAuto";
-            break;
-        case SelectedAutoRoutine::forward:
-            return "ForwardAuto";
-            break;
-        case SelectedAutoRoutine::lowGoal:
-            return "SwitchAuto";
-            break;
-        case SelectedAutoRoutine::highGoal:
-            return "ScaleAuto";
-            break;
-        default:
-            break;
-    }
-    return "Error initializing auto!";
 }
 };

@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include "WPILib.h"
+
 namespace frc973 {
 
 enum DBStringPos
@@ -29,4 +31,6 @@ enum DBStringPos
  * Use printf-like syntax to print to the smart dash debug string place
  */
 void DBStringPrintf(DBStringPos position, const char *formatstring, ...);
+
+const char *MatchTypeToString(frc::DriverStation::MatchType matchType);
 }
