@@ -191,11 +191,11 @@ void ConstantArcSplineDriveController::CalcDriveOutput(
     //        goal.linear_dist);
 }
 
-void ConstantArcSplineDriveController::Start() {
+void ConstantArcSplineDriveController::Start(DriveControlSignalReceiver *out) {
     m_needSetControlMode = true;
 }
 
-void ConstantArcSplineDriveController::Stop() {
+void ConstantArcSplineDriveController::Stop(DriveControlSignalReceiver *out) {
 }
 
 double ConstantArcSplineDriveController::DistFromStart() const {
