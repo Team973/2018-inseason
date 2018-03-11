@@ -47,7 +47,9 @@ public:
         preLaunch,
         launch,
         launchReset,
-        manual
+        manual,
+        manualClaw,
+        manualKick
     };
     /*
      * When called, opens the claw arms
@@ -95,6 +97,16 @@ public:
      * Whe called, opens claw
      */
     void manualClawOpen();
+
+    /*
+     * When called, activates kicker
+     */
+    void manualKickActive();
+
+    /*
+     * When called, deactivates Kicker
+     */
+    void manualKickIdle();
 
     void TaskPeriodic(RobotMode mode);
 
