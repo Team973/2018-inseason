@@ -14,7 +14,12 @@ Disabled::Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_forkCamera(forkCamera)
         , m_greyCam(greyCam)
         , m_greylight(greylight)
-        , m_disabledSignal(new LightPattern::SolidColor({223, 113, 37})) {
+        , m_disabledSignal(new LightPattern::SolidColor({223, 113, 37}))
+        , m_leftSideSignal(new LightPattern::Wave({0, 0, 0}, {223, 113, 37}, 4))
+        , m_rightSideSignal(
+              new LightPattern::Wave({0, 0, 0}, {223, 113, 37}, 4))
+        , m_centerStartSignal(
+              new LightPattern::CenterMirror(m_leftSideSignal)) {
 }
 
 Disabled::~Disabled() {
@@ -101,6 +106,7 @@ void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
                     m_startPos = AutoRoutineBase::RobotStartPosition::Center;
+                    m_greylight->SetPixelStateProcessor(m_centerStartSignal);
                 }
                 break;
             case DualAction::DPadDownVirtBtn:
@@ -110,11 +116,13 @@ void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
                     m_startPos = AutoRoutineBase::RobotStartPosition::Left;
+                    m_greylight->SetPixelStateProcessor(m_leftSideSignal);
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
                     m_startPos = AutoRoutineBase::RobotStartPosition::Right;
+                    m_greylight->SetPixelStateProcessor(m_rightSideSignal);
                 }
                 break;
             default:
