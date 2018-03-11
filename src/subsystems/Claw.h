@@ -46,7 +46,8 @@ public:
         pushClosed,
         preLaunch,
         launch,
-        launchReset
+        launchReset,
+        manual
     };
     /*
      * When called, opens the claw arms
