@@ -14,10 +14,9 @@ Disabled::Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_forkCamera(forkCamera)
         , m_greyCam(greyCam)
         , m_greylight(greylight)
-        , m_disabledSignal(new LightPattern::SolidColor({223, 113, 37}))
-        , m_leftSideSignal(new LightPattern::Wave({0, 0, 0}, {223, 113, 37}, 4))
-        , m_rightSideSignal(
-              new LightPattern::Wave({0, 0, 0}, {223, 113, 37}, 4))
+        , m_disabledSignal(new LightPattern::SolidColor({255, 0, 0}))
+        , m_leftSideSignal(new LightPattern::Wave({0, 0, 0}, {255, 0, 0}, 4))
+        , m_rightSideSignal(new LightPattern::Wave({0, 0, 0}, {255, 0, 0}, 4))
         , m_centerStartSignal(
               new LightPattern::CenterMirror(m_leftSideSignal)) {
 }
