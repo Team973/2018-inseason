@@ -8,6 +8,7 @@ namespace frc973 {
 Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
                        Intake *intake, Claw *claw, ADXRS450_Gyro *gyro)
         : m_noAuto(new NoAuto())
+        , m_forwardAuto(new ForwardAuto(drive))
         , m_centerSwitchAuto(
               new CenterSwitchAuto(drive, elevator, intake, claw))
         , m_scaleAuto(new ScaleAuto(drive, elevator, intake, claw))
@@ -69,6 +70,10 @@ void Autonomous::AutonomousInit() {
                     m_routine = m_scaleOpposite;
                     m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
+                case SwitchScalePosition::NOT_YET_RECEIVED:
+                    m_routine = m_forwardAuto;
+                    m_direction = AutoRoutineBase::AutoDirection::Left;
+                    break;
                 default:
                     break;
             }
@@ -96,6 +101,10 @@ void Autonomous::AutonomousInit() {
                     m_routine = m_centerSwitchAuto;
                     m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
+                case SwitchScalePosition::NOT_YET_RECEIVED:
+                    m_routine = m_forwardAuto;
+                    m_direction = AutoRoutineBase::AutoDirection::Left;
+                    break;
                 default:
                     break;
             }
@@ -121,6 +130,10 @@ void Autonomous::AutonomousInit() {
                     m_scaleAuto->Reset();
                     m_routine = m_twoCubeAuto;
                     m_direction = AutoRoutineBase::AutoDirection::Right;
+                    break;
+                case SwitchScalePosition::NOT_YET_RECEIVED:
+                    m_routine = m_forwardAuto;
+                    m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 default:
                     break;
@@ -152,7 +165,7 @@ Autonomous::SwitchScalePosition Autonomous::GetSwitchScalePosition(
     else if (message[0] == 'R' && message[1] == 'R') {
         m_switchScalePosition = SwitchScalePosition::RR;
     }
-    else if (message == "") {
+    else {
         m_switchScalePosition = SwitchScalePosition::NOT_YET_RECEIVED;
     }
     return m_switchScalePosition;
