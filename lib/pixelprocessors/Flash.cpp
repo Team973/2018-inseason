@@ -32,7 +32,11 @@ void Flash::Tick(PixelState& state) {
         std::fill(state.pixels.begin(), state.pixels.end(), m_second);
         return;
     }
+#ifndef USING_LED_SIMULATOR
     double currentTime = frc973::GetMsecTime();
+#else
+    double currentTime = 0;
+#endif
     // duration_cast<milliseconds>(system_clock::now().time_since_epoch())
     //.count();
     if (currentTime - m_lastTime >= 1.0 / m_hz * 1000) {

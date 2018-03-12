@@ -66,11 +66,14 @@ int main(int argc, char* argv[]) {
           auto_i->SetData("LRL");
         }
         if(state==2){
-          auto_i->SetData("RRL");
+          auto_i->SetData("LLR");
 
         }
         if(state==3){
-          auto_i->SetData("RRLM");
+          auto_i->SetData("LRLM");
+        }
+        if(state==4){
+          state=0;
         }
         sf::Event event;
         while (window.pollEvent(event)) {

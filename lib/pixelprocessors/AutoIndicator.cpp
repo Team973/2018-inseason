@@ -36,35 +36,31 @@ void AutoIndicator::Tick(PixelState& state) {
         }
         switch (m_gameData[1]) {
             case 'L':
-                std::fill(state.pixels.begin(),
-                          state.pixels.end() - column_width * 2,
+                std::fill(state.pixels.begin() + column_width,
+                          state.pixels.end() - column_width,
                           Color{255, 0, 255});
                 break;
             case 'R':
-                std::fill(state.pixels.begin(),
-                          state.pixels.end() - column_width * 2,
+                std::fill(state.pixels.begin() + column_width,
+                          state.pixels.end() - column_width,
                           Color{255, 255, 255});
                 break;
             default:
-                std::fill(state.pixels.begin(),
-                          state.pixels.end() - column_width * 2,
-                          Color{255, 0, 0});
+                std::fill(state.pixels.begin() + column_width,
+                          state.pixels.end() - column_width, Color{255, 0, 0});
         }
         switch (m_gameData[2]) {
             case 'L':
-                std::fill(state.pixels.begin(),
-                          state.pixels.end() - column_width * 2,
-                          Color{255, 0, 255});
+                std::fill(state.pixels.begin() + column_width * 2,
+                          state.pixels.end(), Color{255, 0, 255});
                 break;
             case 'R':
-                std::fill(state.pixels.begin(),
-                          state.pixels.end() - column_width * 2,
-                          Color{255, 255, 255});
+                std::fill(state.pixels.begin() + column_width * 2,
+                          state.pixels.end(), Color{255, 255, 255});
                 break;
             default:
-                std::fill(state.pixels.begin(),
-                          state.pixels.end() - column_width * 2,
-                          Color{255, 0, 0});
+                std::fill(state.pixels.begin() + column_width * 2,
+                          state.pixels.end(), Color{255, 0, 0});
         }
     }
     else {
