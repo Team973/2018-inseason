@@ -66,13 +66,13 @@ void Claw::TaskPeriodic(RobotMode mode) {
             goToState(grabbed);
             break;
         case ClawState::preLaunch:
-            if (GetMsecTime() - m_stateStartTimeMs > 300) {
+            if (GetMsecTime() - m_stateStartTimeMs > 100) {
                 goToState(launch);
                 m_cubeClamp->Set(clawOpen);
             }
             break;
         case ClawState::launch:
-            if (GetMsecTime() - m_stateStartTimeMs > 1000) {
+            if (GetMsecTime() - m_stateStartTimeMs > 500) {
                 goToState(launchReset);
             }
             break;
