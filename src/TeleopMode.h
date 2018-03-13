@@ -17,6 +17,9 @@
 #include "src/subsystems/Claw.h"
 #include "src/subsystems/Intake.h"
 #include "src/subsystems/Hanger.h"
+#include "lib/helpers/GreyLight.h"
+#include "lib/pixelprocessors/Flash.h"
+#include "lib/pixelprocessors/SolidColor.h"
 
 using namespace frc;
 
@@ -24,7 +27,8 @@ namespace frc973 {
 class Teleop {
 public:
     Teleop(ObservableJoystick *driver, ObservableJoystick *codriver, Claw *claw,
-           Drive *drive, Elevator *elevator, Intake *intake, Hanger *hanger);
+           Drive *drive, Elevator *elevator, Intake *intake, Hanger *hanger,
+           GreyLight *greylight);
     virtual ~Teleop();
 
     void TeleopInit();
@@ -67,7 +71,7 @@ private:
         switchTaking,
         switchGrabbing,
         switchStandby,
-        switchEjecting,
+        switchRaising,
         vaultStart,
         vaultIntaking,
         vaultEjecting
@@ -76,5 +80,9 @@ private:
     uint32_t m_intakeModeTimer;
 
     Hanger *m_hanger;
+    GreyLight *m_greyLight;
+    LightPattern::Flash *m_intakeSignal;
+    LightPattern::Flash *m_endGameSignal;
+    LightPattern::SolidColor *m_ptoSignal;
 };
 };

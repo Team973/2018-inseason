@@ -13,6 +13,8 @@
 #include "src/info/RobotInfo.h"
 #include "src/subsystems/Drive.h"
 #include "src/subsystems/Elevator.h"
+#include "lib/helpers/GreyLight.h"
+#include "lib/pixelprocessors/SolidColor.h"
 
 using namespace frc;
 using namespace cs;
@@ -24,8 +26,9 @@ class LogSpreadsheet;
 class Hanger : public CoopTask {
 public:
     Hanger(TaskMgr *scheduler, LogSpreadsheet *logger, Drive *drive,
-           Elevator *elevator, Solenoid *hangerPTO, TalonSRX *forkliftTalon,
-           UsbCamera intakeCamera, UsbCamera forkCamera, VideoSink greyCam);
+           Elevator *elevator, Solenoid *hangerPTO, Solenoid *forkDeploy,
+           TalonSRX *forkliftTalon, UsbCamera intakeCamera,
+           UsbCamera forkCamera, VideoSink greyCam, GreyLight *greylight);
     virtual ~Hanger();
 
     /**
@@ -37,6 +40,8 @@ public:
      * Disengages the hanger PTO, stops drive + elevator motors
      **/
     void DisengagePTO();
+
+    void DeployForks();
 
     /**
      * Sets all forklift motors to a determined speed
@@ -59,10 +64,14 @@ private:
     Drive *m_drive;
     Elevator *m_elevator;
     Solenoid *m_hangerPTO;
+    Solenoid *m_forkDeploy;
     TalonSRX *m_forkliftTalon;
 
     UsbCamera m_intakeCamera;
     UsbCamera m_forkCamera;
     VideoSink m_greyCam;
+
+    GreyLight *m_greylight;
+    LightPattern::SolidColor *m_ptoSignal;
 };
 }

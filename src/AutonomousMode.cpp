@@ -8,6 +8,7 @@ namespace frc973 {
 Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
                        Intake *intake, Claw *claw, ADXRS450_Gyro *gyro)
         : m_noAuto(new NoAuto())
+        , m_forwardAuto(new ForwardAuto(drive))
         , m_centerSwitchAuto(
               new CenterSwitchAuto(drive, elevator, intake, claw))
         , m_scaleAuto(new ScaleAuto(drive, elevator, intake, claw))
@@ -17,7 +18,7 @@ Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
         , m_twoCubeAuto(new TwoCubeAuto(drive, elevator, intake, claw))
         , m_disabled(disabled)
         , m_scoringLocations("")
-        , m_switchScalePosition(SwitchScalePosition::LL)
+        , m_switchScalePosition(SwitchScalePosition::NOT_YET_RECEIVED)
         , m_routine(m_noAuto)
         , m_direction(AutoRoutineBase::AutoDirection::Left)
         , m_drive(drive)
@@ -37,9 +38,14 @@ void Autonomous::AutonomousInit() {
     m_claw->grab();
     std::cout << "Autonomous Start" << std::endl;
 
-    m_scoringLocations = DriverStation::GetInstance().GetGameSpecificMessage();
     DBStringPrintf(DB_LINE1, "%s", m_scoringLocations.c_str());
     printf("%s\n", m_scoringLocations.c_str());
+
+    if (GetSwitchScalePosition(m_scoringLocations) ==
+        SwitchScalePosition::NOT_YET_RECEIVED) {
+        m_scoringLocations =
+            DriverStation::GetInstance().GetGameSpecificMessage();
+    }
 
     switch (m_disabled->GetStartPosition()) {
         case AutoRoutineBase::RobotStartPosition::Left:
@@ -56,13 +62,17 @@ void Autonomous::AutonomousInit() {
                     break;
                 case SwitchScalePosition::RL:
                     m_switchOpposite->Reset();
-                    m_routine = m_switchOpposite;
-                    m_direction = AutoRoutineBase::AutoDirection::Right;
+                    m_routine = m_scaleAuto;
+                    m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::RR:
                     m_switchOpposite->Reset();
                     m_routine = m_scaleOpposite;
                     m_direction = AutoRoutineBase::AutoDirection::Right;
+                    break;
+                case SwitchScalePosition::NOT_YET_RECEIVED:
+                    m_routine = m_forwardAuto;
+                    m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 default:
                     break;
@@ -91,6 +101,10 @@ void Autonomous::AutonomousInit() {
                     m_routine = m_centerSwitchAuto;
                     m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
+                case SwitchScalePosition::NOT_YET_RECEIVED:
+                    m_routine = m_forwardAuto;
+                    m_direction = AutoRoutineBase::AutoDirection::Left;
+                    break;
                 default:
                     break;
             }
@@ -116,6 +130,10 @@ void Autonomous::AutonomousInit() {
                     m_scaleAuto->Reset();
                     m_routine = m_twoCubeAuto;
                     m_direction = AutoRoutineBase::AutoDirection::Right;
+                    break;
+                case SwitchScalePosition::NOT_YET_RECEIVED:
+                    m_routine = m_forwardAuto;
+                    m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 default:
                     break;
@@ -146,6 +164,9 @@ Autonomous::SwitchScalePosition Autonomous::GetSwitchScalePosition(
     }
     else if (message[0] == 'R' && message[1] == 'R') {
         m_switchScalePosition = SwitchScalePosition::RR;
+    }
+    else {
+        m_switchScalePosition = SwitchScalePosition::NOT_YET_RECEIVED;
     }
     return m_switchScalePosition;
 }

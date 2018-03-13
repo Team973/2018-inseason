@@ -10,6 +10,7 @@
 
 #include "GreyLightTypes.h"
 #include "PixelStateProcessor.h"
+#include "lib/util/Util.h"
 #include <vector>
 #include <chrono>
 

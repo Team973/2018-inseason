@@ -1,14 +1,15 @@
 #include "src/auto/SideSwitch.h"
 #include "src/auto/profiles/rightsideswitch_trajectory.h"
 #include "src/auto/profiles/leftsideswitch_trajectory.h"
-#include "src/auto/profiles/leftswitchreset_trajectory.h"
-#include "src/auto/profiles/rightswitchreset_trajectory.h"
+#include "src/auto/profiles/leftsideswitchbackoff_trajectory.h"
+#include "src/auto/profiles/rightsideswitchbackoff_trajectory.h"
 
 using namespace frc;
 using namespace left_side_switch;
 using namespace right_side_switch;
-using namespace right_switch_reset;
-using namespace left_switch_reset;
+using namespace right_side_switch_backoff;
+using namespace left_side_switch_backoff;
+//        { "x": 106, "y": -60, "angle": 0 }
 
 namespace frc973 {
 SideSwitch::SideSwitch(Drive *drive, Elevator *elevator, Intake *intake,
@@ -59,20 +60,25 @@ void SideSwitch::Execute(AutoRoutineBase::AutoDirection direction) {
         case 3:
             if (m_drive->GetSplinePercentComplete() > 1.0) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
-                    m_drive->SplineDrive(&left_switch_reset::left_switch_reset,
-                                         Drive::RelativeTo::SetPoint);
+                    m_drive->SplineDrive(
+                        &left_side_switch_backoff::left_side_switch_backoff,
+                        Drive::RelativeTo::Now);
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(
-                        &right_switch_reset::right_switch_reset,
-                        Drive::RelativeTo::SetPoint);
+                        &right_side_switch_backoff::right_side_switch_backoff,
+                        Drive::RelativeTo::Now);
                 }
                 m_autoState++;
             }
             break;
         case 4:
+            if (m_drive->GetSplinePercentComplete() > 0.5) {
+                m_intake->LowerIntake();
+            }
             if (m_drive->GetSplinePercentComplete() > 1.0) {
                 m_drive->OpenloopArcadeDrive(0.0, 0.0);
+                m_elevator->SetPosition(Elevator::GROUND);
                 m_autoState++;
             }
             break;

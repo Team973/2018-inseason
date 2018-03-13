@@ -12,9 +12,12 @@
 using namespace frc;
 
 namespace frc973 {
+
+static bool g_hangingSignal = false;
+
 Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
                Claw *claw, Drive *drive, Elevator *elevator, Intake *intake,
-               Hanger *hanger)
+               Hanger *hanger, GreyLight *greylight)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_claw(claw)
@@ -24,7 +27,12 @@ Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_intake(intake)
         , m_elevatorMode(ElevatorMode::percentOutput)
         , m_intakeMode(IntakeMode::manual)
-        , m_hanger(hanger) {
+        , m_hanger(hanger)
+        , m_greyLight(greylight)
+        , m_intakeSignal(
+              new LightPattern::Flash({0, 255, 0}, {0, 0, 0}, 50, 15))
+        , m_endGameSignal(
+              new LightPattern::Flash({255, 0, 0}, {0, 0, 0}, 50, 15)) {
 }
 
 Teleop::~Teleop() {
@@ -39,6 +47,11 @@ void Teleop::TeleopInit() {
 }
 
 void Teleop::TeleopPeriodic() {
+    if (!g_hangingSignal && Timer::GetMatchTime() < 40) {
+        g_hangingSignal = true;
+        m_endGameSignal->Reset();
+        m_greyLight->SetPixelStateProcessor(m_endGameSignal);
+    }
     /**
      * Driver Joystick
      */
@@ -135,6 +148,11 @@ void Teleop::TeleopPeriodic() {
             m_claw->kickOff();
             m_elevatorMode = ElevatorMode::motionMagic;
             m_elevator->SetPosition(Elevator::VAULT);
+            m_intakeSignal->Reset();
+            m_greyLight->SetPixelStateProcessor(m_intakeSignal);
+            m_intakeMode = IntakeMode::switchRaising;
+            break;
+        case IntakeMode::switchRaising:
             if (m_elevator->GetPosition() > 2.0) {
                 m_intake->Open();
             }
@@ -235,6 +253,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 if (pressedP) {
                     m_driveMode = DriveMode::Hanger;
                     m_hanger->DisengagePTO();
+                    m_hanger->DeployForks();
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:
