@@ -211,7 +211,7 @@ app.on('ready', () => {
   const displays = electron.screen.getAllDisplays();
   const externalDisplay = displays.find(display => display.bounds.x !== 0 || display.bounds.y !== 0);
   createWindow();
-  createCameraWindow(externalDisplay);
+  // createCameraWindow(externalDisplay);
 });
 
 // Quit when all windows are closed.
