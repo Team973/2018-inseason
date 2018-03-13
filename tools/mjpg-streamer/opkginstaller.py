@@ -41,9 +41,7 @@ logger = logging.getLogger('robotpy.installer')
 is_windows = hasattr(sys, 'getwindowsversion')
 
 _FEEDS = [
-    'https://www.tortall.net/~robotpy/feeds/2018',
     'https://www.tortall.net/~robotpy/feeds/2017',
-    'http://download.ni.com/ni-linux-rt/feeds/2017/arm/ipk/cortexa9-vfpv3',
     'http://download.ni.com/ni-linux-rt/feeds/2016/arm/ipk/cortexa9-vfpv3',
 ]
 

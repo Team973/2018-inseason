@@ -14,4 +14,4 @@ ssh -4 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null admin@$ROBOT 
     /etc/init.d/keep-streamer-alive \
     /etc/init.d/mjpg-streamer
 
-ssh -4 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null admin@$ROBOT '/sbin/ldconfig && /usr/sbin/update-rc.d -s keep_streamer_alive defaults 89'
+ssh -4 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null admin@$ROBOT '/sbin/ldconfig && /usr/sbin/update-rc.d -s keep-streamer-alive defaults 89'
