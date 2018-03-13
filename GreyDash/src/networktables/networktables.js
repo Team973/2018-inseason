@@ -2,12 +2,12 @@ const ipc = require('electron').ipcRenderer;
 
 const NetworkTables =
     (() => {
-      const keys = {};
-      const connectionListeners = [];
-      let connected = false;
-      const globalListeners = [];
-      const keyListeners = {};
-      const robotAddress = '127.0.0.1';
+      let keys = {},
+        connectionListeners = [],
+        connected = false,
+        globalListeners = [],
+        keyListeners = {},
+        robotAddress = '127.0.0.1';
       ipc.send('ready');
       ipc.on('connected', (ev, con) => {
         connected = con;
@@ -41,33 +41,33 @@ const NetworkTables =
       ipc.on('flagChange', (ev, mesg) => {
         keys[mesg.key].flags = mesg.flags;
       });
-      const d3Map = function () {
+      const d3_map = function () {
         this._ = Object.create(null);
         this.forEach = function (f) {
-          for (const key in this._) { f.call(this, d3MapUnescape(key), this._[key]); }
+          for (const key in this._) { f.call(this, d3_map_unescape(key), this._[key]); }
         };
         this.get = function (key) {
-          return this._[d3MapEscape(key)];
+          return this._[d3_map_escape(key)];
         };
         this.getKeys = function () {
           const keys = [];
-          for (const key in this._) { keys.push(d3MapUnescape(key)); }
+          for (const key in this._) { keys.push(d3_map_unescape(key)); }
           return keys;
         };
         this.has = function (key) {
-          return d3MapEscape(key) in this._;
+          return d3_map_escape(key) in this._;
         };
         this.set = function (key, value) {
-          return this._[d3MapEscape(key)] = value;
+          return this._[d3_map_escape(key)] = value;
         };
       };
-      const d3MapProto = '__proto__';
-      const d3MapZero = '\x00';
-      function d3MapEscape(key) {
-        return (key += '') === d3MapProto || key[0] === d3MapZero ? d3MapZero + encodeURIComponent(key) : encodeURIComponent(key);
+      let d3_map_proto = '__proto__',
+        d3_map_zero = '\x00';
+      function d3_map_escape(key) {
+        return (key += '') === d3_map_proto || key[0] === d3_map_zero ? d3_map_zero + encodeURIComponent(key) : encodeURIComponent(key);
       }
-      function d3MapUnescape(key) {
-        return (key += '')[0] === d3MapZero ? decodeURIComponent(key.slice(1)) : decodeURIComponent(key);
+      function d3_map_unescape(key) {
+        return (key += '')[0] === d3_map_zero ? decodeURIComponent(key.slice(1)) : decodeURIComponent(key);
       }
       return {
         /**
@@ -154,7 +154,6 @@ const NetworkTables =
 
           return defaultValue;
         },
-
         /**
          * @returns null if the robot is not connected, or a string otherwise
          */
@@ -194,7 +193,7 @@ const NetworkTables =
          * @returns map object, with forEach/get/has/set functions defined. Simlar to a map object when using d3.js
          */
         create_map() {
-          return new d3Map();
+          return new d3_map();
         },
 
         /**
