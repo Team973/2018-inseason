@@ -100,6 +100,7 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
+                    m_drive->HangerDrive(1.0);
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
@@ -110,12 +111,8 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
+                    m_driveMode = DriveMode::Hanger;
                     m_hanger->EngagePTO();
-                    m_drive->HangerDrive(1.0);
-                }
-                else {
-                    m_drive->HangerDrive(0);
-                    m_hanger->DisengagePTO();
                 }
                 break;
             case DualAction::RightTrigger:
@@ -147,6 +144,7 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::BtnA:
                 if (pressedP) {
+                    m_hanger->DisengagePTO();
                     m_driveMode = DriveMode::Velocity;
                 }
                 break;
