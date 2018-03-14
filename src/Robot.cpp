@@ -145,13 +145,13 @@ void Robot::AllStateContinuous() {
     // NetworkTable Battery Voltage
     SmartDashboard::PutNumber("misc/pdp/batteryvoltage", m_pdp->GetVoltage());
 
-    m_matchIdentifier->LogPrintf("%s_%s%dm%d",
-            DriverStation::GetInstance().GetEventName().c_str(),
-            MatchTypeToString(DriverStation::GetInstance().GetMatchType()),
-            DriverStation::GetInstance().GetMatchNumber(),
-            DriverStation::GetInstance().GetReplayNumber());
+    m_matchIdentifier->LogPrintf(
+        "%s_%s%dm%d", DriverStation::GetInstance().GetEventName().c_str(),
+        MatchTypeToString(DriverStation::GetInstance().GetMatchType()),
+        DriverStation::GetInstance().GetMatchNumber(),
+        DriverStation::GetInstance().GetReplayNumber());
     m_gameSpecificMessage->LogText(
-            DriverStation::GetInstance().GetGameSpecificMessage().c_str());
+        DriverStation::GetInstance().GetGameSpecificMessage().c_str());
 }
 
 void Robot::ObserveJoystickStateChange(uint32_t port, uint32_t button,
