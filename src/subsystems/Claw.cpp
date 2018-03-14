@@ -47,19 +47,23 @@ void Claw::cubeLaunch() {
 }
 
 void Claw::manualClawOpen() {
-    goToState(manualClaw);
+    goToState(manual);
+    m_cubeClamp->Set(clawOpen);
 }
 
 void Claw::manualClawClosed() {
     goToState(manual);
+    m_cubeClamp->Set(clawClosed);
 }
 
 void Claw::manualKickActive() {
-    goToState(manualKick);
+    goToState(manual);
+    m_clawKicker->Set(active);
 }
 
 void Claw::manualKickIdle() {
     goToState(manual);
+    m_clawKicker->Set(kickIdle);
 }
 
 void Claw::TaskPeriodic(RobotMode mode) {
@@ -97,12 +101,6 @@ void Claw::TaskPeriodic(RobotMode mode) {
             break;
         case ClawState::manual:
             goToState(manual);
-            break;
-        case ClawState::manualClaw:
-            goToState(manualClaw);
-            break;
-        case ClawState::manualKick:
-            goToState(manualKick);
             break;
     }
 }
@@ -146,12 +144,6 @@ void Claw::goToState(ClawState newState) {
             m_clawKicker->Set(kickIdle);
             break;
         case ClawState::manual:
-            break;
-        case ClawState::manualClaw:
-            m_cubeClamp->Set(clawOpen);
-            break;
-        case ClawState::manualKick:
-            m_clawKicker->Set(active);
             break;
     }
 }
