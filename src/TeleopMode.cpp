@@ -211,6 +211,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::BtnY:
                 if (pressedP) {
+                    m_hanger->DeployForks();
                 }
                 break;
             case DualAction::LeftBumper:
@@ -251,7 +252,6 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 if (pressedP) {
                     m_driveMode = DriveMode::Hanger;
                     m_hanger->DisengagePTO();
-                    m_hanger->DeployForks();
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:
