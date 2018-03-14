@@ -13,6 +13,7 @@
 using namespace GreyLightType;
 
 GreyLight::GreyLight(int numLEDs) {
+    m_numLEDs = numLEDs;
     m_state = PixelState{};
     m_state.fps = 60;
     m_state.numLEDs = numLEDs;
@@ -35,9 +36,10 @@ void GreyLight::Loop() {
         int now = clock();
         m_state.delta = (now - lastTick) / 1000;
         lastTick = now;
-        m_state.numLEDs = state.numLEDs;
+        m_state.numLEDs = m_numLEDs;
         m_processor->Tick(m_state);
 #ifndef USING_LED_SIMULATOR
+
         m_strip->Show(m_state.pixels);
 #endif
         m_stateLock.unlock();
