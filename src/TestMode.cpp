@@ -75,7 +75,7 @@ void Test::TestPeriodic() {
             false);  // gear set to false until solenoids get set up
     }
     else if (m_driveMode == DriveMode::Hanger) {
-        m_drive->HangerDrive(y);
+        m_drive->HangerDrive(-y);
     }
     else if (m_driveMode == DriveMode::Openloop) {
         m_drive->OpenloopArcadeDrive(y, x);
@@ -100,7 +100,7 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
-                    m_drive->HangerDrive(1.0);
+                    m_hanger->DisengagePTO();
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
@@ -144,7 +144,6 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::BtnA:
                 if (pressedP) {
-                    m_hanger->DisengagePTO();
                     m_driveMode = DriveMode::Velocity;
                 }
                 break;
