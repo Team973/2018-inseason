@@ -47,9 +47,7 @@ public:
         preLaunch,
         launch,
         launchReset,
-        manual,
-        manualClaw,
-        manualKick
+        manual
     };
     /*
      * When called, opens the claw arms
