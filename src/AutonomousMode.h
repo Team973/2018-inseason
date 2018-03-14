@@ -5,6 +5,7 @@
 #include "src/info/RobotInfo.h"
 #include "src/auto/AutoRoutineBase.h"
 #include "src/auto/NoAuto.h"
+#include "src/auto/ForwardAuto.h"
 #include "src/auto/CenterSwitchAuto.h"
 #include "src/auto/ScaleAuto.h"
 #include "src/auto/SwitchOpposite.h"
@@ -33,7 +34,8 @@ public:
         LL,
         LR,
         RR,
-        RL
+        RL,
+        NOT_YET_RECEIVED
     };
 
     Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
@@ -49,6 +51,7 @@ public:
 
 private:
     NoAuto *m_noAuto;
+    ForwardAuto *m_forwardAuto;
     CenterSwitchAuto *m_centerSwitchAuto;
     ScaleAuto *m_scaleAuto;
     ScaleOpposite *m_scaleOpposite;

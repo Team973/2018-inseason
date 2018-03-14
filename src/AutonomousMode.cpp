@@ -9,6 +9,7 @@ Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
                        Intake *intake, Claw *claw, ADXRS450_Gyro *gyro,
                        GreyLight *greylight)
         : m_noAuto(new NoAuto())
+        , m_forwardAuto(new ForwardAuto(drive))
         , m_centerSwitchAuto(
               new CenterSwitchAuto(drive, elevator, intake, claw))
         , m_scaleAuto(new ScaleAuto(drive, elevator, intake, claw))
@@ -20,7 +21,7 @@ Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
         , m_greylight(greylight)
         , m_autoSignal(new LightPattern::AutoIndicator())
         , m_scoringLocations("")
-        , m_switchScalePosition(SwitchScalePosition::LL)
+        , m_switchScalePosition(SwitchScalePosition::NOT_YET_RECEIVED)
         , m_routine(m_noAuto)
         , m_direction(AutoRoutineBase::AutoDirection::Left)
         , m_drive(drive)
@@ -40,13 +41,18 @@ void Autonomous::AutonomousInit() {
     m_claw->grab();
     std::cout << "Autonomous Start" << std::endl;
 
-    m_scoringLocations = DriverStation::GetInstance().GetGameSpecificMessage();
     DBStringPrintf(DB_LINE1, "%s", m_scoringLocations.c_str());
     printf("%s\n", m_scoringLocations.c_str());
     m_autoSignal->SetData(m_scoringLocations);
     m_greylight->SetPixelStateProcessor(m_autoSignal);
 
-    /*switch (m_disabled->GetStartPosition()) {
+    if (GetSwitchScalePosition(m_scoringLocations) ==
+        SwitchScalePosition::NOT_YET_RECEIVED) {
+        m_scoringLocations =
+            DriverStation::GetInstance().GetGameSpecificMessage();
+    }
+
+    switch (m_disabled->GetStartPosition()) {
         case AutoRoutineBase::RobotStartPosition::Left:
             switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case SwitchScalePosition::LL:
@@ -68,6 +74,10 @@ void Autonomous::AutonomousInit() {
                     m_switchOpposite->Reset();
                     m_routine = m_scaleOpposite;
                     m_direction = AutoRoutineBase::AutoDirection::Right;
+                    break;
+                case SwitchScalePosition::NOT_YET_RECEIVED:
+                    m_routine = m_forwardAuto;
+                    m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 default:
                     break;
@@ -96,6 +106,10 @@ void Autonomous::AutonomousInit() {
                     m_routine = m_centerSwitchAuto;
                     m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
+                case SwitchScalePosition::NOT_YET_RECEIVED:
+                    m_routine = m_forwardAuto;
+                    m_direction = AutoRoutineBase::AutoDirection::Left;
+                    break;
                 default:
                     break;
             }
@@ -122,17 +136,21 @@ void Autonomous::AutonomousInit() {
                     m_routine = m_twoCubeAuto;
                     m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
+                case SwitchScalePosition::NOT_YET_RECEIVED:
+                    m_routine = m_forwardAuto;
+                    m_direction = AutoRoutineBase::AutoDirection::Left;
+                    break;
                 default:
                     break;
             }
             break;
         default:
             break;
-    }*/
+    }
 }
 
 void Autonomous::AutonomousPeriodic() {
-    // m_routine->Execute(m_direction);
+    m_routine->Execute(m_direction);
 }
 
 void Autonomous::AutonomousStop() {
@@ -151,6 +169,9 @@ Autonomous::SwitchScalePosition Autonomous::GetSwitchScalePosition(
     }
     else if (message[0] == 'R' && message[1] == 'R') {
         m_switchScalePosition = SwitchScalePosition::RR;
+    }
+    else {
+        m_switchScalePosition = SwitchScalePosition::NOT_YET_RECEIVED;
     }
     return m_switchScalePosition;
 }

@@ -8,6 +8,7 @@
 #include "src/TestMode.h"
 #include "src/Robot.h"
 #include "ctre/Phoenix.h"
+#include "lib/util/WrapDash.h"
 
 using namespace frc;
 using namespace ctre;
@@ -28,6 +29,8 @@ Robot::Robot()
         , m_rightDriveVictorC(new VictorSPX(RIGHT_DRIVE_C_VICTOR_ID))
         , m_gyro(new ADXRS450_Gyro())
         , m_logger(new LogSpreadsheet(this))
+        , m_matchIdentifier(new LogCell("Match Identifier", 64))
+        , m_gameSpecificMessage(new LogCell("GameSpecificMessage", 10))
         , m_forkCamera(UsbCamera("USB Camera 0", 0))
         , m_intakeCamera(UsbCamera("USB Camera 1", 1))
         , m_cameraServer(CameraServer::GetInstance())
@@ -80,6 +83,9 @@ Robot::~Robot() {
 
 void Robot::Initialize() {
     m_compressor->Enable();
+    m_logger->RegisterCell(m_matchIdentifier);
+    m_logger->RegisterCell(m_gameSpecificMessage);
+    m_logger->Start();
     m_cameraServer->AddCamera(m_intakeCamera);
     m_cameraServer->AddCamera(m_forkCamera);
     m_intakeCamera.SetVideoMode(VideoMode::PixelFormat::kMJPEG, 160, 120, 10);
@@ -138,6 +144,14 @@ void Robot::TestStop() {
 void Robot::AllStateContinuous() {
     // NetworkTable Battery Voltage
     SmartDashboard::PutNumber("misc/pdp/batteryvoltage", m_pdp->GetVoltage());
+
+    m_matchIdentifier->LogPrintf(
+        "%s_%s%dm%d", DriverStation::GetInstance().GetEventName().c_str(),
+        MatchTypeToString(DriverStation::GetInstance().GetMatchType()),
+        DriverStation::GetInstance().GetMatchNumber(),
+        DriverStation::GetInstance().GetReplayNumber());
+    m_gameSpecificMessage->LogText(
+        DriverStation::GetInstance().GetGameSpecificMessage().c_str());
 }
 
 void Robot::ObserveJoystickStateChange(uint32_t port, uint32_t button,

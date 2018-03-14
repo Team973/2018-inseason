@@ -137,14 +137,14 @@ public:
     /**
      * Initialize the table... open the file, write the column headers, etc.
      */
-    void InitializeTable();
+    void Start();
 
     /**
      * Called regularly. If we are initialized, write a row of the table.
      *
      * @param RobotMode mode
      */
-    void TaskPostPeriodic(RobotMode mode);
+    void TaskPostPeriodic(RobotMode mode) override;
 
     /**
      * Register a new column to be logged.  You will figure this value out
