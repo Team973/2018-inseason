@@ -248,8 +248,10 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::BtnY:
                 if (pressedP) {
-                    m_driveMode = DriveMode::Hanger;
-                    m_hanger->EngagePTO();
+                    m_claw->manualClawOpen();
+                }
+                else {
+                    m_claw->manualClawClosed();
                 }
                 break;
             case DualAction::Start:
