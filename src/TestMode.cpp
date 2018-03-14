@@ -48,11 +48,9 @@ void Test::TestPeriodic() {
         -m_operatorJoystick->GetRawAxis(DualAction::RightYAxis);
 
     if (intakeControl > 0.8) {
-        m_intakeMode = IntakeMode::manual;
         m_intake->RaiseIntake();
     }
     else if (intakeControl < -0.8) {
-        m_intakeMode = IntakeMode::manual;
         m_intake->LowerIntake();
     }
 

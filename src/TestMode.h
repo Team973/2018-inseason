@@ -51,20 +51,6 @@ private:
         Velocity
     };
 
-    enum class IntakeMode
-    {
-        manual,
-        switchIntaking,
-        switchTaking,
-        switchGrabbing,
-        switchStandby,
-        switchEjecting,
-        vaultStart,
-        vaultIntaking,
-        vaultEjecting
-    };
-    IntakeMode m_intakeMode;
-
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
 
