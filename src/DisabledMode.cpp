@@ -4,6 +4,7 @@
 using namespace frc;
 
 namespace frc973 {
+static const Color DISABLED_RED = {255, 0, 0};
 Disabled::Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
                    UsbCamera intakeCamera, UsbCamera forkCamera,
                    VideoSink greyCam, GreyLight *greylight)
@@ -14,7 +15,7 @@ Disabled::Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_forkCamera(forkCamera)
         , m_greyCam(greyCam)
         , m_greylight(greylight)
-        , m_disabledSignal(new LightPattern::SolidColor({255, 0, 0}))
+        , m_disabledSignal(new LightPattern::SolidColor(DISABLED_RED))
         , m_leftSideSignal(
               new LightPattern::LengthModifier(m_disabledSignal, 12))
         , m_rightSideSignal(

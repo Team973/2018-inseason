@@ -12,6 +12,11 @@
 using namespace frc;
 
 namespace frc973 {
+
+static const Color INTAKE_GREEN = {0, 255, 0};
+static const Color END_GAME_RED = {255, 0, 0};
+static const Color NO_COLOR = {0, 0, 0};
+
 Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
                Claw *claw, Drive *drive, Elevator *elevator, Intake *intake,
                Hanger *hanger, GreyLight *greylight)
@@ -28,9 +33,9 @@ Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_hanger(hanger)
         , m_greyLight(greylight)
         , m_intakeSignal(
-              new LightPattern::Flash({0, 255, 0}, {0, 0, 0}, 50, 15))
+              new LightPattern::Flash(INTAKE_GREEN, NO_COLOR, 50, 15))
         , m_endGameSignal(
-              new LightPattern::Flash({255, 0, 0}, {0, 0, 0}, 50, 15)) {
+              new LightPattern::Flash(END_GAME_RED, NO_COLOR, 50, 15)) {
 }
 
 Teleop::~Teleop() {
