@@ -3,8 +3,8 @@ const fs = require('fs');
 
 const smoothie = require('smoothie');
 
-const Raphael = require(path.normalize(path.join(path.resolve('.'), 'node_modules', 'raphael', 'raphael.js')));
-require(path.normalize(path.join(path.resolve('.'), 'node_modules', 'justgage', 'justgage.js')));
+// const Raphael = require(path.normalize(path.join(path.resolve('.'), 'node_modules', 'raphael', 'raphael.js')));
+// require(path.normalize(path.join(path.resolve('.'), 'node_modules', 'justgage', 'justgage.js')));
 
 const config = JSON.parse(fs.readFileSync(path.join(path.resolve('.'), 'src', 'configlisteners.json'), 'utf-8'));
 
@@ -202,10 +202,31 @@ const updateDebugGyro = (key, value) => {
 NetworkTables.addKeyListener('/SmartDashboard/drive/gyro/angle', updateGyro);
 NetworkTables.addKeyListener('/SmartDashboard/drive/gyro/angle', updateDebugGyro);
 
-NetworkTables.addKeyListener('/robot/time', (key, value) => {
-  // This is an example of how a dashboard could display the remaining time in a match.
-  // We assume here that value is an integer representing the number of seconds left.
-  ui.misc.timer.innerHTML = value < 0 ? '0:00' : `${Math.floor(value / 60)}:${value % 60 < 10 ? '0' : ''}${value % 60}`;
+NetworkTables.addKeyListener('/SmartDashboard/misc/timer', (key, value) => {
+  console.log(value);
+  // Make sure timer is reset to black when it starts
+  ui.misc.timer.style.color = '#000000';
+  // Minutes (m) is equal to the total seconds divided by sixty with the decimal removed.
+  const m = Math.floor(value / 60);
+  // Create seconds number that will actually be displayed after minutes are subtracted
+  let visualS = (value % 60);
+
+  // Add leading zero if seconds is one digit long, for proper time formatting.
+  visualS = visualS < 10 ? `0${visualS}` : visualS;
+
+  if (value < 0) {
+    // Stop countdown when timer reaches zero
+    clearTimeout(countdown);
+    return;
+} else if (value <= 15) {
+    // Flash timer if less than 15 seconds left
+    ui.misc.timer.style.color = (s % 2 === 0) ? '#FF3030' : 'transparent';
+} else if (value <= 30) {
+    // Solid red timer when less than 30 seconds left.
+    ui.misc.timer.style.color = '#FF3030';
+  }
+  ui.misc.timer.innerHTML = `${m}:${visualS}`;
+  NetworkTables.putValue(key, false);
 });
 
 // Reset gyro value to 0 on click
@@ -222,24 +243,24 @@ ui.custom.drive.debugGyro.container.addEventListener('click', () => {
   updateDebugGyro('/SmartDashboard/drive/gyro/angle', ui.custom.drive.gyro.val);
 });
 
-// Compressor
-const airGuage = new JustGage({
-  id: 'airPressure',
-  min: 0,
-  max: 60,
-  title: 'Air Pressure',
-});
-const debugAirGuage = new JustGage({
-  id: 'debugAirPressure',
-  min: 0,
-  max: 60,
-  title: 'Air Pressure',
-});
-
-NetworkTables.addKeyListener('/SmartDashboard/misc/compressor/pressure', (key, value) => {
-  airGuage.value = value;
-  debugAirGuage.value = value;
-});
+// // Compressor
+// const airGuage = new JustGage({
+//   id: 'airPressure',
+//   min: 0,
+//   max: 60,
+//   title: 'Air Pressure',
+// });
+// const debugAirGuage = new JustGage({
+//   id: 'debugAirPressure',
+//   min: 0,
+//   max: 60,
+//   title: 'Air Pressure',
+// });
+//
+// NetworkTables.addKeyListener('/SmartDashboard/misc/compressor/pressure', (key, value) => {
+//   airGuage.value = value;
+//   debugAirGuage.value = value;
+// });
 
 window.addEventListener('error', (ev) => {
   ipc.send('windowError', { mesg: ev.message, file: ev.filename, lineNumber: ev.lineno });

@@ -185,6 +185,10 @@ void Teleop::TeleopPeriodic() {
     }
 
     SmartDashboard::PutNumber("intake/modes/currentmode", (int)m_intakeMode);
+
+    // Match time to display in dashboard
+    SmartDashboard::PutNumber("misc/timer",
+                              DriverStation::GetInstance().GetMatchTime());
 }
 
 void Teleop::TeleopStop() {
