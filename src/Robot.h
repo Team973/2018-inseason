@@ -90,6 +90,8 @@ private:
     ADXRS450_Gyro *m_gyro;
 
     LogSpreadsheet *m_logger;
+    LogCell *m_matchIdentifier;
+    LogCell *m_gameSpecificMessage;
 
     UsbCamera m_forkCamera;
     UsbCamera m_intakeCamera;

@@ -46,39 +46,66 @@ public:
         pushClosed,
         preLaunch,
         launch,
-        launchReset
+        launchReset,
+        manual
     };
-
-    void open();
     /*
      * When called, opens the claw arms
      */
-    void grab();
+    void open();
+
     /*
      * When called, closes claw arms, and
      * has all claw solenoids set to idle
      */
-    void drop();
+    void grab();
+
     /*
      * When called, opens claw arms to drop cube
      */
-    void push();
+    void drop();
+
     /*
      * When called, opens claw arms and
      * activates kicker
      */
-    void kickOn();
+    void push();
+
     /*
      * When called, activates kicker
      */
-    void kickOff();
+    void kickOn();
+
     /*
      * When called, deactivates clawKicker
      */
-    void cubeLaunch();
+    void kickOff();
+
     /*
      * When called, launches cube
      */
+    void cubeLaunch();
+
+    /*
+     * When called, closes claw
+     */
+    void manualClawClosed();
+
+    /*
+     * Whe called, opens claw
+     */
+    void manualClawOpen();
+
+    /*
+     * When called, activates kicker
+     */
+    void manualKickActive();
+
+    /*
+     * When called, deactivates Kicker
+     */
+    void manualKickIdle();
+
     void TaskPeriodic(RobotMode mode);
 
 private:
