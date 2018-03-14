@@ -1,4 +1,3 @@
-
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const electron = require('electron');
@@ -9,14 +8,20 @@ const client = new wpilibNT.Client();
 // The client will try to reconnect after 1 second
 client.setReconnectDelay(1000);
 
-/** Module for receiving messages from the electron.BrowserWindow */
+/** Module to control application life. */
+const { app } = electron;
+
+/** Module to create native browser window. */
+const { BrowserWindow } = electron;
+
+/** Module for receiving messages from the BrowserWindow */
 const ipc = electron.ipcMain;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 /**
  * The Main Window of the Program
- * @type {Electron.electron.BrowserWindow}
+ * @type {Electron.BrowserWindow}
  * */
 let mainWindow;
 let cameraWindow;
@@ -25,13 +30,12 @@ let connectedFunc;
 let ready = false;
 
 const clientDataListener = (key, val, valType, mesgType, id, flags) => {
-  let newVal = val;
-  if (newVal === 'true' || newVal === 'false') {
-    newVal = newVal === 'true';
+  if (val === 'true' || val === 'false') {
+    val = val === 'true';
   }
   mainWindow.webContents.send(mesgType, {
     key,
-    newVal,
+    val,
     valType,
     id,
     flags,
@@ -95,7 +99,7 @@ function createWindow() {
   const width = electron.screen.getPrimaryDisplay().bounds.width;
   const height = Math.round(electron.screen.getPrimaryDisplay().bounds.height - 240);
   if (process.env.DASHBOARD) {
-    mainWindow = new electron.BrowserWindow({
+    mainWindow = new BrowserWindow({
       frame: false,
       width,
       height,
@@ -103,7 +107,7 @@ function createWindow() {
       icon: `${__dirname}/../build/icon.png`,
     });
   } else {
-    mainWindow = new electron.BrowserWindow({
+    mainWindow = new BrowserWindow({
       frame: true,
       width: 1280,
       height: 720,
@@ -144,7 +148,7 @@ function createWindow() {
 function createCameraWindow(externalDisplay) {
   // Create the browser window.
   if (externalDisplay) {
-    cameraWindow = new electron.BrowserWindow({
+    cameraWindow = new BrowserWindow({
 	  x: externalDisplay.bounds.x,
 	  y: externalDisplay.bounds.y,
 	  fullscreen: true,
@@ -155,7 +159,7 @@ function createCameraWindow(externalDisplay) {
       icon: `${__dirname}/../build/icon.png`,
     });
   } else {
-    cameraWindow = new electron.BrowserWindow({
+    cameraWindow = new BrowserWindow({
       x: 0,
       y: 0,
       width: 1280,
@@ -198,16 +202,16 @@ function createCameraWindow(externalDisplay) {
 }
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
-electron.app.on('ready', () => {
+app.on('ready', () => {
   console.log('app is ready');
   const displays = electron.screen.getAllDisplays();
   const externalDisplay = displays.find(display => display.bounds.x !== 0 || display.bounds.y !== 0);
   createWindow();
-  createCameraWindow(externalDisplay);
+  // createCameraWindow(externalDisplay);
 });
 
 // Quit when all windows are closed.
-electron.app.on('window-all-closed', () => {
+app.on('window-all-closed', () => {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q.
   // Not like we're creating a consumer application though.
@@ -215,14 +219,14 @@ electron.app.on('window-all-closed', () => {
   // If you want to restore the standard behavior, uncomment the next line.
 
   // if (process.platform !== 'darwin')
-  electron.app.quit();
+  app.quit();
 });
 
-electron.app.on('quit', () => {
+app.on('quit', () => {
   console.log('Application quit.');
 });
 
-electron.app.on('activate', () => {
+app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow == null) createWindow();

@@ -19,16 +19,19 @@ for (let i = 0; i < config.charts.length; i += 1) {
   if (config.charts[i].settings.maxValue === undefined) {
     config.charts[i].settings.maxValue = 50;
   }
-  if (config.charts[i].settings.debug === undefined) {
-    config.charts[i].settings.debug = false;
+  if (config.charts[i].settings.interpolation === undefined) {
+    config.charts[i].settings.interpolation = 'step';
+  }
+  if (config.charts[i].settings.default === undefined) {
+    config.charts[i].settings.default = false;
   }
 }
 for (let i = 0; i < config.indicators.length; i += 1) {
   if (config.indicators[i].settings.fixedDecimals === undefined) {
     config.indicators[i].settings.fixedDecimals = true;
   }
-  if (config.indicators[i].settings.debug === undefined) {
-    config.indicators[i].settings.debug = false;
+  if (config.indicators[i].settings.default === undefined) {
+    config.indicators[i].settings.default = false;
   }
 }
 
@@ -79,7 +82,6 @@ const ui = {
  */
 for (let i = 0; i < config.charts.length; i += 1) {
   config.charts[i].div = document.createElement('div');
-  config.charts[i].div.setAttribute('id', `chart${i}`);
   config.charts[i].div.setAttribute('class', 'chartContainer');
 
   config.charts[i].displayTitle = document.createElement('span');
@@ -87,16 +89,15 @@ for (let i = 0; i < config.charts.length; i += 1) {
 
   config.charts[i].displayChart = document.createElement('canvas');
   config.charts[i].displayChart.setAttribute('class', 'responsiveCharts');
+  config.charts[i].displayChart.setAttribute('name', `chart${i}`);
 
   config.charts[i].chart = new smoothie.SmoothieChart({
-    interpolation: 'step',
     responsive: 'true',
+    interpolation: config.charts[i].settings.interpolation,
     tooltip: config.charts[i].settings.tooltip,
     minValue: config.charts[i].settings.minValue,
     maxValue: config.charts[i].settings.maxValue,
-    interpolation: 'step',
   });
-  config.charts[i].chart.streamTo(config.charts[i].displayChart, 0);
 
   config.charts[i].lines = {};
   for (let line = 0; line < config.charts[i].keys.length; line += 1) {
@@ -112,14 +113,26 @@ for (let i = 0; i < config.charts.length; i += 1) {
       });
     }(i)));
   }
+
+  config.charts[i].chart.streamTo(config.charts[i].displayChart, 0);
+
   config.charts[i].div.appendChild(config.charts[i].displayTitle);
   config.charts[i].div.appendChild(document.createElement('br'));
   config.charts[i].div.appendChild(config.charts[i].displayChart);
-  if (config.charts[i].settings.debug) {
-    ui.debugCharts.appendChild(config.charts[i].div);
-  } else {
+  if (config.charts[i].settings.default) {
     ui.charts.appendChild(config.charts[i].div);
+  } else if (config.charts[i].settings.bothTabs) {
+    ui.charts.appendChild(config.charts[i].div);
+    // ui.debugCharts.appendChild(config.charts[i].div.cloneNode(true));
+  } else {
+    ui.debugCharts.appendChild(config.charts[i].div);
   }
+
+  // TODO: duplicate the elements so they display on both, dont stream to multiple
+  // const chartTabs = document.getElementsByName(`chart${i}`);
+  // for (let multichart = 0; multichart < document.getElementsByName(`chart${i}`).length; multichart += 1) {
+  //   config.charts[i].chart.streamTo(chartTabs[multichart], 0);
+  // }
 }
 
 /**
@@ -149,13 +162,13 @@ for (let i = 0; i < config.indicators.length; i += 1) {
   config.indicators[i].displayTitle.appendChild(config.indicators[i].displayValue);
   config.indicators[i].div.appendChild(config.indicators[i].displayTitle);
   ui.indicators.appendChild(config.indicators[i].div);
-  if (config.indicators[i].settings.debug) {
-    ui.debugIndicators.appendChild(config.indicators[i].div);
+  if (config.indicators[i].settings.default) {
+    ui.indicators.appendChild(config.indicators[i].div);
   } else if (config.indicators[i].settings.bothTabs) {
     ui.indicators.appendChild(config.indicators[i].div);
-    ui.debugIndicators.appendChild(config.indicators[i].div);
+    ui.debugIndicators.appendChild(config.indicators[i].div.cloneNode(true));
   } else {
-    ui.indicators.appendChild(config.indicators[i].div);
+    ui.debugIndicators.appendChild(config.indicators[i].div);
   }
 }
 

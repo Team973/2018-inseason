@@ -64,7 +64,8 @@
         },
         {
             "settings": {
-                "fixedDecimals": true
+                "fixedDecimals": true,
+                "bothTabs": true
             },
             "title": "Left Drive Encoder",
             "unit": "in",
