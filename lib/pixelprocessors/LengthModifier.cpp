@@ -13,6 +13,8 @@ LengthModifier::LengthModifier(PixelStateProcessor* processor, int numLEDs) {
     m_numLEDS = numLEDs;
 }
 void LengthModifier::Tick(PixelState& state) {
+    std::fill(state.pixels.begin() + m_numLEDS, state.pixels.end(),
+              Color{0, 0, 0});
     double previousNumLEDs = state.numLEDs;
     state.numLEDs = m_numLEDS;
     PixelStateProcessorModulator::Tick(state);
