@@ -76,7 +76,6 @@ void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
-                    printf("Setting fork camera\n");
                     m_greyCam.SetSource(m_forkCamera);
                 }
                 else {
@@ -84,7 +83,6 @@ void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
-                    printf("Setting intake camera\n");
                     m_greyCam.SetSource(m_intakeCamera);
                 }
                 else {
