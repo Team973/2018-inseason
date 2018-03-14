@@ -46,7 +46,7 @@ void Autonomous::AutonomousInit() {
     m_autoSignal->SetData(m_scoringLocations);
     m_greylight->SetPixelStateProcessor(m_autoSignal);
 
-    switch (m_disabled->GetStartPosition()) {
+    /*switch (m_disabled->GetStartPosition()) {
         case AutoRoutineBase::RobotStartPosition::Left:
             switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case SwitchScalePosition::LL:
@@ -128,11 +128,11 @@ void Autonomous::AutonomousInit() {
             break;
         default:
             break;
-    }
+    }*/
 }
 
 void Autonomous::AutonomousPeriodic() {
-    m_routine->Execute(m_direction);
+    // m_routine->Execute(m_direction);
 }
 
 void Autonomous::AutonomousStop() {

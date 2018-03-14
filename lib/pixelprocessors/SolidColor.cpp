@@ -19,6 +19,7 @@ void SolidColor::SetColor(Color color) {
 }
 
 void SolidColor::Tick(PixelState& state) {
-    std::fill(state.pixels.begin(), state.pixels.end(), m_currentColor);
+    std::fill(state.pixels.begin(), state.pixels.end() - state.numLEDs,
+              m_currentColor);
 }
 }

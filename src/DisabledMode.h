@@ -10,8 +10,8 @@
 #include "src/auto/AutoRoutineBase.h"
 #include "lib/helpers/GreyLight.h"
 #include "lib/pixelprocessors/SolidColor.h"
-#include "lib/pixelprocessors/Wave.h"
-#include "lib/pixelprocessors/CenterMirror.h"
+#include "lib/pixelprocessors/LengthModifier.h"
+#include "lib/pixelprocessors/ReverseModifier.h"
 
 using namespace frc;
 using namespace cs;
@@ -46,8 +46,7 @@ private:
 
     GreyLight *m_greylight;
     LightPattern::SolidColor *m_disabledSignal;
-    LightPattern::Wave *m_leftSideSignal;
-    LightPattern::Wave *m_rightSideSignal;
-    LightPattern::CenterMirror *m_centerStartSignal;
+    LightPattern::LengthModifier *m_leftSideSignal;
+    LightPattern::ReverseModifier *m_rightSideSignal;
 };
 };

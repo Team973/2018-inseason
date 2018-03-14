@@ -15,10 +15,10 @@ Disabled::Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_greyCam(greyCam)
         , m_greylight(greylight)
         , m_disabledSignal(new LightPattern::SolidColor({255, 0, 0}))
-        , m_leftSideSignal(new LightPattern::Wave({0, 0, 0}, {255, 0, 0}, 4))
-        , m_rightSideSignal(new LightPattern::Wave({0, 0, 0}, {255, 0, 0}, 4))
-        , m_centerStartSignal(
-              new LightPattern::CenterMirror(m_leftSideSignal)) {
+        , m_leftSideSignal(
+              new LightPattern::LengthModifier(m_disabledSignal, 12))
+        , m_rightSideSignal(
+              new LightPattern::ReverseModifier(m_leftSideSignal)) {
 }
 
 Disabled::~Disabled() {
@@ -105,7 +105,7 @@ void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
                     m_startPos = AutoRoutineBase::RobotStartPosition::Center;
-                    m_greylight->SetPixelStateProcessor(m_centerStartSignal);
+                    m_greylight->SetPixelStateProcessor(m_disabledSignal);
                 }
                 break;
             case DualAction::DPadDownVirtBtn:

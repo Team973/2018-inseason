@@ -22,7 +22,7 @@ void AutoIndicator::Tick(PixelState& state) {
             case 'L':
                 std::fill(state.pixels.begin(),
                           state.pixels.end() - column_width * 2,
-                          Color{255, 0, 255});
+                          Color{0, 255, 0});
                 break;
             case 'R':
                 std::fill(state.pixels.begin(),
@@ -37,8 +37,7 @@ void AutoIndicator::Tick(PixelState& state) {
         switch (m_gameData[1]) {
             case 'L':
                 std::fill(state.pixels.begin() + column_width,
-                          state.pixels.end() - column_width,
-                          Color{255, 0, 255});
+                          state.pixels.end() - column_width, Color{0, 255, 0});
                 break;
             case 'R':
                 std::fill(state.pixels.begin() + column_width,
@@ -52,7 +51,7 @@ void AutoIndicator::Tick(PixelState& state) {
         switch (m_gameData[2]) {
             case 'L':
                 std::fill(state.pixels.begin() + column_width * 2,
-                          state.pixels.end(), Color{255, 0, 255});
+                          state.pixels.end(), Color{0, 255, 0});
                 break;
             case 'R':
                 std::fill(state.pixels.begin() + column_width * 2,
@@ -64,7 +63,7 @@ void AutoIndicator::Tick(PixelState& state) {
         }
     }
     else {
-        std::fill(state.pixels.begin(), state.pixels.end(), Color{255, 255, 0});
+        std::fill(state.pixels.begin(), state.pixels.end(), Color{0, 0, 255});
     }
 }
 }
