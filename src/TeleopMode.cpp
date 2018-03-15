@@ -12,9 +12,6 @@
 using namespace frc;
 
 namespace frc973 {
-
-static bool g_hangingSignal = false;
-
 Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
                Claw *claw, Drive *drive, Elevator *elevator, Intake *intake,
                Hanger *hanger, GreyLight *greylight)
@@ -27,12 +24,13 @@ Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_intake(intake)
         , m_elevatorMode(ElevatorMode::percentOutput)
         , m_intakeMode(IntakeMode::manual)
+        , m_endGameSignalSent(false)
         , m_hanger(hanger)
         , m_greyLight(greylight)
         , m_intakeSignal(
-              new LightPattern::Flash({0, 255, 0}, {0, 0, 0}, 50, 15))
+              new LightPattern::Flash(INTAKE_GREEN, NO_COLOR, 50, 15))
         , m_endGameSignal(
-              new LightPattern::Flash({255, 0, 0}, {0, 0, 0}, 50, 15)) {
+              new LightPattern::Flash(END_GAME_RED, NO_COLOR, 50, 15)) {
 }
 
 Teleop::~Teleop() {
@@ -47,8 +45,8 @@ void Teleop::TeleopInit() {
 }
 
 void Teleop::TeleopPeriodic() {
-    if (!g_hangingSignal && Timer::GetMatchTime() < 40) {
-        g_hangingSignal = true;
+    if (!m_endGameSignalSent && Timer::GetMatchTime() < 40) {
+        m_endGameSignalSent = true;
         m_endGameSignal->Reset();
         m_greyLight->SetPixelStateProcessor(m_endGameSignal);
     }
@@ -213,6 +211,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::BtnY:
                 if (pressedP) {
+                    m_hanger->DeployForks();
                 }
                 break;
             case DualAction::LeftBumper:
@@ -253,7 +252,6 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 if (pressedP) {
                     m_driveMode = DriveMode::Hanger;
                     m_hanger->DisengagePTO();
-                    m_hanger->DeployForks();
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:

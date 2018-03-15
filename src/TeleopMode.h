@@ -26,6 +26,10 @@ using namespace frc;
 namespace frc973 {
 class Teleop {
 public:
+    static constexpr Color INTAKE_GREEN = {0, 255, 0};
+    static constexpr Color END_GAME_RED = {255, 0, 0};
+    static constexpr Color NO_COLOR = {0, 0, 0};
+
     Teleop(ObservableJoystick *driver, ObservableJoystick *codriver, Claw *claw,
            Drive *drive, Elevator *elevator, Intake *intake, Hanger *hanger,
            GreyLight *greylight);
@@ -78,6 +82,8 @@ private:
     };
     IntakeMode m_intakeMode;
     uint32_t m_intakeModeTimer;
+
+    bool m_endGameSignalSent;
 
     Hanger *m_hanger;
     GreyLight *m_greyLight;

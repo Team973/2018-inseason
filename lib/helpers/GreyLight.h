@@ -30,6 +30,7 @@ public:
 private:
     PixelStateProcessor* m_processor;
     PixelState m_state;
+    int m_numLEDs;
     std::thread m_worker;
     std::mutex m_stateLock;
 #ifndef USING_LED_SIMULATOR

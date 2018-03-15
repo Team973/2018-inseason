@@ -4,6 +4,7 @@
 using namespace frc;
 
 namespace frc973 {
+static const Color DISABLED_RED = {255, 0, 0};
 Disabled::Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
                    UsbCamera intakeCamera, UsbCamera forkCamera,
                    VideoSink greyCam, GreyLight *greylight)
@@ -14,12 +15,11 @@ Disabled::Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_forkCamera(forkCamera)
         , m_greyCam(greyCam)
         , m_greylight(greylight)
-        , m_disabledSignal(new LightPattern::SolidColor({223, 113, 37}))
-        , m_leftSideSignal(new LightPattern::Wave({0, 0, 0}, {223, 113, 37}, 4))
+        , m_disabledSignal(new LightPattern::SolidColor(DISABLED_RED))
+        , m_leftSideSignal(
+              new LightPattern::LengthModifier(m_disabledSignal, 12))
         , m_rightSideSignal(
-              new LightPattern::Wave({0, 0, 0}, {223, 113, 37}, 4))
-        , m_centerStartSignal(
-              new LightPattern::CenterMirror(m_leftSideSignal)) {
+              new LightPattern::ReverseModifier(m_leftSideSignal)) {
 }
 
 Disabled::~Disabled() {
@@ -77,7 +77,6 @@ void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
-                    printf("Setting fork camera\n");
                     m_greyCam.SetSource(m_forkCamera);
                 }
                 else {
@@ -85,7 +84,6 @@ void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
-                    printf("Setting intake camera\n");
                     m_greyCam.SetSource(m_intakeCamera);
                 }
                 else {
@@ -106,7 +104,7 @@ void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
                     m_startPos = AutoRoutineBase::RobotStartPosition::Center;
-                    m_greylight->SetPixelStateProcessor(m_centerStartSignal);
+                    m_greylight->SetPixelStateProcessor(m_disabledSignal);
                 }
                 break;
             case DualAction::DPadDownVirtBtn:

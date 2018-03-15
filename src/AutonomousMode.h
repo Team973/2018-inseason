@@ -19,6 +19,8 @@
 #include "src/subsystems/Elevator.h"
 #include "src/subsystems/Intake.h"
 #include "src/subsystems/Claw.h"
+#include "lib/helpers/GreyLight.h"
+#include "lib/pixelprocessors/AutoIndicator.h"
 
 using namespace frc;
 
@@ -37,7 +39,8 @@ public:
     };
 
     Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
-               Intake *intake, Claw *claw, ADXRS450_Gyro *gyro);
+               Intake *intake, Claw *claw, ADXRS450_Gyro *gyro,
+               GreyLight *greylight);
     virtual ~Autonomous();
 
     void AutonomousInit();
@@ -57,6 +60,8 @@ private:
     TwoCubeAuto *m_twoCubeAuto;
 
     Disabled *m_disabled;
+    GreyLight *m_greylight;
+    LightPattern::AutoIndicator *m_autoSignal;
 
     std::string m_scoringLocations;
     Autonomous::SwitchScalePosition m_switchScalePosition;

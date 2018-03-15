@@ -9,7 +9,6 @@ using namespace left_side_switch;
 using namespace right_side_switch;
 using namespace right_side_switch_backoff;
 using namespace left_side_switch_backoff;
-//        { "x": 106, "y": -60, "angle": 0 }
 
 namespace frc973 {
 SideSwitch::SideSwitch(Drive *drive, Elevator *elevator, Intake *intake,

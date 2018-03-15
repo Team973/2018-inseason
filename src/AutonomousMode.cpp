@@ -6,7 +6,8 @@ using namespace frc;
 
 namespace frc973 {
 Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
-                       Intake *intake, Claw *claw, ADXRS450_Gyro *gyro)
+                       Intake *intake, Claw *claw, ADXRS450_Gyro *gyro,
+                       GreyLight *greylight)
         : m_noAuto(new NoAuto())
         , m_forwardAuto(new ForwardAuto(drive))
         , m_centerSwitchAuto(
@@ -17,6 +18,8 @@ Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
         , m_switchOpposite(new SwitchOpposite(drive, elevator, intake, claw))
         , m_twoCubeAuto(new TwoCubeAuto(drive, elevator, intake, claw))
         , m_disabled(disabled)
+        , m_greylight(greylight)
+        , m_autoSignal(new LightPattern::AutoIndicator())
         , m_scoringLocations("")
         , m_switchScalePosition(SwitchScalePosition::NOT_YET_RECEIVED)
         , m_routine(m_noAuto)
@@ -40,6 +43,8 @@ void Autonomous::AutonomousInit() {
 
     DBStringPrintf(DB_LINE1, "%s", m_scoringLocations.c_str());
     printf("%s\n", m_scoringLocations.c_str());
+    m_autoSignal->SetData(m_scoringLocations);
+    m_greylight->SetPixelStateProcessor(m_autoSignal);
 
     if (GetSwitchScalePosition(m_scoringLocations) ==
         SwitchScalePosition::NOT_YET_RECEIVED) {

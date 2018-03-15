@@ -10,7 +10,9 @@
 
 #include "GreyLightTypes.h"
 #include "PixelStateProcessor.h"
+#ifndef USING_LED_SIMULATOR
 #include "lib/util/Util.h"
+#endif
 #include <vector>
 #include <chrono>
 
