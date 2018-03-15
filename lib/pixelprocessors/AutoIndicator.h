@@ -14,6 +14,10 @@
 #include <string>
 
 namespace LightPattern {
+static constexpr Color LEFT_GREEN = {0, 255, 0};
+static constexpr Color RIGHT_WHITE = {255, 255, 255};
+static constexpr Color NO_MESSAGE_BLUE = {0, 0, 255};
+static constexpr Color DEFAULT_FILL_RED = {255, 0, 0};
 
 class AutoIndicator : public PixelStateProcessor {
 public:

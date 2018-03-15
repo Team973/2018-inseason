@@ -12,11 +12,6 @@
 using namespace frc;
 
 namespace frc973 {
-
-static const Color INTAKE_GREEN = {0, 255, 0};
-static const Color END_GAME_RED = {255, 0, 0};
-static const Color NO_COLOR = {0, 0, 0};
-
 Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
                Claw *claw, Drive *drive, Elevator *elevator, Intake *intake,
                Hanger *hanger, GreyLight *greylight)

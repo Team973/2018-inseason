@@ -8,10 +8,7 @@
 #include "AutoIndicator.h"
 #include <iostream>
 namespace LightPattern {
-static const Color LEFT_GREEN = {0, 255, 0};
-static const Color RIGHT_WHITE = {255, 255, 255};
-static const Color NO_MESSAGE_BLUE = {0, 0, 255};
-static const Color DEFAULT_FILL_RED = {255, 0, 0};
+
 AutoIndicator::AutoIndicator() {
     m_gameData = "";
 }

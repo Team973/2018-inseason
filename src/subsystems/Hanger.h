@@ -25,6 +25,8 @@ class LogSpreadsheet;
 
 class Hanger : public CoopTask {
 public:
+    static constexpr Color HANGER_BLUE = {0, 0, 255};
+
     Hanger(TaskMgr *scheduler, LogSpreadsheet *logger, Drive *drive,
            Elevator *elevator, Solenoid *hangerPTO, Solenoid *forkDeploy,
            TalonSRX *forkliftTalon, UsbCamera intakeCamera,

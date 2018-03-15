@@ -3,7 +3,6 @@
 using namespace frc;
 
 namespace frc973 {
-static const Color HANGER_BLUE = {0, 0, 255};
 Hanger::Hanger(TaskMgr *scheduler, LogSpreadsheet *logger, Drive *drive,
                Elevator *elevator, Solenoid *hangerPTO, Solenoid *forkDeploy,
                TalonSRX *forkliftTalon, UsbCamera intakeCamera,
