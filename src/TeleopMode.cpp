@@ -346,20 +346,23 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
-                    m_hanger->SetForkliftPower(1.0);
-                }
-                else {
-                    m_hanger->SetForkliftPower(0);
-                }
-                break;
-            case DualAction::DPadDownVirtBtn:
-                if (pressedP) {
                     m_hanger->SetForkliftPower(-1.0);
                 }
                 else {
                     m_hanger->SetForkliftPower(0);
                 }
                 break;
+            case DualAction::DPadDownVirtBtn:
+                /*
+                    if (pressedP) {
+                        m_hanger->SetForkliftPower(-1.0);
+                    }
+                    else {
+                        m_hanger->SetForkliftPower(0);
+                    }
+                    */
+                break;
+
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
                     m_intakeMode = IntakeMode::manual;

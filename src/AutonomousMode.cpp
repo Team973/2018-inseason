@@ -43,14 +43,15 @@ void Autonomous::AutonomousInit() {
 
     DBStringPrintf(DB_LINE1, "%s", m_scoringLocations.c_str());
     printf("%s\n", m_scoringLocations.c_str());
-    m_autoSignal->SetData(m_scoringLocations);
-    m_greylight->SetPixelStateProcessor(m_autoSignal);
 
     if (GetSwitchScalePosition(m_scoringLocations) ==
         SwitchScalePosition::NOT_YET_RECEIVED) {
         m_scoringLocations =
             DriverStation::GetInstance().GetGameSpecificMessage();
     }
+
+    m_autoSignal->SetData(m_scoringLocations);
+    m_greylight->SetPixelStateProcessor(m_autoSignal);
 
     switch (m_disabled->GetStartPosition()) {
         case AutoRoutineBase::RobotStartPosition::Left:
