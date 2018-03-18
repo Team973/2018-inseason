@@ -23,6 +23,51 @@
                 "/SmartDashboard/drive/voltages/rightvoltage"
             ]
         },
+		{
+            "settings": {
+                "tooltip": true,
+                "minValue": -360,
+                "maxValue": 360
+            },
+            "title": "Drive Angles",
+            "keys": [
+                "/SmartDashboard/drive/outputs/anglesetpoint",
+                "/SmartDashboard/drive/outputs/angleactual"
+            ]
+        },
+		{
+            "settings": {
+                "tooltip": true,
+                "minValue": -120,
+                "maxValue": 120
+            },
+            "title": "Drive Left Positions"
+                "/SmartDashboard/drive/outputs/leftpossetpoint",
+                "/SmartDashboard/drive/outputs/leftencoder"
+            ]
+        },
+		{
+            "settings": {
+                "tooltip": true,
+                "minValue": -120,
+                "maxValue": 120
+            },
+            "title": "Drive Right Positions"
+                "/SmartDashboard/drive/outputs/rightpossetpoint",
+                "/SmartDashboard/drive/outputs/rightencoder"
+            ]
+        },
+		{
+            "settings": {
+                "tooltip": true,
+                "minValue": -144,
+                "maxValue": 144
+            },
+            "title": "Drive Velocity (red left, blue right)"
+                "/SmartDashboard/drive/outputs/leftvelff",
+                "/SmartDashboard/drive/outputs/rightvelff"
+            ]
+        },
         {
             "settings": {
                 "tooltip": true,
