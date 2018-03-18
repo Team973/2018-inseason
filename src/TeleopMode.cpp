@@ -25,6 +25,7 @@ Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_elevatorMode(ElevatorMode::percentOutput)
         , m_intakeMode(IntakeMode::manual)
         , m_endGameSignalSent(false)
+        , m_enableForkDeploy(false)
         , m_hanger(hanger)
         , m_greyLight(greylight)
         , m_intakeSignal(
@@ -193,6 +194,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
         switch (button) {
             case DualAction::BtnA:
                 if (pressedP) {
+                    m_enableForkDeploy = true;
                 }
                 break;
             case DualAction::LJoystickBtn:
@@ -211,7 +213,9 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::BtnY:
                 if (pressedP) {
-                    m_hanger->DeployForks();
+                    if (m_enableForkDeploy || Timer::GetMatchTime() < 29) {
+                        m_hanger->DeployForks();
+                    }
                 }
                 break;
             case DualAction::LeftBumper:
