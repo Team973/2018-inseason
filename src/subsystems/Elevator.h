@@ -40,7 +40,8 @@ public:
     static constexpr double SCALE_MID = 70.0;
     static constexpr double SCALE_HIGH = 78.0;
 
-    Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor);
+    Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
+             TalonSRX *elevatorMotor, TalonSRX *wristMotor);
     virtual ~Elevator();
 
     /**
@@ -80,6 +81,7 @@ private:
     TaskMgr *m_scheduler;
 
     TalonSRX *m_elevatorMotor;
+    TalonSRX *m_wristMotor;
 
     double m_position;
     uint32_t m_zeroingTime;

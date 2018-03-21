@@ -6,9 +6,11 @@
 using namespace frc;
 
 namespace frc973 {
-Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor)
+Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
+                   TalonSRX *elevatorMotor, TalonSRX *wristMotor)
         : m_scheduler(scheduler)
-        , m_elevatorMotor(motor)
+        , m_elevatorMotor(elevatorMotor)
+        , m_wristMotor(wristMotor)
         , m_position(0.0)
         , m_zeroingTime(0)
         , m_elevatorState(ElevatorState::manual) {
@@ -39,6 +41,32 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor)
     m_elevatorMotor->ConfigForwardSoftLimitEnable(true, 10);
 
     m_elevatorMotor->Set(ControlMode::PercentOutput, 0.0);
+
+    m_wristMotor->ConfigSelectedFeedbackSensor(
+        ctre::phoenix::motorcontrol::FeedbackDevice::QuadEncoder, 0,
+        10);  // 0 = Not cascaded PID Loop; 10 = in constructor, not in a loop
+    m_wristMotor->SetSensorPhase(true);
+    m_wristMotor->SetNeutralMode(NeutralMode::Coast);
+    m_wristMotor->SetInverted(true);
+
+    m_wristMotor->Config_kP(0, 1.5, 10);
+    m_wristMotor->Config_kI(0, 0.0, 10);
+    m_wristMotor->Config_kD(0, 0.0, 10);
+    m_wristMotor->Config_kF(0, 0.0, 10);
+    m_wristMotor->ConfigMotionCruiseVelocity(3750.0, 10);
+    m_wristMotor->ConfigMotionAcceleration(4200.0, 10);
+    m_wristMotor->SelectProfileSlot(0, 0);
+
+    m_wristMotor->EnableCurrentLimit(true);
+    m_wristMotor->ConfigPeakCurrentDuration(0, 10);
+    m_wristMotor->ConfigPeakCurrentLimit(0, 10);
+    m_wristMotor->ConfigContinuousCurrentLimit(15, 10);
+    m_wristMotor->EnableVoltageCompensation(false);
+    m_wristMotor->ConfigForwardSoftLimitThreshold(
+        ELEVATOR_SOFT_HEIGHT_LIMIT / ELEVATOR_INCHES_PER_CLICK, 10);
+    m_wristMotor->ConfigForwardSoftLimitEnable(true, 10);
+
+    m_wristMotor->Set(ControlMode::PercentOutput, 0.0);
     m_positionCell = new LogCell("Elevator Position", 32, true);
     logger->RegisterCell(m_positionCell);
 }
