@@ -81,7 +81,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_elevator->SetPosition(Elevator::GROUND);
                 m_autoState++;
             }
-            /*if (m_drive->GetSplinePercentComplete() > 1.0) {
+            if (m_drive->GetSplinePercentComplete() > 1.0) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
                         &two_cube_intaking_left::two_cube_intaking_left,
@@ -99,9 +99,9 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_claw->kickOff();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
-            }*/
+            }
             break;
-        /*case 5:
+        case 5:
             if (m_drive->GetSplinePercentComplete() > 1.0) {
                 m_intake->Close();
             }
@@ -115,7 +115,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_claw->kickOff();
                 m_autoState++;
             }
-            break;*/
+            break;
         default:
             break;
     }
