@@ -12,6 +12,8 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
         , m_elevatorMotor(elevatorMotor)
         , m_wristMotor(wristMotor)
         , m_position(0.0)
+        , m_prevElevatorSetpoint(0.0)
+        , m_elevatorPositionDelta(0.0)
         , m_zeroingTime(0)
         , m_elevatorState(ElevatorState::manual) {
     this->m_scheduler->RegisterTask("Elevator", this, TASK_PERIODIC);
@@ -86,6 +88,13 @@ void Elevator::SetPosition(double position) {
     m_elevatorMotor->Set(ControlMode::MotionMagic, position_clicks);
 }
 
+void Elevator::SetManualInput(double input) {
+    m_elevatorState = ElevatorState::manual;
+    m_elevatorPositionDelta =
+        input * ELEVATOR_MAX_SPEED * ROBOT_LOOP_PERIOD_SEC_PER_LOOP +
+        m_prevElevatorSetpoint;
+}
+
 void Elevator::Reset() {
     m_elevatorState = ElevatorState::zeroing_start;
 }
@@ -105,12 +114,16 @@ void Elevator::TaskPeriodic(RobotMode mode) {
     DBStringPrintf(DBStringPos::DB_LINE0, "e %f", GetPosition());
     switch (m_elevatorState) {
         case manual:
+            m_elevatorMotor->Set(ControlMode::Position,
+                                 m_elevatorPositionDelta + this->GetPosition());
             break;
         case zeroing_start:
             m_elevatorState = ElevatorState::zeroing_goDown;
             break;
         case zeroing_goDown:
             m_elevatorMotor->Set(ControlMode::PercentOutput, -0.2);
+            break;
+        case motionMagic:
             break;
         case position:
             break;

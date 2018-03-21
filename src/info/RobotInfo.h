@@ -57,6 +57,10 @@ static const int OPERATOR_JOYSTICK_PORT = 1;
 // LEDs
 static const int NUM_LED = 26;
 
+// Constants
+static const double ROBOT_LOOP_PERIOD_SEC_PER_LOOP = 1.0 / 20.0;
+static const double ELEVATOR_MAX_SPEED = 200.0;
+
 // Drive
 static constexpr double DRIVE_WIDTH = 25.205;
 static constexpr double DRIVE_WHEEL_DIAMETER = 5.0;

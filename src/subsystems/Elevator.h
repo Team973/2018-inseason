@@ -28,6 +28,7 @@ public:
         manual,
         zeroing_start,
         position,
+        motionMagic,
         zeroing_goDown,
         zeroing_stop
     };
@@ -45,12 +46,14 @@ public:
     virtual ~Elevator();
 
     /**
-     * Sets Elevator Position
+     * Sets Elevator Position using Motion Magic
      *
      * @param position: the position goal
      **/
     void SetPosition(double position);
 
+    // Uses Position PID
+    void SetManualInput(double input);
     /**
      * Sets Elevator Power
      *
@@ -84,6 +87,8 @@ private:
     TalonSRX *m_wristMotor;
 
     double m_position;
+    double m_prevElevatorSetpoint;
+    double m_elevatorPositionDelta;
     uint32_t m_zeroingTime;
     ElevatorState m_elevatorState;
     LogCell *m_positionCell;
