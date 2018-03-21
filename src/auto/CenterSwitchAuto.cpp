@@ -32,7 +32,6 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             m_elevator->SetPosition(Elevator::LOW_GOAL);
             m_claw->grab();
-            m_claw->kickOff();
             m_autoTimer = GetMsecTime();
             m_autoState++;
             break;
@@ -45,7 +44,6 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
         case 2:
             if (m_drive->GetSplinePercentComplete() > 0.80 ||
                 m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
-                m_claw->cubeLaunch();
                 m_autoState++;
             }
             break;

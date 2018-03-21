@@ -35,7 +35,6 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                                      Drive::RelativeTo::Now);
             }
             m_claw->grab();
-            m_claw->kickOff();
             m_autoTimer = GetMsecTime();
             m_autoState++;
             break;
@@ -48,7 +47,6 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
         case 2:
             if (m_drive->GetSplinePercentComplete() > 0.8 ||
                 m_drive->OnTarget()) {
-                m_claw->cubeLaunch();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
@@ -84,7 +82,6 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                         Drive::RelativeTo::Now);
                 }
                 m_claw->open();
-                m_claw->kickOff();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
@@ -93,14 +90,12 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             if ((m_drive->GetSplinePercentComplete() > 0.8) ||
                 GetMsecTime() - m_autoTimer > 4000) {
                 m_claw->grab();
-                m_claw->kickOff();
                 m_autoState++;
             }
             break;
         case 6:
             m_elevator->SetPosition(Elevator::LOW_GOAL);
             if (m_elevator->GetPosition() > 20.0) {
-                m_claw->cubeLaunch();
                 m_autoState++;
             }
             break;

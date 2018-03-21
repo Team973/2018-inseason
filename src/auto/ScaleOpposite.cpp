@@ -33,7 +33,6 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
                     Drive::RelativeTo::Now);
             }
             m_claw->grab();
-            m_claw->kickOff();
             m_autoTimer = GetMsecTime();
             m_autoState++;
             break;
@@ -62,7 +61,6 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
         case 3:
             if (m_drive->GetSplinePercentComplete() > 0.85 ||
                 m_drive->OnTarget()) {
-                m_claw->cubeLaunch();
                 m_autoState++;
             }
             break;

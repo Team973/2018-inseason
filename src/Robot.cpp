@@ -48,7 +48,7 @@ Robot::Robot()
         , m_forkliftTalon(new GreyTalonSRX(FORKLIFT_TALON_CAN_ID))
         , m_greylight(new GreyLight(NUM_LED))
         , m_elevator(new Elevator(this, m_logger, m_elevatorMotor))
-        , m_claw(new Claw(this, m_logger, m_cubeClamp, m_clawKicker))
+        , m_claw(new Claw(this, m_logger, m_cubeClamp))
         , m_drive(new Drive(this, m_logger, m_leftDriveTalonA,
                             m_leftDriveVictorB, m_leftDriveVictorC,
                             m_rightDriveTalonA, m_rightDriveVictorB,

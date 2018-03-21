@@ -189,14 +189,12 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::RightTrigger:
                 if (pressedP) {
-                    m_claw->cubeLaunch();
                 }
                 else {
                 }
                 break;
             case DualAction::RightBumper:
                 if (pressedP) {
-                    m_claw->push();
                 }
                 else {
                 }
@@ -215,18 +213,14 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::BtnA:
                 if (pressedP) {
-                    m_claw->manualClawOpen();
                 }
                 else {
-                    m_claw->manualClawClosed();
                 }
                 break;
             case DualAction::BtnB:
                 if (pressedP) {
-                    m_claw->kickOn();
                 }
                 else {
-                    m_claw->kickOff();
                 }
                 break;
             case DualAction::BtnX:

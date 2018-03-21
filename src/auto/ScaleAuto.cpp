@@ -35,7 +35,6 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                                      Drive::RelativeTo::Now);
             }
             m_claw->grab();
-            m_claw->kickOff();
             m_autoTimer = GetMsecTime();
             m_autoState++;
             break;
@@ -49,7 +48,6 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
         case 2:
             if (m_drive->GetSplinePercentComplete() > 0.80 ||
                 m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
-                m_claw->cubeLaunch();
                 m_autoState++;
             }
             break;
@@ -83,7 +81,6 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                         Drive::RelativeTo::Now);
                 }
                 m_claw->open();
-                m_claw->kickOff();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
@@ -92,7 +89,6 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             if ((m_drive->GetSplinePercentComplete() > 0.8) ||
                 GetMsecTime() - m_autoTimer > 4000) {
                 m_claw->grab();
-                m_claw->kickOff();
                 m_autoState++;
             }
             break;

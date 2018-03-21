@@ -95,8 +95,6 @@ void Teleop::TeleopPeriodic() {
         case IntakeMode::switchIntaking:
             m_elevatorMode = ElevatorMode::motionMagic;
             m_elevator->SetPosition(Elevator::VAULT);
-            m_claw->open();
-            m_claw->kickOff();
             if (m_elevator->GetPosition() < 5.0 ||
                 m_driverJoystick->GetRawButton(DualAction::Back)) {
                 m_intakeMode = IntakeMode::switchTaking;
@@ -104,9 +102,7 @@ void Teleop::TeleopPeriodic() {
             break;
         case IntakeMode::switchTaking:
             m_elevator->SetPosition(Elevator::GROUND);
-            m_claw->kickOff();
             if (m_elevator->GetPosition() < 2.0) {
-                m_claw->grab();
                 m_intakeModeTimer = GetMsecTime();
                 m_intakeMode = IntakeMode::switchGrabbing;
             }
@@ -117,16 +113,12 @@ void Teleop::TeleopPeriodic() {
             }
             break;
         case IntakeMode::switchStandby:
-            m_claw->grab();
-            m_claw->kickOff();
             m_elevatorMode = ElevatorMode::motionMagic;
             m_elevator->SetPosition(Elevator::VAULT);
             m_intakeSignal->Reset();
             m_greyLight->SetPixelStateProcessor(m_intakeSignal);
             break;
         case IntakeMode::vaultStart:
-            m_claw->grab();
-            m_claw->kickOff();
             m_elevatorMode = ElevatorMode::motionMagic;
             m_elevator->SetPosition(Elevator::GROUND);
             m_intakeModeTimer = GetMsecTime();
@@ -137,8 +129,6 @@ void Teleop::TeleopPeriodic() {
                 (GetMsecTime() - m_intakeModeTimer) > 300) {
                 m_elevatorMode = ElevatorMode::motionMagic;
                 m_elevator->SetPosition(Elevator::GROUND);
-                m_claw->grab();
-                m_claw->kickOff();
             }
             break;
         default:
@@ -180,7 +170,6 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::LeftBumper:
                 if (pressedP) {
                     m_intakeMode = IntakeMode::manual;
-                    m_claw->drop();
                 }
                 else {
                 }
@@ -188,7 +177,6 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::LeftTrigger:
                 if (pressedP) {
                     m_intakeMode = IntakeMode::manual;
-                    m_claw->cubeLaunch();
                 }
                 break;
             case DualAction::RightBumper:
@@ -294,7 +282,6 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::RightBumper:
                 if (pressedP) {
                     m_intakeMode = IntakeMode::manual;
-                    m_claw->open();
                 }
                 else {
                 }
