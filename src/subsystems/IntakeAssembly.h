@@ -7,6 +7,8 @@
 #include "src/info/RobotInfo.h"
 #include "lib/helpers/JoystickHelper.h"
 #include "lib/util/Util.h"
+#include "src/subsystems/Elevator.h"
+#include "src/subsystems/Wrist.h"
 
 using namespace frc;
 
@@ -14,55 +16,11 @@ namespace frc973 {
 class TaskMgr;
 class LogSpreadsheet;
 
-class Elevator : public CoopTask {
+class IntakeAssembly : public CoopTask {
 public:
-    enum ElevatorState
-    {
-        manual,
-        zeroing_start,
-        position,
-        zeroing_goDown,
-        zeroing_stop
-    };
-
-    static constexpr double GROUND = 0.0;
-    static constexpr double VAULT = 4.5;
-    static constexpr double LOW_GOAL = 30.0;
-    static constexpr double HANGING = 55.0;
-    static constexpr double SCALE_LOW = 64.0;
-    static constexpr double SCALE_MID = 70.0;
-    static constexpr double SCALE_HIGH = 78.0;
-
-    Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
-             TalonSRX *elevatorMotor, TalonSRX *wristMotor);
-    virtual ~Elevator();
-
-    /**
-     * Sets Elevator Position
-     *
-     * @param position: the position goal
-     **/
-    void SetPosition(double position);
-
-    /**
-     * Sets Elevator Power
-     *
-     * @param power: power being sent to the motor from -1.0 to 1.0
-     **/
-    void SetPower(double power);
-
-    /**
-     * Resets elevator subsystem by setting position to zero
-     *  and setting control modes to % output
-     **/
-    void Reset();
-
-    /**
-     * @return: returns current elevator position in sensor units
-     **/
-    float GetPosition();
-
-    void ZeroPosition();
+    IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
+                   Elevator *elevator, Wrist *wrist);
+    virtual ~IntakeAssembly();
 
     /**
      * Update function synonymous to TeleopContinuous that gets called
@@ -73,12 +31,7 @@ public:
 private:
     TaskMgr *m_scheduler;
 
-    TalonSRX *m_elevatorMotor;
-    TalonSRX *m_wristMotor;
-
-    double m_position;
-    uint32_t m_zeroingTime;
-    ElevatorState m_elevatorState;
-    LogCell *m_positionCell;
+    Elevator *m_elevator;
+    Wrist *m_wrist;
 };
 }
