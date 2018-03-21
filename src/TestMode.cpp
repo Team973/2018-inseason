@@ -6,14 +6,13 @@ using namespace sample;
 
 namespace frc973 {
 Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-           Drive *drive, Elevator *elevator, Intake *intake, Claw *claw,
-           Hanger *hanger, GreyLight *greylight)
+           Drive *drive, Elevator *elevator, Claw *claw, Hanger *hanger,
+           GreyLight *greylight)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_drive(drive)
         , m_elevator(elevator)
         , m_claw(claw)
-        , m_intake(intake)
         , m_hanger(hanger)
         , m_elevatorMode(ElevatorMode::percentOutput)
         , m_greylight(greylight)
@@ -42,16 +41,6 @@ void Test::TestPeriodic() {
     else if (m_elevatorMode == ElevatorMode::zero) {
     }
     else if (m_elevatorMode == ElevatorMode::motionMagic) {
-    }
-
-    double intakeControl =
-        -m_operatorJoystick->GetRawAxis(DualAction::RightYAxis);
-
-    if (intakeControl > 0.8) {
-        m_intake->RaiseIntake();
-    }
-    else if (intakeControl < -0.8) {
-        m_intake->LowerIntake();
     }
 
     double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
@@ -214,24 +203,14 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
-                    m_intake->RegularPull();
-                    m_intake->LowerIntake();
-                    m_claw->open();
                 }
                 else {
-                    m_intake->Stop();
-                    m_claw->grab();
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
-                    m_intake->Eject();
-                    m_intake->LowerIntake();
-                    m_claw->open();
                 }
                 else {
-                    m_intake->Stop();
-                    m_claw->grab();
                 }
                 break;
             case DualAction::BtnA:
@@ -252,18 +231,14 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::BtnX:
                 if (pressedP) {
-                    m_intake->RegularPull();
                 }
                 else {
-                    m_intake->Stop();
                 }
                 break;
             case DualAction::BtnY:
                 if (pressedP) {
-                    m_intake->Eject();
                 }
                 else {
-                    m_intake->Stop();
                 }
                 break;
             case DualAction::Start:

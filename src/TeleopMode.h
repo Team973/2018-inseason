@@ -15,7 +15,6 @@
 #include "src/subsystems/Drive.h"
 #include "src/subsystems/Elevator.h"
 #include "src/subsystems/Claw.h"
-#include "src/subsystems/Intake.h"
 #include "src/subsystems/Hanger.h"
 #include "lib/helpers/GreyLight.h"
 #include "lib/pixelprocessors/Flash.h"
@@ -31,7 +30,7 @@ public:
     static constexpr Color NO_COLOR = {0, 0, 0};
 
     Teleop(ObservableJoystick *driver, ObservableJoystick *codriver, Claw *claw,
-           Drive *drive, Elevator *elevator, Intake *intake, Hanger *hanger,
+           Drive *drive, Elevator *elevator, Hanger *hanger,
            GreyLight *greylight);
     virtual ~Teleop();
 
@@ -63,7 +62,6 @@ private:
     };
 
     Elevator *m_elevator;
-    Intake *m_intake;
 
     ElevatorMode m_elevatorMode;
     double m_elevatorPosition;
@@ -75,7 +73,6 @@ private:
         switchTaking,
         switchGrabbing,
         switchStandby,
-        switchRaising,
         vaultStart,
         vaultIntaking,
         vaultEjecting

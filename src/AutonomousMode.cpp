@@ -6,17 +6,15 @@ using namespace frc;
 
 namespace frc973 {
 Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
-                       Intake *intake, Claw *claw, ADXRS450_Gyro *gyro,
-                       GreyLight *greylight)
+                       Claw *claw, ADXRS450_Gyro *gyro, GreyLight *greylight)
         : m_noAuto(new NoAuto())
         , m_forwardAuto(new ForwardAuto(drive))
-        , m_centerSwitchAuto(
-              new CenterSwitchAuto(drive, elevator, intake, claw))
-        , m_scaleAuto(new ScaleAuto(drive, elevator, intake, claw))
-        , m_scaleOpposite(new ScaleOpposite(drive, elevator, intake, claw))
-        , m_sideSwitch(new SideSwitch(drive, elevator, intake, claw))
-        , m_switchOpposite(new SwitchOpposite(drive, elevator, intake, claw))
-        , m_twoCubeAuto(new TwoCubeAuto(drive, elevator, intake, claw))
+        , m_centerSwitchAuto(new CenterSwitchAuto(drive, elevator, claw))
+        , m_scaleAuto(new ScaleAuto(drive, elevator, claw))
+        , m_scaleOpposite(new ScaleOpposite(drive, elevator, claw))
+        , m_sideSwitch(new SideSwitch(drive, elevator, claw))
+        , m_switchOpposite(new SwitchOpposite(drive, elevator, claw))
+        , m_twoCubeAuto(new TwoCubeAuto(drive, elevator, claw))
         , m_disabled(disabled)
         , m_greylight(greylight)
         , m_autoSignal(new LightPattern::AutoIndicator())
@@ -26,7 +24,6 @@ Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
         , m_direction(AutoRoutineBase::AutoDirection::Left)
         , m_drive(drive)
         , m_elevator(elevator)
-        , m_intake(intake)
         , m_claw(claw)
         , m_gyro(gyro) {
 }

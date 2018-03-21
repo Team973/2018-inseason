@@ -8,7 +8,6 @@
 #include "src/subsystems/Drive.h"
 #include "src/subsystems/Elevator.h"
 #include "src/subsystems/Claw.h"
-#include "src/subsystems/Intake.h"
 #include "src/subsystems/Hanger.h"
 #include "lib/helpers/GreyLight.h"
 #include "lib/pixelprocessors/Flash.h"
@@ -19,8 +18,7 @@ namespace frc973 {
 class Test {
 public:
     Test(ObservableJoystick *driver, ObservableJoystick *codriver, Drive *drive,
-         Elevator *elevator, Intake *intake, Claw *claw, Hanger *hanger,
-         GreyLight *greylight);
+         Elevator *elevator, Claw *claw, Hanger *hanger, GreyLight *greylight);
     virtual ~Test();
 
     void TestInit();
@@ -58,7 +56,6 @@ private:
     DriveMode m_driveMode;
     Elevator *m_elevator;
     Claw *m_claw;
-    Intake *m_intake;
     Hanger *m_hanger;
 
     ElevatorMode m_elevatorMode;

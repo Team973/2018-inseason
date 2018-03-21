@@ -49,9 +49,6 @@ Robot::Robot()
         , m_greylight(new GreyLight(NUM_LED))
         , m_elevator(new Elevator(this, m_logger, m_elevatorMotor))
         , m_claw(new Claw(this, m_logger, m_cubeClamp, m_clawKicker))
-        , m_intake(new Intake(this, m_logger, m_rightRoller, m_leftRoller,
-                              m_cubeSensor, m_intakePosition,
-                              m_intakeOpenClose))
         , m_drive(new Drive(this, m_logger, m_leftDriveTalonA,
                             m_leftDriveVictorB, m_leftDriveVictorC,
                             m_rightDriveTalonA, m_rightDriveVictorB,
@@ -67,14 +64,12 @@ Robot::Robot()
         , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick,
                                   m_intakeCamera, m_forkCamera, m_greyCam,
                                   m_greylight))
-        , m_autonomous(new Autonomous(m_disabled, m_drive, m_elevator, m_intake,
-                                      m_claw, m_gyro, m_greylight))
+        , m_autonomous(new Autonomous(m_disabled, m_drive, m_elevator, m_claw,
+                                      m_gyro, m_greylight))
         , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick, m_claw,
-                              m_drive, m_elevator, m_intake, m_hanger,
-                              m_greylight))
+                              m_drive, m_elevator, m_hanger, m_greylight))
         , m_test(new Test(m_driverJoystick, m_operatorJoystick, m_drive,
-                          m_elevator, m_intake, m_claw, m_hanger,
-                          m_greylight)) {
+                          m_elevator, m_claw, m_hanger, m_greylight)) {
     std::cout << "Constructed a Robot!" << std::endl;
 }
 
