@@ -34,7 +34,7 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_drive->SplineDrive(&right_scale::right_scale,
                                      Drive::RelativeTo::Now);
             }
-            m_claw->grab();
+            m_claw->CloseClaw();
             m_autoTimer = GetMsecTime();
             m_autoState++;
             break;
@@ -81,7 +81,7 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                         &two_cube_intaking_right::two_cube_intaking_right,
                         Drive::RelativeTo::Now);
                 }
-                m_claw->open();
+                m_claw->OpenClaw();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
@@ -89,7 +89,7 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
         case 5:
             if ((m_drive->GetSplinePercentComplete() > 0.8) ||
                 GetMsecTime() - m_autoTimer > 4000) {
-                m_claw->grab();
+                m_claw->CloseClaw();
                 m_autoState++;
             }
             break;

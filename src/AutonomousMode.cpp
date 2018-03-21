@@ -35,7 +35,7 @@ void Autonomous::AutonomousInit() {
     // Remember to zero all sensors here
     m_elevator->SetPosition(Elevator::GROUND);
     m_gyro->Reset();
-    m_claw->grab();
+    m_claw->CloseClaw();
     std::cout << "Autonomous Start" << std::endl;
 
     DBStringPrintf(DB_LINE1, "%s", m_scoringLocations.c_str());

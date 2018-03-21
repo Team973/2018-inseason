@@ -7,6 +7,7 @@
 #pragma once
 
 #include "WPILib.h"
+#include "Phoenix.h"
 #include "lib/managers/CoopTask.h"
 #include "lib/logging/LogSpreadsheet.h"
 #include "src/info/RobotInfo.h"
@@ -19,7 +20,8 @@ class LogSpreadsheet;
 
 class Claw : public CoopTask {
 public:
-    Claw(TaskMgr *scheduler, LogSpreadsheet *logger, Solenoid *cubeClamp);
+    Claw(TaskMgr *scheduler, LogSpreadsheet *logger, DigitalInput *cubeSensor,
+         Solenoid *cubeClamp, TalonSRX *leftRoller, TalonSRX *rightRoller);
 
     virtual ~Claw();
 
@@ -32,17 +34,24 @@ public:
     /*
      * When called, opens the claw arms
      */
-    void open();
+    void OpenClaw();
 
     /*
      * When called, closes claw arms
      */
-    void grab();
+    void CloseClaw();
+
+    void IntakeCube();
+    void EjectCube();
 
     void TaskPeriodic(RobotMode mode);
 
 private:
     TaskMgr *m_scheduler;
+    DigitalInput *m_cubeSensor;
     Solenoid *m_cubeClamp;
+
+    TalonSRX *m_leftRoller;
+    TalonSRX *m_rightRoller;
 };
 }

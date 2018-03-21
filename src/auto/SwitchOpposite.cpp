@@ -33,7 +33,7 @@ void SwitchOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
                     Drive::RelativeTo::Now);
             }
             m_elevator->SetPosition(Elevator::LOW_GOAL);
-            m_claw->grab();
+            m_claw->CloseClaw();
             m_autoTimer = GetMsecTime();
             m_autoState++;
             break;

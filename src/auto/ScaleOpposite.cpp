@@ -32,7 +32,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
                     &right_scale_opposite_a::right_scale_opposite_a,
                     Drive::RelativeTo::Now);
             }
-            m_claw->grab();
+            m_claw->CloseClaw();
             m_autoTimer = GetMsecTime();
             m_autoState++;
             break;
