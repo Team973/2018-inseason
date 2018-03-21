@@ -44,6 +44,8 @@ public:
     void IntakeCube();
     void EjectCube();
 
+    bool IsCubeIn();
+
     void TaskPeriodic(RobotMode mode);
 
 private:

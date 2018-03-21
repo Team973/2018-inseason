@@ -43,6 +43,10 @@ void Claw::EjectCube() {
     m_rightRoller->Set(ControlMode::PercentOutput, -1.0);
 }
 
+bool Claw::IsCubeIn() {
+    return m_cubeSensor->Get();
+}
+
 void Claw::TaskPeriodic(RobotMode mode) {
 }
 }
