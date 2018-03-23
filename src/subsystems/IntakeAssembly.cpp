@@ -20,8 +20,40 @@ IntakeAssembly::~IntakeAssembly() {
     m_scheduler->UnregisterTask(this);
 }
 
-void IntakeAssembly::GoToStow() {
-    m_elevator->SetPosition(Elevator::GROUND);
+void IntakeAssembly::GoToIntakePosition() {
+    switch (m_intakePosition) {
+        case IntakePosition::stow:
+            m_elevatorPosition = Elevator::GROUND;
+            m_wristPosition = Wrist::STOW;
+            break;
+        case IntakePosition::vault:
+            m_elevatorPosition = Elevator::VAULT;
+            m_wristPosition = Wrist::STOW;
+            break;
+        case IntakePosition::lowGoal:
+            m_elevatorPosition = Elevator::LOW_GOAL;
+            m_wristPosition = Wrist::STOW;
+            break;
+        case IntakePosition::scaleLow:
+            m_elevatorPosition = Elevator::SCALE_LOW;
+            m_wristPosition = Wrist::STOW;
+            break;
+        case IntakePosition::scaleMid:
+            m_elevatorPosition = Elevator::SCALE_MID;
+            m_wristPosition = Wrist::STOW;
+            break;
+        case IntakePosition::scaleHigh:
+            m_elevatorPosition = Elevator::SCALE_HIGH;
+            m_wristPosition = Wrist::STOW;
+            break;
+        case IntakePosition::overBack:
+            m_elevatorPosition = Elevator::SCALE_HIGH;
+            m_wristPosition = Wrist::OVER_THE_BACK;
+        default:
+            break;
+    }
+    m_elevator->SetPosition(m_elevatorPosition);
+    m_wrist->SetPosition(m_wristPosition);
 }
 
 void IntakeAssembly::TaskPeriodic(RobotMode mode) {

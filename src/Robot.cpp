@@ -50,6 +50,8 @@ Robot::Robot()
               new Elevator(this, m_logger, m_elevatorMotor, m_wristMotor))
         , m_wrist(new Wrist(this, m_logger, m_cubeSensor, m_wristMotor,
                             m_leftRoller, m_rightRoller, m_cubeClamp))
+        , m_intakeAssembly(
+              new IntakeAssembly(this, m_logger, m_elevator, m_wrist))
         , m_drive(new Drive(this, m_logger, m_leftDriveTalonA,
                             m_leftDriveVictorB, m_leftDriveVictorC,
                             m_rightDriveTalonA, m_rightDriveVictorB,

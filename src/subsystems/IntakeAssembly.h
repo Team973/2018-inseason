@@ -22,7 +22,7 @@ public:
                    Elevator *elevator, Wrist *wrist);
     virtual ~IntakeAssembly();
 
-    void GoToStow();
+    void GoToIntakePosition();
 
     /**
      * Update function synonymous to TeleopContinuous that gets called
@@ -31,7 +31,19 @@ public:
     void TaskPeriodic(RobotMode mode);
 
 private:
+    enum class IntakePosition
+    {
+        stow,
+        vault,
+        lowGoal,
+        scaleLow,
+        scaleMid,
+        scaleHigh,
+        overBack
+    };
+
     TaskMgr *m_scheduler;
+    IntakePosition m_intakePosition;
 
     Elevator *m_elevator;
     Wrist *m_wrist;

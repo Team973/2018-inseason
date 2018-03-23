@@ -25,6 +25,7 @@
 #include "src/subsystems/Wrist.h"
 #include "src/subsystems/Hanger.h"
 #include "src/subsystems/Drive.h"
+#include "src/subsystems/IntakeAssembly.h"
 #include "lib/logging/LogSpreadsheet.h"
 #include "lib/helpers/JoystickHelper.h"
 #include "lib/helpers/GreyCompressor.h"
@@ -111,6 +112,7 @@ private:
     GreyLight *m_greylight;
     Elevator *m_elevator;
     Wrist *m_wrist;
+    IntakeAssembly *m_intakeAssembly;
     Drive *m_drive;
     Hanger *m_hanger;
 
