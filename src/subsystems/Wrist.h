@@ -60,6 +60,7 @@ public:
 
     void IntakeCube();
     void EjectCube();
+    void StopIntake();
 
     bool IsCubeIn();
 

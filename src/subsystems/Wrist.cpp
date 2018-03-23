@@ -108,6 +108,11 @@ void Wrist::EjectCube() {
     m_rightRoller->Set(ControlMode::PercentOutput, -1.0);
 }
 
+void Wrist::StopIntake() {
+    m_leftRoller->Set(ControlMode::PercentOutput, 0.0);
+    m_rightRoller->Set(ControlMode::PercentOutput, 0.0);
+}
+
 bool Wrist::IsCubeIn() {
     return m_cubeSensor->Get();
 }

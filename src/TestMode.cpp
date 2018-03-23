@@ -30,6 +30,11 @@ void Test::TestInit() {
 void Test::TestPeriodic() {
     double elevatorManualPower =
         -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
+    m_intakeAssembly->SetElevatorManualPower(elevatorManualPower +
+                                             ELEVATOR_FEED_FORWARD);
+    m_intakeAssembly->SetWristManualPower(
+        -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis) +
+        ELEVATOR_FEED_FORWARD);
 
     double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
     double x =
@@ -186,14 +191,18 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
+                    m_intakeAssembly->IntakeCube();
                 }
                 else {
+                    m_intakeAssembly->StopIntake();
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
+                    m_intakeAssembly->EjectCube();
                 }
                 else {
+                    m_intakeAssembly->StopIntake();
                 }
                 break;
             case DualAction::BtnA:

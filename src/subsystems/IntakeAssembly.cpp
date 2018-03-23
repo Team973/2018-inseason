@@ -56,6 +56,26 @@ void IntakeAssembly::GoToIntakePosition(IntakePosition intakePosition) {
     m_wrist->SetPosition(m_wristPositionSetpoint);
 }
 
+void IntakeAssembly::SetElevatorManualPower(double input) {
+    m_elevator->SetPower(input);
+}
+
+void IntakeAssembly::SetWristManualPower(double input) {
+    m_wrist->SetPower(input);
+}
+
+void IntakeAssembly::IntakeCube() {
+    m_wrist->IntakeCube();
+}
+
+void IntakeAssembly::EjectCube() {
+    m_wrist->EjectCube();
+}
+
+void IntakeAssembly::StopIntake() {
+    m_wrist->StopIntake();
+}
+
 double IntakeAssembly::GetElevatorPosition() {
     return m_elevator->GetPosition();
 }

@@ -35,6 +35,13 @@ public:
 
     void GoToIntakePosition(IntakePosition intakePosition);
 
+    void SetElevatorManualPower(double input);
+    void SetWristManualPower(double input);
+
+    void IntakeCube();
+    void EjectCube();
+    void StopIntake();
+
     double GetElevatorPosition();
     double GetWristPosition();
 
