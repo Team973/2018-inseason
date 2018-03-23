@@ -4,8 +4,7 @@
 #include <iostream>
 #include "src/auto/AutoRoutineBase.h"
 #include "src/subsystems/Drive.h"
-#include "src/subsystems/Elevator.h"
-#include "src/subsystems/Wrist.h"
+#include "src/subsystems/IntakeAssembly.h"
 
 using namespace frc;
 namespace frc973 {
@@ -13,7 +12,7 @@ class Disabled;
 
 class SwitchOpposite : public AutoRoutineBase {
 public:
-    SwitchOpposite(Drive *drive, Elevator *elevator, Wrist *wrist);
+    SwitchOpposite(Drive *drive, IntakeAssembly *intakeAssembly);
     virtual ~SwitchOpposite();
 
     void Execute(AutoRoutineBase::AutoDirection direction) override;
@@ -22,8 +21,7 @@ public:
 
 private:
     Drive *m_drive;
-    Elevator *m_elevator;
-    Wrist *m_wrist;
+    IntakeAssembly *m_intakeAssembly;
 
     uint32_t m_autoTimer;
 };

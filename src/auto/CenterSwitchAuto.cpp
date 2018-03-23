@@ -12,9 +12,8 @@ using namespace right_switch_reset;
 using namespace left_switch_reset;
 
 namespace frc973 {
-CenterSwitchAuto::CenterSwitchAuto(Drive *drive, Elevator *elevator,
-                                   Wrist *wrist)
-        : m_drive(drive), m_elevator(elevator), m_wrist(wrist), m_autoTimer(0) {
+CenterSwitchAuto::CenterSwitchAuto(Drive *drive, IntakeAssembly *intakeAssembly)
+        : m_drive(drive), m_intakeAssembly(intakeAssembly), m_autoTimer(0) {
 }
 
 CenterSwitchAuto::~CenterSwitchAuto(void) {
@@ -31,7 +30,8 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_drive->SplineDrive(&center_right_switch::center_right_switch,
                                      Drive::RelativeTo::Now);
             }
-            m_elevator->SetPosition(Elevator::LOW_GOAL);
+            m_intakeAssembly->GoToIntakePosition(
+                IntakeAssembly::IntakePosition::vault);
             m_wrist->CloseClaw();
             m_autoTimer = GetMsecTime();
             m_autoState++;
@@ -65,7 +65,8 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
         case 4:
             if (m_drive->GetSplinePercentComplete() > 1.0) {
                 m_drive->OpenloopArcadeDrive(0.0, 0.0);
-                m_elevator->SetPosition(Elevator::GROUND);
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::IntakePosition::vault);
                 m_autoState++;
             }
             break;

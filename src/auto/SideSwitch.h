@@ -4,14 +4,13 @@
 #include <iostream>
 #include "src/auto/AutoRoutineBase.h"
 #include "src/subsystems/Drive.h"
-#include "src/subsystems/Elevator.h"
-#include "src/subsystems/Wrist.h"
+#include "src/subsystems/IntakeAssembly.h"
 
 using namespace frc;
 namespace frc973 {
 class SideSwitch : public AutoRoutineBase {
 public:
-    SideSwitch(Drive *drive, Elevator *elevator, Wrist *wrist);
+    SideSwitch(Drive *drive, IntakeAssembly *intakeAssembly);
     virtual ~SideSwitch();
 
     void Execute(AutoRoutineBase::AutoDirection direction) override;
@@ -20,8 +19,7 @@ public:
 
 private:
     Drive *m_drive;
-    Elevator *m_elevator;
-    Wrist *m_wrist;
+    IntakeAssembly *m_intakeAssembly;
 
     uint32_t m_autoTimer;
 };
