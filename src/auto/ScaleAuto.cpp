@@ -40,7 +40,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             break;
         case 1:
             if (GetMsecTime() - m_autoTimer > 1000) {
-                m_elevator->SetPosition(Elevator::SCALE_HIGH);
+                // m_elevator->SetPosition(Elevator::SCALE_HIGH);
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }

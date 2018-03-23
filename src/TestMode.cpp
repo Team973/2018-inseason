@@ -13,7 +13,6 @@ Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_drive(drive)
         , m_intakeAssembly(intakeAssembly)
         , m_hanger(hanger)
-        , m_elevatorMode(ElevatorMode::percentOutput)
         , m_greylight(greylight)
         , m_flashSignal(
               new LightPattern::Flash({0, 255, 0}, {0, 0, 0}, 50, 50)) {
@@ -31,16 +30,6 @@ void Test::TestInit() {
 void Test::TestPeriodic() {
     double elevatorManualPower =
         -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
-
-    if (fabs(elevatorManualPower) > 0.1 ||
-        m_elevatorMode == ElevatorMode::percentOutput) {
-        m_elevatorMode = ElevatorMode::percentOutput;
-        m_elevator->SetPower(elevatorManualPower / 2.0);
-    }
-    else if (m_elevatorMode == ElevatorMode::zero) {
-    }
-    else if (m_elevatorMode == ElevatorMode::motionMagic) {
-    }
 
     double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
     double x =
@@ -81,7 +70,6 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
         switch (button) {
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::percentOutput;
                 }
                 break;
             case DualAction::DPadDownVirtBtn:
@@ -91,8 +79,6 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::zero;
-                    m_elevator->Reset();
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:

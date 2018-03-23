@@ -32,7 +32,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             m_intakeAssembly->GoToIntakePosition(
                 IntakeAssembly::IntakePosition::vault);
-            m_wrist->CloseClaw();
+            // m_wrist->CloseClaw();
             m_autoTimer = GetMsecTime();
             m_autoState++;
             break;
