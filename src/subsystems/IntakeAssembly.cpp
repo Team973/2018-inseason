@@ -11,8 +11,11 @@ IntakeAssembly::IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
         : m_scheduler(scheduler)
         , m_elevator(elevator)
         , m_wrist(wrist)
+        , m_controlMode(ControlMode::Idle)
         , m_elevatorPositionSetpoint(0.0)
-        , m_wristPositionSetpoint(0.0) {
+        , m_wristPositionSetpoint(0.0)
+        , m_elevatorInc(0.0)
+        , m_wristInc(0.0) {
     this->m_scheduler->RegisterTask("IntakeAssembly", this, TASK_PERIODIC);
 }
 
@@ -21,6 +24,7 @@ IntakeAssembly::~IntakeAssembly() {
 }
 
 void IntakeAssembly::GoToIntakePosition(IntakePosition intakePosition) {
+    m_controlMode = ControlMode::Position;
     switch (intakePosition) {
         case IntakePosition::stow:
             m_elevatorPositionSetpoint = Elevator::GROUND;
@@ -64,6 +68,22 @@ void IntakeAssembly::SetWristManualPower(double input) {
     m_wrist->SetPower(input);
 }
 
+void IntakeAssembly::SetPosManualInput(double elevatorInc, double wristInc) {
+    m_elevatorInc = elevatorInc;
+    m_wristInc = wristInc;
+
+    double currPosition = GetWristPosition();
+    m_wristPositionSetpoint += m_wristInc * MAX_WRIST_SPEED * 1.0 / 20.0;
+    m_wristPositionSetpoint = Util::bound(
+            m_wristPositionSetpoint,
+            currPosition - MAX_WRIST_SPEED * 1.5 / 20.0,
+            currPosition + MAX_WRIST_SPEED * 1.5 / 20.0);
+
+    m_wrist->SetPositionStep(m_wristPositionSetpoint);
+    m_elevator->SetPower(m_elevatorInc + ELEVATOR_FEED_FORWARD);
+    m_controlMode = ControlMode::ManualPosition;
+}
+
 void IntakeAssembly::IntakeCube() {
     m_wrist->IntakeCube();
 }
@@ -85,5 +105,21 @@ double IntakeAssembly::GetWristPosition() {
 }
 
 void IntakeAssembly::TaskPeriodic(RobotMode mode) {
+    DBStringPrintf(DBStringPos::DB_LINE8, "w %3.2f s %3.2f i %1.2f",
+            GetWristPosition(),
+            m_wristPositionSetpoint,
+            m_wristInc);
+
+    switch (m_controlMode) {
+        case ControlMode::Idle:
+            break;
+        case ControlMode::ManualPosition:
+            break;
+        case ControlMode::ManualVoltage:
+            break;
+        case ControlMode::Position:
+            break;
+    }
 }
+
 }

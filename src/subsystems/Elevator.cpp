@@ -24,7 +24,7 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_elevatorMotor->SetNeutralMode(NeutralMode::Coast);
     m_elevatorMotor->SetInverted(true);
 
-    m_elevatorMotor->Config_kP(0, 1.5, 10);
+    m_elevatorMotor->Config_kP(0, 2.5, 10);
     m_elevatorMotor->Config_kI(0, 0.0, 10);
     m_elevatorMotor->Config_kD(0, 0.0, 10);
     m_elevatorMotor->Config_kF(0, 0.0, 10);

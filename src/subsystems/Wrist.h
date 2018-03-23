@@ -26,11 +26,12 @@ public:
     virtual ~Wrist();
 
     /**
-     * Sets Elevator Position
+     * Sets Wrist Position using Motion Magic
      *
      * @param position: the position goal
      **/
     void SetPosition(double position);
+    void SetPositionStep(double position);
 
     void SetManualInput(double input);
 

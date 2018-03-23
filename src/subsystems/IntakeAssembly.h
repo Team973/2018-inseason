@@ -29,6 +29,14 @@ public:
         overBack
     };
 
+    enum class ControlMode
+    {
+        Idle,
+        ManualPosition,
+        ManualVoltage,
+        Position,
+    };
+
     IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
                    Elevator *elevator, Wrist *wrist);
     virtual ~IntakeAssembly();
@@ -37,6 +45,8 @@ public:
 
     void SetElevatorManualPower(double input);
     void SetWristManualPower(double input);
+
+    void SetPosManualInput(double elevatorInc, double wristInc);
 
     void IntakeCube();
     void EjectCube();
@@ -57,7 +67,14 @@ private:
     Elevator *m_elevator;
     Wrist *m_wrist;
 
+    ControlMode m_controlMode;
+
     double m_elevatorPositionSetpoint;
     double m_wristPositionSetpoint;
+
+    double m_elevatorInc, m_wristInc;
+
+    static constexpr double MAX_WRIST_SPEED = 180.0;
+    static constexpr double MAX_ELEVATOR_SPEED = 50.0;
 };
 }

@@ -1,5 +1,6 @@
 #include "src/TestMode.h"
 #include "src/auto/profiles/sample_trajectory.h"
+#include <cmath>
 
 using namespace frc;
 using namespace sample;
@@ -28,13 +29,30 @@ void Test::TestInit() {
 }
 
 void Test::TestPeriodic() {
-    double elevatorManualPower =
-        -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
-    m_intakeAssembly->SetElevatorManualPower(elevatorManualPower +
-                                             ELEVATOR_FEED_FORWARD);
-    m_intakeAssembly->SetWristManualPower(
-        -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis) +
-        ELEVATOR_FEED_FORWARD);
+
+    if (false) {
+        double elevatorManualPower =
+            -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
+        double wristManualPower = 
+            -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
+
+        m_intakeAssembly->SetElevatorManualPower(elevatorManualPower +
+                                                 ELEVATOR_FEED_FORWARD);
+
+        m_intakeAssembly->SetWristManualPower(wristManualPower +
+            sin(m_intakeAssembly->GetWristPosition() * 3.14159 / 180.0)
+                * ELEVATOR_FEED_FORWARD);
+    }
+    else {
+        double elevatorPosIncInput =
+            -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
+        double wristPosIncInput = 
+            -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
+
+        m_intakeAssembly->SetPosManualInput(
+                elevatorPosIncInput,
+                wristPosIncInput);
+    }
 
     double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
     double x =

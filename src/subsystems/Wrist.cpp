@@ -21,17 +21,16 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
         , m_wristPositionDelta(0.0)
         , m_zeroingTime(0) {
     this->m_scheduler->RegisterTask("Wrist", this, TASK_PERIODIC);
-    this->m_scheduler->RegisterTask("Claw", this, TASK_PERIODIC);
 
     m_wristMotor->ConfigSelectedFeedbackSensor(
-        ctre::phoenix::motorcontrol::FeedbackDevice::CTRE_MagEncoder_Absolute,
+        ctre::phoenix::motorcontrol::FeedbackDevice::QuadEncoder,
         0,
         10);  // 0 = Not cascaded PID Loop; 10 = in constructor, not in a loop
     m_wristMotor->SetSensorPhase(true);
     m_wristMotor->SetNeutralMode(NeutralMode::Coast);
     m_wristMotor->SetInverted(true);
 
-    m_wristMotor->Config_kP(0, 1.5, 10);
+    m_wristMotor->Config_kP(0, 5.0, 10);
     m_wristMotor->Config_kI(0, 0.0, 10);
     m_wristMotor->Config_kD(0, 0.0, 10);
     m_wristMotor->Config_kF(0, 0.0, 10);
@@ -43,10 +42,18 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_wristMotor->ConfigPeakCurrentDuration(0, 10);
     m_wristMotor->ConfigPeakCurrentLimit(0, 10);
     m_wristMotor->ConfigContinuousCurrentLimit(15, 10);
-    m_wristMotor->EnableVoltageCompensation(false);
+    m_wristMotor->EnableVoltageCompensation(true);
+
+    m_wristMotor->GetSensorCollection().SetQuadraturePosition(
+            90 / WRIST_DEGREES_PER_CLICK, 10);
+
     m_wristMotor->ConfigForwardSoftLimitThreshold(
-        WRIST_SOFT_LIMIT / WRIST_INCHES_PER_CLICK, 10);
+        90 / WRIST_DEGREES_PER_CLICK, 10);
     m_wristMotor->ConfigForwardSoftLimitEnable(true, 10);
+
+    m_wristMotor->ConfigReverseSoftLimitThreshold(
+        WRIST_SOFT_LIMIT / WRIST_DEGREES_PER_CLICK, 10);
+    m_wristMotor->ConfigReverseSoftLimitEnable(true, 10);
 
     m_wristMotor->Set(ControlMode::PercentOutput, 0.0);
 
@@ -70,8 +77,16 @@ void Wrist::SetPower(double power) {
 
 void Wrist::SetPosition(double position) {
     m_wristState = WristState::motionMagic;
-    int position_clicks = position / WRIST_INCHES_PER_CLICK;
+    int position_clicks = 
+        Util::bound(position, -45, 90) / WRIST_DEGREES_PER_CLICK;
     m_wristMotor->Set(ControlMode::MotionMagic, position_clicks);
+}
+
+void Wrist::SetPositionStep(double position) {
+    m_wristState = WristState::motionMagic;
+    int position_clicks = 
+        Util::bound(position, -45, 90) / WRIST_DEGREES_PER_CLICK;
+    m_wristMotor->Set(ControlMode::Position, position_clicks);
 }
 
 void Wrist::SetManualInput(double input) {
@@ -82,12 +97,12 @@ void Wrist::SetManualInput(double input) {
 }
 
 float Wrist::GetPosition() {
-    return WRIST_INCHES_PER_CLICK *
+    return WRIST_DEGREES_PER_CLICK *
            ((float)m_wristMotor->GetSelectedSensorPosition(0));
 }
 
 void Wrist::ZeroPosition() {
-    m_wristMotor->GetSensorCollection().SetQuadraturePosition(0, 0);
+    m_wristMotor->GetSensorCollection().SetQuadraturePosition(90, 0);
 }
 
 void Wrist::OpenClaw() {
@@ -119,7 +134,9 @@ bool Wrist::IsCubeIn() {
 
 void Wrist::TaskPeriodic(RobotMode mode) {
     SmartDashboard::PutNumber("elevator/encoders/encoder", GetPosition());
-    DBStringPrintf(DBStringPos::DB_LINE0, "e %f", GetPosition());
+    DBStringPrintf(DBStringPos::DB_LINE7, "e %d",
+            m_wristMotor->GetClosedLoopError(0));
+
     switch (m_wristState) {
         case WristState::manualVoltage:
             break;
