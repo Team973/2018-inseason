@@ -18,22 +18,6 @@ class LogSpreadsheet;
 
 class IntakeAssembly : public CoopTask {
 public:
-    IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
-                   Elevator *elevator, Wrist *wrist);
-    virtual ~IntakeAssembly();
-
-    void GoToIntakePosition();
-
-    double GetElevatorPosition();
-    double GetWristPosition()
-
-        /**
-         * Update function synonymous to TeleopContinuous that gets called
-         *continuously
-         **/
-        void TaskPeriodic(RobotMode mode);
-
-private:
     enum class IntakePosition
     {
         stow,
@@ -45,13 +29,28 @@ private:
         overBack
     };
 
+    IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
+                   Elevator *elevator, Wrist *wrist);
+    virtual ~IntakeAssembly();
+
+    void GoToIntakePosition(IntakePosition intakePosition);
+
+    double GetElevatorPosition();
+    double GetWristPosition();
+
+    /**
+     * Update function synonymous to TeleopContinuous that gets called
+     *continuously
+     **/
+    void TaskPeriodic(RobotMode mode);
+
+private:
     TaskMgr *m_scheduler;
-    IntakePosition m_intakePosition;
 
     Elevator *m_elevator;
     Wrist *m_wrist;
 
-    double m_elevatorPosition;
-    double m_wristPosition;
+    double m_elevatorPositionSetpoint;
+    double m_wristPositionSetpoint;
 };
 }

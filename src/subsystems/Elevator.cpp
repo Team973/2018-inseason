@@ -14,7 +14,7 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
         , m_prevElevatorSetpoint(0.0)
         , m_elevatorPositionDelta(0.0)
         , m_zeroingTime(0)
-        , m_elevatorState(ElevatorState::manual) {
+        , m_elevatorState(ElevatorState::manualVoltage) {
     this->m_scheduler->RegisterTask("Elevator", this, TASK_PERIODIC);
 
     m_elevatorMotor->ConfigSelectedFeedbackSensor(
@@ -43,31 +43,6 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
 
     m_elevatorMotor->Set(ControlMode::PercentOutput, 0.0);
 
-    m_wristMotor->ConfigSelectedFeedbackSensor(
-        ctre::phoenix::motorcontrol::FeedbackDevice::QuadEncoder, 0,
-        10);  // 0 = Not cascaded PID Loop; 10 = in constructor, not in a loop
-    m_wristMotor->SetSensorPhase(true);
-    m_wristMotor->SetNeutralMode(NeutralMode::Coast);
-    m_wristMotor->SetInverted(true);
-
-    m_wristMotor->Config_kP(0, 1.5, 10);
-    m_wristMotor->Config_kI(0, 0.0, 10);
-    m_wristMotor->Config_kD(0, 0.0, 10);
-    m_wristMotor->Config_kF(0, 0.0, 10);
-    m_wristMotor->ConfigMotionCruiseVelocity(3750.0, 10);
-    m_wristMotor->ConfigMotionAcceleration(4200.0, 10);
-    m_wristMotor->SelectProfileSlot(0, 0);
-
-    m_wristMotor->EnableCurrentLimit(true);
-    m_wristMotor->ConfigPeakCurrentDuration(0, 10);
-    m_wristMotor->ConfigPeakCurrentLimit(0, 10);
-    m_wristMotor->ConfigContinuousCurrentLimit(15, 10);
-    m_wristMotor->EnableVoltageCompensation(false);
-    m_wristMotor->ConfigForwardSoftLimitThreshold(
-        ELEVATOR_SOFT_HEIGHT_LIMIT / ELEVATOR_INCHES_PER_CLICK, 10);
-    m_wristMotor->ConfigForwardSoftLimitEnable(true, 10);
-
-    m_wristMotor->Set(ControlMode::PercentOutput, 0.0);
     m_positionCell = new LogCell("Elevator Position", 32, true);
     logger->RegisterCell(m_positionCell);
 }
@@ -77,25 +52,21 @@ Elevator::~Elevator() {
 }
 
 void Elevator::SetPower(double power) {
-    m_elevatorState = ElevatorState::manual;
+    m_elevatorState = ElevatorState::manualVoltage;
     m_elevatorMotor->Set(ControlMode::PercentOutput, power);
 }
 
 void Elevator::SetPosition(double position) {
-    m_elevatorState = ElevatorState::position;
+    m_elevatorState = ElevatorState::motionMagic;
     int position_clicks = position / ELEVATOR_INCHES_PER_CLICK;
     m_elevatorMotor->Set(ControlMode::MotionMagic, position_clicks);
 }
 
 void Elevator::SetManualInput(double input) {
-    m_elevatorState = ElevatorState::manual;
+    m_elevatorState = ElevatorState::manualPosition;
     m_elevatorPositionDelta =
         input * ELEVATOR_MAX_SPEED * ROBOT_LOOP_PERIOD_SEC_PER_LOOP +
         m_prevElevatorSetpoint;
-}
-
-void Elevator::Reset() {
-    m_elevatorState = ElevatorState::zeroing_start;
 }
 
 float Elevator::GetPosition() {
@@ -113,12 +84,6 @@ void Elevator::TaskPeriodic(RobotMode mode) {
     DBStringPrintf(DBStringPos::DB_LINE0, "e %f", GetPosition());
     switch (m_elevatorState) {
         case manualVoltage:
-            break;
-        case zeroing_start:
-            m_elevatorState = ElevatorState::zeroing_goDown;
-            break;
-        case zeroing_goDown:
-            m_elevatorMotor->Set(ControlMode::PercentOutput, -0.2);
             break;
         case motionMagic:
             break;

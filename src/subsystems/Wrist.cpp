@@ -10,7 +10,7 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
              DigitalInput *cubeSensor, TalonSRX *wristMotor,
              TalonSRX *leftRoller, TalonSRX *rightRoller, Solenoid *cubeClamp)
         : m_scheduler(scheduler)
-        , m_wristState(WristState::manual)
+        , m_wristState(WristState::manualVoltage)
         , m_cubeSensor(cubeSensor)
         , m_cubeClamp(cubeClamp)
         , m_leftRoller(leftRoller)
@@ -24,7 +24,8 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     this->m_scheduler->RegisterTask("Claw", this, TASK_PERIODIC);
 
     m_wristMotor->ConfigSelectedFeedbackSensor(
-        ctre::phoenix::motorcontrol::FeedbackDevice::QuadEncoder, 0,
+        ctre::phoenix::motorcontrol::FeedbackDevice::CTRE_MagEncoder_Absolute,
+        0,
         10);  // 0 = Not cascaded PID Loop; 10 = in constructor, not in a loop
     m_wristMotor->SetSensorPhase(true);
     m_wristMotor->SetNeutralMode(NeutralMode::Coast);
@@ -63,17 +64,18 @@ Wrist::~Wrist() {
 }
 
 void Wrist::SetPower(double power) {
+    m_wristState = WristState::manualVoltage;
     m_wristMotor->Set(ControlMode::PercentOutput, power);
 }
 
 void Wrist::SetPosition(double position) {
-    m_wristState = WristState::position;
+    m_wristState = WristState::motionMagic;
     int position_clicks = position / WRIST_INCHES_PER_CLICK;
     m_wristMotor->Set(ControlMode::MotionMagic, position_clicks);
 }
 
 void Wrist::SetManualInput(double input) {
-    m_wristState = WristState::manual;
+    m_wristState = WristState::manualPosition;
     m_wristPositionDelta =
         input * WRIST_MAX_SPEED * ROBOT_LOOP_PERIOD_SEC_PER_LOOP +
         m_prevWristSetpoint;
@@ -89,11 +91,11 @@ void Wrist::ZeroPosition() {
 }
 
 void Wrist::OpenClaw() {
-    m_cubeClamp->Set(openState::clawOpen);
+    m_cubeClamp->Set(true);
 }
 
 void Wrist::CloseClaw() {
-    m_cubeClamp->Set(openState::clawClosed);
+    m_cubeClamp->Set(false);
 }
 
 void Wrist::IntakeCube() {
@@ -115,12 +117,6 @@ void Wrist::TaskPeriodic(RobotMode mode) {
     DBStringPrintf(DBStringPos::DB_LINE0, "e %f", GetPosition());
     switch (m_wristState) {
         case WristState::manualVoltage:
-            break;
-        case WristState::zeroing_start:
-            m_wristState = WristState::zeroing_goDown;
-            break;
-        case WristState::zeroing_goDown:
-            m_wristMotor->Set(ControlMode::PercentOutput, -0.2);
             break;
         case WristState::motionMagic:
             break;

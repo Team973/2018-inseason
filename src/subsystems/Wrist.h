@@ -48,12 +48,6 @@ public:
 
     void ZeroPosition();
 
-    enum class openState
-    {
-        clawOpen = true,
-        clawClosed = false
-    };
-
     /*
      * When called, opens the claw arms
      */
@@ -75,8 +69,6 @@ private:
     enum class WristState
     {
         manualVoltage,
-        zeroing_start,
-        zeroing_goDown,
         motionMagic,
         manualPosition
     };

@@ -118,12 +118,14 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
-                    m_intakeAssembly->GoToIntakePosition();
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::IntakePosition::scaleMid);
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
-                    m_intakeAssembly->GoToIntakePosition();
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::IntakePosition::scaleHigh);
                 }
                 break;
             case DualAction::BtnA:
@@ -162,22 +164,26 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
         switch (button) {
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
-                    m_intakeAssembly->GoToIntakePosition();
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::IntakePosition::vault);
                 }
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
-                    m_intakeAssembly->GoToIntakePosition();
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::IntakePosition::lowGoal);
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
-                    m_intakeAssembly->GoToIntakePosition();
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::IntakePosition::overBack);
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
-                    m_intakeAssembly->GoToIntakePosition();
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::IntakePosition::vault);
                 }
                 break;
             case DualAction::RightTrigger:

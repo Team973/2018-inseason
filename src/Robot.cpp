@@ -68,10 +68,10 @@ Robot::Robot()
                                   m_greylight))
         , m_autonomous(new Autonomous(m_disabled, m_drive, m_intakeAssembly,
                                       m_gyro, m_greylight))
-        , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick,
-                              m_intakeAssembly, m_drive, m_hanger, m_greylight))
+        , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick, m_drive,
+                              m_intakeAssembly, m_hanger, m_greylight))
         , m_test(new Test(m_driverJoystick, m_operatorJoystick, m_drive,
-                          m_intakeAssembly m_hanger, m_greylight)) {
+                          m_intakeAssembly, m_hanger, m_greylight)) {
     std::cout << "Constructed a Robot!" << std::endl;
 }
 

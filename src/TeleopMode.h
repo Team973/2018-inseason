@@ -29,7 +29,7 @@ public:
     static constexpr Color NO_COLOR = {0, 0, 0};
 
     Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
-           IntakeAssembly *intakeAssembly, Hanger *hanger,
+           Drive *drive, IntakeAssembly *intakeAssembly, Hanger *hanger,
            GreyLight *greylight);
     virtual ~Teleop();
 

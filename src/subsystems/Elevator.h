@@ -26,11 +26,8 @@ public:
     enum ElevatorState
     {
         manualVoltage,
-        zeroing_start,
         manualPosition,
-        motionMagic,
-        zeroing_goDown,
-        zeroing_stop
+        motionMagic
     };
 
     static constexpr double GROUND = 0.0;
@@ -60,12 +57,6 @@ public:
      * @param power: power being sent to the motor from -1.0 to 1.0
      **/
     void SetPower(double power);
-
-    /**
-     * Resets elevator subsystem by setting position to zero
-     *  and setting control modes to % output
-     **/
-    void Reset();
 
     /**
      * @return: returns current elevator position in sensor units

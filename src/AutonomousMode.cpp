@@ -24,8 +24,7 @@ Autonomous::Autonomous(Disabled *disabled, Drive *drive,
         , m_routine(m_noAuto)
         , m_direction(AutoRoutineBase::AutoDirection::Left)
         , m_drive(drive)
-        , m_elevator(elevator)
-        , m_wrist(wrist)
+        , m_intakeAssembly(intakeAssembly)
         , m_gyro(gyro) {
 }
 
@@ -34,7 +33,7 @@ Autonomous::~Autonomous() {
 
 void Autonomous::AutonomousInit() {
     // Remember to zero all sensors here
-    m_intakeAssembly->GoToIntakePosition();
+    m_intakeAssembly->GoToIntakePosition(IntakeAssembly::IntakePosition::stow);
     m_gyro->Reset();
     std::cout << "Autonomous Start" << std::endl;
 

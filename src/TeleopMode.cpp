@@ -13,7 +13,7 @@ using namespace frc;
 
 namespace frc973 {
 Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
-               IntakeAssembly *intakeAssembly, Drive *drive, Hanger *hanger,
+               Drive *drive, IntakeAssembly *intakeAssembly, Hanger *hanger,
                GreyLight *greylight)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
@@ -71,24 +71,24 @@ void Teleop::TeleopPeriodic() {
     double elevatorManualPower =
         -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
 
-    if (fabs(elevatorManualPower) > 0.1 ||
+    /*if (fabs(elevatorManualPower) > 0.1 ||
         m_elevatorMode == ElevatorMode::percentOutput) {
         m_elevatorMode = ElevatorMode::percentOutput;
         m_elevator->SetPower(elevatorManualPower + ELEVATOR_FEED_FORWARD);
-    }
+    }*/
 
     switch (m_intakeMode) {
         case IntakeMode::manual:
             break;
         case IntakeMode::switchIntaking:
-            m_intakeAssembly->GoToIntakePosition();
-            if (m_elevator->GetPosition() < 5.0 ||
+            m_intakeAssembly->GoToIntakePosition(
+                IntakeAssembly::IntakePosition::vault);
+            if (m_intakeAssembly->GetElevatorPosition() < 5.0 ||
                 m_driverJoystick->GetRawButton(DualAction::Back)) {
                 m_intakeMode = IntakeMode::switchTaking;
             }
             break;
         case IntakeMode::switchTaking:
-            m_intakeAssembly->GoToIntakePosition();
             if (m_intakeAssembly->GetElevatorPosition() < 2.0) {
                 m_intakeModeTimer = GetMsecTime();
                 m_intakeMode = IntakeMode::switchGrabbing;
@@ -100,19 +100,22 @@ void Teleop::TeleopPeriodic() {
             }
             break;
         case IntakeMode::switchStandby:
-            m_intakeAssembly->GoToIntakePosition();
+            m_intakeAssembly->GoToIntakePosition(
+                IntakeAssembly::IntakePosition::vault);
             m_intakeSignal->Reset();
             m_greyLight->SetPixelStateProcessor(m_intakeSignal);
             break;
         case IntakeMode::vaultStart:
-            m_intakeAssembly->GoToIntakePosition();
+            m_intakeAssembly->GoToIntakePosition(
+                IntakeAssembly::IntakePosition::vault);
             m_intakeModeTimer = GetMsecTime();
             m_intakeMode = IntakeMode::vaultIntaking;
             break;
         case IntakeMode::vaultIntaking:
             if (m_intakeAssembly->GetElevatorPosition() < 1.0 &&
                 (GetMsecTime() - m_intakeModeTimer) > 300) {
-                m_intakeAssembly->GoToIntakePosition();
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::IntakePosition::vault);
             }
             break;
         default:
@@ -216,22 +219,26 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
         switch (button) {
             case DualAction::BtnY:
                 if (pressedP) {
-                    m_intakeAssembly->GoToIntakePosition();
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::IntakePosition::overBack);
                 }
                 break;
             case DualAction::BtnA:
                 if (pressedP) {
-                    m_intakeAssembly->GoToIntakePosition();
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::IntakePosition::vault);
                 }
                 break;
             case DualAction::BtnX:
                 if (pressedP) {
-                    m_intakeAssembly->GoToIntakePosition();
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::IntakePosition::lowGoal);
                 }
                 break;
             case DualAction::BtnB:
                 if (pressedP) {
-                    m_intakeAssembly->GoToIntakePosition();
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::IntakePosition::scaleMid);
                 }
                 else {
                 }
