@@ -31,6 +31,8 @@ public:
      **/
     void SetPosition(double position);
 
+    void SetManualInput(double input);
+
     /**
      * Sets Elevator Power
      *
@@ -69,7 +71,18 @@ public:
     void TaskPeriodic(RobotMode mode);
 
 private:
+    enum class WristState
+    {
+        manual,
+        zeroing_start,
+        zeroing_goDown,
+        motionMagic,
+        position
+    };
+
     TaskMgr *m_scheduler;
+    WristState m_wristState;
+
     DigitalInput *m_cubeSensor;
     Solenoid *m_cubeClamp;
 
@@ -78,6 +91,8 @@ private:
     TalonSRX *m_wristMotor;
 
     double m_position;
+    double m_prevWristSetpoint;
+    double m_wristPositionDelta;
     uint32_t m_zeroingTime;
 };
 }

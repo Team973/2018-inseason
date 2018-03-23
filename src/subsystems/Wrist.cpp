@@ -10,12 +10,15 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
              DigitalInput *cubeSensor, TalonSRX *wristMotor,
              TalonSRX *leftRoller, TalonSRX *rightRoller, Solenoid *cubeClamp)
         : m_scheduler(scheduler)
+        , m_wristState(WristState::manual)
         , m_cubeSensor(cubeSensor)
         , m_cubeClamp(cubeClamp)
         , m_leftRoller(leftRoller)
         , m_rightRoller(rightRoller)
         , m_wristMotor(wristMotor)
         , m_position(0.0)
+        , m_prevWristSetpoint(0.0)
+        , m_wristPositionDelta(0.0)
         , m_zeroingTime(0) {
     this->m_scheduler->RegisterTask("Wrist", this, TASK_PERIODIC);
     this->m_scheduler->RegisterTask("Claw", this, TASK_PERIODIC);
@@ -41,7 +44,7 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_wristMotor->ConfigContinuousCurrentLimit(15, 10);
     m_wristMotor->EnableVoltageCompensation(false);
     m_wristMotor->ConfigForwardSoftLimitThreshold(
-        ELEVATOR_SOFT_HEIGHT_LIMIT / ELEVATOR_INCHES_PER_CLICK, 10);
+        WRIST_SOFT_LIMIT / WRIST_INCHES_PER_CLICK, 10);
     m_wristMotor->ConfigForwardSoftLimitEnable(true, 10);
 
     m_wristMotor->Set(ControlMode::PercentOutput, 0.0);
@@ -64,12 +67,20 @@ void Wrist::SetPower(double power) {
 }
 
 void Wrist::SetPosition(double position) {
+    m_wristState = WristState::position;
     int position_clicks = position / WRIST_INCHES_PER_CLICK;
     m_wristMotor->Set(ControlMode::MotionMagic, position_clicks);
 }
 
+void Wrist::SetManualInput(double input) {
+    m_wristState = WristState::manual;
+    m_wristPositionDelta =
+        input * WRIST_MAX_SPEED * ROBOT_LOOP_PERIOD_SEC_PER_LOOP +
+        m_prevWristSetpoint;
+}
+
 float Wrist::GetPosition() {
-    return ELEVATOR_INCHES_PER_CLICK *
+    return WRIST_INCHES_PER_CLICK *
            ((float)m_wristMotor->GetSelectedSensorPosition(0));
 }
 
@@ -102,5 +113,23 @@ bool Wrist::IsCubeIn() {
 void Wrist::TaskPeriodic(RobotMode mode) {
     SmartDashboard::PutNumber("elevator/encoders/encoder", GetPosition());
     DBStringPrintf(DBStringPos::DB_LINE0, "e %f", GetPosition());
+    switch (m_wristState) {
+        case WristState::manual:
+            break;
+        case WristState::zeroing_start:
+            m_wristState = WristState::zeroing_goDown;
+            break;
+        case WristState::zeroing_goDown:
+            m_wristMotor->Set(ControlMode::PercentOutput, -0.2);
+            break;
+        case WristState::motionMagic:
+            break;
+        case WristState::position:
+            m_wristMotor->Set(ControlMode::Position,
+                              m_wristPositionDelta + this->GetPosition());
+            break;
+        default:
+            break;
+    }
 }
 }

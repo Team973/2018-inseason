@@ -114,8 +114,6 @@ void Elevator::TaskPeriodic(RobotMode mode) {
     DBStringPrintf(DBStringPos::DB_LINE0, "e %f", GetPosition());
     switch (m_elevatorState) {
         case manual:
-            m_elevatorMotor->Set(ControlMode::Position,
-                                 m_elevatorPositionDelta + this->GetPosition());
             break;
         case zeroing_start:
             m_elevatorState = ElevatorState::zeroing_goDown;
@@ -126,6 +124,8 @@ void Elevator::TaskPeriodic(RobotMode mode) {
         case motionMagic:
             break;
         case position:
+            m_elevatorMotor->Set(ControlMode::Position,
+                                 m_elevatorPositionDelta + this->GetPosition());
             break;
         default:
             break;

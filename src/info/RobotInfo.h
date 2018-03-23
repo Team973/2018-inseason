@@ -36,6 +36,7 @@ static const int INTAKE_OPENCLOSE_PCM_ID = 4;
 // Wrist
 static const int CLAW_LEFT_ROLLER_CAN_ID = 5;
 static const int CLAW_RIGHT_ROLLER_CAN_ID = 12;
+static const int WRIST_SOFT_LIMIT = 135.0;
 
 // Hanger
 static const int FORKLIFT_TALON_CAN_ID = 6;
@@ -56,7 +57,8 @@ static const int NUM_LED = 26;
 
 // Constants
 static const double ROBOT_LOOP_PERIOD_SEC_PER_LOOP = 1.0 / 20.0;
-static const double ELEVATOR_MAX_SPEED = 200.0;
+static const double ELEVATOR_MAX_SPEED = 4000.0;
+static const double WRIST_MAX_SPEED = 3000.0;
 
 // Drive
 static constexpr double DRIVE_WIDTH = 25.205;
