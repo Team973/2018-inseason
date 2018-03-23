@@ -14,7 +14,7 @@
 #include "lib/helpers/JoystickHelper.h"
 #include "src/subsystems/Drive.h"
 #include "src/subsystems/Elevator.h"
-#include "src/subsystems/Claw.h"
+#include "src/subsystems/Wrist.h"
 #include "src/subsystems/Hanger.h"
 #include "lib/helpers/GreyLight.h"
 #include "lib/pixelprocessors/Flash.h"
@@ -29,8 +29,8 @@ public:
     static constexpr Color END_GAME_RED = {255, 0, 0};
     static constexpr Color NO_COLOR = {0, 0, 0};
 
-    Teleop(ObservableJoystick *driver, ObservableJoystick *codriver, Claw *claw,
-           Drive *drive, Elevator *elevator, Hanger *hanger,
+    Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
+           Wrist *wrist, Drive *drive, Elevator *elevator, Hanger *hanger,
            GreyLight *greylight);
     virtual ~Teleop();
 
@@ -44,7 +44,7 @@ private:
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
 
-    Claw *m_claw;
+    Wrist *m_wrist;
 
     Drive *m_drive;
     enum class DriveMode

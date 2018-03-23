@@ -11,8 +11,8 @@ using namespace right_side_switch_backoff;
 using namespace left_side_switch_backoff;
 
 namespace frc973 {
-SideSwitch::SideSwitch(Drive *drive, Elevator *elevator, Claw *claw)
-        : m_drive(drive), m_elevator(elevator), m_claw(claw), m_autoTimer(0) {
+SideSwitch::SideSwitch(Drive *drive, Elevator *elevator, Wrist *wrist)
+        : m_drive(drive), m_elevator(elevator), m_wrist(wrist), m_autoTimer(0) {
 }
 
 SideSwitch::~SideSwitch() {
@@ -30,7 +30,7 @@ void SideSwitch::Execute(AutoRoutineBase::AutoDirection direction) {
                                      Drive::RelativeTo::Now);
             }
             m_elevator->SetPosition(Elevator::LOW_GOAL);
-            m_claw->CloseClaw();
+            m_wrist->CloseClaw();
             m_autoTimer = GetMsecTime();
             m_autoState++;
             break;

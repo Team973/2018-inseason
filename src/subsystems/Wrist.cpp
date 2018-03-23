@@ -8,7 +8,7 @@ using namespace frc;
 namespace frc973 {
 Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
              DigitalInput *cubeSensor, TalonSRX *wristMotor,
-             TalonSRX *leftRoller, TalonSrc *rightRoller, Solenoid *cubeClamp)
+             TalonSRX *leftRoller, TalonSRX *rightRoller, Solenoid *cubeClamp)
         : m_scheduler(scheduler)
         , m_cubeSensor(cubeSensor)
         , m_cubeClamp(cubeClamp)
@@ -45,8 +45,6 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_wristMotor->ConfigForwardSoftLimitEnable(true, 10);
 
     m_wristMotor->Set(ControlMode::PercentOutput, 0.0);
-    m_positionCell = new LogCell("Wrist Position", 32, true);
-    logger->RegisterCell(m_positionCell);
 
     m_leftRoller->SetNeutralMode(NeutralMode::Brake);
 
@@ -102,7 +100,6 @@ bool Wrist::IsCubeIn() {
 }
 
 void Wrist::TaskPeriodic(RobotMode mode) {
-    m_positionCell->LogDouble(GetPosition());
     SmartDashboard::PutNumber("elevator/encoders/encoder", GetPosition());
     DBStringPrintf(DBStringPos::DB_LINE0, "e %f", GetPosition());
 }

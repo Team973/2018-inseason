@@ -5,13 +5,13 @@
 #include "src/auto/AutoRoutineBase.h"
 #include "src/subsystems/Drive.h"
 #include "src/subsystems/Elevator.h"
-#include "src/subsystems/Claw.h"
+#include "src/subsystems/Wrist.h"
 
 using namespace frc;
 namespace frc973 {
 class SideSwitch : public AutoRoutineBase {
 public:
-    SideSwitch(Drive *drive, Elevator *elevator, Claw *claw);
+    SideSwitch(Drive *drive, Elevator *elevator, Wrist *wrist);
     virtual ~SideSwitch();
 
     void Execute(AutoRoutineBase::AutoDirection direction) override;
@@ -21,7 +21,7 @@ public:
 private:
     Drive *m_drive;
     Elevator *m_elevator;
-    Claw *m_claw;
+    Wrist *m_wrist;
 
     uint32_t m_autoTimer;
 };

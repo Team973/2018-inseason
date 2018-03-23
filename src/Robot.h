@@ -22,7 +22,7 @@
 #include "src/TestMode.h"
 #include "lib/helpers/JoystickHelper.h"
 #include "src/subsystems/Elevator.h"
-#include "src/subsystems/Claw.h"
+#include "src/subsystems/Wrist.h"
 #include "src/subsystems/Hanger.h"
 #include "src/subsystems/Drive.h"
 #include "lib/logging/LogSpreadsheet.h"
@@ -99,7 +99,6 @@ private:
 
     Solenoid *m_cubeClamp;
     Solenoid *m_clawKicker;
-    Solenoid *m_intakePosition;
     Solenoid *m_intakeOpenClose;
     TalonSRX *m_rightRoller;
     TalonSRX *m_leftRoller;
@@ -111,7 +110,7 @@ private:
     TalonSRX *m_forkliftTalon;
     GreyLight *m_greylight;
     Elevator *m_elevator;
-    Claw *m_claw;
+    Wrist *m_wrist;
     Drive *m_drive;
     Hanger *m_hanger;
 

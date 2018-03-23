@@ -20,7 +20,7 @@ public:
     static constexpr double OVER_THE_BACK = 135.0;
 
     Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, DigitalInput *cubeSensor,
-          TalonSRX *wristMotor, TalonSRX *leftRoller, TalonSrc *rightRoller,
+          TalonSRX *wristMotor, TalonSRX *leftRoller, TalonSRX *rightRoller,
           Solenoid *cubeClamp);
     virtual ~Wrist();
 

@@ -13,11 +13,11 @@ using namespace frc;
 
 namespace frc973 {
 Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
-               Claw *claw, Drive *drive, Elevator *elevator, Hanger *hanger,
+               Wrist *wrist, Drive *drive, Elevator *elevator, Hanger *hanger,
                GreyLight *greylight)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
-        , m_claw(claw)
+        , m_wrist(wrist)
         , m_drive(drive)
         , m_driveMode(DriveMode::Cheesy)
         , m_elevator(elevator)

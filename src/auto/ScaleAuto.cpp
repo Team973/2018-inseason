@@ -15,8 +15,8 @@ using namespace two_cube_intaking_left;
 using namespace two_cube_intaking_right;
 
 namespace frc973 {
-ScaleAuto::ScaleAuto(Drive *drive, Elevator *elevator, Claw *claw)
-        : m_drive(drive), m_elevator(elevator), m_claw(claw), m_autoTimer(0) {
+ScaleAuto::ScaleAuto(Drive *drive, Elevator *elevator, Wrist *wrist)
+        : m_drive(drive), m_elevator(elevator), m_wrist(wrist), m_autoTimer(0) {
 }
 
 ScaleAuto::~ScaleAuto() {
@@ -34,7 +34,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_drive->SplineDrive(&right_scale::right_scale,
                                      Drive::RelativeTo::Now);
             }
-            m_claw->CloseClaw();
+            m_wrist->CloseClaw();
             m_autoTimer = GetMsecTime();
             m_autoState++;
             break;
@@ -80,7 +80,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                         &two_cube_intaking_right::two_cube_intaking_right,
                         Drive::RelativeTo::Now);
                 }
-                m_claw->OpenClaw();
+                m_wrist->OpenClaw();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
@@ -88,7 +88,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
         case 5:
             if ((m_drive->GetSplinePercentComplete() > 0.8) ||
                 GetMsecTime() - m_autoTimer > 4000) {
-                m_claw->CloseClaw();
+                m_wrist->CloseClaw();
                 m_autoState++;
             }
             break;

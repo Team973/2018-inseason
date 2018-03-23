@@ -36,7 +36,6 @@ static const int INTAKE_OPENCLOSE_PCM_ID = 4;
 // Wrist
 static const int CLAW_LEFT_ROLLER_CAN_ID = 5;
 static const int CLAW_RIGHT_ROLLER_CAN_ID = 12;
-static const int CUBE_BANNER_SENSOR_DIN = 0;
 
 // Hanger
 static const int FORKLIFT_TALON_CAN_ID = 6;

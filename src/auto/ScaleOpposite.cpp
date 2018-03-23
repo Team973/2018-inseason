@@ -11,8 +11,8 @@ using namespace left_scale_opposite_b;
 using namespace right_scale_opposite_b;
 
 namespace frc973 {
-ScaleOpposite::ScaleOpposite(Drive *drive, Elevator *elevator, Claw *claw)
-        : m_drive(drive), m_elevator(elevator), m_claw(claw), m_autoTimer(0) {
+ScaleOpposite::ScaleOpposite(Drive *drive, Elevator *elevator, Wrist *wrist)
+        : m_drive(drive), m_elevator(elevator), m_wrist(wrist), m_autoTimer(0) {
 }
 
 ScaleOpposite::~ScaleOpposite() {
@@ -32,7 +32,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
                     &right_scale_opposite_a::right_scale_opposite_a,
                     Drive::RelativeTo::Now);
             }
-            m_claw->CloseClaw();
+            m_wrist->CloseClaw();
             m_autoTimer = GetMsecTime();
             m_autoState++;
             break;

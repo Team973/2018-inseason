@@ -6,15 +6,15 @@ using namespace frc;
 
 namespace frc973 {
 Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
-                       Claw *claw, ADXRS450_Gyro *gyro, GreyLight *greylight)
+                       Wrist *wrist, ADXRS450_Gyro *gyro, GreyLight *greylight)
         : m_noAuto(new NoAuto())
         , m_forwardAuto(new ForwardAuto(drive))
-        , m_centerSwitchAuto(new CenterSwitchAuto(drive, elevator, claw))
-        , m_scaleAuto(new ScaleAuto(drive, elevator, claw))
-        , m_scaleOpposite(new ScaleOpposite(drive, elevator, claw))
-        , m_sideSwitch(new SideSwitch(drive, elevator, claw))
-        , m_switchOpposite(new SwitchOpposite(drive, elevator, claw))
-        , m_twoCubeAuto(new TwoCubeAuto(drive, elevator, claw))
+        , m_centerSwitchAuto(new CenterSwitchAuto(drive, elevator, wrist))
+        , m_scaleAuto(new ScaleAuto(drive, elevator, wrist))
+        , m_scaleOpposite(new ScaleOpposite(drive, elevator, wrist))
+        , m_sideSwitch(new SideSwitch(drive, elevator, wrist))
+        , m_switchOpposite(new SwitchOpposite(drive, elevator, wrist))
+        , m_twoCubeAuto(new TwoCubeAuto(drive, elevator, wrist))
         , m_disabled(disabled)
         , m_greylight(greylight)
         , m_autoSignal(new LightPattern::AutoIndicator())
@@ -24,7 +24,7 @@ Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
         , m_direction(AutoRoutineBase::AutoDirection::Left)
         , m_drive(drive)
         , m_elevator(elevator)
-        , m_claw(claw)
+        , m_wrist(wrist)
         , m_gyro(gyro) {
 }
 
@@ -35,7 +35,7 @@ void Autonomous::AutonomousInit() {
     // Remember to zero all sensors here
     m_elevator->SetPosition(Elevator::GROUND);
     m_gyro->Reset();
-    m_claw->CloseClaw();
+    m_wrist->CloseClaw();
     std::cout << "Autonomous Start" << std::endl;
 
     DBStringPrintf(DB_LINE1, "%s", m_scoringLocations.c_str());

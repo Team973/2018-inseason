@@ -6,13 +6,13 @@ using namespace sample;
 
 namespace frc973 {
 Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-           Drive *drive, Elevator *elevator, Claw *claw, Hanger *hanger,
+           Drive *drive, Elevator *elevator, Wrist *wrist, Hanger *hanger,
            GreyLight *greylight)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_drive(drive)
         , m_elevator(elevator)
-        , m_claw(claw)
+        , m_wrist(wrist)
         , m_hanger(hanger)
         , m_elevatorMode(ElevatorMode::percentOutput)
         , m_greylight(greylight)
