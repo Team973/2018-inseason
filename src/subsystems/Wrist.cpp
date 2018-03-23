@@ -6,12 +6,19 @@
 using namespace frc;
 
 namespace frc973 {
-Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *wristMotor)
+Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
+             DigitalInput *cubeSensor, TalonSRX *wristMotor,
+             TalonSRX *leftRoller, TalonSrc *rightRoller, Solenoid *cubeClamp)
         : m_scheduler(scheduler)
+        , m_cubeSensor(cubeSensor)
+        , m_cubeClamp(cubeClamp)
+        , m_leftRoller(leftRoller)
+        , m_rightRoller(rightRoller)
         , m_wristMotor(wristMotor)
         , m_position(0.0)
         , m_zeroingTime(0) {
     this->m_scheduler->RegisterTask("Wrist", this, TASK_PERIODIC);
+    this->m_scheduler->RegisterTask("Claw", this, TASK_PERIODIC);
 
     m_wristMotor->ConfigSelectedFeedbackSensor(
         ctre::phoenix::motorcontrol::FeedbackDevice::QuadEncoder, 0,
@@ -40,6 +47,14 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *wristMotor)
     m_wristMotor->Set(ControlMode::PercentOutput, 0.0);
     m_positionCell = new LogCell("Wrist Position", 32, true);
     logger->RegisterCell(m_positionCell);
+
+    m_leftRoller->SetNeutralMode(NeutralMode::Brake);
+
+    m_rightRoller->SetNeutralMode(NeutralMode::Brake);
+    m_rightRoller->SetInverted(true);
+
+    m_leftRoller->Set(ControlMode::PercentOutput, 0.0);
+    m_rightRoller->Set(ControlMode::PercentOutput, 0.0);
 }
 
 Wrist::~Wrist() {
@@ -62,6 +77,28 @@ float Wrist::GetPosition() {
 
 void Wrist::ZeroPosition() {
     m_wristMotor->GetSensorCollection().SetQuadraturePosition(0, 0);
+}
+
+void Wrist::OpenClaw() {
+    m_cubeClamp->Set(clawOpen);
+}
+
+void Wrist::CloseClaw() {
+    m_cubeClamp->Set(clawClosed);
+}
+
+void Wrist::IntakeCube() {
+    m_leftRoller->Set(ControlMode::PercentOutput, 1.0);
+    m_rightRoller->Set(ControlMode::PercentOutput, 1.0);
+}
+
+void Wrist::EjectCube() {
+    m_leftRoller->Set(ControlMode::PercentOutput, -1.0);
+    m_rightRoller->Set(ControlMode::PercentOutput, -1.0);
+}
+
+bool Wrist::IsCubeIn() {
+    return m_cubeSensor->Get();
 }
 
 void Wrist::TaskPeriodic(RobotMode mode) {

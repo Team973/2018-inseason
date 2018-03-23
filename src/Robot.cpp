@@ -36,7 +36,6 @@ Robot::Robot()
         , m_cameraServer(CameraServer::GetInstance())
         , m_greyCam(m_cameraServer->AddServer("serve_GreyCam", 1181))
         , m_cubeClamp(new Solenoid(PCM_CAN_ID, CUBE_CLAMP_PCM_ID))
-        , m_clawKicker(new Solenoid(PCM_CAN_ID, CLAW_KICKER_PCM_ID))
         , m_intakePosition(new Solenoid(PCM_CAN_ID, INTAKE_POSITION_PCM_ID))
         , m_intakeOpenClose(new Solenoid(PCM_CAN_ID, INTAKE_OPENCLOSE_PCM_ID))
         , m_rightRoller(new GreyTalonSRX(CLAW_RIGHT_ROLLER_CAN_ID))
@@ -50,8 +49,8 @@ Robot::Robot()
         , m_greylight(new GreyLight(NUM_LED))
         , m_elevator(
               new Elevator(this, m_logger, m_elevatorMotor, m_wristMotor))
-        , m_claw(new Claw(this, m_logger, m_cubeSensor, m_cubeClamp,
-                          m_leftRoller, m_rightRoller))
+        , m_wrist(new Claw(this, m_logger, m_cubeSensor, m_cubeClamp,
+                           m_leftRoller, m_rightRoller))
         , m_drive(new Drive(this, m_logger, m_leftDriveTalonA,
                             m_leftDriveVictorB, m_leftDriveVictorC,
                             m_rightDriveTalonA, m_rightDriveVictorB,
@@ -67,12 +66,12 @@ Robot::Robot()
         , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick,
                                   m_intakeCamera, m_forkCamera, m_greyCam,
                                   m_greylight))
-        , m_autonomous(new Autonomous(m_disabled, m_drive, m_elevator, m_claw,
+        , m_autonomous(new Autonomous(m_disabled, m_drive, m_elevator, m_wrist,
                                       m_gyro, m_greylight))
-        , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick, m_claw,
+        , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick, m_wrist,
                               m_drive, m_elevator, m_hanger, m_greylight))
         , m_test(new Test(m_driverJoystick, m_operatorJoystick, m_drive,
-                          m_elevator, m_claw, m_hanger, m_greylight)) {
+                          m_elevator, m_wrist, m_hanger, m_greylight)) {
     std::cout << "Constructed a Robot!" << std::endl;
 }
 

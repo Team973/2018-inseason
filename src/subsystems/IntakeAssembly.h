@@ -22,6 +22,8 @@ public:
                    Elevator *elevator, Wrist *wrist);
     virtual ~IntakeAssembly();
 
+    void GoToStow();
+
     /**
      * Update function synonymous to TeleopContinuous that gets called
      *continuously
@@ -33,5 +35,8 @@ private:
 
     Elevator *m_elevator;
     Wrist *m_wrist;
+
+    double m_elevatorPosition;
+    double m_wristPosition;
 };
 }

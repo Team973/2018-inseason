@@ -16,15 +16,12 @@ class LogSpreadsheet;
 
 class Wrist : public CoopTask {
 public:
-    static constexpr double GROUND = 0.0;
-    static constexpr double VAULT = 4.5;
-    static constexpr double LOW_GOAL = 30.0;
-    static constexpr double HANGING = 55.0;
-    static constexpr double SCALE_LOW = 64.0;
-    static constexpr double SCALE_MID = 70.0;
-    static constexpr double SCALE_HIGH = 78.0;
+    static constexpr double STOW = 0.0;
+    static constexpr double OVER_THE_BACK = 135.0;
 
-    Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *wristMotor);
+    Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, DigitalInput *cubeSensor,
+          TalonSRX *wristMotor, TalonSRX *leftRoller, TalonSrc *rightRoller,
+          Solenoid *cubeClamp);
     virtual ~Wrist();
 
     /**
@@ -48,18 +45,39 @@ public:
 
     void ZeroPosition();
 
-    /**
-     * Update function synonymous to TeleopContinuous that gets called
-     *continuously
-     **/
+    enum openState
+    {
+        clawOpen = true,
+        clawClosed = false
+    };
+
+    /*
+     * When called, opens the claw arms
+     */
+    void OpenClaw();
+
+    /*
+     * When called, closes claw arms
+     */
+    void CloseClaw();
+
+    void IntakeCube();
+    void EjectCube();
+
+    bool IsCubeIn();
+
     void TaskPeriodic(RobotMode mode);
 
 private:
     TaskMgr *m_scheduler;
+    DigitalInput *m_cubeSensor;
+    Solenoid *m_cubeClamp;
+
+    TalonSRX *m_leftRoller;
+    TalonSRX *m_rightRoller;
     TalonSRX *m_wristMotor;
 
     double m_position;
     uint32_t m_zeroingTime;
-    LogCell *m_positionCell;
 };
 }
