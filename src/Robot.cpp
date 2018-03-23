@@ -46,8 +46,7 @@ Robot::Robot()
         , m_forkDeploy(new Solenoid(PCM_CAN_ID, FORK_DEPLOY_PCM_ID))
         , m_forkliftTalon(new GreyTalonSRX(FORKLIFT_TALON_CAN_ID))
         , m_greylight(new GreyLight(NUM_LED))
-        , m_elevator(
-              new Elevator(this, m_logger, m_elevatorMotor, m_wristMotor))
+        , m_elevator(new Elevator(this, m_logger, m_elevatorMotor))
         , m_wrist(new Wrist(this, m_logger, m_cubeSensor, m_wristMotor,
                             m_leftRoller, m_rightRoller, m_cubeClamp))
         , m_intakeAssembly(
@@ -67,12 +66,12 @@ Robot::Robot()
         , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick,
                                   m_intakeCamera, m_forkCamera, m_greyCam,
                                   m_greylight))
-        , m_autonomous(new Autonomous(m_disabled, m_drive, m_elevator, m_wrist,
+        , m_autonomous(new Autonomous(m_disabled, m_drive, m_intakeAssembly,
                                       m_gyro, m_greylight))
-        , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick, m_wrist,
-                              m_drive, m_elevator, m_hanger, m_greylight))
+        , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick,
+                              m_intakeAssembly, m_drive, m_hanger, m_greylight))
         , m_test(new Test(m_driverJoystick, m_operatorJoystick, m_drive,
-                          m_elevator, m_wrist, m_hanger, m_greylight)) {
+                          m_intakeAssembly m_hanger, m_greylight)) {
     std::cout << "Constructed a Robot!" << std::endl;
 }
 

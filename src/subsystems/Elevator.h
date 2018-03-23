@@ -25,9 +25,9 @@ class Elevator : public CoopTask {
 public:
     enum ElevatorState
     {
-        manual,
+        manualVoltage,
         zeroing_start,
-        position,
+        manualPosition,
         motionMagic,
         zeroing_goDown,
         zeroing_stop
@@ -42,7 +42,7 @@ public:
     static constexpr double SCALE_HIGH = 78.0;
 
     Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
-             TalonSRX *elevatorMotor, TalonSRX *wristMotor);
+             TalonSRX *elevatorMotor);
     virtual ~Elevator();
 
     /**
@@ -84,7 +84,6 @@ private:
     TaskMgr *m_scheduler;
 
     TalonSRX *m_elevatorMotor;
-    TalonSRX *m_wristMotor;
 
     double m_position;
     double m_prevElevatorSetpoint;

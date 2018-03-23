@@ -24,11 +24,14 @@ public:
 
     void GoToIntakePosition();
 
-    /**
-     * Update function synonymous to TeleopContinuous that gets called
-     *continuously
-     **/
-    void TaskPeriodic(RobotMode mode);
+    double GetElevatorPosition();
+    double GetWristPosition()
+
+        /**
+         * Update function synonymous to TeleopContinuous that gets called
+         *continuously
+         **/
+        void TaskPeriodic(RobotMode mode);
 
 private:
     enum class IntakePosition

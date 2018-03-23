@@ -7,10 +7,9 @@ using namespace frc;
 
 namespace frc973 {
 Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
-                   TalonSRX *elevatorMotor, TalonSRX *wristMotor)
+                   TalonSRX *elevatorMotor)
         : m_scheduler(scheduler)
         , m_elevatorMotor(elevatorMotor)
-        , m_wristMotor(wristMotor)
         , m_position(0.0)
         , m_prevElevatorSetpoint(0.0)
         , m_elevatorPositionDelta(0.0)
@@ -113,7 +112,7 @@ void Elevator::TaskPeriodic(RobotMode mode) {
     SmartDashboard::PutNumber("elevator/encoders/encoder", GetPosition());
     DBStringPrintf(DBStringPos::DB_LINE0, "e %f", GetPosition());
     switch (m_elevatorState) {
-        case manual:
+        case manualVoltage:
             break;
         case zeroing_start:
             m_elevatorState = ElevatorState::zeroing_goDown;
@@ -123,7 +122,7 @@ void Elevator::TaskPeriodic(RobotMode mode) {
             break;
         case motionMagic:
             break;
-        case position:
+        case manualPosition:
             m_elevatorMotor->Set(ControlMode::Position,
                                  m_elevatorPositionDelta + this->GetPosition());
             break;

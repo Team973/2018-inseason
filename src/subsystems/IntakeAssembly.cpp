@@ -11,8 +11,8 @@ IntakeAssembly::IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
         : m_scheduler(scheduler)
         , m_elevator(elevator)
         , m_wrist(wrist)
-        , m_elevatorPosition(0.0)
-        , m_wristPosition(0.0) {
+        , m_elevatorPositionSetpoint(0.0)
+        , m_wristPositionSetpoint(0.0) {
     this->m_scheduler->RegisterTask("IntakeAssembly", this, TASK_PERIODIC);
 }
 
@@ -23,37 +23,37 @@ IntakeAssembly::~IntakeAssembly() {
 void IntakeAssembly::GoToIntakePosition() {
     switch (m_intakePosition) {
         case IntakePosition::stow:
-            m_elevatorPosition = Elevator::GROUND;
-            m_wristPosition = Wrist::STOW;
+            m_elevatorPositionSetpoint = Elevator::GROUND;
+            m_wristPositionSetpoint = Wrist::STOW;
             break;
         case IntakePosition::vault:
-            m_elevatorPosition = Elevator::VAULT;
-            m_wristPosition = Wrist::STOW;
+            m_elevatorPositionSetpoint = Elevator::VAULT;
+            m_wristPositionSetpoint = Wrist::STOW;
             break;
         case IntakePosition::lowGoal:
-            m_elevatorPosition = Elevator::LOW_GOAL;
-            m_wristPosition = Wrist::STOW;
+            m_elevatorPositionSetpoint = Elevator::LOW_GOAL;
+            m_wristPositionSetpoint = Wrist::STOW;
             break;
         case IntakePosition::scaleLow:
-            m_elevatorPosition = Elevator::SCALE_LOW;
-            m_wristPosition = Wrist::STOW;
+            m_elevatorPositionSetpoint = Elevator::SCALE_LOW;
+            m_wristPositionSetpoint = Wrist::STOW;
             break;
         case IntakePosition::scaleMid:
-            m_elevatorPosition = Elevator::SCALE_MID;
-            m_wristPosition = Wrist::STOW;
+            m_elevatorPositionSetpoint = Elevator::SCALE_MID;
+            m_wristPositionSetpoint = Wrist::STOW;
             break;
         case IntakePosition::scaleHigh:
-            m_elevatorPosition = Elevator::SCALE_HIGH;
-            m_wristPosition = Wrist::STOW;
+            m_elevatorPositionSetpoint = Elevator::SCALE_HIGH;
+            m_wristPositionSetpoint = Wrist::STOW;
             break;
         case IntakePosition::overBack:
-            m_elevatorPosition = Elevator::SCALE_HIGH;
-            m_wristPosition = Wrist::OVER_THE_BACK;
+            m_elevatorPositionSetpoint = Elevator::SCALE_HIGH;
+            m_wristPositionSetpoint = Wrist::OVER_THE_BACK;
         default:
             break;
     }
-    m_elevator->SetPosition(m_elevatorPosition);
-    m_wrist->SetPosition(m_wristPosition);
+    m_elevator->SetPosition(m_elevatorPositionSetpoint);
+    m_wrist->SetPosition(m_wristPositionSetpoint);
 }
 
 void IntakeAssembly::TaskPeriodic(RobotMode mode) {

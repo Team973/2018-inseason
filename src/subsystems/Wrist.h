@@ -17,7 +17,8 @@ class LogSpreadsheet;
 class Wrist : public CoopTask {
 public:
     static constexpr double STOW = 0.0;
-    static constexpr double OVER_THE_BACK = 135.0;
+    static constexpr double EXTENDED = 90.0;
+    static constexpr double OVER_THE_BACK = -45.0;
 
     Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, DigitalInput *cubeSensor,
           TalonSRX *wristMotor, TalonSRX *leftRoller, TalonSRX *rightRoller,
@@ -47,7 +48,7 @@ public:
 
     void ZeroPosition();
 
-    enum openState
+    enum class openState
     {
         clawOpen = true,
         clawClosed = false
@@ -73,11 +74,11 @@ public:
 private:
     enum class WristState
     {
-        manual,
+        manualVoltage,
         zeroing_start,
         zeroing_goDown,
         motionMagic,
-        position
+        manualPosition
     };
 
     TaskMgr *m_scheduler;

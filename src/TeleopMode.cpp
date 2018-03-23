@@ -13,15 +13,13 @@ using namespace frc;
 
 namespace frc973 {
 Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
-               Wrist *wrist, Drive *drive, Elevator *elevator, Hanger *hanger,
+               IntakeAssembly *intakeAssembly, Drive *drive, Hanger *hanger,
                GreyLight *greylight)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
-        , m_wrist(wrist)
         , m_drive(drive)
         , m_driveMode(DriveMode::Cheesy)
-        , m_elevator(elevator)
-        , m_elevatorMode(ElevatorMode::percentOutput)
+        , m_intakeAssembly(intakeAssembly)
         , m_intakeMode(IntakeMode::manual)
         , m_endGameSignalSent(false)
         , m_hanger(hanger)
@@ -78,31 +76,20 @@ void Teleop::TeleopPeriodic() {
         m_elevatorMode = ElevatorMode::percentOutput;
         m_elevator->SetPower(elevatorManualPower + ELEVATOR_FEED_FORWARD);
     }
-    else if (m_elevatorMode == ElevatorMode::zeroingDown) {
-    }
-    else if (m_elevatorMode == ElevatorMode::motionMagic) {
-    }
-
-    double intakeSpinDirection =
-        -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
-
-    double intakeControl =
-        -m_operatorJoystick->GetRawAxis(DualAction::RightYAxis);
 
     switch (m_intakeMode) {
         case IntakeMode::manual:
             break;
         case IntakeMode::switchIntaking:
-            m_elevatorMode = ElevatorMode::motionMagic;
-            m_elevator->SetPosition(Elevator::VAULT);
+            m_intakeAssembly->GoToIntakePosition();
             if (m_elevator->GetPosition() < 5.0 ||
                 m_driverJoystick->GetRawButton(DualAction::Back)) {
                 m_intakeMode = IntakeMode::switchTaking;
             }
             break;
         case IntakeMode::switchTaking:
-            m_elevator->SetPosition(Elevator::GROUND);
-            if (m_elevator->GetPosition() < 2.0) {
+            m_intakeAssembly->GoToIntakePosition();
+            if (m_intakeAssembly->GetElevatorPosition() < 2.0) {
                 m_intakeModeTimer = GetMsecTime();
                 m_intakeMode = IntakeMode::switchGrabbing;
             }
@@ -113,22 +100,19 @@ void Teleop::TeleopPeriodic() {
             }
             break;
         case IntakeMode::switchStandby:
-            m_elevatorMode = ElevatorMode::motionMagic;
-            m_elevator->SetPosition(Elevator::VAULT);
+            m_intakeAssembly->GoToIntakePosition();
             m_intakeSignal->Reset();
             m_greyLight->SetPixelStateProcessor(m_intakeSignal);
             break;
         case IntakeMode::vaultStart:
-            m_elevatorMode = ElevatorMode::motionMagic;
-            m_elevator->SetPosition(Elevator::GROUND);
+            m_intakeAssembly->GoToIntakePosition();
             m_intakeModeTimer = GetMsecTime();
             m_intakeMode = IntakeMode::vaultIntaking;
             break;
         case IntakeMode::vaultIntaking:
-            if (m_elevator->GetPosition() < 1.0 &&
+            if (m_intakeAssembly->GetElevatorPosition() < 1.0 &&
                 (GetMsecTime() - m_intakeModeTimer) > 300) {
-                m_elevatorMode = ElevatorMode::motionMagic;
-                m_elevator->SetPosition(Elevator::GROUND);
+                m_intakeAssembly->GoToIntakePosition();
             }
             break;
         default:
@@ -232,26 +216,22 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
         switch (button) {
             case DualAction::BtnY:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::motionMagic;
-                    m_elevator->SetPosition(Elevator::SCALE_HIGH);
+                    m_intakeAssembly->GoToIntakePosition();
                 }
                 break;
             case DualAction::BtnA:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::motionMagic;
-                    m_elevator->SetPosition(Elevator::GROUND);
+                    m_intakeAssembly->GoToIntakePosition();
                 }
                 break;
             case DualAction::BtnX:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::motionMagic;
-                    m_elevator->SetPosition(Elevator::SCALE_LOW);
+                    m_intakeAssembly->GoToIntakePosition();
                 }
                 break;
             case DualAction::BtnB:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::motionMagic;
-                    m_elevator->SetPosition(Elevator::LOW_GOAL);
+                    m_intakeAssembly->GoToIntakePosition();
                 }
                 else {
                 }
@@ -319,12 +299,8 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::Start:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::zeroingDown;
-                    m_elevator->Reset();
                 }
                 else {
-                    m_elevator->ZeroPosition();
-                    m_elevator->SetPower(0.0);
                 }
                 break;
         }

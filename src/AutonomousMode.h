@@ -16,8 +16,7 @@
 #include "src/DisabledMode.h"
 #include "src/Robot.h"
 #include "src/subsystems/Drive.h"
-#include "src/subsystems/Elevator.h"
-#include "src/subsystems/Wrist.h"
+#include "src/subsystems/IntakeAssembly.h"
 #include "lib/helpers/GreyLight.h"
 #include "lib/pixelprocessors/AutoIndicator.h"
 
@@ -37,8 +36,8 @@ public:
         NOT_YET_RECEIVED
     };
 
-    Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
-               Wrist *wrist, ADXRS450_Gyro *gyro, GreyLight *greylight);
+    Autonomous(Disabled *disabled, Drive *drive, IntakeAssembly *intakeAssembly,
+               ADXRS450_Gyro *gyro, GreyLight *greylight);
     virtual ~Autonomous();
 
     void AutonomousInit();
@@ -67,8 +66,7 @@ private:
     AutoRoutineBase::AutoDirection m_direction;
 
     Drive *m_drive;
-    Elevator *m_elevator;
-    Wrist *m_wrist;
+    IntakeAssembly *m_intakeAssembly;
     ADXRS450_Gyro *m_gyro;
 };
 };

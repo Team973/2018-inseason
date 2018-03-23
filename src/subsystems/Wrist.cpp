@@ -89,11 +89,11 @@ void Wrist::ZeroPosition() {
 }
 
 void Wrist::OpenClaw() {
-    m_cubeClamp->Set(clawOpen);
+    m_cubeClamp->Set(openState::clawOpen);
 }
 
 void Wrist::CloseClaw() {
-    m_cubeClamp->Set(clawClosed);
+    m_cubeClamp->Set(openState::clawClosed);
 }
 
 void Wrist::IntakeCube() {
@@ -114,7 +114,7 @@ void Wrist::TaskPeriodic(RobotMode mode) {
     SmartDashboard::PutNumber("elevator/encoders/encoder", GetPosition());
     DBStringPrintf(DBStringPos::DB_LINE0, "e %f", GetPosition());
     switch (m_wristState) {
-        case WristState::manual:
+        case WristState::manualVoltage:
             break;
         case WristState::zeroing_start:
             m_wristState = WristState::zeroing_goDown;
@@ -124,7 +124,7 @@ void Wrist::TaskPeriodic(RobotMode mode) {
             break;
         case WristState::motionMagic:
             break;
-        case WristState::position:
+        case WristState::manualPosition:
             m_wristMotor->Set(ControlMode::Position,
                               m_wristPositionDelta + this->GetPosition());
             break;

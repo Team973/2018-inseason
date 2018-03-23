@@ -6,13 +6,12 @@ using namespace sample;
 
 namespace frc973 {
 Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-           Drive *drive, Elevator *elevator, Wrist *wrist, Hanger *hanger,
+           Drive *drive, IntakeAssembly *intakeAssembly, Hanger *hanger,
            GreyLight *greylight)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_drive(drive)
-        , m_elevator(elevator)
-        , m_wrist(wrist)
+        , m_intakeAssembly(intakeAssembly)
         , m_hanger(hanger)
         , m_elevatorMode(ElevatorMode::percentOutput)
         , m_greylight(greylight)
@@ -119,14 +118,12 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::motionMagic;
-                    m_elevator->SetPosition(Elevator::SCALE_HIGH);
+                    m_intakeAssembly->GoToIntakePosition();
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::motionMagic;
-                    m_elevator->SetPosition(Elevator::SCALE_MID);
+                    m_intakeAssembly->GoToIntakePosition();
                 }
                 break;
             case DualAction::BtnA:
@@ -165,26 +162,22 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
         switch (button) {
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::motionMagic;
-                    m_elevator->SetPosition(Elevator::GROUND);
+                    m_intakeAssembly->GoToIntakePosition();
                 }
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::motionMagic;
-                    m_elevator->SetPosition(Elevator::LOW_GOAL);
+                    m_intakeAssembly->GoToIntakePosition();
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::motionMagic;
-                    m_elevator->SetPosition(Elevator::SCALE_LOW);
+                    m_intakeAssembly->GoToIntakePosition();
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::motionMagic;
-                    m_elevator->SetPosition(Elevator::VAULT);
+                    m_intakeAssembly->GoToIntakePosition();
                 }
                 break;
             case DualAction::RightTrigger:

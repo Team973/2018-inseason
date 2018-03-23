@@ -13,8 +13,7 @@
 #include "src/info/RobotInfo.h"
 #include "lib/helpers/JoystickHelper.h"
 #include "src/subsystems/Drive.h"
-#include "src/subsystems/Elevator.h"
-#include "src/subsystems/Wrist.h"
+#include "src/subsystems/IntakeAssembly.h"
 #include "src/subsystems/Hanger.h"
 #include "lib/helpers/GreyLight.h"
 #include "lib/pixelprocessors/Flash.h"
@@ -30,7 +29,7 @@ public:
     static constexpr Color NO_COLOR = {0, 0, 0};
 
     Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
-           Wrist *wrist, Drive *drive, Elevator *elevator, Hanger *hanger,
+           IntakeAssembly *intakeAssembly, Hanger *hanger,
            GreyLight *greylight);
     virtual ~Teleop();
 
@@ -44,8 +43,6 @@ private:
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
 
-    Wrist *m_wrist;
-
     Drive *m_drive;
     enum class DriveMode
     {
@@ -54,16 +51,7 @@ private:
     };
     DriveMode m_driveMode;
 
-    enum class ElevatorMode
-    {
-        percentOutput,
-        motionMagic,
-        zeroingDown
-    };
-
-    Elevator *m_elevator;
-
-    ElevatorMode m_elevatorMode;
+    IntakeAssembly *m_intakeAssembly;
     double m_elevatorPosition;
 
     enum class IntakeMode

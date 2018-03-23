@@ -5,8 +5,9 @@
 using namespace frc;
 
 namespace frc973 {
-Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
-                       Wrist *wrist, ADXRS450_Gyro *gyro, GreyLight *greylight)
+Autonomous::Autonomous(Disabled *disabled, Drive *drive,
+                       IntakeAssembly *intakeAssembly, ADXRS450_Gyro *gyro,
+                       GreyLight *greylight)
         : m_noAuto(new NoAuto())
         , m_forwardAuto(new ForwardAuto(drive))
         , m_centerSwitchAuto(new CenterSwitchAuto(drive, elevator, wrist))
@@ -33,9 +34,8 @@ Autonomous::~Autonomous() {
 
 void Autonomous::AutonomousInit() {
     // Remember to zero all sensors here
-    m_elevator->SetPosition(Elevator::GROUND);
+    m_intakeAssembly->GoToIntakePosition();
     m_gyro->Reset();
-    m_wrist->CloseClaw();
     std::cout << "Autonomous Start" << std::endl;
 
     DBStringPrintf(DB_LINE1, "%s", m_scoringLocations.c_str());
