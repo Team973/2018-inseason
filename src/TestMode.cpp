@@ -25,7 +25,7 @@ Test::~Test() {
 void Test::TestInit() {
     std::cout << "Test Start" << std::endl;
     m_driveMode = DriveMode::Openloop;
-    m_intakeMode = IntakeMode::manualVoltage;
+    m_intakeMode = IntakeMode::manualPosition;
     m_hanger->DisengagePTO();
 }
 

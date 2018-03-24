@@ -24,7 +24,6 @@ using namespace frc;
 namespace frc973 {
 class Teleop {
 public:
-    static constexpr Color INTAKE_GREEN = {0, 255, 0};
     static constexpr Color END_GAME_RED = {255, 0, 0};
     static constexpr Color NO_COLOR = {0, 0, 0};
 
@@ -49,30 +48,25 @@ private:
         Cheesy,
         Hanger
     };
+
+    enum class IntakeMode
+    {
+        manualVoltage,
+        manualPosition,
+        motionMagic
+    };
     DriveMode m_driveMode;
+    IntakeMode m_intakeMode;
 
     IntakeAssembly *m_intakeAssembly;
     double m_elevatorPosition;
 
-    enum class IntakeMode
-    {
-        manual,
-        switchIntaking,
-        switchTaking,
-        switchGrabbing,
-        switchStandby,
-        vaultStart,
-        vaultIntaking,
-        vaultEjecting
-    };
-    IntakeMode m_intakeMode;
     uint32_t m_intakeModeTimer;
 
     bool m_endGameSignalSent;
 
     Hanger *m_hanger;
     GreyLight *m_greyLight;
-    LightPattern::Flash *m_intakeSignal;
     LightPattern::Flash *m_endGameSignal;
     LightPattern::SolidColor *m_ptoSignal;
 };

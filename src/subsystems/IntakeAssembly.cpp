@@ -7,10 +7,12 @@ using namespace frc;
 
 namespace frc973 {
 IntakeAssembly::IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
-                               Elevator *elevator, Wrist *wrist)
+                               Elevator *elevator, Wrist *wrist,
+                               GreyLight *greylight)
         : m_scheduler(scheduler)
         , m_elevator(elevator)
         , m_wrist(wrist)
+        , m_greyLight(greylight)
         , m_controlMode(ControlMode::Idle)
         , m_elevatorPositionSetpoint(0.0)
         , m_wristPositionSetpoint(0.0)
@@ -89,24 +91,33 @@ void IntakeAssembly::SetPosManualInput(double elevatorInc, double wristInc) {
 }
 
 void IntakeAssembly::IntakeCube(double power) {
-    this->GoToIntakePosition(IntakePosition::ground);
+    m_controlMode = ControlMode::switchIntaking;
     m_wrist->IntakeCube(power);
+}
+
+void IntakeAssembly::VaultIntake() {
+    m_controlMode = ControlMode::vaultStart;
+    m_wrist->IntakeCube(1.0);
 }
 
 void IntakeAssembly::EjectCube() {
     m_wrist->EjectCube();
+    m_controlMode = ControlMode::ManualPosition;
 }
 
 void IntakeAssembly::StopIntake() {
     m_wrist->StopIntake();
+    m_controlMode = ControlMode::ManualPosition;
 }
 
 void IntakeAssembly::DropCube() {
     m_wrist->OpenClaw();
+    m_controlMode = ControlMode::ManualPosition;
 }
 
 void IntakeAssembly::GrabCube() {
     m_wrist->CloseClaw();
+    m_controlMode = ControlMode::ManualPosition;
 }
 
 double IntakeAssembly::GetElevatorPosition() {
@@ -120,7 +131,6 @@ double IntakeAssembly::GetWristPosition() {
 void IntakeAssembly::TaskPeriodic(RobotMode mode) {
     DBStringPrintf(DBStringPos::DB_LINE8, "w %3.2f s %3.2f i %1.2f",
                    GetWristPosition(), m_wristPositionSetpoint, m_wristInc);
-
     switch (m_controlMode) {
         case ControlMode::Idle:
             break;
@@ -129,6 +139,29 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
         case ControlMode::ManualVoltage:
             break;
         case ControlMode::Position:
+            break;
+        case ControlMode::switchIntaking:
+            GoToIntakePosition(IntakeAssembly::IntakePosition::ground);
+            if (GetElevatorPosition() < 5.0) {
+                m_controlMode = ControlMode::switchStandby;
+            }
+            break;
+        case ControlMode::switchStandby:
+            if (m_wrist->IsCubeIn()) {
+                GoToIntakePosition(IntakeAssembly::IntakePosition::stow);
+                m_intakeSignal->Reset();
+                m_greyLight->SetPixelStateProcessor(m_intakeSignal);
+            }
+            break;
+        case ControlMode::vaultStart:
+            GoToIntakePosition(IntakeAssembly::IntakePosition::vault);
+            IntakeCube(1.0);
+            m_controlMode = ControlMode::vaultStop;
+            break;
+        case ControlMode::vaultStop:
+            if (m_wrist->IsCubeIn()) {
+                StopIntake();
+            }
             break;
     }
 }

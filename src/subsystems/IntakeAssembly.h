@@ -9,6 +9,8 @@
 #include "lib/util/Util.h"
 #include "src/subsystems/Elevator.h"
 #include "src/subsystems/Wrist.h"
+#include "lib/helpers/GreyLight.h"
+#include "lib/pixelprocessors/Flash.h"
 
 using namespace frc;
 
@@ -18,6 +20,9 @@ class LogSpreadsheet;
 
 class IntakeAssembly : public CoopTask {
 public:
+    static constexpr Color NO_COLOR = {0, 0, 0};
+    static constexpr Color INTAKE_GREEN = {0, 255, 0};
+
     enum class IntakePosition
     {
         stow,
@@ -36,10 +41,14 @@ public:
         ManualPosition,
         ManualVoltage,
         Position,
+        switchIntaking,
+        switchStandby,
+        vaultStart,
+        vaultStop
     };
 
     IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
-                   Elevator *elevator, Wrist *wrist);
+                   Elevator *elevator, Wrist *wrist, GreyLight *greylight);
     virtual ~IntakeAssembly();
 
     void GoToIntakePosition(IntakePosition intakePosition);
@@ -50,6 +59,7 @@ public:
     void SetPosManualInput(double elevatorInc, double wristInc);
 
     void IntakeCube(double input);
+    void VaultIntake();
     void EjectCube();
     void StopIntake();
 
@@ -70,6 +80,8 @@ private:
 
     Elevator *m_elevator;
     Wrist *m_wrist;
+    GreyLight *m_greyLight;
+    LightPattern::Flash *m_intakeSignal;
 
     ControlMode m_controlMode;
 
