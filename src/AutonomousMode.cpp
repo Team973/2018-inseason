@@ -114,7 +114,7 @@ void Autonomous::AutonomousInit() {
             switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case SwitchScalePosition::LL:
                     m_switchOpposite->Reset();
-                    m_routine = m_scaleOpposite;
+                    m_routine = m_forwardAuto;
                     m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::LR:
@@ -147,6 +147,7 @@ void Autonomous::AutonomousInit() {
 
 void Autonomous::AutonomousPeriodic() {
     m_routine->Execute(m_direction);
+    // m_forwardAuto->Execute(m_direction);
 }
 
 void Autonomous::AutonomousStop() {
