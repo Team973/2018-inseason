@@ -73,10 +73,12 @@ void IntakeAssembly::GoToIntakePosition(IntakePosition intakePosition) {
 }
 
 void IntakeAssembly::SetElevatorManualPower(double input) {
+    m_controlMode = ControlMode::ManualVoltage;
     m_elevator->SetPower(input);
 }
 
 void IntakeAssembly::SetWristManualPower(double input) {
+    m_controlMode = ControlMode::ManualVoltage;
     m_wrist->SetPower(input);
 }
 
