@@ -26,7 +26,8 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     this->m_scheduler->RegisterTask("Wrist", this, TASK_PERIODIC);
 
     m_wristMotor->ConfigSelectedFeedbackSensor(
-        ctre::phoenix::motorcontrol::FeedbackDevice::QuadEncoder, 0,
+        ctre::phoenix::motorcontrol::FeedbackDevice::CTRE_MagEncoder_Absolute,
+        0,
         10);  // 0 = Not cascaded PID Loop; 10 = in constructor, not in a loop
     m_wristMotor->SetSensorPhase(true);
     m_wristMotor->SetNeutralMode(NeutralMode::Coast);
@@ -43,12 +44,17 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_wristMotor->EnableCurrentLimit(true);
     m_wristMotor->ConfigPeakCurrentDuration(0, 10);
     m_wristMotor->ConfigPeakCurrentLimit(0, 10);
-    m_wristMotor->ConfigContinuousCurrentLimit(15, 10);
+    m_wristMotor->ConfigContinuousCurrentLimit(5, 10);
     m_wristMotor->EnableVoltageCompensation(true);
 
     /*if (this->GetPosition() > 180.0) {
-        m_wristMotor->GetSensorCollection().SetQuadraturePosition(
-            (int)((this->GetPosition() - 360) / WRIST_DEGREES_PER_CLICK), 10);
+        m_wristMotor->SetSelectedSensorPosition(
+            (int)((this->GetPosition() - 360) / WRIST_DEGREES_PER_CLICK), 0,
+    10);
+    }
+    else if (this->GetPosition() < -180.0){
+      m_wristMotor->SetSelectedSensorPosition(
+          (int)((this->GetPosition() + 360) / WRIST_DEGREES_PER_CLICK), 0, 10);
     }*/
     ZeroPosition();
 
@@ -106,8 +112,8 @@ float Wrist::GetPosition() {
 }
 
 void Wrist::ZeroPosition() {
-    m_wristMotor->GetSensorCollection().SetQuadraturePosition(
-        90.0 / WRIST_DEGREES_PER_CLICK, 0);
+    m_wristMotor->SetSelectedSensorPosition(90.0 / WRIST_DEGREES_PER_CLICK, 0,
+                                            0);
 }
 
 void Wrist::OpenClaw() {
@@ -139,8 +145,8 @@ bool Wrist::IsCubeIn() {
 
 void Wrist::TaskPeriodic(RobotMode mode) {
     SmartDashboard::PutNumber("elevator/encoders/encoder", GetPosition());
-    DBStringPrintf(DBStringPos::DB_LINE7, "e %d",
-                   m_wristMotor->GetClosedLoopError(0));
+    DBStringPrintf(DBStringPos::DB_LINE7, "pos %d",
+                   m_wristMotor->GetSensorCollection().GetAnalogInRaw());
     DBStringPrintf(DBStringPos::DB_LINE5, "cube: l%d r %d c%d",
                    m_leftCubeSensor->Get(), m_rightCubeSensor->Get(),
                    IsCubeIn());
