@@ -34,13 +34,13 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_drive->SplineDrive(&right_scale::right_scale,
                                      Drive::RelativeTo::Now);
             }
-            // m_wrist->CloseClaw();
             m_autoTimer = GetMsecTime();
             m_autoState++;
             break;
         case 1:
-            if (GetMsecTime() - m_autoTimer > 1000) {
-                // m_elevator->SetPosition(Elevator::SCALE_HIGH);
+            if (GetMsecTime() - m_autoTimer > 2000) {
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::IntakePosition::scaleHigh);
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
@@ -48,6 +48,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
         case 2:
             if (m_drive->GetSplinePercentComplete() > 0.80 ||
                 m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
+                m_intakeAssembly->EjectCube();
                 m_autoState++;
             }
             break;
@@ -63,7 +64,8 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                         &two_cube_backoff_right::two_cube_backoff_right,
                         Drive::RelativeTo::SetPoint);
                 }
-                // m_elevator->SetPosition(Elevator::GROUND);
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::IntakePosition::ground);
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
@@ -80,15 +82,16 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                         &two_cube_intaking_right::two_cube_intaking_right,
                         Drive::RelativeTo::Now);
                 }
-                // m_wrist->OpenClaw();
+                m_intakeAssembly->IntakeCube(-1.0);
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
         case 5:
             if ((m_drive->GetSplinePercentComplete() > 0.8) ||
-                GetMsecTime() - m_autoTimer > 4000) {
-                // m_wrist->CloseClaw();
+                GetMsecTime() - m_autoTimer > 4000 ||
+                m_intakeAssembly->GetWrist()->IsCubeIn()) {
+                m_intakeAssembly->StopIntake();
                 m_autoState++;
             }
             break;

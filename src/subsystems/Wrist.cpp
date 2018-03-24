@@ -106,7 +106,7 @@ void Wrist::SetPositionStep(double position) {
     m_wristMotor->Set(ControlMode::Position, position_clicks);
 }
 
-float Wrist::GetPosition() {
+float Wrist::GetPosition() const {
     return WRIST_DEGREES_PER_CLICK *
            ((float)m_wristMotor->GetSelectedSensorPosition(0));
 }
@@ -139,7 +139,7 @@ void Wrist::StopIntake() {
     m_rightRoller->Set(ControlMode::PercentOutput, -0.1);
 }
 
-bool Wrist::IsCubeIn() {
+bool Wrist::IsCubeIn() const {
     return (!m_leftCubeSensor->Get() || !m_rightCubeSensor->Get());
 }
 

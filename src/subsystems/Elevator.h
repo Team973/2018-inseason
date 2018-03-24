@@ -61,7 +61,7 @@ public:
     /**
      * @return: returns current elevator position in sensor units
      **/
-    float GetPosition();
+    float GetPosition() const;
 
     void ZeroPosition();
 

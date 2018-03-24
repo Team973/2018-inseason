@@ -61,6 +61,7 @@ void SideSwitch::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_drive->OpenloopArcadeDrive(0.0, 0.0);
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::IntakePosition::ground);
+                m_intakeAssembly->StopIntake();
                 m_autoState++;
             }
             break;

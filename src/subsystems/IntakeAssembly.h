@@ -76,6 +76,9 @@ public:
     void EnableBrakeMode();
     void EnableCoastMode();
 
+    const Wrist *GetWrist();
+    const Elevator *GetElevator();
+
     /**
      * Update function synonymous to TeleopContinuous that gets called
      *continuously

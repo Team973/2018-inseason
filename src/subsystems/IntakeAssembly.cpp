@@ -150,6 +150,14 @@ void IntakeAssembly::EnableCoastMode() {
     m_elevator->EnableCoastMode();
 }
 
+const Wrist *IntakeAssembly::GetWrist() {
+    return m_wrist;
+}
+
+const Elevator *IntakeAssembly::GetElevator() {
+    return m_elevator;
+}
+
 void IntakeAssembly::TaskPeriodic(RobotMode mode) {
     DBStringPrintf(DBStringPos::DB_LINE8, "w %3.2f s %3.2f i %1.2f",
                    GetWristPosition(), m_wristPositionSetpoint, m_wristInc);

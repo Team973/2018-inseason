@@ -46,7 +46,7 @@ public:
     /**
      * @return: returns current elevator position in sensor units
      **/
-    float GetPosition();
+    float GetPosition() const;
 
     void ZeroPosition();
 
@@ -64,7 +64,7 @@ public:
     void EjectCube();
     void StopIntake();
 
-    bool IsCubeIn();
+    bool IsCubeIn() const;
 
     void TaskPeriodic(RobotMode mode);
 
