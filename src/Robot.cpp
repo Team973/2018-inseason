@@ -39,7 +39,10 @@ Robot::Robot()
         , m_intakeOpenClose(new Solenoid(PCM_CAN_ID, INTAKE_OPENCLOSE_PCM_ID))
         , m_rightRoller(new GreyTalonSRX(CLAW_RIGHT_ROLLER_CAN_ID))
         , m_leftRoller(new GreyTalonSRX(CLAW_LEFT_ROLLER_CAN_ID))
-        , m_cubeSensor(new DigitalInput(INTAKE_BEAM_BREAKER_SENSOR_DIN))
+        , m_rightCubeSensor(
+              new DigitalInput(RIGHT_INTAKE_BEAM_BREAKER_SENSOR_DIN))
+        , m_leftCubeSensor(
+              new DigitalInput(LEFT_INTAKE_BEAM_BREAKER_SENSOR_DIN))
         , m_elevatorMotor(new GreyTalonSRX(ELEVATOR_CAN_ID))
         , m_wristMotor(new GreyTalonSRX(WRIST_CAN_ID))
         , m_hangerPTO(new Solenoid(PCM_CAN_ID, HANGER_PTO_PCM_ID))
@@ -47,8 +50,9 @@ Robot::Robot()
         , m_forkliftTalon(new GreyTalonSRX(FORKLIFT_TALON_CAN_ID))
         , m_greylight(new GreyLight(NUM_LED))
         , m_elevator(new Elevator(this, m_logger, m_elevatorMotor))
-        , m_wrist(new Wrist(this, m_logger, m_cubeSensor, m_wristMotor,
-                            m_leftRoller, m_rightRoller, m_cubeClamp))
+        , m_wrist(new Wrist(this, m_logger, m_leftCubeSensor, m_rightCubeSensor,
+                            m_wristMotor, m_leftRoller, m_rightRoller,
+                            m_cubeClamp))
         , m_intakeAssembly(new IntakeAssembly(this, m_logger,
                                               m_operatorJoystick, m_elevator,
                                               m_wrist, m_greylight))

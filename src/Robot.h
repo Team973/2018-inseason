@@ -103,7 +103,8 @@ private:
     Solenoid *m_intakeOpenClose;
     TalonSRX *m_rightRoller;
     TalonSRX *m_leftRoller;
-    DigitalInput *m_cubeSensor;
+    DigitalInput *m_rightCubeSensor;
+    DigitalInput *m_leftCubeSensor;
     TalonSRX *m_elevatorMotor;
     TalonSRX *m_wristMotor;
     Solenoid *m_hangerPTO;

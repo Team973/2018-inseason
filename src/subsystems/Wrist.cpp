@@ -7,11 +7,13 @@ using namespace frc;
 
 namespace frc973 {
 Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
-             DigitalInput *cubeSensor, TalonSRX *wristMotor,
-             TalonSRX *leftRoller, TalonSRX *rightRoller, Solenoid *cubeClamp)
+             DigitalInput *rightCubeSensor, DigitalInput *leftCubeSensor,
+             TalonSRX *wristMotor, TalonSRX *leftRoller, TalonSRX *rightRoller,
+             Solenoid *cubeClamp)
         : m_scheduler(scheduler)
         , m_wristState(WristState::manualVoltage)
-        , m_cubeSensor(cubeSensor)
+        , m_rightCubeSensor(rightCubeSensor)
+        , m_leftCubeSensor(leftCubeSensor)
         , m_cubeClamp(cubeClamp)
         , m_leftRoller(leftRoller)
         , m_rightRoller(rightRoller)
@@ -19,6 +21,7 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
         , m_position(0.0)
         , m_prevWristSetpoint(0.0)
         , m_wristPositionDelta(0.0)
+        , m_bannerFilter(new DigitalGlitchFilter())
         , m_zeroingTime(0) {
     this->m_scheduler->RegisterTask("Wrist", this, TASK_PERIODIC);
 
@@ -66,6 +69,10 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
 
     m_leftRoller->Set(ControlMode::PercentOutput, 0.0);
     m_rightRoller->Set(ControlMode::PercentOutput, 0.0);
+
+    m_bannerFilter->Add(m_leftCubeSensor);
+    m_bannerFilter->Add(m_rightCubeSensor);
+    m_bannerFilter->SetPeriodNanoSeconds(10000);
 }
 
 Wrist::~Wrist() {
@@ -127,14 +134,16 @@ void Wrist::StopIntake() {
 }
 
 bool Wrist::IsCubeIn() {
-    return m_cubeSensor->Get();
+    return (!m_leftCubeSensor->Get() || !m_rightCubeSensor->Get());
 }
 
 void Wrist::TaskPeriodic(RobotMode mode) {
     SmartDashboard::PutNumber("elevator/encoders/encoder", GetPosition());
     DBStringPrintf(DBStringPos::DB_LINE7, "e %d",
                    m_wristMotor->GetClosedLoopError(0));
-
+    DBStringPrintf(DBStringPos::DB_LINE5, "cube: l%d r %d c%d",
+                   m_leftCubeSensor->Get(), m_rightCubeSensor->Get(),
+                   IsCubeIn());
     switch (m_wristState) {
         case WristState::manualVoltage:
             break;

@@ -162,7 +162,7 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             }
             break;
         case ControlMode::switchStandby:
-            if (!m_wrist->IsCubeIn() ||
+            if (m_wrist->IsCubeIn() ||
                 m_operatorJoystick->GetRawButton(DualAction::Back)) {
                 GoToIntakePosition(IntakeAssembly::IntakePosition::stow);
                 m_wrist->StopIntake();
@@ -176,7 +176,7 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             m_controlMode = ControlMode::vaultStop;
             break;
         case ControlMode::vaultStop:
-            if (!m_wrist->IsCubeIn()) {
+            if (m_wrist->IsCubeIn()) {
                 StopIntake();
             }
             break;

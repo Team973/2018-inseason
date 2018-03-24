@@ -43,7 +43,8 @@ static const int WRIST_FORWARD_SOFT_LIMIT = 90.0;
 static const int FORKLIFT_TALON_CAN_ID = 6;
 
 // Digital
-static const int INTAKE_BEAM_BREAKER_SENSOR_DIN = 3;
+static const int RIGHT_INTAKE_BEAM_BREAKER_SENSOR_DIN = 2;
+static const int LEFT_INTAKE_BEAM_BREAKER_SENSOR_DIN = 3;
 static const int PRESSURE_DIN_ID = 1;
 
 // Relays

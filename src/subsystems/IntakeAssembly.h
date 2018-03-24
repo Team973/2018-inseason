@@ -11,6 +11,7 @@
 #include "src/subsystems/Wrist.h"
 #include "lib/helpers/GreyLight.h"
 #include "lib/pixelprocessors/Flash.h"
+#include "lib/filters/Debouncer.h"
 
 using namespace frc;
 

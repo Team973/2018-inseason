@@ -7,6 +7,7 @@
 #include "src/info/RobotInfo.h"
 #include "lib/helpers/JoystickHelper.h"
 #include "lib/util/Util.h"
+#include "DigitalGlitchFilter.h"
 
 using namespace frc;
 
@@ -16,12 +17,13 @@ class LogSpreadsheet;
 
 class Wrist : public CoopTask {
 public:
-    static constexpr double STOW = 0.0;
+    static constexpr double STOW = -35.0;
     static constexpr double SCALE = 10.0;
     static constexpr double EXTENDED = 90.0;
     static constexpr double OVER_THE_BACK = -50.0;
 
-    Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, DigitalInput *cubeSensor,
+    Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
+          DigitalInput *rightCubeSensor, DigitalInput *leftCubeSensor,
           TalonSRX *wristMotor, TalonSRX *leftRoller, TalonSRX *rightRoller,
           Solenoid *cubeClamp);
     virtual ~Wrist();
@@ -77,7 +79,8 @@ private:
     TaskMgr *m_scheduler;
     WristState m_wristState;
 
-    DigitalInput *m_cubeSensor;
+    DigitalInput *m_rightCubeSensor;
+    DigitalInput *m_leftCubeSensor;
     Solenoid *m_cubeClamp;
 
     TalonSRX *m_leftRoller;
@@ -87,6 +90,7 @@ private:
     double m_position;
     double m_prevWristSetpoint;
     double m_wristPositionDelta;
+    DigitalGlitchFilter *m_bannerFilter;
     uint32_t m_zeroingTime;
 };
 }
