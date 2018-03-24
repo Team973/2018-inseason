@@ -94,13 +94,19 @@ void IntakeAssembly::IntakeCube(double power) {
 }
 
 void IntakeAssembly::EjectCube() {
-    this->GoToIntakePosition(IntakePosition::ground);
     m_wrist->EjectCube();
 }
 
 void IntakeAssembly::StopIntake() {
-    this->GoToIntakePosition(IntakePosition::ground);
     m_wrist->StopIntake();
+}
+
+void IntakeAssembly::DropCube() {
+    m_wrist->OpenClaw();
+}
+
+void IntakeAssembly::GrabCube() {
+    m_wrist->CloseClaw();
 }
 
 double IntakeAssembly::GetElevatorPosition() {

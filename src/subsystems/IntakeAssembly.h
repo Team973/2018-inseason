@@ -53,6 +53,9 @@ public:
     void EjectCube();
     void StopIntake();
 
+    void DropCube();
+    void GrabCube();
+
     double GetElevatorPosition();
     double GetWristPosition();
 

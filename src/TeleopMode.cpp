@@ -157,6 +157,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::LeftBumper:
                 if (pressedP) {
                     m_intakeMode = IntakeMode::manual;
+                    m_intakeAssembly->DropCube();
                 }
                 else {
                 }
@@ -164,6 +165,10 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::LeftTrigger:
                 if (pressedP) {
                     m_intakeMode = IntakeMode::manual;
+                    m_intakeAssembly->EjectCube();
+                }
+                else {
+                    m_intakeAssembly->StopIntake();
                 }
                 break;
             case DualAction::RightBumper:
@@ -219,26 +224,30 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
         switch (button) {
             case DualAction::BtnY:
                 if (pressedP) {
+                    m_intakeMode = IntakeMode::manual;
                     m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::IntakePosition::overBack);
+                        IntakeAssembly::IntakePosition::scaleHigh);
                 }
                 break;
             case DualAction::BtnA:
                 if (pressedP) {
+                    m_intakeMode = IntakeMode::manual;
                     m_intakeAssembly->GoToIntakePosition(
                         IntakeAssembly::IntakePosition::vault);
                 }
                 break;
             case DualAction::BtnX:
                 if (pressedP) {
+                    m_intakeMode = IntakeMode::manual;
                     m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::IntakePosition::lowGoal);
+                        IntakeAssembly::IntakePosition::scaleLow);
                 }
                 break;
             case DualAction::BtnB:
                 if (pressedP) {
+                    m_intakeMode = IntakeMode::manual;
                     m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::IntakePosition::scaleMid);
+                        IntakeAssembly::IntakePosition::lowGoal);
                 }
                 else {
                 }
@@ -291,12 +300,10 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::manual;
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::manual;
                 }
                 break;
             case DualAction::Back:
