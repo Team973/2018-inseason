@@ -84,6 +84,7 @@ private:
     uint32_t m_intakeModeTimer;
 
     bool m_endGameSignalSent;
+    bool m_enableForkDeploy;
 
     Hanger *m_hanger;
     GreyLight *m_greyLight;
