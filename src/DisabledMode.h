@@ -20,8 +20,8 @@ namespace frc973 {
 class Disabled {
 public:
     Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
-             UsbCamera intakeCamera, UsbCamera forkCamera, VideoSink greyCam,
-             GreyLight *greylight);
+             IntakeAssembly *intakeAssembly, UsbCamera intakeCamera,
+             UsbCamera forkCamera, VideoSink greyCam, GreyLight *greylight);
     virtual ~Disabled();
 
     void DisabledInit();
@@ -45,6 +45,7 @@ private:
     VideoSink m_greyCam;
 
     GreyLight *m_greylight;
+    IntakeAssembly *m_intakeAssembly;
     LightPattern::SolidColor *m_disabledSignal;
     LightPattern::LengthModifier *m_leftSideSignal;
     LightPattern::ReverseModifier *m_rightSideSignal;

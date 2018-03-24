@@ -69,8 +69,8 @@ Robot::Robot()
         , m_compressor(
               new GreyCompressor(m_airPressureSwitch, m_compressorRelay, this))
         , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick,
-                                  m_intakeCamera, m_forkCamera, m_greyCam,
-                                  m_greylight))
+                                  m_intakeAssembly, m_intakeCamera,
+                                  m_forkCamera, m_greyCam, m_greylight))
         , m_autonomous(new Autonomous(m_disabled, m_drive, m_intakeAssembly,
                                       m_gyro, m_greylight))
         , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick, m_drive,

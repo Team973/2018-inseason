@@ -34,7 +34,6 @@ Teleop::~Teleop() {
 void Teleop::TeleopInit() {
     std::cout << "Teleop Start" << std::endl;
     m_intakeMode = IntakeMode::manualPosition;
-    m_intakeAssembly->EnableCoastMode();
 }
 
 void Teleop::TeleopPeriodic() {
@@ -98,7 +97,6 @@ void Teleop::TeleopPeriodic() {
 }
 
 void Teleop::TeleopStop() {
-    m_intakeAssembly->EnableBrakeMode();
 }
 
 void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {

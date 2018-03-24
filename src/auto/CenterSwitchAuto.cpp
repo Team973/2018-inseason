@@ -31,24 +31,18 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                                      Drive::RelativeTo::Now);
             }
             m_intakeAssembly->GoToIntakePosition(
-                IntakeAssembly::IntakePosition::vault);
-            // m_wrist->CloseClaw();
+                IntakeAssembly::IntakePosition::lowGoal);
             m_autoTimer = GetMsecTime();
             m_autoState++;
             break;
         case 1:
-            if (GetMsecTime() - m_autoTimer > 2000) {
-                m_autoTimer = GetMsecTime();
+            if (m_drive->GetSplinePercentComplete() > 0.80 ||
+                m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
+                m_intakeAssembly->EjectCube();
                 m_autoState++;
             }
             break;
         case 2:
-            if (m_drive->GetSplinePercentComplete() > 0.80 ||
-                m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
-                m_autoState++;
-            }
-            break;
-        case 3:
             if (m_drive->GetSplinePercentComplete() > 1.0) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(&left_switch_reset::left_switch_reset,
@@ -62,11 +56,11 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_autoState++;
             }
             break;
-        case 4:
+        case 3:
             if (m_drive->GetSplinePercentComplete() > 1.0) {
                 m_drive->OpenloopArcadeDrive(0.0, 0.0);
                 m_intakeAssembly->GoToIntakePosition(
-                    IntakeAssembly::IntakePosition::vault);
+                    IntakeAssembly::IntakePosition::ground);
                 m_autoState++;
             }
             break;
