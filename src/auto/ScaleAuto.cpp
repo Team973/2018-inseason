@@ -46,9 +46,10 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 2:
-            if (m_drive->GetSplinePercentComplete() > 0.80 ||
+            if (m_drive->GetSplinePercentComplete() > 1.0 ||
                 m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
                 m_intakeAssembly->EjectCube();
+                m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
@@ -66,6 +67,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 }
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::IntakePosition::ground);
+                m_intakeAssembly->StopIntake();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
@@ -75,12 +77,12 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
                         &two_cube_intaking_left::two_cube_intaking_left,
-                        Drive::RelativeTo::Now);
+                        Drive::RelativeTo::SetPoint);
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(
                         &two_cube_intaking_right::two_cube_intaking_right,
-                        Drive::RelativeTo::Now);
+                        Drive::RelativeTo::SetPoint);
                 }
                 m_intakeAssembly->IntakeCube(-1.0);
                 m_autoTimer = GetMsecTime();
@@ -88,10 +90,11 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 5:
-            if ((m_drive->GetSplinePercentComplete() > 0.8) ||
-                GetMsecTime() - m_autoTimer > 4000 ||
-                m_intakeAssembly->GetWrist()->IsCubeIn()) {
+            if ((GetMsecTime() - m_autoTimer > 4000 ||
+                 m_intakeAssembly->GetWrist()->IsCubeIn())) {
                 m_intakeAssembly->StopIntake();
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::IntakePosition::lowGoal);
                 m_autoState++;
             }
             break;

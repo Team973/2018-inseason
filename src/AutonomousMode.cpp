@@ -128,8 +128,8 @@ void Autonomous::AutonomousInit() {
                     m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
                 case SwitchScalePosition::RR:
-                    m_twoCubeAuto->Reset();
-                    m_routine = m_twoCubeAuto;
+                    m_scaleAuto->Reset();
+                    m_routine = m_scaleAuto;
                     m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
                 case SwitchScalePosition::NOT_YET_RECEIVED:
