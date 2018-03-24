@@ -25,33 +25,36 @@ Test::~Test() {
 void Test::TestInit() {
     std::cout << "Test Start" << std::endl;
     m_driveMode = DriveMode::Openloop;
+    m_intakeMode = IntakeMode::manualVoltage;
     m_hanger->DisengagePTO();
 }
 
 void Test::TestPeriodic() {
+    double elevatorPosIncInput =
+        -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
+    double wristPosIncInput = Util::signCube(
+        -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis));
 
-    if (false) {
+    if (fabs(elevatorPosIncInput) > 0.25 || fabs(wristPosIncInput) > 0.25) {
+        m_intakeMode = IntakeMode::manualPosition;
+    }
+
+    if (m_intakeMode == IntakeMode::manualVoltage) {
         double elevatorManualPower =
             -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
-        double wristManualPower = 
+        double wristManualPower =
             -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
 
         m_intakeAssembly->SetElevatorManualPower(elevatorManualPower +
                                                  ELEVATOR_FEED_FORWARD);
 
-        m_intakeAssembly->SetWristManualPower(wristManualPower +
-            sin(m_intakeAssembly->GetWristPosition() * 3.14159 / 180.0)
-                * ELEVATOR_FEED_FORWARD);
+        m_intakeAssembly->SetWristManualPower(wristManualPower);
     }
-    else {
-        double elevatorPosIncInput =
-            -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
-        double wristPosIncInput = 
-            -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
-
-        m_intakeAssembly->SetPosManualInput(
-                elevatorPosIncInput,
-                wristPosIncInput);
+    else if (m_intakeMode == IntakeMode::manualPosition) {
+        m_intakeAssembly->SetPosManualInput(elevatorPosIncInput,
+                                            wristPosIncInput);
+    }
+    else if (m_intakeMode == IntakeMode::motionMagic) {
     }
 
     double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
@@ -127,12 +130,14 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
+                    m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
                         IntakeAssembly::IntakePosition::scaleMid);
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
+                    m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
                         IntakeAssembly::IntakePosition::scaleHigh);
                 }
@@ -173,24 +178,28 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
         switch (button) {
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
+                    m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::IntakePosition::vault);
+                        IntakeAssembly::IntakePosition::stow);
                 }
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
+                    m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
                         IntakeAssembly::IntakePosition::lowGoal);
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
+                    m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
                         IntakeAssembly::IntakePosition::overBack);
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
+                    m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
                         IntakeAssembly::IntakePosition::vault);
                 }
@@ -209,7 +218,7 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
-                    m_intakeAssembly->IntakeCube();
+                    m_intakeAssembly->IntakeCube(-1.0);
                 }
                 else {
                     m_intakeAssembly->StopIntake();

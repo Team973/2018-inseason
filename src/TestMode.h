@@ -41,11 +41,19 @@ private:
         Velocity
     };
 
+    enum class IntakeMode
+    {
+        manualPosition,
+        manualVoltage,
+        motionMagic
+    };
+
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
 
     Drive *m_drive;
     DriveMode m_driveMode;
+    IntakeMode m_intakeMode;
     IntakeAssembly *m_intakeAssembly;
     Hanger *m_hanger;
 

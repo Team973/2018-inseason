@@ -30,6 +30,10 @@ void IntakeAssembly::GoToIntakePosition(IntakePosition intakePosition) {
             m_elevatorPositionSetpoint = Elevator::GROUND;
             m_wristPositionSetpoint = Wrist::STOW;
             break;
+        case IntakePosition::ground:
+            m_elevatorPositionSetpoint = Elevator::GROUND;
+            m_wristPositionSetpoint = Wrist::EXTENDED;
+            break;
         case IntakePosition::vault:
             m_elevatorPositionSetpoint = Elevator::VAULT;
             m_wristPositionSetpoint = Wrist::EXTENDED;
@@ -40,19 +44,20 @@ void IntakeAssembly::GoToIntakePosition(IntakePosition intakePosition) {
             break;
         case IntakePosition::scaleLow:
             m_elevatorPositionSetpoint = Elevator::SCALE_LOW;
-            m_wristPositionSetpoint = Wrist::EXTENDED;
+            m_wristPositionSetpoint = Wrist::SCALE;
             break;
         case IntakePosition::scaleMid:
             m_elevatorPositionSetpoint = Elevator::SCALE_MID;
-            m_wristPositionSetpoint = Wrist::EXTENDED;
+            m_wristPositionSetpoint = Wrist::SCALE;
             break;
         case IntakePosition::scaleHigh:
             m_elevatorPositionSetpoint = Elevator::SCALE_HIGH;
-            m_wristPositionSetpoint = Wrist::EXTENDED;
+            m_wristPositionSetpoint = Wrist::SCALE;
             break;
         case IntakePosition::overBack:
             m_elevatorPositionSetpoint = Elevator::SCALE_HIGH;
             m_wristPositionSetpoint = Wrist::OVER_THE_BACK;
+            break;
         default:
             break;
     }
@@ -75,24 +80,26 @@ void IntakeAssembly::SetPosManualInput(double elevatorInc, double wristInc) {
     double currPosition = GetWristPosition();
     m_wristPositionSetpoint += m_wristInc * MAX_WRIST_SPEED * 1.0 / 20.0;
     m_wristPositionSetpoint = Util::bound(
-            m_wristPositionSetpoint,
-            currPosition - MAX_WRIST_SPEED * 1.5 / 20.0,
-            currPosition + MAX_WRIST_SPEED * 1.5 / 20.0);
+        m_wristPositionSetpoint, currPosition - MAX_WRIST_SPEED * 1.5 / 20.0,
+        currPosition + MAX_WRIST_SPEED * 1.5 / 20.0);
 
     m_wrist->SetPositionStep(m_wristPositionSetpoint);
     m_elevator->SetPower(m_elevatorInc + ELEVATOR_FEED_FORWARD);
     m_controlMode = ControlMode::ManualPosition;
 }
 
-void IntakeAssembly::IntakeCube() {
-    m_wrist->IntakeCube();
+void IntakeAssembly::IntakeCube(double power) {
+    this->GoToIntakePosition(IntakePosition::ground);
+    m_wrist->IntakeCube(power);
 }
 
 void IntakeAssembly::EjectCube() {
+    this->GoToIntakePosition(IntakePosition::ground);
     m_wrist->EjectCube();
 }
 
 void IntakeAssembly::StopIntake() {
+    this->GoToIntakePosition(IntakePosition::ground);
     m_wrist->StopIntake();
 }
 
@@ -106,9 +113,7 @@ double IntakeAssembly::GetWristPosition() {
 
 void IntakeAssembly::TaskPeriodic(RobotMode mode) {
     DBStringPrintf(DBStringPos::DB_LINE8, "w %3.2f s %3.2f i %1.2f",
-            GetWristPosition(),
-            m_wristPositionSetpoint,
-            m_wristInc);
+                   GetWristPosition(), m_wristPositionSetpoint, m_wristInc);
 
     switch (m_controlMode) {
         case ControlMode::Idle:
@@ -121,5 +126,4 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             break;
     }
 }
-
 }

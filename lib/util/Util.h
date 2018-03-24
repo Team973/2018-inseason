@@ -205,6 +205,10 @@ inline double signSquare(double n) {
     }
 }
 
+inline double signCube(double n) {
+    return n * n * n;
+}
+
 inline double square(double n) {
     return n * n;
 }

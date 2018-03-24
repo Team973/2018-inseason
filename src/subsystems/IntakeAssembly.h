@@ -21,6 +21,7 @@ public:
     enum class IntakePosition
     {
         stow,
+        ground,
         vault,
         lowGoal,
         scaleLow,
@@ -48,7 +49,7 @@ public:
 
     void SetPosManualInput(double elevatorInc, double wristInc);
 
-    void IntakeCube();
+    void IntakeCube(double input);
     void EjectCube();
     void StopIntake();
 

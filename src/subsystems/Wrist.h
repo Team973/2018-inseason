@@ -17,8 +17,9 @@ class LogSpreadsheet;
 class Wrist : public CoopTask {
 public:
     static constexpr double STOW = 0.0;
+    static constexpr double SCALE = 5.0;
     static constexpr double EXTENDED = 90.0;
-    static constexpr double OVER_THE_BACK = -45.0;
+    static constexpr double OVER_THE_BACK = -50.0;
 
     Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, DigitalInput *cubeSensor,
           TalonSRX *wristMotor, TalonSRX *leftRoller, TalonSRX *rightRoller,
@@ -32,8 +33,6 @@ public:
      **/
     void SetPosition(double position);
     void SetPositionStep(double position);
-
-    void SetManualInput(double input);
 
     /**
      * Sets Elevator Power
@@ -59,7 +58,7 @@ public:
      */
     void CloseClaw();
 
-    void IntakeCube();
+    void IntakeCube(double power);
     void EjectCube();
     void StopIntake();
 
