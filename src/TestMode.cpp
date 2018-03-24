@@ -26,6 +26,7 @@ void Test::TestInit() {
     std::cout << "Test Start" << std::endl;
     m_driveMode = DriveMode::Openloop;
     m_intakeMode = IntakeMode::manualPosition;
+    m_intakeAssembly->EnableCoastMode();
     m_hanger->DisengagePTO();
 }
 
@@ -89,6 +90,7 @@ void Test::TestPeriodic() {
 }
 
 void Test::TestStop() {
+    m_intakeAssembly->EnableBrakeMode();
 }
 
 void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {

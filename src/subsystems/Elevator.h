@@ -65,6 +65,9 @@ public:
 
     void ZeroPosition();
 
+    void EnableBrakeMode();
+    void EnableCoastMode();
+
     /**
      * Update function synonymous to TeleopContinuous that gets called
      *continuously

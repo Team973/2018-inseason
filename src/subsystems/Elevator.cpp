@@ -53,6 +53,7 @@ Elevator::~Elevator() {
 
 void Elevator::SetPower(double power) {
     m_elevatorState = ElevatorState::manualVoltage;
+    power = Util::bound(power, -0.2, 1.0);
     m_elevatorMotor->Set(ControlMode::PercentOutput, power);
 }
 
@@ -76,6 +77,14 @@ float Elevator::GetPosition() {
 
 void Elevator::ZeroPosition() {
     m_elevatorMotor->GetSensorCollection().SetQuadraturePosition(0, 0);
+}
+
+void Elevator::EnableBrakeMode() {
+    m_elevatorMotor->SetNeutralMode(NeutralMode::Brake);
+}
+
+void Elevator::EnableCoastMode() {
+    m_elevatorMotor->SetNeutralMode(NeutralMode::Coast);
 }
 
 void Elevator::TaskPeriodic(RobotMode mode) {

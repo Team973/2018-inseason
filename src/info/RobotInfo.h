@@ -36,7 +36,7 @@ static const int INTAKE_OPENCLOSE_PCM_ID = 4;
 static const int CLAW_LEFT_ROLLER_CAN_ID = 5;
 static const int CLAW_RIGHT_ROLLER_CAN_ID = 12;
 static const int WRIST_CAN_ID = 7;
-static const int WRIST_REVERSE_SOFT_LIMIT = -45.0;
+static const int WRIST_REVERSE_SOFT_LIMIT = -40.0;
 static const int WRIST_FORWARD_SOFT_LIMIT = 90.0;
 
 // Hanger

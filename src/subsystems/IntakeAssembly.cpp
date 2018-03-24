@@ -7,12 +7,16 @@ using namespace frc;
 
 namespace frc973 {
 IntakeAssembly::IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
+                               ObservableJoystick *operatorJoystick,
                                Elevator *elevator, Wrist *wrist,
                                GreyLight *greylight)
         : m_scheduler(scheduler)
+        , m_operatorJoystick(operatorJoystick)
         , m_elevator(elevator)
         , m_wrist(wrist)
         , m_greyLight(greylight)
+        , m_intakeSignal(
+              new LightPattern::Flash(INTAKE_GREEN, NO_COLOR, 50, 15))
         , m_controlMode(ControlMode::Idle)
         , m_elevatorPositionSetpoint(0.0)
         , m_wristPositionSetpoint(0.0)
@@ -65,6 +69,7 @@ void IntakeAssembly::GoToIntakePosition(IntakePosition intakePosition) {
     }
     m_elevator->SetPosition(m_elevatorPositionSetpoint);
     m_wrist->SetPosition(m_wristPositionSetpoint);
+    m_wrist->CloseClaw();
 }
 
 void IntakeAssembly::SetElevatorManualPower(double input) {
@@ -93,11 +98,13 @@ void IntakeAssembly::SetPosManualInput(double elevatorInc, double wristInc) {
 void IntakeAssembly::IntakeCube(double power) {
     m_controlMode = ControlMode::switchIntaking;
     m_wrist->IntakeCube(power);
+    m_wrist->CloseClaw();
 }
 
 void IntakeAssembly::VaultIntake() {
     m_controlMode = ControlMode::vaultStart;
-    m_wrist->IntakeCube(1.0);
+    m_wrist->IntakeCube(-1.0);
+    m_wrist->CloseClaw();
 }
 
 void IntakeAssembly::EjectCube() {
@@ -128,6 +135,14 @@ double IntakeAssembly::GetWristPosition() {
     return m_wrist->GetPosition();
 }
 
+void IntakeAssembly::EnableBrakeMode() {
+    m_elevator->EnableBrakeMode();
+}
+
+void IntakeAssembly::EnableCoastMode() {
+    m_elevator->EnableCoastMode();
+}
+
 void IntakeAssembly::TaskPeriodic(RobotMode mode) {
     DBStringPrintf(DBStringPos::DB_LINE8, "w %3.2f s %3.2f i %1.2f",
                    GetWristPosition(), m_wristPositionSetpoint, m_wristInc);
@@ -147,19 +162,21 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             }
             break;
         case ControlMode::switchStandby:
-            if (m_wrist->IsCubeIn()) {
+            if (!m_wrist->IsCubeIn() ||
+                m_operatorJoystick->GetRawButton(DualAction::Back)) {
                 GoToIntakePosition(IntakeAssembly::IntakePosition::stow);
+                m_wrist->StopIntake();
                 m_intakeSignal->Reset();
                 m_greyLight->SetPixelStateProcessor(m_intakeSignal);
             }
             break;
         case ControlMode::vaultStart:
-            GoToIntakePosition(IntakeAssembly::IntakePosition::vault);
-            IntakeCube(1.0);
+            GoToIntakePosition(IntakeAssembly::IntakePosition::ground);
+            m_wrist->IntakeCube(-1.0);
             m_controlMode = ControlMode::vaultStop;
             break;
         case ControlMode::vaultStop:
-            if (m_wrist->IsCubeIn()) {
+            if (!m_wrist->IsCubeIn()) {
                 StopIntake();
             }
             break;

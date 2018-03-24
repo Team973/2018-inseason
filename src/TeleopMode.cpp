@@ -34,6 +34,7 @@ Teleop::~Teleop() {
 void Teleop::TeleopInit() {
     std::cout << "Teleop Start" << std::endl;
     m_intakeMode = IntakeMode::manualPosition;
+    m_intakeAssembly->EnableCoastMode();
 }
 
 void Teleop::TeleopPeriodic() {
@@ -97,6 +98,7 @@ void Teleop::TeleopPeriodic() {
 }
 
 void Teleop::TeleopStop() {
+    m_intakeAssembly->EnableBrakeMode();
 }
 
 void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
@@ -198,13 +200,15 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                     m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
                         IntakeAssembly::IntakePosition::scaleHigh);
+                    m_intakeAssembly->GrabCube();
                 }
                 break;
             case DualAction::BtnA:
                 if (pressedP) {
                     m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::IntakePosition::vault);
+                        IntakeAssembly::IntakePosition::ground);
+                    m_intakeAssembly->GrabCube();
                 }
                 break;
             case DualAction::BtnX:
@@ -212,6 +216,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                     m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
                         IntakeAssembly::IntakePosition::scaleLow);
+                    m_intakeAssembly->GrabCube();
                 }
                 break;
             case DualAction::BtnB:
@@ -219,14 +224,15 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                     m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
                         IntakeAssembly::IntakePosition::lowGoal);
+                    m_intakeAssembly->GrabCube();
                 }
                 else {
                 }
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
-                    m_intakeAssembly->IntakeCube(1.0);
                     m_intakeMode = IntakeMode::motionMagic;
+                    m_intakeAssembly->IntakeCube(-1.0);
                 }
                 else {
                     m_intakeMode = IntakeMode::manualPosition;
@@ -235,8 +241,8 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
-                    m_intakeAssembly->VaultIntake();
                     m_intakeMode = IntakeMode::motionMagic;
+                    m_intakeAssembly->VaultIntake();
                 }
                 else {
                     m_intakeMode = IntakeMode::manualPosition;
@@ -245,8 +251,12 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::RightTrigger:
                 if (pressedP) {
+                    m_intakeMode = IntakeMode::motionMagic;
+                    m_intakeAssembly->EjectCube();
                 }
                 else {
+                    m_intakeMode = IntakeMode::manualPosition;
+                    m_intakeAssembly->StopIntake();
                 }
                 break;
             case DualAction::RightBumper:
@@ -286,6 +296,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::Start:
                 if (pressedP) {
+                    // m_intakeAssembly->ZeroPosition();
                 }
                 else {
                 }

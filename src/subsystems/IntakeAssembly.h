@@ -48,7 +48,8 @@ public:
     };
 
     IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
-                   Elevator *elevator, Wrist *wrist, GreyLight *greylight);
+                   ObservableJoystick *operatorJoystick, Elevator *elevator,
+                   Wrist *wrist, GreyLight *greylight);
     virtual ~IntakeAssembly();
 
     void GoToIntakePosition(IntakePosition intakePosition);
@@ -69,6 +70,9 @@ public:
     double GetElevatorPosition();
     double GetWristPosition();
 
+    void EnableBrakeMode();
+    void EnableCoastMode();
+
     /**
      * Update function synonymous to TeleopContinuous that gets called
      *continuously
@@ -78,6 +82,7 @@ public:
 private:
     TaskMgr *m_scheduler;
 
+    ObservableJoystick *m_operatorJoystick;
     Elevator *m_elevator;
     Wrist *m_wrist;
     GreyLight *m_greyLight;
