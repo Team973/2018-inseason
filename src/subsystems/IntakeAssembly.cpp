@@ -135,6 +135,11 @@ double IntakeAssembly::GetWristPosition() {
     return m_wrist->GetPosition();
 }
 
+void IntakeAssembly::ZeroPosition() {
+    m_elevator->ZeroPosition();
+    m_wrist->ZeroPosition();
+}
+
 void IntakeAssembly::EnableBrakeMode() {
     m_elevator->EnableBrakeMode();
 }

@@ -294,9 +294,12 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::Start:
                 if (pressedP) {
-                    // m_intakeAssembly->ZeroPosition();
+                    m_intakeMode = IntakeMode::manualVoltage;
+                    m_intakeAssembly->SetElevatorManualPower(-0.2);
+                    m_intakeAssembly->SetWristManualPower(0.2);
                 }
                 else {
+                    m_intakeAssembly->ZeroPosition();
                 }
                 break;
         }

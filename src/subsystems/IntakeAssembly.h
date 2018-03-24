@@ -71,6 +71,8 @@ public:
     double GetElevatorPosition();
     double GetWristPosition();
 
+    void ZeroPosition();
+
     void EnableBrakeMode();
     void EnableCoastMode();
 
