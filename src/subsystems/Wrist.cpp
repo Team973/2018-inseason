@@ -32,7 +32,7 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_wristMotor->SetNeutralMode(NeutralMode::Coast);
     m_wristMotor->SetInverted(true);
 
-    m_wristMotor->Config_kP(0, 5.0, 10);
+    m_wristMotor->Config_kP(0, 3.0, 10);
     m_wristMotor->Config_kI(0, 0.0, 10);
     m_wristMotor->Config_kD(0, 0.0, 10);
     m_wristMotor->Config_kF(0, 0.0, 10);
@@ -45,6 +45,8 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_wristMotor->ConfigPeakCurrentLimit(0, 10);
     m_wristMotor->ConfigContinuousCurrentLimit(15, 10);
     m_wristMotor->EnableVoltageCompensation(true);
+    m_wristMotor->ConfigPeakOutputForward(0.3, 10);
+    m_wristMotor->ConfigPeakOutputReverse(-0.3, 10);
 
     /*if (this->GetPosition() > 180.0) {
         m_wristMotor->GetSensorCollection().SetQuadraturePosition(

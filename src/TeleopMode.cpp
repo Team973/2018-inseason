@@ -198,7 +198,6 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                     m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
                         IntakeAssembly::IntakePosition::scaleHigh);
-                    m_intakeAssembly->GrabCube();
                 }
                 break;
             case DualAction::BtnA:
@@ -206,7 +205,6 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                     m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
                         IntakeAssembly::IntakePosition::ground);
-                    m_intakeAssembly->GrabCube();
                 }
                 break;
             case DualAction::BtnX:
@@ -214,7 +212,6 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                     m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
                         IntakeAssembly::IntakePosition::scaleLow);
-                    m_intakeAssembly->GrabCube();
                 }
                 break;
             case DualAction::BtnB:
@@ -222,7 +219,6 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                     m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
                         IntakeAssembly::IntakePosition::lowGoal);
-                    m_intakeAssembly->GrabCube();
                 }
                 else {
                 }

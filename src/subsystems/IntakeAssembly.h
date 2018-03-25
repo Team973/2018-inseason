@@ -25,8 +25,8 @@ public:
     static constexpr Color INTAKE_GREEN = {0, 255, 0};
     static constexpr double UPPER_WRIST_BOUND = 90.0;
     static constexpr double OVER_BACK_LOWER_BOUND = -45.0;
-    static constexpr double FORK_LOWER_BOUND = 10.0;
-    static constexpr double SWITCH_LOWER_BOUND = -40.0;
+    static constexpr double FORK_LOWER_BOUND = 20.0;
+    static constexpr double SWITCH_LOWER_BOUND = -30.0;
 
     enum class IntakePosition
     {

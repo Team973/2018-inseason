@@ -137,13 +137,14 @@ double IntakeAssembly::GetWristLowerBound(double elevatorPosition) {
     if (elevatorPosition > 78.0) {
         return OVER_BACK_LOWER_BOUND;
     }
-    else if (elevatorPosition < 78.0 && elevatorPosition > 38.0) {
+    else if (elevatorPosition < 78.0 && elevatorPosition > 31.0) {
         return FORK_LOWER_BOUND;
     }
-    else if (elevatorPosition < 38.0 && elevatorPosition > 30.0) {
-        return (25.0 / 4.0 * (elevatorPosition - 38.0) + 10.0);
+    else if (elevatorPosition < 31.0 && elevatorPosition > 20.0) {
+        return ((10.0 - (-40.0)) / (33.0 - 20.0) * (elevatorPosition - 31.0) +
+                10.0);
     }
-    else if (elevatorPosition < 30.0) {
+    else if (elevatorPosition < 20.0) {
         return SWITCH_LOWER_BOUND;
     }
     else {
@@ -163,13 +164,19 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             m_wristInc =
                 Util::signCube(-m_operatorJoystick->GetRawAxisWithDeadband(
                     DualAction::RightXAxis));
-
-            m_wristPositionSetpoint +=
-                m_wristInc * MAX_WRIST_SPEED * 1.0 / 20.0;
-            m_wristPositionSetpoint =
-                Util::bound(m_wristPositionSetpoint,
-                            GetWristPosition() - MAX_WRIST_SPEED * 1.5 / 20.0,
-                            GetWristPosition() + MAX_WRIST_SPEED * 1.5 / 20.0);
+            if (GetElevatorPosition() > 78.0 &&
+                GetWristPosition() < FORK_LOWER_BOUND && m_elevatorInc < 0.0) {
+                m_wristPositionSetpoint = FORK_LOWER_BOUND;
+                m_elevatorInc = 0.0;
+            }
+            else {
+                m_wristPositionSetpoint +=
+                    m_wristInc * MAX_WRIST_SPEED * 1.0 / 20.0;
+                m_wristPositionSetpoint = Util::bound(
+                    m_wristPositionSetpoint,
+                    GetWristPosition() - MAX_WRIST_SPEED * 1.5 / 20.0,
+                    GetWristPosition() + MAX_WRIST_SPEED * 1.5 / 20.0);
+            }
 
             m_wrist->SetPositionStep(Util::bound(
                 m_wristPositionSetpoint,
