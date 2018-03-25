@@ -38,7 +38,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             m_autoState++;
             break;
         case 1:
-            if (GetMsecTime() - m_autoTimer > 2000) {
+            if (GetMsecTime() - m_autoTimer > 4000) {
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::IntakePosition::scaleHigh);
                 m_autoTimer = GetMsecTime();
