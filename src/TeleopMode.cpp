@@ -73,7 +73,7 @@ void Teleop::TeleopPeriodic() {
         -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis));
 
     if (fabs(elevatorPosIncInput) > 0.25 || fabs(wristPosIncInput) > 0.25) {
-        m_intakeMode = IntakeMode::manualPosition;
+        m_intakeAssembly->SetPosManualInput();
     }
 
     if (m_intakeMode == IntakeMode::manualVoltage) {
@@ -88,8 +88,6 @@ void Teleop::TeleopPeriodic() {
         m_intakeAssembly->SetWristManualPower(wristManualPower);
     }
     else if (m_intakeMode == IntakeMode::manualPosition) {
-        m_intakeAssembly->SetPosManualInput(elevatorPosIncInput,
-                                            wristPosIncInput);
     }
     else if (m_intakeMode == IntakeMode::motionMagic) {
     }

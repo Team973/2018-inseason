@@ -18,6 +18,7 @@ IntakeAssembly::IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
         , m_intakeSignal(
               new LightPattern::Flash(INTAKE_GREEN, NO_COLOR, 50, 15))
         , m_controlMode(ControlMode::Idle)
+        , m_collisionAvoidanceMode(CollisionAvoidanceMode::low)
         , m_elevatorPositionSetpoint(0.0)
         , m_wristPositionSetpoint(0.0)
         , m_elevatorInc(0.0)
@@ -80,18 +81,7 @@ void IntakeAssembly::SetWristManualPower(double input) {
     m_wrist->SetPower(input);
 }
 
-void IntakeAssembly::SetPosManualInput(double elevatorInc, double wristInc) {
-    m_elevatorInc = elevatorInc;
-    m_wristInc = wristInc;
-
-    double currPosition = GetWristPosition();
-    m_wristPositionSetpoint += m_wristInc * MAX_WRIST_SPEED * 1.0 / 20.0;
-    m_wristPositionSetpoint = Util::bound(
-        m_wristPositionSetpoint, currPosition - MAX_WRIST_SPEED * 1.5 / 20.0,
-        currPosition + MAX_WRIST_SPEED * 1.5 / 20.0);
-
-    m_wrist->SetPositionStep(m_wristPositionSetpoint);
-    m_elevator->SetPower(m_elevatorInc + ELEVATOR_FEED_FORWARD);
+void IntakeAssembly::SetPosManualInput() {
     m_controlMode = ControlMode::ManualPosition;
 }
 
@@ -143,6 +133,24 @@ void IntakeAssembly::EnableCoastMode() {
     m_elevator->EnableCoastMode();
 }
 
+double IntakeAssembly::GetWristLowerBound(double elevatorPosition) {
+    if (elevatorPosition > 78.0) {
+        return OVER_BACK_LOWER_BOUND;
+    }
+    else if (elevatorPosition < 78.0 && elevatorPosition > 38.0) {
+        return FORK_LOWER_BOUND;
+    }
+    else if (elevatorPosition < 38.0 && elevatorPosition > 30.0) {
+        return (25.0 / 4.0 * (elevatorPosition - 38.0) + 10.0);
+    }
+    else if (elevatorPosition < 30.0) {
+        return SWITCH_LOWER_BOUND;
+    }
+    else {
+        return SWITCH_LOWER_BOUND;
+    }
+}
+
 void IntakeAssembly::TaskPeriodic(RobotMode mode) {
     DBStringPrintf(DBStringPos::DB_LINE8, "w %3.2f s %3.2f i %1.2f",
                    GetWristPosition(), m_wristPositionSetpoint, m_wristInc);
@@ -150,6 +158,23 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
         case ControlMode::Idle:
             break;
         case ControlMode::ManualPosition:
+            m_elevatorInc =
+                -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
+            m_wristInc =
+                Util::signCube(-m_operatorJoystick->GetRawAxisWithDeadband(
+                    DualAction::RightXAxis));
+
+            m_wristPositionSetpoint +=
+                m_wristInc * MAX_WRIST_SPEED * 1.0 / 20.0;
+            m_wristPositionSetpoint =
+                Util::bound(m_wristPositionSetpoint,
+                            GetWristPosition() - MAX_WRIST_SPEED * 1.5 / 20.0,
+                            GetWristPosition() + MAX_WRIST_SPEED * 1.5 / 20.0);
+
+            m_wrist->SetPositionStep(Util::bound(
+                m_wristPositionSetpoint,
+                GetWristLowerBound(GetElevatorPosition()), UPPER_WRIST_BOUND));
+            m_elevator->SetPower(m_elevatorInc + ELEVATOR_FEED_FORWARD);
             break;
         case ControlMode::ManualVoltage:
             break;

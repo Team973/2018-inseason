@@ -23,6 +23,10 @@ class IntakeAssembly : public CoopTask {
 public:
     static constexpr Color NO_COLOR = {0, 0, 0};
     static constexpr Color INTAKE_GREEN = {0, 255, 0};
+    static constexpr double UPPER_WRIST_BOUND = 90.0;
+    static constexpr double OVER_BACK_LOWER_BOUND = -45.0;
+    static constexpr double FORK_LOWER_BOUND = 10.0;
+    static constexpr double SWITCH_LOWER_BOUND = -40.0;
 
     enum class IntakePosition
     {
@@ -36,18 +40,6 @@ public:
         overBack
     };
 
-    enum class ControlMode
-    {
-        Idle,
-        ManualPosition,
-        ManualVoltage,
-        Position,
-        switchIntaking,
-        switchStandby,
-        vaultStart,
-        vaultStop
-    };
-
     IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
                    ObservableJoystick *operatorJoystick, Elevator *elevator,
                    Wrist *wrist, GreyLight *greylight);
@@ -58,7 +50,7 @@ public:
     void SetElevatorManualPower(double input);
     void SetWristManualPower(double input);
 
-    void SetPosManualInput(double elevatorInc, double wristInc);
+    void SetPosManualInput();
 
     void IntakeCube(double input);
     void VaultIntake();
@@ -74,6 +66,8 @@ public:
     void EnableBrakeMode();
     void EnableCoastMode();
 
+    double GetWristLowerBound(double elevatorPosition);
+
     /**
      * Update function synonymous to TeleopContinuous that gets called
      *continuously
@@ -81,6 +75,25 @@ public:
     void TaskPeriodic(RobotMode mode);
 
 private:
+    enum class ControlMode
+    {
+        Idle,
+        ManualPosition,
+        ManualVoltage,
+        Position,
+        switchIntaking,
+        switchStandby,
+        vaultStart,
+        vaultStop
+    };
+
+    enum class CollisionAvoidanceMode
+    {
+        low,
+        fork,
+        overBack
+    };
+
     TaskMgr *m_scheduler;
 
     ObservableJoystick *m_operatorJoystick;
@@ -90,6 +103,7 @@ private:
     LightPattern::Flash *m_intakeSignal;
 
     ControlMode m_controlMode;
+    CollisionAvoidanceMode m_collisionAvoidanceMode;
 
     double m_elevatorPositionSetpoint;
     double m_wristPositionSetpoint;
