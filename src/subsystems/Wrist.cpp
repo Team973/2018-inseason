@@ -44,9 +44,8 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_wristMotor->ConfigPeakCurrentDuration(0, 10);
     m_wristMotor->ConfigPeakCurrentLimit(0, 10);
     m_wristMotor->ConfigContinuousCurrentLimit(15, 10);
-    m_wristMotor->EnableVoltageCompensation(true);
-    m_wristMotor->ConfigPeakOutputForward(0.3, 10);
-    m_wristMotor->ConfigPeakOutputReverse(-0.3, 10);
+    m_wristMotor->ConfigPeakOutputForward(0.5, 10);
+    m_wristMotor->ConfigPeakOutputReverse(-0.5, 10);
 
     /*if (this->GetPosition() > 180.0) {
         m_wristMotor->GetSensorCollection().SetQuadraturePosition(
@@ -71,6 +70,16 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
 
     m_leftRoller->Set(ControlMode::PercentOutput, 0.0);
     m_rightRoller->Set(ControlMode::PercentOutput, 0.0);
+
+    m_leftRoller->EnableCurrentLimit(true);
+    m_leftRoller->ConfigPeakCurrentDuration(0, 10);
+    m_leftRoller->ConfigPeakCurrentLimit(0, 10);
+    m_leftRoller->ConfigContinuousCurrentLimit(15, 10);
+
+    m_rightRoller->EnableCurrentLimit(true);
+    m_rightRoller->ConfigPeakCurrentDuration(0, 10);
+    m_rightRoller->ConfigPeakCurrentLimit(0, 10);
+    m_rightRoller->ConfigContinuousCurrentLimit(15, 10);
 
     m_bannerFilter->Add(m_leftCubeSensor);
     m_bannerFilter->Add(m_rightCubeSensor);

@@ -132,14 +132,14 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 if (pressedP) {
                     m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::IntakePosition::scaleMid);
+                        IntakeAssembly::IntakePreset::SCALE_MID_PRESET);
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
                     m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::IntakePosition::scaleHigh);
+                        IntakeAssembly::IntakePreset::SCALE_HIGH_PRESET);
                 }
                 break;
             case DualAction::BtnA:
@@ -180,21 +180,21 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 if (pressedP) {
                     m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::IntakePosition::stow);
+                        IntakeAssembly::IntakePreset::STOW_PRESET);
                 }
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
                     m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::IntakePosition::lowGoal);
+                        IntakeAssembly::IntakePreset::LOW_GOAL_PRESET);
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
                     m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::IntakePosition::overBack);
+                        IntakeAssembly::IntakePreset::SCALE_MID_PRESET);
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:

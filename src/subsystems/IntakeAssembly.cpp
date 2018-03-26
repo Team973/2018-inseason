@@ -2,6 +2,7 @@
 #include "WPILib.h"
 #include "ctre/Phoenix.h"
 #include "lib/util/WrapDash.h"
+#include <cmath>
 
 using namespace frc;
 
@@ -18,7 +19,8 @@ IntakeAssembly::IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
         , m_intakeSignal(
               new LightPattern::Flash(INTAKE_GREEN, NO_COLOR, 50, 15))
         , m_controlMode(ControlMode::Idle)
-        , m_collisionAvoidanceMode(CollisionAvoidanceMode::low)
+        , m_presetGoal(STOW_PRESET)
+        , m_intakePosition(IntakePosition::stow)
         , m_elevatorPositionSetpoint(0.0)
         , m_wristPositionSetpoint(0.0)
         , m_elevatorInc(0.0)
@@ -30,47 +32,33 @@ IntakeAssembly::~IntakeAssembly() {
     m_scheduler->UnregisterTask(this);
 }
 
-void IntakeAssembly::GoToIntakePosition(IntakePosition intakePosition) {
+void IntakeAssembly::GoToIntakePosition(IntakePreset intakePosition) {
     m_controlMode = ControlMode::Position;
-    switch (intakePosition) {
-        case IntakePosition::stow:
-            m_elevatorPositionSetpoint = Elevator::GROUND;
-            m_wristPositionSetpoint = Wrist::STOW;
-            break;
-        case IntakePosition::ground:
-            m_elevatorPositionSetpoint = Elevator::GROUND;
-            m_wristPositionSetpoint = Wrist::EXTENDED;
-            break;
-        case IntakePosition::vault:
-            m_elevatorPositionSetpoint = Elevator::VAULT;
-            m_wristPositionSetpoint = Wrist::EXTENDED;
-            break;
-        case IntakePosition::lowGoal:
-            m_elevatorPositionSetpoint = Elevator::LOW_GOAL;
-            m_wristPositionSetpoint = Wrist::EXTENDED;
-            break;
-        case IntakePosition::scaleLow:
-            m_elevatorPositionSetpoint = Elevator::SCALE_LOW;
-            m_wristPositionSetpoint = Wrist::SCALE;
-            break;
-        case IntakePosition::scaleMid:
-            m_elevatorPositionSetpoint = Elevator::SCALE_MID;
-            m_wristPositionSetpoint = Wrist::SCALE;
-            break;
-        case IntakePosition::scaleHigh:
-            m_elevatorPositionSetpoint = Elevator::SCALE_HIGH;
-            m_wristPositionSetpoint = Wrist::SCALE;
-            break;
-        case IntakePosition::overBack:
-            m_elevatorPositionSetpoint = Elevator::SCALE_HIGH;
-            m_wristPositionSetpoint = Wrist::OVER_THE_BACK;
-            break;
-        default:
-            break;
-    }
-    m_elevator->SetPosition(m_elevatorPositionSetpoint);
-    m_wrist->SetPosition(m_wristPositionSetpoint);
+    m_persetGoal = intakePosition;
     m_wrist->CloseClaw();
+    if (intakePosition == OVER_BACK_PRESET && GetElevatorPosition() > 77.0) {
+        m_controlMode = PositionAvoidanceMode::overBack;
+    }
+    else if ((intakePosition == OVER_BACK_PRESET && GetWrist() < 20.0 &&
+              GetElevatorPosition() < 77.0) ||
+             (intakePosition != OVER_BACK_PRESET &&
+              (GetElevatorPosition() > 72.0 && GetElevatorPosition() < 77.0))) {
+        m_controlMode = PositionAvoidanceMode::superFork;
+    }
+    else if ((intakePosition == OVER_BACK_PRESET && GetWrist() > 20.0) ||
+             (intakePosition != OVER_BACK_PRESET &&
+              GetElevatorPosition() > 77.0)) {
+        m_controlMode = PositionAvoidanceMode::subFork;
+    }
+    else {
+        m_controlMode = PositionAvoidanceMode::low;
+    }
+}
+
+void IntakeAssembly::SetPosition(IntakePreset *preset) {
+    m_controlMode = ControlMode::Position;
+    m_elevator->SetPosition(preset.ElevatorPosition);
+    m_wrist->SetPosition(preset.WristPosition);
 }
 
 void IntakeAssembly::SetElevatorManualPower(double input) {
@@ -152,6 +140,11 @@ double IntakeAssembly::GetWristLowerBound(double elevatorPosition) {
     }
 }
 
+double GetPositionError() {
+    return sqrt(square(m_elevatorPositionSetpoint - GetElevatorPosition()) +
+                square(m_wristPositionSetpoint - GetWristPosition()));
+}
+
 void IntakeAssembly::TaskPeriodic(RobotMode mode) {
     DBStringPrintf(DBStringPos::DB_LINE8, "w %3.2f s %3.2f i %1.2f",
                    GetWristPosition(), m_wristPositionSetpoint, m_wristInc);
@@ -186,6 +179,34 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
         case ControlMode::ManualVoltage:
             break;
         case ControlMode::Position:
+            break;
+        case ControlMode::low:
+            SetPosition(m_presetGoal);
+            break;
+        case ControlMode::subFork:
+            SetPosition(SCALE_LOW_PRESET);
+            if (m_intakePosition != OVER_BACK_PRESET &&
+                GetPositionError() < 5.0) {
+                m_controlMode = ControlMode::low;
+            }
+            else if (m_intakePosition == OVER_BACK_PRESET &&
+                     GetPositionError() < 5.0) {
+                m_controlMode = ControlMode::superFork;
+            }
+            break;
+        case ControlMode::superFork:
+            SetPosition(SCALE_HIGH_PRESET);
+            if (m_intakePosition != IntakePosition::overBack &&
+                GetPositionError() < 5.0) {
+                m_controlMode = ControlMode::subFork;
+            }
+            else if (m_intakePosition == IntakePosition::overBack &&
+                     GetPositionError() < 5.0) {
+                m_controlMode = ControlMode::overBack;
+            }
+            break;
+        case ControlMode::overBack:
+            SetPosition(OVER_BACK_PRESET);
             break;
         case ControlMode::switchIntaking:
             GoToIntakePosition(IntakeAssembly::IntakePosition::ground);

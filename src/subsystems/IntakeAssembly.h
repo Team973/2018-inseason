@@ -21,24 +21,39 @@ class LogSpreadsheet;
 
 class IntakeAssembly : public CoopTask {
 public:
+    struct IntakePreset {
+        double ElevatorPosition;
+        double WristPosition;
+
+        IntakePreset(double elevatorPosition_, double wristPosition_)
+                : ElevatorPosition(elevatorPosition_)
+                , WristPosition(wristPosition_) {
+        }
+    };
+
     static constexpr Color NO_COLOR = {0, 0, 0};
     static constexpr Color INTAKE_GREEN = {0, 255, 0};
     static constexpr double UPPER_WRIST_BOUND = 90.0;
-    static constexpr double OVER_BACK_LOWER_BOUND = -45.0;
+    static constexpr double OVER_BACK_LOWER_BOUND = -80.0;
     static constexpr double FORK_LOWER_BOUND = 20.0;
     static constexpr double SWITCH_LOWER_BOUND = -30.0;
 
-    enum class IntakePosition
-    {
-        stow,
-        ground,
-        vault,
-        lowGoal,
-        scaleLow,
-        scaleMid,
-        scaleHigh,
-        overBack
-    };
+    const IntakePreset STOW_PRESET =
+        IntakePreset(Elevator::GROUND, Wrist::STOW);
+    const IntakePreset GROUND_PRESET =
+        IntakePreset(Elevator::GROUND, Wrist::EXTENDED);
+    const IntakePreset VAULT_PRESET =
+        IntakePreset(Elevator::VAULT, Wrist::EXTENDED);
+    const IntakePreset LOW_GOAL_PRESET =
+        IntakePreset(Elevator::LOW_GOAL, Wrist::EXTENDED);
+    const IntakePreset SCALE_LOW_PRESET =
+        IntakePreset(Elevator::SCALE_LOW, Wrist::SCALE);
+    const IntakePreset SCALE_MID_PRESET =
+        IntakePreset(Elevator::SCALE_MID, Wrist::SCALE);
+    const IntakePreset SCALE_HIGH_PRESET =
+        IntakePreset(Elevator::SCALE_HIGH, Wrist::SCALE);
+    const IntakePreset OVER_BACK_PRESET =
+        IntakePreset(Elevator::SCALE_HIGH, Wrist::OVER_THE_BACK);
 
     IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
                    ObservableJoystick *operatorJoystick, Elevator *elevator,
@@ -68,6 +83,8 @@ public:
 
     double GetWristLowerBound(double elevatorPosition);
 
+    double GetPositionError();
+
     /**
      * Update function synonymous to TeleopContinuous that gets called
      *continuously
@@ -84,13 +101,10 @@ private:
         switchIntaking,
         switchStandby,
         vaultStart,
-        vaultStop
-    };
-
-    enum class CollisionAvoidanceMode
-    {
+        vaultStop,
         low,
-        fork,
+        subFork,
+        superFork,
         overBack
     };
 
@@ -103,7 +117,7 @@ private:
     LightPattern::Flash *m_intakeSignal;
 
     ControlMode m_controlMode;
-    CollisionAvoidanceMode m_collisionAvoidanceMode;
+    IntakePreset m_presetGoal;
 
     double m_elevatorPositionSetpoint;
     double m_wristPositionSetpoint;
