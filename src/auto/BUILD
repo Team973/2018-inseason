@@ -15,6 +15,8 @@ cc_library(
         "//src/auto/profiles:sample_header",
         "//src/auto/profiles:centerleftswitch_header",
         "//src/auto/profiles:centerrightswitch_header",
+        "//src/auto/profiles:centerleftswitchbackoff_header",
+        "//src/auto/profiles:centerrightswitchbackoff_header",
         "//src/auto/profiles:leftscale_header",
         "//src/auto/profiles:rightscale_header",
         "//src/auto/profiles:leftscaleoppositea_header",

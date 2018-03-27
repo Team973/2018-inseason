@@ -33,20 +33,21 @@ Autonomous::~Autonomous() {
 
 void Autonomous::AutonomousInit() {
     // Remember to zero all sensors here
-    m_intakeAssembly->GoToIntakePosition(IntakeAssembly::IntakePosition::stow);
+    m_intakeAssembly->GoToIntakePosition(IntakeAssembly::STOW_PRESET);
     m_gyro->Reset();
     std::cout << "Autonomous Start" << std::endl;
 
     DBStringPrintf(DB_LINE1, "%s", m_scoringLocations.c_str());
     printf("%s\n", m_scoringLocations.c_str());
-    m_autoSignal->SetData(m_scoringLocations);
-    m_greylight->SetPixelStateProcessor(m_autoSignal);
 
     if (GetSwitchScalePosition(m_scoringLocations) ==
         SwitchScalePosition::NOT_YET_RECEIVED) {
         m_scoringLocations =
             DriverStation::GetInstance().GetGameSpecificMessage();
     }
+
+    m_autoSignal->SetData(m_scoringLocations);
+    m_greylight->SetPixelStateProcessor(m_autoSignal);
 
     switch (m_disabled->GetStartPosition()) {
         case AutoRoutineBase::RobotStartPosition::Left:
@@ -57,17 +58,17 @@ void Autonomous::AutonomousInit() {
                     m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::LR:
-                    m_sideSwitch->Reset();
-                    m_routine = m_sideSwitch;
-                    m_direction = AutoRoutineBase::AutoDirection::Left;
+                    m_scaleOpposite->Reset();
+                    m_routine = m_scaleOpposite;
+                    m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
                 case SwitchScalePosition::RL:
-                    m_switchOpposite->Reset();
+                    m_scaleAuto->Reset();
                     m_routine = m_scaleAuto;
                     m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::RR:
-                    m_switchOpposite->Reset();
+                    m_scaleOpposite->Reset();
                     m_routine = m_scaleOpposite;
                     m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
@@ -118,9 +119,9 @@ void Autonomous::AutonomousInit() {
                     m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::LR:
-                    m_switchOpposite->Reset();
-                    m_routine = m_switchOpposite;
-                    m_direction = AutoRoutineBase::AutoDirection::Left;
+                    m_scaleAuto->Reset();
+                    m_routine = m_scaleAuto;
+                    m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
                 case SwitchScalePosition::RL:
                     m_sideSwitch->Reset();

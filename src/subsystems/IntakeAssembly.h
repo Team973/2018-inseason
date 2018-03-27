@@ -21,44 +21,58 @@ class LogSpreadsheet;
 
 class IntakeAssembly : public CoopTask {
 public:
+    struct IntakePreset {
+        double elevatorPosition;
+        double wristPosition;
+
+        IntakePreset(double elevatorPosition_, double wristPosition_)
+                : elevatorPosition(elevatorPosition_)
+                , wristPosition(wristPosition_) {
+        }
+
+        inline bool operator==(const IntakePreset &rhs) const {
+            return this->elevatorPosition == rhs.elevatorPosition &&
+                   this->wristPosition == rhs.wristPosition;
+        }
+    };
+
     static constexpr Color NO_COLOR = {0, 0, 0};
     static constexpr Color INTAKE_GREEN = {0, 255, 0};
 
-    enum class IntakePosition
-    {
-        stow,
-        ground,
-        vault,
-        lowGoal,
-        scaleLow,
-        scaleMid,
-        scaleHigh,
-        overBack
-    };
+    static constexpr double UPPER_WRIST_BOUND = 90.0;
+    static constexpr double OVER_BACK_FORK_LOWER_BOUND = -80.0;
+    static constexpr double NOCOLLIDE_FORK_LOWER_BOUND = 20.0;
+    static constexpr double SWITCH_LOWER_BOUND = -30.0;
 
-    enum class ControlMode
-    {
-        Idle,
-        ManualPosition,
-        ManualVoltage,
-        Position,
-        switchIntaking,
-        switchStandby,
-        vaultStart,
-        vaultStop
-    };
+    static constexpr double FORK_AVOIDANCE_MIN_HEIGHT = 20.0;
+    static constexpr double FORK_AVOIDANCE_MID_HEIGHT = 31.0;
+    static constexpr double FORK_AVOIDANCE_MAX_HEIGHT = 78.0;
+
+    static const IntakePreset STOW_PRESET;
+    static const IntakePreset GROUND_PRESET;
+    static const IntakePreset VAULT_PRESET;
+    static const IntakePreset LOW_GOAL_PRESET;
+    static const IntakePreset SCALE_LOW_PRESET;
+    static const IntakePreset SCALE_MID_PRESET;
+    static const IntakePreset SCALE_HIGH_PRESET;
+    static const IntakePreset OVER_BACK_PRESET;
 
     IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
                    ObservableJoystick *operatorJoystick, Elevator *elevator,
                    Wrist *wrist, GreyLight *greylight);
     virtual ~IntakeAssembly();
 
-    void GoToIntakePosition(IntakePosition intakePosition);
+    /**
+     * Go to an elevator+wrist position.  This function does collision
+     * avoidance so it might take a weird route to get to your
+     * end goal position
+     */
+    void GoToIntakePosition(IntakePreset intakePosition);
 
     void SetElevatorManualPower(double input);
     void SetWristManualPower(double input);
 
-    void SetPosManualInput(double elevatorInc, double wristInc);
+    void SetPosManualInput();
 
     void IntakeCube(double input);
     void VaultIntake();
@@ -79,6 +93,13 @@ public:
     const Wrist *GetWrist();
     const Elevator *GetElevator();
 
+    double GetWristLowerBound(double elevatorPosition);
+
+    double GetPositionError();
+
+    void StartZeroPosition();
+    void EndZeroPosition();
+
     /**
      * Update function synonymous to TeleopContinuous that gets called
      *continuously
@@ -86,6 +107,28 @@ public:
     void TaskPeriodic(RobotMode mode);
 
 private:
+    /**
+     * Used internally to go to a position.  This method is unsafe
+     * because it does not do collision avoidance
+     */
+    void SetPosition(IntakePreset position);
+
+    enum class ControlMode
+    {
+        Idle,
+        ManualPosition,
+        ManualVoltage,
+        Zeroing,
+        SwitchIntaking,
+        SwitchStandby,
+        VaultStart,
+        VaultStop,
+        LowPosition,
+        SubForkPosition,
+        SuperForkPosition,
+        OverBackPosition,
+    };
+
     TaskMgr *m_scheduler;
 
     ObservableJoystick *m_operatorJoystick;
@@ -96,10 +139,8 @@ private:
 
     ControlMode m_controlMode;
 
-    double m_elevatorPositionSetpoint;
-    double m_wristPositionSetpoint;
-
-    double m_elevatorInc, m_wristInc;
+    IntakePreset m_endPositionGoal;
+    IntakePreset m_interimPositionGoal;
 
     static constexpr double MAX_WRIST_SPEED = 180.0;
     static constexpr double MAX_ELEVATOR_SPEED = 50.0;

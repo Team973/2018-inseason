@@ -21,7 +21,6 @@ static const int RIGHT_DRIVE_C_VICTOR_ID = 3;
 // Elevator
 static const int ELEVATOR_CAN_ID = 4;
 static const double ELEVATOR_INCHES_PER_CLICK = 8.0 / 4096.0;
-static const double WRIST_DEGREES_PER_CLICK = 360.0 / 4096.0;
 static const double ELEVATOR_SOFT_HEIGHT_LIMIT = 80.5;
 static const double ELEVATOR_FEED_FORWARD = 0.10;
 
@@ -35,7 +34,7 @@ static const int FORK_DEPLOY_PCM_ID = 5;
 static const int CLAW_LEFT_ROLLER_CAN_ID = 5;
 static const int CLAW_RIGHT_ROLLER_CAN_ID = 12;
 static const int WRIST_CAN_ID = 7;
-static const int WRIST_REVERSE_SOFT_LIMIT = -40.0;
+static const int WRIST_REVERSE_SOFT_LIMIT = -80.0;
 static const int WRIST_FORWARD_SOFT_LIMIT = 90.0;
 
 // Hanger

@@ -49,14 +49,7 @@ private:
         Hanger
     };
 
-    enum class IntakeMode
-    {
-        manualVoltage,
-        manualPosition,
-        motionMagic
-    };
     DriveMode m_driveMode;
-    IntakeMode m_intakeMode;
 
     IntakeAssembly *m_intakeAssembly;
     double m_elevatorPosition;
@@ -64,6 +57,7 @@ private:
     uint32_t m_intakeModeTimer;
 
     bool m_endGameSignalSent;
+    bool m_enableForkDeploy;
 
     Hanger *m_hanger;
     GreyLight *m_greyLight;

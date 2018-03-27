@@ -18,9 +18,11 @@ class LogSpreadsheet;
 class Wrist : public CoopTask {
 public:
     static constexpr double STOW = -35.0;
-    static constexpr double SCALE = 10.0;
+    static constexpr double SCALE = 20.0;
     static constexpr double EXTENDED = 90.0;
     static constexpr double OVER_THE_BACK = -50.0;
+
+    static constexpr double WRIST_DEGREES_PER_CLICK = 360.0 / 4096.0;
 
     Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
           DigitalInput *rightCubeSensor, DigitalInput *leftCubeSensor,
@@ -69,6 +71,12 @@ public:
     void TaskPeriodic(RobotMode mode);
 
 private:
+    /*
+     * Convert a number from degrees to native encoder units and vise versa
+     */
+    double DegreesToNativeUnits(double degrees);
+    double NativeUnitsToDegrees(double nativeUnits);
+
     enum class WristState
     {
         manualVoltage,

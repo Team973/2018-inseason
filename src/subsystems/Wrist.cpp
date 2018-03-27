@@ -4,6 +4,7 @@
 #include "lib/util/WrapDash.h"
 
 using namespace frc;
+using namespace ctre::phoenix::motorcontrol;
 
 namespace frc973 {
 Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
@@ -33,7 +34,7 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_wristMotor->SetNeutralMode(NeutralMode::Coast);
     m_wristMotor->SetInverted(true);
 
-    m_wristMotor->Config_kP(0, 5.0, 10);
+    m_wristMotor->Config_kP(0, 3.0, 10);
     m_wristMotor->Config_kI(0, 0.0, 10);
     m_wristMotor->Config_kD(0, 0.0, 10);
     m_wristMotor->Config_kF(0, 0.0, 10);
@@ -46,6 +47,8 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_wristMotor->ConfigPeakCurrentLimit(0, 10);
     m_wristMotor->ConfigContinuousCurrentLimit(5, 10);
     m_wristMotor->EnableVoltageCompensation(true);
+    m_wristMotor->ConfigPeakOutputForward(0.5, 10);
+    m_wristMotor->ConfigPeakOutputReverse(-0.5, 10);
 
     /*if (this->GetPosition() > 180.0) {
         m_wristMotor->SetSelectedSensorPosition(
@@ -56,15 +59,24 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
       m_wristMotor->SetSelectedSensorPosition(
           (int)((this->GetPosition() + 360) / WRIST_DEGREES_PER_CLICK), 0, 10);
     }*/
-    ZeroPosition();
 
+    /*
     m_wristMotor->ConfigForwardSoftLimitThreshold(
-        WRIST_FORWARD_SOFT_LIMIT / WRIST_DEGREES_PER_CLICK, 10);
+        DegreesToNativeUnits(WRIST_FORWARD_SOFT_LIMIT), 10);
     m_wristMotor->ConfigForwardSoftLimitEnable(true, 10);
 
     m_wristMotor->ConfigReverseSoftLimitThreshold(
-        WRIST_REVERSE_SOFT_LIMIT / WRIST_DEGREES_PER_CLICK, 10);
+        DegreesToNativeUnits(WRIST_REVERSE_SOFT_LIMIT), 10);
     m_wristMotor->ConfigReverseSoftLimitEnable(true, 10);
+    */
+
+    m_wristMotor->ConfigForwardLimitSwitchSource(
+        LimitSwitchSource::LimitSwitchSource_FeedbackConnector,
+        LimitSwitchNormal::LimitSwitchNormal_NormallyOpen, 10);
+    m_wristMotor->ConfigReverseLimitSwitchSource(
+        LimitSwitchSource::LimitSwitchSource_FeedbackConnector,
+        LimitSwitchNormal::LimitSwitchNormal_NormallyOpen, 10);
+    m_wristMotor->OverrideLimitSwitchesEnable(true);
 
     m_wristMotor->Set(ControlMode::PercentOutput, 0.0);
 
@@ -75,6 +87,16 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
 
     m_leftRoller->Set(ControlMode::PercentOutput, 0.0);
     m_rightRoller->Set(ControlMode::PercentOutput, 0.0);
+
+    m_leftRoller->EnableCurrentLimit(true);
+    m_leftRoller->ConfigPeakCurrentDuration(0, 10);
+    m_leftRoller->ConfigPeakCurrentLimit(0, 10);
+    m_leftRoller->ConfigContinuousCurrentLimit(15, 10);
+
+    m_rightRoller->EnableCurrentLimit(true);
+    m_rightRoller->ConfigPeakCurrentDuration(0, 10);
+    m_rightRoller->ConfigPeakCurrentLimit(0, 10);
+    m_rightRoller->ConfigContinuousCurrentLimit(15, 10);
 
     m_bannerFilter->Add(m_leftCubeSensor);
     m_bannerFilter->Add(m_rightCubeSensor);
@@ -92,17 +114,15 @@ void Wrist::SetPower(double power) {
 
 void Wrist::SetPosition(double position) {
     m_wristState = WristState::motionMagic;
-    int position_clicks = Util::bound(position, WRIST_REVERSE_SOFT_LIMIT,
-                                      WRIST_FORWARD_SOFT_LIMIT) /
-                          WRIST_DEGREES_PER_CLICK;
+    int position_clicks = DegreesToNativeUnits(Util::bound(
+        position, WRIST_REVERSE_SOFT_LIMIT, WRIST_FORWARD_SOFT_LIMIT));
     m_wristMotor->Set(ControlMode::MotionMagic, position_clicks);
 }
 
 void Wrist::SetPositionStep(double position) {
     m_wristState = WristState::motionMagic;
-    int position_clicks = Util::bound(position, WRIST_REVERSE_SOFT_LIMIT,
-                                      WRIST_FORWARD_SOFT_LIMIT) /
-                          WRIST_DEGREES_PER_CLICK;
+    int position_clicks = DegreesToNativeUnits(Util::bound(
+        position, WRIST_REVERSE_SOFT_LIMIT, WRIST_FORWARD_SOFT_LIMIT));
     m_wristMotor->Set(ControlMode::Position, position_clicks);
 }
 
@@ -113,6 +133,15 @@ float Wrist::GetPosition() const {
 
 void Wrist::ZeroPosition() {
     m_wristMotor->SetSelectedSensorPosition(90.0 / WRIST_DEGREES_PER_CLICK, 0,
+                                            0);
+}
+
+float Wrist::GetPosition() {
+    return NativeUnitsToDegrees(m_wristMotor->GetSelectedSensorPosition(0));
+}
+
+void Wrist::ZeroPosition() {
+    m_wristMotor->SetSelectedSensorPosition(DegreesToNativeUnits(EXTENDED), 0,
                                             0);
 }
 
@@ -145,11 +174,21 @@ bool Wrist::IsCubeIn() const {
 
 void Wrist::TaskPeriodic(RobotMode mode) {
     SmartDashboard::PutNumber("elevator/encoders/encoder", GetPosition());
-    DBStringPrintf(DBStringPos::DB_LINE7, "pos %d",
-                   m_wristMotor->GetSensorCollection().GetAnalogInRaw());
+    DBStringPrintf(
+        DBStringPos::DB_LINE7, "e %d pwp %d r %d f %d",
+        m_wristMotor->GetClosedLoopError(0),
+        m_wristMotor->GetSensorCollection().GetPulseWidthPosition(),
+        m_wristMotor->GetSensorCollection().IsFwdLimitSwitchClosed(),
+        m_wristMotor->GetSensorCollection().IsRevLimitSwitchClosed());
     DBStringPrintf(DBStringPos::DB_LINE5, "cube: l%d r %d c%d",
                    m_leftCubeSensor->Get(), m_rightCubeSensor->Get(),
                    IsCubeIn());
+
+    if (m_wristMotor->GetSensorCollection().IsFwdLimitSwitchClosed() &&
+        GetPosition() > EXTENDED) {
+        ZeroPosition();
+    }
+
     switch (m_wristState) {
         case WristState::manualVoltage:
             break;
@@ -162,5 +201,15 @@ void Wrist::TaskPeriodic(RobotMode mode) {
         default:
             break;
     }
+}
+
+double Wrist::DegreesToNativeUnits(double degrees) {
+    // return 1500 - (degrees / WRIST_DEGREES_PER_CLICK);
+    return degrees / WRIST_DEGREES_PER_CLICK + 1500;
+}
+
+double Wrist::NativeUnitsToDegrees(double nativeUnits) {
+    // return (1500 - nativeUnits) * WRIST_DEGREES_PER_CLICK;
+    return (nativeUnits - 1500) * WRIST_DEGREES_PER_CLICK;
 }
 }
