@@ -11,8 +11,6 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
         : m_scheduler(scheduler)
         , m_elevatorMotor(elevatorMotor)
         , m_position(0.0)
-        , m_prevElevatorSetpoint(0.0)
-        , m_elevatorPositionDelta(0.0)
         , m_zeroingTime(0)
         , m_elevatorState(ElevatorState::manualVoltage) {
     this->m_scheduler->RegisterTask("Elevator", this, TASK_PERIODIC);
@@ -63,13 +61,6 @@ void Elevator::SetPosition(double position) {
     m_elevatorMotor->Set(ControlMode::MotionMagic, position_clicks);
 }
 
-void Elevator::SetManualInput(double input) {
-    m_elevatorState = ElevatorState::manualPosition;
-    m_elevatorPositionDelta =
-        input * ELEVATOR_MAX_SPEED * ROBOT_LOOP_PERIOD_SEC_PER_LOOP +
-        m_prevElevatorSetpoint;
-}
-
 float Elevator::GetPosition() {
     return ELEVATOR_INCHES_PER_CLICK *
            ((float)m_elevatorMotor->GetSelectedSensorPosition(0));
@@ -95,10 +86,6 @@ void Elevator::TaskPeriodic(RobotMode mode) {
         case manualVoltage:
             break;
         case motionMagic:
-            break;
-        case manualPosition:
-            m_elevatorMotor->Set(ControlMode::Position,
-                                 m_elevatorPositionDelta + this->GetPosition());
             break;
         default:
             break;

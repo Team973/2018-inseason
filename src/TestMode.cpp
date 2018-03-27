@@ -1,6 +1,5 @@
 #include "src/TestMode.h"
 #include "src/auto/profiles/sample_trajectory.h"
-#include <cmath>
 
 using namespace frc;
 using namespace sample;

@@ -26,7 +26,6 @@ public:
     enum ElevatorState
     {
         manualVoltage,
-        manualPosition,
         motionMagic
     };
 
@@ -49,8 +48,6 @@ public:
      **/
     void SetPosition(double position);
 
-    // Uses Position PID
-    void SetManualInput(double input);
     /**
      * Sets Elevator Power
      *
@@ -80,8 +77,6 @@ private:
     TalonSRX *m_elevatorMotor;
 
     double m_position;
-    double m_prevElevatorSetpoint;
-    double m_elevatorPositionDelta;
     uint32_t m_zeroingTime;
     ElevatorState m_elevatorState;
     LogCell *m_positionCell;
