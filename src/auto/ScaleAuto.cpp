@@ -63,12 +63,15 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                         &two_cube_backoff_right::two_cube_backoff_right,
                         Drive::RelativeTo::SetPoint);
                 }
-                // m_elevator->SetPosition(Elevator::GROUND);
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
         case 4:
+            if (m_drive->GetSplinePercentComplete() > 0.80) {
+                m_elevator->SetPosition(Elevator::GROUND);
+                m_autoState++;
+            }
             if (m_drive->GetSplinePercentComplete() > 1.0) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(

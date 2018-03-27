@@ -1,146 +1,194 @@
 {
-    "charts": [{
-            "settings": {
-                "tooltip": true,
-                "minValue": 0,
-                "maxValue": 40
-            },
-            "title": "Drive Currents",
-            "keys": [
-                "/SmartDashboard/drive/currents/leftcurrent",
-                "/SmartDashboard/drive/currents/rightcurrent"
-            ]
-        },
-        {
-            "settings": {
-                "tooltip": true,
-                "minValue": -14,
-                "maxValue": 14
-            },
-            "title": "Drive Voltages",
-            "keys": [
-                "/SmartDashboard/drive/voltages/leftvoltage",
-                "/SmartDashboard/drive/voltages/rightvoltage"
-            ]
-        },
-        {
-            "settings": {
-                "tooltip": true,
-                "minValue": 0,
-                "maxValue": 30
-            },
-            "title": "Elevator Current",
-            "keys": [
-                "/SmartDashboard/drive/currents/current"
-            ]
-        },
-        {
-            "settings": {
-                "tooltip": true,
-                "minValue": 0,
-                "maxValue": 14
-            },
-            "title": "Battery Voltage",
-            "keys": [
-                "/SmartDashboard/misc/pdp/batteryvoltage"
-            ]
-        }
-    ],
-    "indicators": [{
-            "settings": {
-                "fixedDecimals": true
-            },
-            "title": "Left Drive Current",
-            "unit": "a",
-            "key": "/SmartDashboard/drive/currents/leftcurrent"
-        },
-        {
-            "settings": {
-                "fixedDecimals": true
-            },
-            "title": "Right Drive Current",
-            "unit": "a",
-            "key": "/SmartDashboard/drive/currents/rightcurrent"
-        },
-        {
-            "settings": {
-                "fixedDecimals": true
-            },
-            "title": "Left Drive Encoder",
-            "unit": "in",
-            "key": "/SmartDashboard/drive/encoders/leftencoder"
-        },
-        {
-            "settings": {
-                "fixedDecimals": true
-            },
-            "title": "Right Drive Encoder",
-            "unit": "in",
-            "key": "/SmartDashboard/drive/encoders/rightencoder"
-        },
-        {
-            "settings": {
-                "fixedDecimals": true
-            },
-            "title": "Left Drive Voltage",
-            "unit": "v",
-            "key": "/SmartDashboard/drive/voltages/leftvoltage"
-        },
-        {
-            "settings": {
-                "fixedDecimals": true
-            },
-            "title": "Right Drive Voltage",
-            "unit": "v",
-            "key": "/SmartDashboard/drive/voltages/rightvoltage"
-        },
-        {
-            "settings": {
-                "fixedDecimals": true
-            },
-            "title": "Elevator Current",
-            "unit": "a",
-            "key": "/SmartDashboard/elevator/currents/current"
-        },
-        {
-            "settings": {
-                "fixedDecimals": true
-            },
-            "title": "Elevator Encoder",
-            "unit": "in",
-            "key": "/SmartDashboard/elevator/encoders/encoder"
-        },
-        {
-            "settings": {
-                "fixedDecimals": true
-            },
-            "title": "Elevator Voltage",
-            "unit": "v",
-            "key": "/SmartDashboard/elevator/voltages/voltage"
-        },
-        {
-            "settings": {
-                "fixedDecimals": true
-            },
-            "title": "Battery Voltage",
-            "unit": "v",
-            "key": "/SmartDashboard/misc/pdp/batteryvoltage"
-        },
-        {
-            "settings": {
-                "fixedDecimals": false
-            },
-            "title": "Is cube in?",
-            "unit": "",
-            "key": "/SmartDashboard/intake/sensors/bannersensor"
-        },
-        {
-            "settings": {
-                "fixedDecimals": false
-            },
-            "title": "Intake Mode",
-            "unit": "",
-            "key": "/SmartDashboard/intake/modes/currentmode"
-        }
-    ]
+  "charts": [{
+      "settings": {
+        "tooltip": true,
+        "minValue": 0,
+        "maxValue": 40
+      },
+      "title": "Drive Currents",
+      "keys": [
+        "/SmartDashboard/drive/currents/leftcurrent",
+        "/SmartDashboard/drive/currents/rightcurrent"
+      ]
+    },
+    {
+      "settings": {
+        "tooltip": true,
+        "minValue": -14,
+        "maxValue": 14
+      },
+      "title": "Drive Voltages",
+      "keys": [
+        "/SmartDashboard/drive/voltages/leftvoltage",
+        "/SmartDashboard/drive/voltages/rightvoltage"
+      ]
+    },
+    {
+      "settings": {
+        "tooltip": true,
+        "minValue": -360,
+        "maxValue": 360
+      },
+      "title": "Drive Angles",
+      "keys": [
+        "/SmartDashboard/drive/outputs/anglesetpoint",
+        "/SmartDashboard/drive/outputs/angleactual"
+      ]
+    },
+    {
+      "settings": {
+        "tooltip": true,
+        "minValue": -120,
+        "maxValue": 120
+      },
+      "title": "Drive Left Positions",
+      "keys": [
+        "/SmartDashboard/drive/outputs/leftpossetpoint",
+        "/SmartDashboard/drive/outputs/leftencoder"
+      ]
+    },
+    {
+      "settings": {
+        "tooltip": true,
+        "minValue": -120,
+        "maxValue": 120
+      },
+      "title": "Drive Right Positions",
+      "keys": [
+        "/SmartDashboard/drive/outputs/rightpossetpoint",
+        "/SmartDashboard/drive/outputs/rightencoder"
+      ]
+    },
+    {
+      "settings": {
+        "tooltip": true,
+        "minValue": -144,
+        "maxValue": 144
+      },
+      "title": "Drive Velocity (red left, blue right)",
+      "keys": [
+        "/SmartDashboard/drive/outputs/leftvelff",
+        "/SmartDashboard/drive/outputs/rightvelff"
+      ]
+    },
+    {
+      "settings": {
+        "tooltip": true,
+        "minValue": 0,
+        "maxValue": 30
+      },
+      "title": "Elevator Current",
+      "keys": [
+        "/SmartDashboard/drive/currents/current"
+      ]
+    },
+    {
+      "settings": {
+        "tooltip": true,
+        "minValue": 0,
+        "maxValue": 14
+      },
+      "title": "Battery Voltage",
+      "keys": [
+        "/SmartDashboard/misc/pdp/batteryvoltage"
+      ]
+    }
+  ],
+  "indicators": [{
+      "settings": {
+        "fixedDecimals": true
+      },
+      "title": "Left Drive Current",
+      "unit": "a",
+      "key": "/SmartDashboard/drive/currents/leftcurrent"
+    },
+    {
+      "settings": {
+        "fixedDecimals": true
+      },
+      "title": "Right Drive Current",
+      "unit": "a",
+      "key": "/SmartDashboard/drive/currents/rightcurrent"
+    },
+    {
+      "settings": {
+        "fixedDecimals": true
+      },
+      "title": "Left Drive Encoder",
+      "unit": "in",
+      "key": "/SmartDashboard/drive/encoders/leftencoder"
+    },
+    {
+      "settings": {
+        "fixedDecimals": true
+      },
+      "title": "Right Drive Encoder",
+      "unit": "in",
+      "key": "/SmartDashboard/drive/encoders/rightencoder"
+    },
+    {
+      "settings": {
+        "fixedDecimals": true
+      },
+      "title": "Left Drive Voltage",
+      "unit": "v",
+      "key": "/SmartDashboard/drive/voltages/leftvoltage"
+    },
+    {
+      "settings": {
+        "fixedDecimals": true
+      },
+      "title": "Right Drive Voltage",
+      "unit": "v",
+      "key": "/SmartDashboard/drive/voltages/rightvoltage"
+    },
+    {
+      "settings": {
+        "fixedDecimals": true
+      },
+      "title": "Elevator Current",
+      "unit": "a",
+      "key": "/SmartDashboard/elevator/currents/current"
+    },
+    {
+      "settings": {
+        "fixedDecimals": true
+      },
+      "title": "Elevator Encoder",
+      "unit": "in",
+      "key": "/SmartDashboard/elevator/encoders/encoder"
+    },
+    {
+      "settings": {
+        "fixedDecimals": true
+      },
+      "title": "Elevator Voltage",
+      "unit": "v",
+      "key": "/SmartDashboard/elevator/voltages/voltage"
+    },
+    {
+      "settings": {
+        "fixedDecimals": true
+      },
+      "title": "Battery Voltage",
+      "unit": "v",
+      "key": "/SmartDashboard/misc/pdp/batteryvoltage"
+    },
+    {
+      "settings": {
+        "fixedDecimals": false
+      },
+      "title": "Is cube in?",
+      "unit": "",
+      "key": "/SmartDashboard/intake/sensors/bannersensor"
+    },
+    {
+      "settings": {
+        "fixedDecimals": false
+      },
+      "title": "Intake Mode",
+      "unit": "",
+      "key": "/SmartDashboard/intake/modes/currentmode"
+    }
+  ]
 }
