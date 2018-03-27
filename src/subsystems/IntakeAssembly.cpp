@@ -88,6 +88,9 @@ void IntakeAssembly::SetWristManualPower(double input) {
 }
 
 void IntakeAssembly::SetPosManualInput() {
+    if (m_controlMode != ControlMode::ManualPosition) {
+        m_interimPositionGoal.wristPosition = GetWristPosition();
+    }
     m_controlMode = ControlMode::ManualPosition;
 }
 
@@ -140,17 +143,26 @@ void IntakeAssembly::EnableCoastMode() {
 }
 
 double IntakeAssembly::GetWristLowerBound(double elevatorPosition) {
-    if (elevatorPosition >= 78.0) {
+    if (elevatorPosition >= FORK_AVOIDANCE_MAX_HEIGHT) {
         return OVER_BACK_FORK_LOWER_BOUND;
     }
-    else if (elevatorPosition < 78.0 && elevatorPosition >= 31.0) {
+    else if (elevatorPosition < FORK_AVOIDANCE_MAX_HEIGHT &&
+             elevatorPosition >= FORK_AVOIDANCE_MID_HEIGHT) {
         return NOCOLLIDE_FORK_LOWER_BOUND;
     }
-    else if (elevatorPosition < 31.0 && elevatorPosition >= 20.0) {
-        return ((10.0 - (-40.0)) / (33.0 - 20.0) * (elevatorPosition - 31.0) +
-                10.0);
+    else if (elevatorPosition >= FORK_AVOIDANCE_MIN_HEIGHT &&
+             elevatorPosition < FORK_AVOIDANCE_MID_HEIGHT) {
+        const double wristBoundDiff =
+            NOCOLLIDE_FORK_LOWER_BOUND - SWITCH_LOWER_BOUND;
+        const double elevatorPosDiff =
+            FORK_AVOIDANCE_MID_HEIGHT - FORK_AVOIDANCE_MIN_HEIGHT;
+
+        /* ref slope intercept form */
+        return (elevatorPosition - FORK_AVOIDANCE_MIN_HEIGHT) *
+                   (wristBoundDiff / elevatorPosDiff) +
+               SWITCH_LOWER_BOUND;
     }
-    else if (elevatorPosition < 20.0) {
+    else if (elevatorPosition < FORK_AVOIDANCE_MIN_HEIGHT) {
         return SWITCH_LOWER_BOUND;
     }
     else {
@@ -186,8 +198,7 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
                 elevatorInput = 0.0;
             }
             else {
-                m_interimPositionGoal.wristPosition +=
-                    wristInc * MAX_WRIST_SPEED * 1.0 / 20.0;
+                wristPosGoal += wristInc * MAX_WRIST_SPEED * 1.0 / 20.0;
                 wristPosGoal = Util::bound(
                     wristPosGoal,
                     GetWristPosition() - MAX_WRIST_SPEED * 1.5 / 20.0,

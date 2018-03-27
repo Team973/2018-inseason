@@ -38,10 +38,15 @@ public:
 
     static constexpr Color NO_COLOR = {0, 0, 0};
     static constexpr Color INTAKE_GREEN = {0, 255, 0};
+
     static constexpr double UPPER_WRIST_BOUND = 90.0;
     static constexpr double OVER_BACK_FORK_LOWER_BOUND = -80.0;
     static constexpr double NOCOLLIDE_FORK_LOWER_BOUND = 20.0;
     static constexpr double SWITCH_LOWER_BOUND = -30.0;
+
+    static constexpr double FORK_AVOIDANCE_MIN_HEIGHT = 20.0;
+    static constexpr double FORK_AVOIDANCE_MID_HEIGHT = 31.0;
+    static constexpr double FORK_AVOIDANCE_MAX_HEIGHT = 78.0;
 
     static const IntakePreset STOW_PRESET;
     static const IntakePreset GROUND_PRESET;
