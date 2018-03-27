@@ -6,6 +6,7 @@
  *
  *  Control map available at: https://goo.gl/MrViHA
  */
+#include <cmath>
 #include "src/TeleopMode.h"
 #include "lib/helpers/JoystickHelper.h"
 
@@ -19,7 +20,6 @@ Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_operatorJoystick(codriver)
         , m_drive(drive)
         , m_driveMode(DriveMode::Cheesy)
-        , m_intakeMode(IntakeMode::manualPosition)
         , m_intakeAssembly(intakeAssembly)
         , m_endGameSignalSent(false)
         , m_hanger(hanger)
@@ -33,7 +33,7 @@ Teleop::~Teleop() {
 
 void Teleop::TeleopInit() {
     std::cout << "Teleop Start" << std::endl;
-    m_intakeMode = IntakeMode::manualPosition;
+    m_intakeAssembly->SetPosManualInput();
     m_intakeAssembly->EnableCoastMode();
 }
 
@@ -69,30 +69,12 @@ void Teleop::TeleopPeriodic() {
      */
     double elevatorPosIncInput =
         -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
-    double wristPosIncInput = Util::signCube(
-        -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis));
+    double wristPosIncInput = pow(
+        -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis), 3);
 
     if (fabs(elevatorPosIncInput) > 0.25 || fabs(wristPosIncInput) > 0.25) {
         m_intakeAssembly->SetPosManualInput();
     }
-
-    if (m_intakeMode == IntakeMode::manualVoltage) {
-        double elevatorManualPower =
-            -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
-        double wristManualPower =
-            -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
-
-        m_intakeAssembly->SetElevatorManualPower(elevatorManualPower +
-                                                 ELEVATOR_FEED_FORWARD);
-
-        m_intakeAssembly->SetWristManualPower(wristManualPower);
-    }
-    else if (m_intakeMode == IntakeMode::manualPosition) {
-    }
-    else if (m_intakeMode == IntakeMode::motionMagic) {
-    }
-
-    SmartDashboard::PutNumber("intake/modes/currentmode", (int)m_intakeMode);
 }
 
 void Teleop::TeleopStop() {
@@ -127,7 +109,6 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::manualPosition;
                     m_intakeAssembly->DropCube();
                 }
                 else {
@@ -135,7 +116,6 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::manualPosition;
                     m_intakeAssembly->EjectCube();
                 }
                 else {
@@ -195,61 +175,51 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
         switch (button) {
             case DualAction::BtnY:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::IntakePosition::scaleHigh);
+                        IntakeAssembly::SCALE_HIGH_PRESET);
                 }
                 break;
             case DualAction::BtnA:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::IntakePosition::ground);
+                        IntakeAssembly::GROUND_PRESET);
                 }
                 break;
             case DualAction::BtnX:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::IntakePosition::scaleLow);
+                        IntakeAssembly::SCALE_LOW_PRESET);
                 }
                 break;
             case DualAction::BtnB:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::IntakePosition::lowGoal);
+                        IntakeAssembly::LOW_GOAL_PRESET);
                 }
                 else {
                 }
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->IntakeCube(-1.0);
                 }
                 else {
-                    m_intakeMode = IntakeMode::manualPosition;
                     m_intakeAssembly->StopIntake();
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->VaultIntake();
                 }
                 else {
-                    m_intakeMode = IntakeMode::manualPosition;
                     m_intakeAssembly->StopIntake();
                 }
                 break;
             case DualAction::RightTrigger:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->EjectCube();
                 }
                 else {
-                    m_intakeMode = IntakeMode::manualPosition;
                     m_intakeAssembly->StopIntake();
                 }
                 break;

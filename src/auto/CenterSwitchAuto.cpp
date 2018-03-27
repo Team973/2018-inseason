@@ -31,7 +31,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                                      Drive::RelativeTo::Now);
             }
             m_intakeAssembly->GoToIntakePosition(
-                IntakeAssembly::IntakePosition::vault);
+                IntakeAssembly::VAULT_PRESET);
             // m_wrist->CloseClaw();
             m_autoTimer = GetMsecTime();
             m_autoState++;
@@ -66,7 +66,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             if (m_drive->GetSplinePercentComplete() > 1.0) {
                 m_drive->OpenloopArcadeDrive(0.0, 0.0);
                 m_intakeAssembly->GoToIntakePosition(
-                    IntakeAssembly::IntakePosition::vault);
+                    IntakeAssembly::VAULT_PRESET);
                 m_autoState++;
             }
             break;

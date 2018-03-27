@@ -33,7 +33,7 @@ Autonomous::~Autonomous() {
 
 void Autonomous::AutonomousInit() {
     // Remember to zero all sensors here
-    m_intakeAssembly->GoToIntakePosition(IntakeAssembly::IntakePosition::stow);
+    m_intakeAssembly->GoToIntakePosition(IntakeAssembly::STOW_PRESET);
     m_gyro->Reset();
     std::cout << "Autonomous Start" << std::endl;
 

@@ -33,8 +33,8 @@ void Test::TestInit() {
 void Test::TestPeriodic() {
     double elevatorPosIncInput =
         -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
-    double wristPosIncInput = Util::signCube(
-        -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis));
+    double wristPosIncInput = pow(
+        -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis), 3);
 
     if (fabs(elevatorPosIncInput) > 0.25 || fabs(wristPosIncInput) > 0.25) {
         m_intakeAssembly->SetPosManualInput();
@@ -132,14 +132,14 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 if (pressedP) {
                     m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::IntakePreset::SCALE_MID_PRESET);
+                        IntakeAssembly::SCALE_MID_PRESET);
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
                     m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::IntakePreset::SCALE_HIGH_PRESET);
+                        IntakeAssembly::SCALE_HIGH_PRESET);
                 }
                 break;
             case DualAction::BtnA:
@@ -180,28 +180,28 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 if (pressedP) {
                     m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::IntakePreset::STOW_PRESET);
+                        IntakeAssembly::STOW_PRESET);
                 }
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
                     m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::IntakePreset::LOW_GOAL_PRESET);
+                        IntakeAssembly::LOW_GOAL_PRESET);
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
                     m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::IntakePreset::SCALE_MID_PRESET);
+                        IntakeAssembly::SCALE_MID_PRESET);
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
                     m_intakeMode = IntakeMode::motionMagic;
                     m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::IntakePosition::vault);
+                        IntakeAssembly::VAULT_PRESET);
                 }
                 break;
             case DualAction::RightTrigger:

@@ -49,14 +49,7 @@ private:
         Hanger
     };
 
-    enum class IntakeMode
-    {
-        manualVoltage,
-        manualPosition,
-        motionMagic
-    };
     DriveMode m_driveMode;
-    IntakeMode m_intakeMode;
 
     IntakeAssembly *m_intakeAssembly;
     double m_elevatorPosition;
