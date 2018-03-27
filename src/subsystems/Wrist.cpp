@@ -4,6 +4,7 @@
 #include "lib/util/WrapDash.h"
 
 using namespace frc;
+using namespace ctre::phoenix::motorcontrol;
 
 namespace frc973 {
 Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
@@ -26,7 +27,7 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     this->m_scheduler->RegisterTask("Wrist", this, TASK_PERIODIC);
 
     m_wristMotor->ConfigSelectedFeedbackSensor(
-        ctre::phoenix::motorcontrol::FeedbackDevice::QuadEncoder, 0,
+        FeedbackDevice::QuadEncoder, 0,
         10);  // 0 = Not cascaded PID Loop; 10 = in constructor, not in a loop
     m_wristMotor->SetSensorPhase(true);
     m_wristMotor->SetNeutralMode(NeutralMode::Coast);
@@ -53,13 +54,23 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     }*/
     ZeroPosition();
 
+    /*
     m_wristMotor->ConfigForwardSoftLimitThreshold(
-        WRIST_FORWARD_SOFT_LIMIT / WRIST_DEGREES_PER_CLICK, 10);
+        DegreesToNativeUnits(WRIST_FORWARD_SOFT_LIMIT), 10);
     m_wristMotor->ConfigForwardSoftLimitEnable(true, 10);
 
     m_wristMotor->ConfigReverseSoftLimitThreshold(
-        WRIST_REVERSE_SOFT_LIMIT / WRIST_DEGREES_PER_CLICK, 10);
+        DegreesToNativeUnits(WRIST_REVERSE_SOFT_LIMIT), 10);
     m_wristMotor->ConfigReverseSoftLimitEnable(true, 10);
+    */
+
+    m_wristMotor->ConfigForwardLimitSwitchSource(
+        LimitSwitchSource::LimitSwitchSource_FeedbackConnector,
+        LimitSwitchNormal::LimitSwitchNormal_NormallyOpen, 10);
+    m_wristMotor->ConfigReverseLimitSwitchSource(
+        LimitSwitchSource::LimitSwitchSource_FeedbackConnector,
+        LimitSwitchNormal::LimitSwitchNormal_NormallyOpen, 10);
+    m_wristMotor->OverrideLimitSwitchesEnable(true);
 
     m_wristMotor->Set(ControlMode::PercentOutput, 0.0);
 
@@ -97,28 +108,25 @@ void Wrist::SetPower(double power) {
 
 void Wrist::SetPosition(double position) {
     m_wristState = WristState::motionMagic;
-    int position_clicks = Util::bound(position, WRIST_REVERSE_SOFT_LIMIT,
-                                      WRIST_FORWARD_SOFT_LIMIT) /
-                          WRIST_DEGREES_PER_CLICK;
+    int position_clicks = DegreesToNativeUnits(Util::bound(
+        position, WRIST_REVERSE_SOFT_LIMIT, WRIST_FORWARD_SOFT_LIMIT));
     m_wristMotor->Set(ControlMode::MotionMagic, position_clicks);
 }
 
 void Wrist::SetPositionStep(double position) {
     m_wristState = WristState::motionMagic;
-    int position_clicks = Util::bound(position, WRIST_REVERSE_SOFT_LIMIT,
-                                      WRIST_FORWARD_SOFT_LIMIT) /
-                          WRIST_DEGREES_PER_CLICK;
+    int position_clicks = DegreesToNativeUnits(Util::bound(
+        position, WRIST_REVERSE_SOFT_LIMIT, WRIST_FORWARD_SOFT_LIMIT));
     m_wristMotor->Set(ControlMode::Position, position_clicks);
 }
 
 float Wrist::GetPosition() {
-    return WRIST_DEGREES_PER_CLICK *
-           ((float)m_wristMotor->GetSelectedSensorPosition(0));
+    return NativeUnitsToDegrees(m_wristMotor->GetSelectedSensorPosition(0));
 }
 
 void Wrist::ZeroPosition() {
     m_wristMotor->GetSensorCollection().SetQuadraturePosition(
-        90.0 / WRIST_DEGREES_PER_CLICK, 0);
+        DegreesToNativeUnits(EXTENDED), 0);
 }
 
 void Wrist::OpenClaw() {
@@ -155,6 +163,12 @@ void Wrist::TaskPeriodic(RobotMode mode) {
     DBStringPrintf(DBStringPos::DB_LINE5, "cube: l%d r %d c%d",
                    m_leftCubeSensor->Get(), m_rightCubeSensor->Get(),
                    IsCubeIn());
+
+    if (m_wristMotor->GetSensorCollection().IsFwdLimitSwitchClosed() &&
+        GetPosition() > EXTENDED) {
+        ZeroPosition();
+    }
+
     switch (m_wristState) {
         case WristState::manualVoltage:
             break;
@@ -167,5 +181,15 @@ void Wrist::TaskPeriodic(RobotMode mode) {
         default:
             break;
     }
+}
+
+double Wrist::DegreesToNativeUnits(double degrees) {
+    //return 1500 - (degrees / WRIST_DEGREES_PER_CLICK);
+    return degrees / WRIST_DEGREES_PER_CLICK;
+}
+
+double Wrist::NativeUnitsToDegrees(double nativeUnits) {
+    //return (1500 - nativeUnits) * WRIST_DEGREES_PER_CLICK;
+    return nativeUnits * WRIST_DEGREES_PER_CLICK;
 }
 }
