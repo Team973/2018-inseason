@@ -251,6 +251,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
+                    m_intakeAssembly->GoToIntakePosition(IntakeAssembly::OVER_BACK_PRESET);
                 }
                 break;
             case DualAction::Back:
@@ -260,9 +261,10 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::Start:
                 if (pressedP) {
-                    // m_intakeAssembly->ZeroPosition();
+                    m_intakeAssembly->StartZeroPosition();
                 }
                 else {
+                    m_intakeAssembly->EndZeroPosition();
                 }
                 break;
         }

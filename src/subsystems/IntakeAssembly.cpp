@@ -172,13 +172,23 @@ double IntakeAssembly::GetWristLowerBound(double elevatorPosition) {
 
 double IntakeAssembly::GetPositionError() {
     return sqrt(
-        pow(m_endPositionGoal.elevatorPosition - GetElevatorPosition(), 2) +
-        pow(m_endPositionGoal.wristPosition - GetWristPosition(), 2));
+        pow(m_interimPositionGoal.elevatorPosition - GetElevatorPosition(), 2) +
+        pow(m_interimPositionGoal.wristPosition - GetWristPosition(), 2));
+}
+
+void IntakeAssembly::StartZeroPosition() {
+    m_controlMode = ControlMode::Zeroing;
+}
+
+void IntakeAssembly::EndZeroPosition() {
+    m_elevator->ZeroPosition();
+    m_wrist->ZeroPosition();
 }
 
 void IntakeAssembly::TaskPeriodic(RobotMode mode) {
-    DBStringPrintf(DBStringPos::DB_LINE8, "w %3.2f s %3.2f", GetWristPosition(),
-                   m_interimPositionGoal.wristPosition);
+    DBStringPrintf(DBStringPos::DB_LINE8, "w %3.2f s %3.2f e %3.2f",
+                   GetWristPosition(), m_interimPositionGoal.wristPosition,
+                   GetPositionError());
 
     switch (m_controlMode) {
         case ControlMode::Idle:
@@ -227,7 +237,7 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
         case ControlMode::SubForkPosition:
             SetPosition(SCALE_LOW_PRESET);
 
-            if (GetPositionError() < 5.0) {
+            if (GetPositionError() < 15.0) {
                 if (m_endPositionGoal == OVER_BACK_PRESET) {
                     m_controlMode = ControlMode::SuperForkPosition;
                 }
@@ -239,7 +249,7 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
         case ControlMode::SuperForkPosition:
             SetPosition(SCALE_HIGH_PRESET);
 
-            if (GetPositionError() < 5.0) {
+            if (GetPositionError() < 15.0) {
                 if (m_endPositionGoal == OVER_BACK_PRESET) {
                     m_controlMode = ControlMode::OverBackPosition;
                 }
@@ -275,6 +285,10 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             if (m_wrist->IsCubeIn()) {
                 StopIntake();
             }
+            break;
+        case ControlMode::Zeroing:
+            m_elevator->SetPower(-0.1);
+            m_wrist->SetPower(0.2);
             break;
     }
 }

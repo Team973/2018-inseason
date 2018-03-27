@@ -18,7 +18,7 @@ class LogSpreadsheet;
 class Wrist : public CoopTask {
 public:
     static constexpr double STOW = -35.0;
-    static constexpr double SCALE = 10.0;
+    static constexpr double SCALE = 20.0;
     static constexpr double EXTENDED = 90.0;
     static constexpr double OVER_THE_BACK = -50.0;
     

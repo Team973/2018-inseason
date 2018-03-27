@@ -92,6 +92,9 @@ public:
 
     double GetPositionError();
 
+    void StartZeroPosition();
+    void EndZeroPosition();
+
     /**
      * Update function synonymous to TeleopContinuous that gets called
      *continuously
@@ -110,6 +113,7 @@ private:
         Idle,
         ManualPosition,
         ManualVoltage,
+        Zeroing,
         SwitchIntaking,
         SwitchStandby,
         VaultStart,

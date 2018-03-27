@@ -27,7 +27,7 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     this->m_scheduler->RegisterTask("Wrist", this, TASK_PERIODIC);
 
     m_wristMotor->ConfigSelectedFeedbackSensor(
-        FeedbackDevice::QuadEncoder, 0,
+        FeedbackDevice::CTRE_MagEncoder_Absolute, 0,
         10);  // 0 = Not cascaded PID Loop; 10 = in constructor, not in a loop
     m_wristMotor->SetSensorPhase(true);
     m_wristMotor->SetNeutralMode(NeutralMode::Coast);
@@ -52,7 +52,6 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
         m_wristMotor->GetSensorCollection().SetQuadraturePosition(
             (int)((this->GetPosition() - 360) / WRIST_DEGREES_PER_CLICK), 10);
     }*/
-    ZeroPosition();
 
     /*
     m_wristMotor->ConfigForwardSoftLimitThreshold(
@@ -121,12 +120,13 @@ void Wrist::SetPositionStep(double position) {
 }
 
 float Wrist::GetPosition() {
-    return NativeUnitsToDegrees(m_wristMotor->GetSelectedSensorPosition(0));
+    return NativeUnitsToDegrees(
+        m_wristMotor->GetSelectedSensorPosition(0));
 }
 
 void Wrist::ZeroPosition() {
-    m_wristMotor->GetSensorCollection().SetQuadraturePosition(
-        DegreesToNativeUnits(EXTENDED), 0);
+    m_wristMotor->SetSelectedSensorPosition(
+        DegreesToNativeUnits(EXTENDED), 0, 0);
 }
 
 void Wrist::OpenClaw() {
@@ -158,8 +158,12 @@ bool Wrist::IsCubeIn() {
 
 void Wrist::TaskPeriodic(RobotMode mode) {
     SmartDashboard::PutNumber("elevator/encoders/encoder", GetPosition());
-    DBStringPrintf(DBStringPos::DB_LINE7, "e %d",
-                   m_wristMotor->GetClosedLoopError(0));
+    DBStringPrintf(
+        DBStringPos::DB_LINE7, "e %d pwp %d r %d f %d",
+        m_wristMotor->GetClosedLoopError(0),
+        m_wristMotor->GetSensorCollection().GetPulseWidthPosition(),
+        m_wristMotor->GetSensorCollection().IsFwdLimitSwitchClosed(),
+        m_wristMotor->GetSensorCollection().IsRevLimitSwitchClosed());
     DBStringPrintf(DBStringPos::DB_LINE5, "cube: l%d r %d c%d",
                    m_leftCubeSensor->Get(), m_rightCubeSensor->Get(),
                    IsCubeIn());
@@ -184,12 +188,12 @@ void Wrist::TaskPeriodic(RobotMode mode) {
 }
 
 double Wrist::DegreesToNativeUnits(double degrees) {
-    //return 1500 - (degrees / WRIST_DEGREES_PER_CLICK);
-    return degrees / WRIST_DEGREES_PER_CLICK;
+    // return 1500 - (degrees / WRIST_DEGREES_PER_CLICK);
+    return degrees / WRIST_DEGREES_PER_CLICK + 1500;
 }
 
 double Wrist::NativeUnitsToDegrees(double nativeUnits) {
-    //return (1500 - nativeUnits) * WRIST_DEGREES_PER_CLICK;
-    return nativeUnits * WRIST_DEGREES_PER_CLICK;
+    // return (1500 - nativeUnits) * WRIST_DEGREES_PER_CLICK;
+    return (nativeUnits - 1500) * WRIST_DEGREES_PER_CLICK;
 }
 }
