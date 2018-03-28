@@ -55,7 +55,7 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
 
     /*
     m_wristMotor->ConfigForwardSoftLimitThreshold(
-        DegreesToNativeUnits(WRIST_FORWARD_SOFT_LIMIT), 10);
+        DegreesToNativeUnits(70.0), 10);
     m_wristMotor->ConfigForwardSoftLimitEnable(true, 10);
 
     m_wristMotor->ConfigReverseSoftLimitThreshold(
@@ -120,13 +120,12 @@ void Wrist::SetPositionStep(double position) {
 }
 
 float Wrist::GetPosition() {
-    return NativeUnitsToDegrees(
-        m_wristMotor->GetSelectedSensorPosition(0));
+    return NativeUnitsToDegrees(m_wristMotor->GetSelectedSensorPosition(0));
 }
 
 void Wrist::ZeroPosition() {
-    m_wristMotor->SetSelectedSensorPosition(
-        DegreesToNativeUnits(EXTENDED), 0, 0);
+    m_wristMotor->SetSelectedSensorPosition(DegreesToNativeUnits(EXTENDED), 0,
+                                            0);
 }
 
 void Wrist::OpenClaw() {
