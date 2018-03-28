@@ -27,8 +27,7 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     this->m_scheduler->RegisterTask("Wrist", this, TASK_PERIODIC);
 
     m_wristMotor->ConfigSelectedFeedbackSensor(
-        ctre::phoenix::motorcontrol::FeedbackDevice::CTRE_MagEncoder_Absolute,
-        0,
+        FeedbackDevice::CTRE_MagEncoder_Absolute, 0,
         10);  // 0 = Not cascaded PID Loop; 10 = in constructor, not in a loop
     m_wristMotor->SetSensorPhase(true);
     m_wristMotor->SetNeutralMode(NeutralMode::Coast);
@@ -49,6 +48,9 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_wristMotor->EnableVoltageCompensation(true);
     m_wristMotor->ConfigPeakOutputForward(0.5, 10);
     m_wristMotor->ConfigPeakOutputReverse(-0.5, 10);
+
+    m_wristMotor->SetSelectedSensorPosition(DegreesToNativeUnits(-30),
+                                            0, 0);
 
     /*if (this->GetPosition() > 180.0) {
         m_wristMotor->SetSelectedSensorPosition(
@@ -102,7 +104,7 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
 
     m_bannerFilter->Add(m_leftCubeSensor);
     m_bannerFilter->Add(m_rightCubeSensor);
-    m_bannerFilter->SetPeriodNanoSeconds(10000);
+    m_bannerFilter->SetPeriodNanoSeconds(20000);
 }
 
 Wrist::~Wrist() {
@@ -161,7 +163,7 @@ void Wrist::StopIntake() {
 }
 
 bool Wrist::IsCubeIn() const {
-    return (!m_leftCubeSensor->Get() || !m_rightCubeSensor->Get());
+    return (/*!m_leftCubeSensor->Get() ||*/ !m_rightCubeSensor->Get());
 }
 
 void Wrist::TaskPeriodic(RobotMode mode) {

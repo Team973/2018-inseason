@@ -20,7 +20,7 @@ public:
     static constexpr double STOW = -35.0;
     static constexpr double SCALE = 20.0;
     static constexpr double EXTENDED = 90.0;
-    static constexpr double OVER_THE_BACK = -50.0;
+    static constexpr double OVER_THE_BACK = -80.0;
 
     static constexpr double WRIST_DEGREES_PER_CLICK = 360.0 / 4096.0;
 

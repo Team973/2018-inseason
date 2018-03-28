@@ -44,6 +44,8 @@ const IntakeAssembly::IntakePreset IntakeAssembly::SCALE_HIGH_PRESET =
     IntakeAssembly::IntakePreset(Elevator::SCALE_HIGH, Wrist::SCALE);
 const IntakeAssembly::IntakePreset IntakeAssembly::OVER_BACK_PRESET =
     IntakeAssembly::IntakePreset(Elevator::SCALE_HIGH, Wrist::OVER_THE_BACK);
+const IntakeAssembly::IntakePreset IntakeAssembly::HANGING_PRESET =
+    IntakeAssembly::IntakePreset(61.5, -75);
 
 void IntakeAssembly::GoToIntakePosition(IntakePreset intakePosition) {
     m_endPositionGoal = intakePosition;
@@ -90,10 +92,24 @@ void IntakeAssembly::SetWristManualPower(double input) {
 }
 
 void IntakeAssembly::SetPosManualInput() {
-    if (m_controlMode != ControlMode::ManualPosition) {
-        m_interimPositionGoal.wristPosition = GetWristPosition();
+    if (m_controlMode != ControlMode::HangingAuto and m_controlMode != ControlMode::HangingManual) {
+        if (m_controlMode != ControlMode::ManualPosition) {
+            m_interimPositionGoal.wristPosition = GetWristPosition();
+        }
+        m_controlMode = ControlMode::ManualPosition;
     }
-    m_controlMode = ControlMode::ManualPosition;
+    else if (m_controlMode == ControlMode::HangingAuto) {
+        m_controlMode = ControlMode::HangingManual;
+    }
+}
+
+void IntakeAssembly::SetModeHanging(bool hanging) {
+    if (hanging) {
+        m_controlMode = ControlMode::HangingAuto;
+    }
+    else {
+        m_controlMode = ControlMode::ManualPosition;
+    }
 }
 
 void IntakeAssembly::IntakeCube(double power) {
@@ -200,6 +216,11 @@ void IntakeAssembly::EndZeroPosition() {
     m_wrist->ZeroPosition();
 }
 
+void IntakeAssembly::Flash() {
+    m_intakeSignal->Reset();
+    m_greyLight->SetPixelStateProcessor(m_intakeSignal);
+}
+
 void IntakeAssembly::TaskPeriodic(RobotMode mode) {
     DBStringPrintf(DBStringPos::DB_LINE8, "w %3.2f s %3.2f e %3.2f",
                    GetWristPosition(), m_interimPositionGoal.wristPosition,
@@ -237,6 +258,21 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
 
             m_interimPositionGoal.wristPosition = wristPosGoal;
         } break;
+        case ControlMode::HangingAuto: 
+            m_wrist->OpenClaw();
+            SetPosition(HANGING_PRESET);
+            if (GetPositionError() < 5.0) {
+                m_controlMode = ControlMode::HangingManual;
+            }
+            break;
+        case ControlMode::HangingManual: {
+            double elevatorInput =
+                -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
+
+            m_wrist->SetPosition(HANGING_PRESET.wristPosition);
+            m_wrist->OpenClaw();
+            m_elevator->SetPower(elevatorInput + ELEVATOR_FEED_FORWARD);
+        } break;
         case ControlMode::ManualVoltage: {
             double elevatorInput =
                 -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
@@ -268,6 +304,9 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
                 if (m_endPositionGoal == OVER_BACK_PRESET) {
                     m_controlMode = ControlMode::OverBackPosition;
                 }
+                else if (m_endPositionGoal == SCALE_HIGH_PRESET) {
+                    m_controlMode = ControlMode::LowPosition;
+                }
                 else {
                     m_controlMode = ControlMode::SubForkPosition;
                 }
@@ -278,13 +317,9 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             break;
         case ControlMode::SwitchIntaking:
             GoToIntakePosition(GROUND_PRESET);
-            if (GetElevatorPosition() < 5.0) {
-                m_controlMode = ControlMode::SwitchStandby;
-            }
-            break;
-        case ControlMode::SwitchStandby:
-            if (m_wrist->IsCubeIn() ||
-                m_operatorJoystick->GetRawButton(DualAction::Back)) {
+            if (GetElevatorPosition() < 5.0 &&
+                (m_wrist->IsCubeIn() ||
+                 m_operatorJoystick->GetRawButton(DualAction::Back))) {
                 GoToIntakePosition(STOW_PRESET);
                 m_wrist->StopIntake();
                 m_intakeSignal->Reset();

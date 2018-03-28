@@ -73,6 +73,10 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 4:
+            if (m_drive->GetSplinePercentComplete() > 0.80) {
+                // m_elevator->SetPosition(Elevator::GROUND);
+                m_autoState++;
+            }
             if (m_drive->GetSplinePercentComplete() > 1.0) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(

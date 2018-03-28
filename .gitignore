@@ -1,4 +1,5 @@
 *.swp
+*.swo
 build/*
 test/build/*
 .DS_Store

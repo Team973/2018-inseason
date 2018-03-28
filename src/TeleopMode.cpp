@@ -39,6 +39,8 @@ void Teleop::TeleopInit() {
     m_intakeAssembly->StopIntake();
 }
 
+static bool s_intaking = false;
+
 void Teleop::TeleopPeriodic() {
     if (!m_endGameSignalSent && Timer::GetMatchTime() < 40) {
         m_endGameSignalSent = true;
@@ -63,7 +65,7 @@ void Teleop::TeleopPeriodic() {
             false);  // gear set to false until solenoids get set up
     }
     else if (m_driveMode == DriveMode::Hanger) {
-        m_hanger->SetHangerPower(y);
+        //m_hanger->SetHangerPower(y);
     }
 
     /**
@@ -73,6 +75,12 @@ void Teleop::TeleopPeriodic() {
         -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
     double wristPosIncInput = pow(
         -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis), 3);
+
+    if (s_intaking && m_intakeAssembly->GetWrist()->IsCubeIn()) {
+        m_intakeAssembly->StopIntake();
+        m_intakeAssembly->Flash();
+        m_intakeAssembly->GoToIntakePosition(IntakeAssembly::STOW_PRESET);
+    }
 
     if (fabs(elevatorPosIncInput) > 0.25 || fabs(wristPosIncInput) > 0.25) {
         m_intakeAssembly->SetPosManualInput();
@@ -206,9 +214,11 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::LeftBumper:
                 if (pressedP) {
                     m_intakeAssembly->IntakeCube(-1.0);
+                    s_intaking = true;
                 }
                 else {
                     m_intakeAssembly->StopIntake();
+                    s_intaking = false;
                 }
                 break;
             case DualAction::LeftTrigger:
@@ -243,23 +253,23 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadDownVirtBtn:
                 /*
-                    if (pressedP) {
-                        m_hanger->SetForkliftPower(-1.0);
-                    }
-                    else {
-                        m_hanger->SetForkliftPower(0);
-                    }
+                if (pressedP) {
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::STOW_PRESET);
+                }
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::OVER_BACK_PRESET);
                     */
                 break;
 
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
+                    m_intakeAssembly->SetModeHanging(false);
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
-                    m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::OVER_BACK_PRESET);
+                    m_intakeAssembly->SetModeHanging(true);
                 }
                 break;
             case DualAction::Back:
