@@ -38,7 +38,7 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_wristMotor->Config_kD(0, 0.0, 10);
     m_wristMotor->Config_kF(0, 0.0, 10);
     m_wristMotor->ConfigMotionCruiseVelocity(3750.0, 10);
-    m_wristMotor->ConfigMotionAcceleration(4200.0, 10);
+    m_wristMotor->ConfigMotionAcceleration(3200.0, 10);
     m_wristMotor->SelectProfileSlot(0, 0);
 
     m_wristMotor->EnableCurrentLimit(true);

@@ -38,7 +38,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             m_autoState++;
             break;
         case 1:
-            if (GetMsecTime() - m_autoTimer > 4000) {
+            if (m_drive->GetSplinePercentComplete() > 0.6) {
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::SCALE_HIGH_PRESET);
                 m_autoTimer = GetMsecTime();
@@ -47,14 +47,20 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             break;
         case 2:
             if (m_drive->GetSplinePercentComplete() > 1.0 ||
-                m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
-                m_intakeAssembly->EjectCube();
+                GetMsecTime() - m_autoTimer > 4000) {
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::IntakePreset(
+                        Elevator::SCALE_HIGH,
+                        Wrist::EXTENDED));
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
         case 3:
             if (GetMsecTime() - m_autoTimer > 500) {
+                m_intakeAssembly->EjectCube();
+            }
+            if (GetMsecTime() - m_autoTimer > 1000) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
                         &two_cube_backoff_left::two_cube_backoff_left,
@@ -65,17 +71,15 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                         &two_cube_backoff_right::two_cube_backoff_right,
                         Drive::RelativeTo::SetPoint);
                 }
-                m_intakeAssembly->GoToIntakePosition(
-                    IntakeAssembly::GROUND_PRESET);
-                m_intakeAssembly->StopIntake();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
         case 4:
             if (m_drive->GetSplinePercentComplete() > 0.80) {
-                // m_elevator->SetPosition(Elevator::GROUND);
-                m_autoState++;
+                m_intakeAssembly->StopIntake();
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::GROUND_PRESET);
             }
             if (m_drive->GetSplinePercentComplete() > 1.0) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {

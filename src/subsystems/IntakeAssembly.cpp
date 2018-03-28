@@ -63,10 +63,12 @@ void IntakeAssembly::GoToIntakePosition(IntakePreset intakePosition) {
         }
     }
     else {
-        if (GetElevatorPosition() >= 77.0) {
+        if (GetElevatorPosition() >= 77.0 && GetWristPosition() <= 20.0 &&
+            intakePosition.elevatorPosition < 77) {
             m_controlMode = ControlMode::SuperForkPosition;
         }
-        else if (GetElevatorPosition() >= 72) {
+        else if (GetElevatorPosition() >= 72 &&
+                 intakePosition.elevatorPosition < 72) {
             m_controlMode = ControlMode::SubForkPosition;
         }
         else {
@@ -92,7 +94,8 @@ void IntakeAssembly::SetWristManualPower(double input) {
 }
 
 void IntakeAssembly::SetPosManualInput() {
-    if (m_controlMode != ControlMode::HangingAuto and m_controlMode != ControlMode::HangingManual) {
+    if (m_controlMode != ControlMode::HangingAuto and
+        m_controlMode != ControlMode::HangingManual) {
         if (m_controlMode != ControlMode::ManualPosition) {
             m_interimPositionGoal.wristPosition = GetWristPosition();
         }
@@ -258,7 +261,7 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
 
             m_interimPositionGoal.wristPosition = wristPosGoal;
         } break;
-        case ControlMode::HangingAuto: 
+        case ControlMode::HangingAuto:
             m_wrist->OpenClaw();
             SetPosition(HANGING_PRESET);
             if (GetPositionError() < 5.0) {
