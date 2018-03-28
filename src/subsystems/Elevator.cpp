@@ -6,12 +6,13 @@
 using namespace frc;
 
 namespace frc973 {
-Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor)
+Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
+                   TalonSRX *elevatorMotor)
         : m_scheduler(scheduler)
-        , m_elevatorMotor(motor)
+        , m_elevatorMotor(elevatorMotor)
         , m_position(0.0)
         , m_zeroingTime(0)
-        , m_elevatorState(ElevatorState::manual) {
+        , m_elevatorState(ElevatorState::manualVoltage) {
     this->m_scheduler->RegisterTask("Elevator", this, TASK_PERIODIC);
 
     m_elevatorMotor->ConfigSelectedFeedbackSensor(
@@ -21,7 +22,7 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor)
     m_elevatorMotor->SetNeutralMode(NeutralMode::Coast);
     m_elevatorMotor->SetInverted(true);
 
-    m_elevatorMotor->Config_kP(0, 1.5, 10);
+    m_elevatorMotor->Config_kP(0, 2.5, 10);
     m_elevatorMotor->Config_kI(0, 0.0, 10);
     m_elevatorMotor->Config_kD(0, 0.0, 10);
     m_elevatorMotor->Config_kF(0, 0.0, 10);
@@ -39,6 +40,7 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor)
     m_elevatorMotor->ConfigForwardSoftLimitEnable(true, 10);
 
     m_elevatorMotor->Set(ControlMode::PercentOutput, 0.0);
+
     m_positionCell = new LogCell("Elevator Position", 32, true);
     logger->RegisterCell(m_positionCell);
 }
@@ -48,21 +50,18 @@ Elevator::~Elevator() {
 }
 
 void Elevator::SetPower(double power) {
-    m_elevatorState = ElevatorState::manual;
+    m_elevatorState = ElevatorState::manualVoltage;
+    power = Util::bound(power, -0.2, 1.0);
     m_elevatorMotor->Set(ControlMode::PercentOutput, power);
 }
 
 void Elevator::SetPosition(double position) {
-    m_elevatorState = ElevatorState::position;
+    m_elevatorState = ElevatorState::motionMagic;
     int position_clicks = position / ELEVATOR_INCHES_PER_CLICK;
     m_elevatorMotor->Set(ControlMode::MotionMagic, position_clicks);
 }
 
-void Elevator::Reset() {
-    m_elevatorState = ElevatorState::zeroing_start;
-}
-
-float Elevator::GetPosition() {
+float Elevator::GetPosition() const {
     return ELEVATOR_INCHES_PER_CLICK *
            ((float)m_elevatorMotor->GetSelectedSensorPosition(0));
 }
@@ -71,20 +70,22 @@ void Elevator::ZeroPosition() {
     m_elevatorMotor->GetSensorCollection().SetQuadraturePosition(0, 0);
 }
 
+void Elevator::EnableBrakeMode() {
+    m_elevatorMotor->SetNeutralMode(NeutralMode::Brake);
+}
+
+void Elevator::EnableCoastMode() {
+    m_elevatorMotor->SetNeutralMode(NeutralMode::Coast);
+}
+
 void Elevator::TaskPeriodic(RobotMode mode) {
     m_positionCell->LogDouble(GetPosition());
     SmartDashboard::PutNumber("elevator/encoders/encoder", GetPosition());
     DBStringPrintf(DBStringPos::DB_LINE0, "e %f", GetPosition());
     switch (m_elevatorState) {
-        case manual:
+        case manualVoltage:
             break;
-        case zeroing_start:
-            m_elevatorState = ElevatorState::zeroing_goDown;
-            break;
-        case zeroing_goDown:
-            m_elevatorMotor->Set(ControlMode::PercentOutput, -0.2);
-            break;
-        case position:
+        case motionMagic:
             break;
         default:
             break;

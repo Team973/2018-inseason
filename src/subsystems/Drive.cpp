@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include "WPILib.h"
+#include "ctre/Phoenix.h"
 #include "src/controllers/AssistedArcadeDriveController.h"
 #include "src/controllers/CheesyDriveController.h"
 #include "src/controllers/HangerDriveController.h"
@@ -190,6 +191,10 @@ PIDDriveController *Drive::PIDTurn(double turn, RelativeTo relativity,
     m_pidDriveController->SetCap(powerCap);
     m_pidDriveController->SetTarget(0.0, turn, relativity, this);
     return m_pidDriveController;
+}
+
+double Drive::GetPIDDistError() {
+    return m_pidDriveController->GetDistError();
 }
 
 /**
@@ -408,6 +413,18 @@ void Drive::SetDriveOutputVBus(double left, double right) {
         m_rightDriveTalonA->Set(ControlMode::PercentOutput, m_rightDriveOutput);
     }
 }
+void Drive::ConfigDriveCurrentLimit(double limit) {
+    m_leftDriveTalonA->EnableCurrentLimit(true);
+    m_leftDriveTalonA->ConfigContinuousCurrentLimit(limit, 10);
+
+    m_rightDriveTalonA->EnableCurrentLimit(true);
+    m_rightDriveTalonA->ConfigContinuousCurrentLimit(limit, 10);
+}
+void Drive::DisableDriveCurrentLimit() {
+    m_leftDriveTalonA->EnableCurrentLimit(false);
+
+    m_rightDriveTalonA->EnableCurrentLimit(false);
+}
 
 void Drive::TaskPeriodic(RobotMode mode) {
     // NetworkTable Voltages
@@ -452,8 +469,6 @@ void Drive::TaskPeriodic(RobotMode mode) {
 
     DBStringPrintf(DB_LINE9, "l %2.1lf r %2.1lf g %2.1lf", this->GetLeftDist(),
                    this->GetRightDist(), this->GetAngle());
-
-    DBStringPrintf(DB_LINE8, "d %2.1lf", this->GetDist());
 
     m_angleLog->LogDouble(GetAngle());
     m_angularRateLog->LogDouble(GetAngularRate());

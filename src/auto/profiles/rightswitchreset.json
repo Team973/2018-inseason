@@ -1,9 +1,9 @@
 {
     "name": "right_switch_reset",
     "timestep": 0.01,
-    "max_vel": 120.0,
-    "max_accel": 40.0,
-    "max_jerk": 60.0,
+    "max_vel": 140.0,
+    "max_accel": 80.0,
+    "max_jerk": 120.0,
     "wheelbase_width": 25.205,
     "reverse": true,
     "waypoints": [

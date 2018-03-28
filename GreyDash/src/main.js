@@ -13,7 +13,7 @@ client.setReconnectDelay(1000);
 const app = electron.app;
 
 /** Module to create native browser window. */
-const BrowserWindow = electron.BrowserWindow;
+const { BrowserWindow } = electron;
 
 /** Module for receiving messages from the BrowserWindow */
 const ipc = electron.ipcMain;
@@ -25,6 +25,7 @@ const ipc = electron.ipcMain;
  * @type {Electron.BrowserWindow}
  * */
 let mainWindow;
+let cameraWindow;
 
 let connectedFunc,
   ready = false;
@@ -94,17 +95,29 @@ function createWindow() {
     console.log(error);
   });
   // Create the browser window.
-  mainWindow = new BrowserWindow({
-    width: 1366,
-    height: 570,
-    // 1366x570 is a good standard height, but you may want to change this to fit your DriverStation's screen better.
-    // It's best if the dashboard takes up as much space as possible without covering the DriverStation application.
-    // The window is closed until the python server is ready
-    show: false,
-    icon: `${__dirname}/../build/icon.png`,
-  });
+  const x = electron.screen.getPrimaryDisplay().bounds.x;
+  const y = electron.screen.getPrimaryDisplay().bounds.y;
+  const width = electron.screen.getPrimaryDisplay().bounds.width;
+  const height = Math.round(electron.screen.getPrimaryDisplay().bounds.height - 240);
+  if (process.env.DASHBOARD) {
+    mainWindow = new BrowserWindow({
+      frame: false,
+      width,
+      height,
+      show: false,
+      icon: `${__dirname}/../build/icon.png`,
+    });
+  } else {
+    mainWindow = new BrowserWindow({
+      frame: true,
+      width: 1280,
+      height: 720,
+      show: false,
+      icon: `${__dirname}/../build/icon.png`,
+    });
+  }
   // Move window to top (left) of screen.
-  mainWindow.setPosition(0, 0);
+  mainWindow.setPosition(x, y);
   // Load window.
   mainWindow.loadURL(`file://${__dirname}/index.html`);
   // Once the python server is ready, load window contents.
@@ -133,19 +146,33 @@ function createWindow() {
     console.log('window failed load');
   });
 }
-function createCameraWindow() {
+function createCameraWindow(externalDisplay) {
   // Create the browser window.
-  cameraWindow = new BrowserWindow({
-    width: 1280,
-    height: 720,
-    // 1366x570 is a good standard height, but you may want to change this to fit your DriverStation's screen better.
-    // It's best if the dashboard takes up as much space as possible without covering the DriverStation application.
-    // The window is closed until the python server is ready
-    show: false,
-    icon: `${__dirname}/../build/icon.png`,
-  });
-  // Move window to top (left) of screen.
-  cameraWindow.setPosition(0, 0);
+  if (externalDisplay) {
+    cameraWindow = new BrowserWindow({
+	  x: externalDisplay.bounds.x,
+	  y: externalDisplay.bounds.y,
+	  fullscreen: true,
+      // 1366x570 is a good standard height, but you may want to change this to fit your DriverStation's screen better.
+      // It's best if the dashboard takes up as much space as possible without covering the DriverStation application.
+      // The window is closed until the python server is ready
+      show: false,
+      icon: `${__dirname}/../build/icon.png`,
+    });
+  } else {
+    cameraWindow = new BrowserWindow({
+      x: 0,
+      y: 0,
+      width: 1280,
+      height: 720,
+	  fullscreen: false,
+      // 1366x570 is a good standard height, but you may want to change this to fit your DriverStation's screen better.
+      // It's best if the dashboard takes up as much space as possible without covering the DriverStation application.
+      // The window is closed until the python server is ready
+      show: false,
+      icon: `${__dirname}/../build/icon.png`,
+    });
+  }
   // Load window.
   cameraWindow.loadURL(`file://${__dirname}/../camera/src/index.html`);
   // Once the python server is ready, load window contents.
@@ -174,12 +201,17 @@ function createCameraWindow() {
     console.log('camera window failed load');
   });
 }
+
+app.disableHardwareAcceleration();
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 app.on('ready', () => {
   console.log('app is ready');
+  const displays = electron.screen.getAllDisplays();
+  const externalDisplay = displays.find(display => display.bounds.x !== 0 || display.bounds.y !== 0);
   createWindow();
-  createCameraWindow();
+  // createCameraWindow(externalDisplay);
 });
 
 // Quit when all windows are closed.

@@ -25,26 +25,24 @@ class Elevator : public CoopTask {
 public:
     enum ElevatorState
     {
-        manual,
-        zeroing_start,
-        position,
-        zeroing_goDown,
-        zeroing_stop
+        manualVoltage,
+        motionMagic
     };
 
     static constexpr double GROUND = 0.0;
-    static constexpr double VAULT = 3.0;
+    static constexpr double VAULT = 4.5;
     static constexpr double LOW_GOAL = 30.0;
     static constexpr double HANGING = 55.0;
-    static constexpr double SCALE_LOW = 64.0;
+    static constexpr double SCALE_LOW = 58.0;
     static constexpr double SCALE_MID = 70.0;
-    static constexpr double SCALE_HIGH = 78.0;
+    static constexpr double SCALE_HIGH = 79.5;
 
-    Elevator(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *motor);
+    Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
+             TalonSRX *elevatorMotor);
     virtual ~Elevator();
 
     /**
-     * Sets Elevator Position
+     * Sets Elevator Position using Motion Magic
      *
      * @param position: the position goal
      **/
@@ -58,17 +56,14 @@ public:
     void SetPower(double power);
 
     /**
-     * Resets elevator subsystem by setting position to zero
-     *  and setting control modes to % output
-     **/
-    void Reset();
-
-    /**
      * @return: returns current elevator position in sensor units
      **/
-    float GetPosition();
+    float GetPosition() const;
 
     void ZeroPosition();
+
+    void EnableBrakeMode();
+    void EnableCoastMode();
 
     /**
      * Update function synonymous to TeleopContinuous that gets called

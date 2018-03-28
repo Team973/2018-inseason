@@ -8,6 +8,10 @@
 #include "src/AutonomousMode.h"
 #include "lib/util/WrapDash.h"
 #include "src/auto/AutoRoutineBase.h"
+#include "lib/helpers/GreyLight.h"
+#include "lib/pixelprocessors/SolidColor.h"
+#include "lib/pixelprocessors/LengthModifier.h"
+#include "lib/pixelprocessors/ReverseModifier.h"
 
 using namespace frc;
 using namespace cs;
@@ -16,7 +20,8 @@ namespace frc973 {
 class Disabled {
 public:
     Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
-             UsbCamera intakeCamera, UsbCamera forkCamera, VideoSink greyCam);
+             IntakeAssembly *intakeAssembly, UsbCamera intakeCamera,
+             UsbCamera forkCamera, VideoSink greyCam, GreyLight *greylight);
     virtual ~Disabled();
 
     void DisabledInit();
@@ -38,5 +43,11 @@ private:
     UsbCamera m_intakeCamera;
     UsbCamera m_forkCamera;
     VideoSink m_greyCam;
+
+    GreyLight *m_greylight;
+    IntakeAssembly *m_intakeAssembly;
+    LightPattern::SolidColor *m_disabledSignal;
+    LightPattern::LengthModifier *m_leftSideSignal;
+    LightPattern::ReverseModifier *m_rightSideSignal;
 };
 };

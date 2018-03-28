@@ -6,16 +6,16 @@ using namespace sample;
 
 namespace frc973 {
 Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-           Drive *drive, Elevator *elevator, Intake *intake, Claw *claw,
-           Hanger *hanger)
+           Drive *drive, IntakeAssembly *intakeAssembly, Hanger *hanger,
+           GreyLight *greylight)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_drive(drive)
-        , m_elevator(elevator)
-        , m_claw(claw)
-        , m_intake(intake)
+        , m_intakeAssembly(intakeAssembly)
         , m_hanger(hanger)
-        , m_elevatorMode(ElevatorMode::percentOutput) {
+        , m_greylight(greylight)
+        , m_flashSignal(
+              new LightPattern::Flash({0, 255, 0}, {0, 0, 0}, 50, 50)) {
 }
 
 Test::~Test() {
@@ -24,27 +24,40 @@ Test::~Test() {
 void Test::TestInit() {
     std::cout << "Test Start" << std::endl;
     m_driveMode = DriveMode::Openloop;
+    m_intakeMode = IntakeMode::manualPosition;
     m_hanger->DisengagePTO();
 }
 
 void Test::TestPeriodic() {
-    double elevatorManualPower =
+    double elevatorPosIncInput =
         -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
+    double wristPosIncInput = pow(
+        -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis), 3);
 
-    if (fabs(elevatorManualPower) > 0.1 ||
-        m_elevatorMode == ElevatorMode::percentOutput) {
-        m_elevatorMode = ElevatorMode::percentOutput;
-        m_elevator->SetPower(elevatorManualPower);
+    if (fabs(elevatorPosIncInput) > 0.25 || fabs(wristPosIncInput) > 0.25) {
+        m_intakeAssembly->SetPosManualInput();
     }
-    else if (m_elevatorMode == ElevatorMode::zero) {
+
+    if (m_intakeMode == IntakeMode::manualVoltage) {
+        double elevatorManualPower =
+            -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
+        double wristManualPower =
+            -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
+
+        m_intakeAssembly->SetElevatorManualPower(elevatorManualPower +
+                                                 ELEVATOR_FEED_FORWARD);
+
+        m_intakeAssembly->SetWristManualPower(wristManualPower);
     }
-    else if (m_elevatorMode == ElevatorMode::motionMagic) {
+    else if (m_intakeMode == IntakeMode::manualPosition) {
+    }
+    else if (m_intakeMode == IntakeMode::motionMagic) {
     }
 
     double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
     double x =
         -m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
-    bool quickturn = m_driverJoystick->GetRawButton(DualAction::LeftBumper);
+    bool quickturn = m_driverJoystick->GetRawButton(DualAction::RightTrigger);
 
     if (m_driverJoystick->GetRawButton(DualAction::RightBumper)) {
     }
@@ -60,7 +73,7 @@ void Test::TestPeriodic() {
             false);  // gear set to false until solenoids get set up
     }
     else if (m_driveMode == DriveMode::Hanger) {
-        m_drive->HangerDrive(y);
+        m_drive->HangerDrive(-y);
     }
     else if (m_driveMode == DriveMode::Openloop) {
         m_drive->OpenloopArcadeDrive(y, x);
@@ -80,23 +93,21 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
         switch (button) {
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::percentOutput;
                 }
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
+                    m_hanger->DisengagePTO();
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::zero;
-                    m_elevator->Reset();
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
-                }
-                else {
+                    m_driveMode = DriveMode::Hanger;
+                    m_hanger->EngagePTO();
                 }
                 break;
             case DualAction::RightTrigger:
@@ -116,20 +127,21 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::motionMagic;
-                    m_elevator->SetPosition(Elevator::SCALE_HIGH);
+                    m_intakeMode = IntakeMode::motionMagic;
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::SCALE_MID_PRESET);
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::motionMagic;
-                    m_elevator->SetPosition(Elevator::SCALE_MID);
+                    m_intakeMode = IntakeMode::motionMagic;
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::SCALE_HIGH_PRESET);
                 }
                 break;
             case DualAction::BtnA:
                 if (pressedP) {
                     m_driveMode = DriveMode::Velocity;
-                    m_hanger->DisengagePTO();
                 }
                 break;
             case DualAction::BtnB:
@@ -150,7 +162,7 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::Start:
                 if (pressedP) {
                     m_driveMode = DriveMode::PID;
-                    m_drive->PIDDrive(24, 0, Drive::RelativeTo::Now, 1);
+                    m_drive->PIDDrive(24, 0, Drive::RelativeTo::Now, 0.8);
                 }
                 break;
             case DualAction::Back:
@@ -163,98 +175,98 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
         switch (button) {
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::motionMagic;
-                    m_elevator->SetPosition(Elevator::GROUND);
+                    m_intakeMode = IntakeMode::motionMagic;
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::STOW_PRESET);
                 }
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::motionMagic;
-                    m_elevator->SetPosition(Elevator::LOW_GOAL);
+                    m_intakeMode = IntakeMode::motionMagic;
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::LOW_GOAL_PRESET);
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::motionMagic;
-                    m_elevator->SetPosition(Elevator::SCALE_LOW);
+                    m_intakeMode = IntakeMode::motionMagic;
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::SCALE_MID_PRESET);
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::motionMagic;
-                    m_elevator->SetPosition(Elevator::VAULT);
+                    m_intakeMode = IntakeMode::motionMagic;
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::VAULT_PRESET);
                 }
                 break;
             case DualAction::RightTrigger:
                 if (pressedP) {
-                    m_claw->cubeLaunch();
                 }
                 else {
                 }
                 break;
             case DualAction::RightBumper:
                 if (pressedP) {
-                    m_claw->push();
                 }
                 else {
                 }
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
-                    m_intake->RegularPull();
-                    m_intake->LowerIntake();
-                    m_claw->open();
+                    m_intakeAssembly->IntakeCube(-1.0);
                 }
                 else {
-                    m_intake->Stop();
-                    m_claw->grab();
+                    m_intakeAssembly->StopIntake();
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
-                    m_intake->Eject();
-                    m_intake->LowerIntake();
-                    m_claw->open();
+                    m_intakeAssembly->EjectCube();
                 }
                 else {
-                    m_intake->Stop();
-                    m_claw->grab();
+                    m_intakeAssembly->StopIntake();
                 }
                 break;
             case DualAction::BtnA:
                 if (pressedP) {
-                    m_claw->open();
                 }
                 else {
-                    m_claw->grab();
                 }
                 break;
             case DualAction::BtnB:
                 if (pressedP) {
-                    m_claw->drop();
+                }
+                else {
                 }
                 break;
             case DualAction::BtnX:
                 if (pressedP) {
-                    m_claw->kickOn();
                 }
                 else {
-                    m_claw->kickOff();
                 }
                 break;
             case DualAction::BtnY:
                 if (pressedP) {
-                    m_driveMode = DriveMode::Hanger;
-                    m_hanger->EngagePTO();
+                }
+                else {
                 }
                 break;
             case DualAction::Start:
                 if (pressedP) {
+                    m_hanger->SetForkliftPower(0.5);
+                }
+                else {
+                    m_hanger->SetForkliftPower(0);
                 }
                 break;
             case DualAction::Back:
                 if (pressedP) {
-                    m_intake->Stop();
+                    m_hanger->SetForkliftPower(-0.5);
+                }
+                else {
+                    m_hanger->SetForkliftPower(0);
                 }
                 break;
         }

@@ -8,6 +8,7 @@
 #include "src/TestMode.h"
 #include "src/Robot.h"
 #include "ctre/Phoenix.h"
+#include "lib/util/WrapDash.h"
 
 using namespace frc;
 using namespace ctre;
@@ -28,45 +29,53 @@ Robot::Robot()
         , m_rightDriveVictorC(new VictorSPX(RIGHT_DRIVE_C_VICTOR_ID))
         , m_gyro(new ADXRS450_Gyro())
         , m_logger(new LogSpreadsheet(this))
+        , m_matchIdentifier(new LogCell("Match Identifier", 64))
+        , m_gameSpecificMessage(new LogCell("GameSpecificMessage", 10))
         , m_forkCamera(UsbCamera("USB Camera 0", 0))
         , m_intakeCamera(UsbCamera("USB Camera 1", 1))
         , m_cameraServer(CameraServer::GetInstance())
         , m_greyCam(m_cameraServer->AddServer("serve_GreyCam", 1181))
         , m_cubeClamp(new Solenoid(PCM_CAN_ID, CUBE_CLAMP_PCM_ID))
-        , m_clawKicker(new Solenoid(PCM_CAN_ID, CLAW_KICKER_PCM_ID))
-        , m_intakePosition(new Solenoid(PCM_CAN_ID, INTAKE_POSITION_PCM_ID))
-        , m_intakeOpenClose(new Solenoid(PCM_CAN_ID, INTAKE_OPENCLOSE_PCM_ID))
         , m_rightRoller(new GreyTalonSRX(CLAW_RIGHT_ROLLER_CAN_ID))
         , m_leftRoller(new GreyTalonSRX(CLAW_LEFT_ROLLER_CAN_ID))
-        , m_cubeSensor(new DigitalInput(INTAKE_BEAM_BREAKER_SENSOR_DIN))
+        , m_rightCubeSensor(
+              new DigitalInput(RIGHT_INTAKE_BEAM_BREAKER_SENSOR_DIN))
+        , m_leftCubeSensor(
+              new DigitalInput(LEFT_INTAKE_BEAM_BREAKER_SENSOR_DIN))
         , m_elevatorMotor(new GreyTalonSRX(ELEVATOR_CAN_ID))
-        , m_hangerpto(new Solenoid(PCM_CAN_ID, HANGER_PTO_PCM_ID))
+        , m_wristMotor(new GreyTalonSRX(WRIST_CAN_ID))
+        , m_hangerPTO(new Solenoid(PCM_CAN_ID, HANGER_PTO_PCM_ID))
+        , m_forkDeploy(new Solenoid(PCM_CAN_ID, FORK_DEPLOY_PCM_ID))
         , m_forkliftTalon(new GreyTalonSRX(FORKLIFT_TALON_CAN_ID))
+        , m_greylight(new GreyLight(NUM_LED))
         , m_elevator(new Elevator(this, m_logger, m_elevatorMotor))
-        , m_claw(new Claw(this, m_logger, m_cubeClamp, m_clawKicker))
-        , m_intake(new Intake(this, m_logger, m_rightRoller, m_leftRoller,
-                              m_cubeSensor, m_intakePosition,
-                              m_intakeOpenClose))
+        , m_wrist(new Wrist(this, m_logger, m_leftCubeSensor, m_rightCubeSensor,
+                            m_wristMotor, m_leftRoller, m_rightRoller,
+                            m_cubeClamp))
+        , m_intakeAssembly(new IntakeAssembly(this, m_logger,
+                                              m_operatorJoystick, m_elevator,
+                                              m_wrist, m_greylight))
         , m_drive(new Drive(this, m_logger, m_leftDriveTalonA,
                             m_leftDriveVictorB, m_leftDriveVictorC,
                             m_rightDriveTalonA, m_rightDriveVictorB,
                             m_rightDriveVictorC, m_gyro))
-        , m_hanger(new Hanger(this, m_logger, m_drive, m_elevator, m_hangerpto,
-                              m_forkliftTalon, m_intakeCamera, m_forkCamera,
-                              m_greyCam))
+        , m_hanger(new Hanger(this, m_logger, m_drive, m_elevator, m_hangerPTO,
+                              m_forkDeploy, m_forkliftTalon, m_intakeCamera,
+                              m_forkCamera, m_greyCam, m_greylight))
         , m_airPressureSwitch(new DigitalInput(PRESSURE_DIN_ID))
         , m_compressorRelay(
               new Relay(COMPRESSOR_RELAY, Relay::Direction::kForwardOnly))
         , m_compressor(
               new GreyCompressor(m_airPressureSwitch, m_compressorRelay, this))
         , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick,
-                                  m_intakeCamera, m_forkCamera, m_greyCam))
-        , m_autonomous(new Autonomous(m_disabled, m_drive, m_elevator, m_intake,
-                                      m_claw, m_gyro))
-        , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick, m_claw,
-                              m_drive, m_elevator, m_intake, m_hanger))
+                                  m_intakeAssembly, m_intakeCamera,
+                                  m_forkCamera, m_greyCam, m_greylight))
+        , m_autonomous(new Autonomous(m_disabled, m_drive, m_intakeAssembly,
+                                      m_gyro, m_greylight))
+        , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick, m_drive,
+                              m_intakeAssembly, m_hanger, m_greylight))
         , m_test(new Test(m_driverJoystick, m_operatorJoystick, m_drive,
-                          m_elevator, m_intake, m_claw, m_hanger)) {
+                          m_intakeAssembly, m_hanger, m_greylight)) {
     std::cout << "Constructed a Robot!" << std::endl;
 }
 
@@ -75,6 +84,9 @@ Robot::~Robot() {
 
 void Robot::Initialize() {
     m_compressor->Enable();
+    m_logger->RegisterCell(m_matchIdentifier);
+    m_logger->RegisterCell(m_gameSpecificMessage);
+    m_logger->Start();
     m_cameraServer->AddCamera(m_intakeCamera);
     m_cameraServer->AddCamera(m_forkCamera);
     m_intakeCamera.SetVideoMode(VideoMode::PixelFormat::kMJPEG, 160, 120, 10);
@@ -133,6 +145,14 @@ void Robot::TestStop() {
 void Robot::AllStateContinuous() {
     // NetworkTable Battery Voltage
     SmartDashboard::PutNumber("misc/pdp/batteryvoltage", m_pdp->GetVoltage());
+
+    m_matchIdentifier->LogPrintf(
+        "%s_%s%dm%d", DriverStation::GetInstance().GetEventName().c_str(),
+        MatchTypeToString(DriverStation::GetInstance().GetMatchType()),
+        DriverStation::GetInstance().GetMatchNumber(),
+        DriverStation::GetInstance().GetReplayNumber());
+    m_gameSpecificMessage->LogText(
+        DriverStation::GetInstance().GetGameSpecificMessage().c_str());
 }
 
 void Robot::ObserveJoystickStateChange(uint32_t port, uint32_t button,

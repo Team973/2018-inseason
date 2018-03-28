@@ -13,6 +13,8 @@
 #include "src/info/RobotInfo.h"
 #include "src/subsystems/Drive.h"
 #include "src/subsystems/Elevator.h"
+#include "lib/helpers/GreyLight.h"
+#include "lib/pixelprocessors/SolidColor.h"
 
 using namespace frc;
 using namespace cs;
@@ -23,9 +25,12 @@ class LogSpreadsheet;
 
 class Hanger : public CoopTask {
 public:
+    const Color HANGER_RED = {255, 0, 0};
+
     Hanger(TaskMgr *scheduler, LogSpreadsheet *logger, Drive *drive,
-           Elevator *elevator, Solenoid *hangerpto, TalonSRX *forkliftTalon,
-           UsbCamera intakeCamera, UsbCamera forkCamera, VideoSink greyCam);
+           Elevator *elevator, Solenoid *hangerPTO, Solenoid *forkDeploy,
+           TalonSRX *forkliftTalon, UsbCamera intakeCamera,
+           UsbCamera forkCamera, VideoSink greyCam, GreyLight *greylight);
     virtual ~Hanger();
 
     /**
@@ -38,10 +43,20 @@ public:
      **/
     void DisengagePTO();
 
+    void DeployForks();
+
     /**
      * Sets all forklift motors to a determined speed
+     * @param power Throttle from the joystick to set as forklift power
      **/
     void SetForkliftPower(double power);
+
+    /**
+     * Calls the HangerDriveController to drive the drive motors with PTO
+     *Engaged
+     * @param power Throttle from the joystick to set as PTO power
+     **/
+    void SetHangerPower(double power);
 
     void TaskPeriodic(RobotMode mode);
 
@@ -50,11 +65,15 @@ private:
     LogSpreadsheet *m_logger;
     Drive *m_drive;
     Elevator *m_elevator;
-    Solenoid *m_hangerpto;
+    Solenoid *m_hangerPTO;
+    Solenoid *m_forkDeploy;
     TalonSRX *m_forkliftTalon;
 
     UsbCamera m_intakeCamera;
     UsbCamera m_forkCamera;
     VideoSink m_greyCam;
+
+    GreyLight *m_greylight;
+    LightPattern::SolidColor *m_ptoSignal;
 };
 }

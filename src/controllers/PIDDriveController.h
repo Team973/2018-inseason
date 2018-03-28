@@ -79,11 +79,15 @@ public:
         m_onTarget = false;
     }
 
-    void Start() override {
+    double GetDistError() {
+        return m_targetDist - m_prevDist;
+    }
+
+    void Start(DriveControlSignalReceiver *out) override {
         printf("Turning on PID Mode\n");
     }
 
-    void Stop() override {
+    void Stop(DriveControlSignalReceiver *out) override {
         printf("Turning off PID Mode\n");
     }
 
@@ -109,13 +113,13 @@ private:
     /**
      * In in/sec
      */
-    static constexpr double DEFAULT_DIST_TOLERANCE = 2.0;
+    static constexpr double DEFAULT_DIST_TOLERANCE = 3.0;
     static constexpr double DEFAULT_DIST_RATE_TOLERANCE = 5.0;
 
     /**
      * In deg/sec
      */
-    static constexpr double DEFAULT_ANGLE_TOLERANCE = 3.0;
+    static constexpr double DEFAULT_ANGLE_TOLERANCE = 5.0;
     static constexpr double DEFAULT_ANGLE_RATE_TOLERANCE = 5.0;
 };
 }
