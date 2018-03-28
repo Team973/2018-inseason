@@ -254,11 +254,14 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
 
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::STOW_PRESET);
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
-                    m_intakeAssembly->GoToIntakePosition(IntakeAssembly::OVER_BACK_PRESET);
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::OVER_BACK_PRESET);
                 }
                 break;
             case DualAction::Back:

@@ -253,6 +253,9 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
                 if (m_endPositionGoal == OVER_BACK_PRESET) {
                     m_controlMode = ControlMode::OverBackPosition;
                 }
+                else if (m_endPositionGoal == SCALE_HIGH_PRESET) {
+                    m_controlMode = ControlMode::LowPosition;
+                }
                 else {
                     m_controlMode = ControlMode::SubForkPosition;
                 }
