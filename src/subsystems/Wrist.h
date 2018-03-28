@@ -66,7 +66,7 @@ public:
     void EjectCube();
     void StopIntake();
 
-    bool IsCubeIn();
+    bool IsCubeIn() const;
 
     void TaskPeriodic(RobotMode mode);
 

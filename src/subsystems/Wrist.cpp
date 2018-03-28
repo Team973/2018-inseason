@@ -48,6 +48,9 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_wristMotor->ConfigPeakOutputForward(0.5, 10);
     m_wristMotor->ConfigPeakOutputReverse(-0.5, 10);
 
+    m_wristMotor->SetSelectedSensorPosition(DegreesToNativeUnits(-30),
+                                            0, 0);
+
     /*if (this->GetPosition() > 180.0) {
         m_wristMotor->GetSensorCollection().SetQuadraturePosition(
             (int)((this->GetPosition() - 360) / WRIST_DEGREES_PER_CLICK), 10);
@@ -84,16 +87,16 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_leftRoller->EnableCurrentLimit(true);
     m_leftRoller->ConfigPeakCurrentDuration(0, 10);
     m_leftRoller->ConfigPeakCurrentLimit(0, 10);
-    m_leftRoller->ConfigContinuousCurrentLimit(5, 10);
+    m_leftRoller->ConfigContinuousCurrentLimit(15, 10);
 
     m_rightRoller->EnableCurrentLimit(true);
     m_rightRoller->ConfigPeakCurrentDuration(0, 10);
     m_rightRoller->ConfigPeakCurrentLimit(0, 10);
-    m_rightRoller->ConfigContinuousCurrentLimit(5, 10);
+    m_rightRoller->ConfigContinuousCurrentLimit(15, 10);
 
     m_bannerFilter->Add(m_leftCubeSensor);
     m_bannerFilter->Add(m_rightCubeSensor);
-    m_bannerFilter->SetPeriodNanoSeconds(10000);
+    m_bannerFilter->SetPeriodNanoSeconds(20000);
 }
 
 Wrist::~Wrist() {
@@ -151,7 +154,7 @@ void Wrist::StopIntake() {
     m_rightRoller->Set(ControlMode::PercentOutput, -0.1);
 }
 
-bool Wrist::IsCubeIn() {
+bool Wrist::IsCubeIn() const {
     return (/*!m_leftCubeSensor->Get() ||*/ !m_rightCubeSensor->Get());
 }
 

@@ -56,6 +56,7 @@ public:
     static const IntakePreset SCALE_MID_PRESET;
     static const IntakePreset SCALE_HIGH_PRESET;
     static const IntakePreset OVER_BACK_PRESET;
+    static const IntakePreset HANGING_PRESET;
 
     IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
                    ObservableJoystick *operatorJoystick, Elevator *elevator,
@@ -73,6 +74,7 @@ public:
     void SetWristManualPower(double input);
 
     void SetPosManualInput();
+    void SetModeHanging(bool hanging);
 
     void IntakeCube(double input);
     void VaultIntake();
@@ -94,6 +96,10 @@ public:
 
     void StartZeroPosition();
     void EndZeroPosition();
+
+    const Wrist *GetWrist();
+
+    void Flash();
 
     /**
      * Update function synonymous to TeleopContinuous that gets called
@@ -120,6 +126,8 @@ private:
         SubForkPosition,
         SuperForkPosition,
         OverBackPosition,
+        HangingAuto,
+        HangingManual,
     };
 
     TaskMgr *m_scheduler;
