@@ -29,24 +29,19 @@ void SideSwitch::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_drive->SplineDrive(&right_side_switch::right_side_switch,
                                      Drive::RelativeTo::Now);
             }
-            // m_elevator->SetPosition(Elevator::LOW_GOAL);
-            // m_wrist->CloseClaw();
+            m_intakeAssembly->GoToIntakePosition(
+                IntakeAssembly::LOW_GOAL_PRESET);
             m_autoTimer = GetMsecTime();
             m_autoState++;
             break;
         case 1:
-            if (GetMsecTime() - m_autoTimer > 2000) {
-                m_autoTimer = GetMsecTime();
+            if (m_drive->GetSplinePercentComplete() > 0.8 ||
+                m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
+                m_intakeAssembly->EjectCube();
                 m_autoState++;
             }
             break;
         case 2:
-            if (m_drive->GetSplinePercentComplete() > 0.8 ||
-                m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
-                m_autoState++;
-            }
-            break;
-        case 3:
             if (m_drive->GetSplinePercentComplete() > 1.0) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
@@ -61,10 +56,12 @@ void SideSwitch::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_autoState++;
             }
             break;
-        case 4:
+        case 3:
             if (m_drive->GetSplinePercentComplete() > 1.0) {
                 m_drive->OpenloopArcadeDrive(0.0, 0.0);
-                // m_elevator->SetPosition(Elevator::GROUND);
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::GROUND_PRESET);
+                m_intakeAssembly->StopIntake();
                 m_autoState++;
             }
             break;

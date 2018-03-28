@@ -48,7 +48,7 @@ public:
     /**
      * @return: returns current elevator position in sensor units
      **/
-    float GetPosition();
+    float GetPosition() const;
 
     void ZeroPosition();
 
@@ -74,8 +74,8 @@ private:
     /*
      * Convert a number from degrees to native encoder units and vise versa
      */
-    double DegreesToNativeUnits(double degrees);
-    double NativeUnitsToDegrees(double nativeUnits);
+    double DegreesToNativeUnits(double degrees) const;
+    double NativeUnitsToDegrees(double nativeUnits) const;
 
     enum class WristState
     {

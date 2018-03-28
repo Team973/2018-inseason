@@ -87,8 +87,13 @@ public:
     double GetElevatorPosition();
     double GetWristPosition();
 
+    void ZeroPosition();
+
     void EnableBrakeMode();
     void EnableCoastMode();
+
+    const Wrist *GetWrist();
+    const Elevator *GetElevator();
 
     double GetWristLowerBound(double elevatorPosition);
 
@@ -96,8 +101,6 @@ public:
 
     void StartZeroPosition();
     void EndZeroPosition();
-
-    const Wrist *GetWrist();
 
     void Flash();
 
@@ -122,6 +125,7 @@ private:
         Zeroing,
         SwitchIntaking,
         VaultStart,
+        VaultStop,
         LowPosition,
         SubForkPosition,
         SuperForkPosition,

@@ -32,7 +32,6 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
                     &right_scale_opposite_a::right_scale_opposite_a,
                     Drive::RelativeTo::Now);
             }
-            // m_wrist->CloseClaw();
             m_autoTimer = GetMsecTime();
             m_autoState++;
             break;
@@ -53,7 +52,8 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             break;
         case 2:
             if (GetMsecTime() - m_autoTimer > 7000) {
-                // m_elevator->SetPosition(Elevator::SCALE_HIGH);
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::SCALE_HIGH_PRESET);
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
@@ -61,6 +61,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
         case 3:
             if (m_drive->GetSplinePercentComplete() > 0.85 ||
                 m_drive->OnTarget()) {
+                m_intakeAssembly->EjectCube();
                 m_autoState++;
             }
             break;
@@ -72,7 +73,8 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             break;
         case 5:
             if (m_drive->OnTarget()) {
-                // m_elevator->SetPosition(Elevator::GROUND);
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::GROUND_PRESET);
                 m_autoState++;
             }
         default:

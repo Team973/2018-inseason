@@ -38,13 +38,14 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_wristMotor->Config_kD(0, 0.0, 10);
     m_wristMotor->Config_kF(0, 0.0, 10);
     m_wristMotor->ConfigMotionCruiseVelocity(3750.0, 10);
-    m_wristMotor->ConfigMotionAcceleration(4200.0, 10);
+    m_wristMotor->ConfigMotionAcceleration(3200.0, 10);
     m_wristMotor->SelectProfileSlot(0, 0);
 
     m_wristMotor->EnableCurrentLimit(true);
     m_wristMotor->ConfigPeakCurrentDuration(0, 10);
     m_wristMotor->ConfigPeakCurrentLimit(0, 10);
     m_wristMotor->ConfigContinuousCurrentLimit(5, 10);
+    m_wristMotor->EnableVoltageCompensation(true);
     m_wristMotor->ConfigPeakOutputForward(0.5, 10);
     m_wristMotor->ConfigPeakOutputReverse(-0.5, 10);
 
@@ -52,19 +53,26 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
                                             0, 0);
 
     /*if (this->GetPosition() > 180.0) {
-        m_wristMotor->GetSensorCollection().SetQuadraturePosition(
-            (int)((this->GetPosition() - 360) / WRIST_DEGREES_PER_CLICK), 10);
+        m_wristMotor->SetSelectedSensorPosition(
+            (int)((this->GetPosition() - 360) / WRIST_DEGREES_PER_CLICK), 0,
+    10);
+    }
+    else if (this->GetPosition() < -180.0){
+      m_wristMotor->SetSelectedSensorPosition(
+          (int)((this->GetPosition() + 360) / WRIST_DEGREES_PER_CLICK), 0, 10);
     }*/
 
     /*
     m_wristMotor->ConfigForwardSoftLimitThreshold(
-        DegreesToNativeUnits(70.0), 10);
+        DegreesToNativeUnits(WRIST_FORWARD_SOFT_LIMIT), 10);
     m_wristMotor->ConfigForwardSoftLimitEnable(true, 10);
 
     m_wristMotor->ConfigReverseSoftLimitThreshold(
         DegreesToNativeUnits(WRIST_REVERSE_SOFT_LIMIT), 10);
     m_wristMotor->ConfigReverseSoftLimitEnable(true, 10);
     */
+
+    m_wristMotor->SetSelectedSensorPosition(DegreesToNativeUnits(-30.0), 0, 0);
 
     m_wristMotor->ConfigForwardLimitSwitchSource(
         LimitSwitchSource::LimitSwitchSource_FeedbackConnector,
@@ -122,7 +130,7 @@ void Wrist::SetPositionStep(double position) {
     m_wristMotor->Set(ControlMode::Position, position_clicks);
 }
 
-float Wrist::GetPosition() {
+float Wrist::GetPosition() const {
     return NativeUnitsToDegrees(m_wristMotor->GetSelectedSensorPosition(0));
 }
 
@@ -188,12 +196,12 @@ void Wrist::TaskPeriodic(RobotMode mode) {
     }
 }
 
-double Wrist::DegreesToNativeUnits(double degrees) {
+double Wrist::DegreesToNativeUnits(double degrees) const {
     // return 1500 - (degrees / WRIST_DEGREES_PER_CLICK);
     return degrees / WRIST_DEGREES_PER_CLICK + 1500;
 }
 
-double Wrist::NativeUnitsToDegrees(double nativeUnits) {
+double Wrist::NativeUnitsToDegrees(double nativeUnits) const {
     // return (1500 - nativeUnits) * WRIST_DEGREES_PER_CLICK;
     return (nativeUnits - 1500) * WRIST_DEGREES_PER_CLICK;
 }

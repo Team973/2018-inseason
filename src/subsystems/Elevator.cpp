@@ -61,7 +61,7 @@ void Elevator::SetPosition(double position) {
     m_elevatorMotor->Set(ControlMode::MotionMagic, position_clicks);
 }
 
-float Elevator::GetPosition() {
+float Elevator::GetPosition() const {
     return ELEVATOR_INCHES_PER_CLICK *
            ((float)m_elevatorMotor->GetSelectedSensorPosition(0));
 }

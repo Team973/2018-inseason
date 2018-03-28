@@ -63,10 +63,12 @@ void IntakeAssembly::GoToIntakePosition(IntakePreset intakePosition) {
         }
     }
     else {
-        if (GetElevatorPosition() >= 77.0) {
+        if (GetElevatorPosition() >= 77.0 && GetWristPosition() <= 20.0 &&
+            intakePosition.elevatorPosition < 77) {
             m_controlMode = ControlMode::SuperForkPosition;
         }
-        else if (GetElevatorPosition() >= 72) {
+        else if (GetElevatorPosition() >= 72 &&
+                 intakePosition.elevatorPosition < 72) {
             m_controlMode = ControlMode::SubForkPosition;
         }
         else {
@@ -82,15 +84,18 @@ void IntakeAssembly::SetPosition(IntakePreset preset) {
 }
 
 void IntakeAssembly::SetElevatorManualPower(double input) {
+    m_controlMode = ControlMode::ManualVoltage;
     m_elevator->SetPower(input);
 }
 
 void IntakeAssembly::SetWristManualPower(double input) {
+    m_controlMode = ControlMode::ManualVoltage;
     m_wrist->SetPower(input);
 }
 
 void IntakeAssembly::SetPosManualInput() {
-    if (m_controlMode != ControlMode::HangingAuto and m_controlMode != ControlMode::HangingManual) {
+    if (m_controlMode != ControlMode::HangingAuto and
+        m_controlMode != ControlMode::HangingManual) {
         if (m_controlMode != ControlMode::ManualPosition) {
             m_interimPositionGoal.wristPosition = GetWristPosition();
         }
@@ -150,12 +155,25 @@ double IntakeAssembly::GetWristPosition() {
     return m_wrist->GetPosition();
 }
 
+void IntakeAssembly::ZeroPosition() {
+    m_elevator->ZeroPosition();
+    m_wrist->ZeroPosition();
+}
+
 void IntakeAssembly::EnableBrakeMode() {
     m_elevator->EnableBrakeMode();
 }
 
 void IntakeAssembly::EnableCoastMode() {
     m_elevator->EnableCoastMode();
+}
+
+const Wrist *IntakeAssembly::GetWrist() {
+    return m_wrist;
+}
+
+const Elevator *IntakeAssembly::GetElevator() {
+    return m_elevator;
 }
 
 double IntakeAssembly::GetWristLowerBound(double elevatorPosition) {
@@ -201,10 +219,6 @@ void IntakeAssembly::EndZeroPosition() {
     m_wrist->ZeroPosition();
 }
 
-const Wrist *IntakeAssembly::GetWrist() {
-    return m_wrist;
-}
-
 void IntakeAssembly::Flash() {
     m_intakeSignal->Reset();
     m_greyLight->SetPixelStateProcessor(m_intakeSignal);
@@ -247,7 +261,7 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
 
             m_interimPositionGoal.wristPosition = wristPosGoal;
         } break;
-        case ControlMode::HangingAuto: 
+        case ControlMode::HangingAuto:
             m_wrist->OpenClaw();
             SetPosition(HANGING_PRESET);
             if (GetPositionError() < 5.0) {
@@ -318,6 +332,9 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
         case ControlMode::VaultStart:
             GoToIntakePosition(GROUND_PRESET);
             m_wrist->IntakeCube(-1.0);
+            m_controlMode = ControlMode::VaultStop;
+            break;
+        case ControlMode::VaultStop:
             if (m_wrist->IsCubeIn()) {
                 StopIntake();
             }

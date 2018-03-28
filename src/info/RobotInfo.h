@@ -29,7 +29,6 @@ static const int PCM_CAN_ID = 17;
 static const int CUBE_CLAMP_PCM_ID = 1;
 static const int HANGER_PTO_PCM_ID = 0;
 static const int FORK_DEPLOY_PCM_ID = 5;
-static const int INTAKE_OPENCLOSE_PCM_ID = 4;
 
 // Wrist
 static const int CLAW_LEFT_ROLLER_CAN_ID = 5;

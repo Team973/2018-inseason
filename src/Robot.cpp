@@ -36,7 +36,6 @@ Robot::Robot()
         , m_cameraServer(CameraServer::GetInstance())
         , m_greyCam(m_cameraServer->AddServer("serve_GreyCam", 1181))
         , m_cubeClamp(new Solenoid(PCM_CAN_ID, CUBE_CLAMP_PCM_ID))
-        , m_intakeOpenClose(new Solenoid(PCM_CAN_ID, INTAKE_OPENCLOSE_PCM_ID))
         , m_rightRoller(new GreyTalonSRX(CLAW_RIGHT_ROLLER_CAN_ID))
         , m_leftRoller(new GreyTalonSRX(CLAW_LEFT_ROLLER_CAN_ID))
         , m_rightCubeSensor(
@@ -69,8 +68,8 @@ Robot::Robot()
         , m_compressor(
               new GreyCompressor(m_airPressureSwitch, m_compressorRelay, this))
         , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick,
-                                  m_intakeCamera, m_forkCamera, m_greyCam,
-                                  m_greylight))
+                                  m_intakeAssembly, m_intakeCamera,
+                                  m_forkCamera, m_greyCam, m_greylight))
         , m_autonomous(new Autonomous(m_disabled, m_drive, m_intakeAssembly,
                                       m_gyro, m_greylight))
         , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick, m_drive,
