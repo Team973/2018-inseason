@@ -466,8 +466,6 @@ void Drive::TaskPeriodic(RobotMode mode) {
     DBStringPrintf(DB_LINE9, "l %2.1lf r %2.1lf g %2.1lf", this->GetLeftDist(),
                    this->GetRightDist(), this->GetAngle());
 
-    DBStringPrintf(DB_LINE8, "d %2.1lf", this->GetDist());
-
     m_angleLog->LogDouble(GetAngle());
     m_angularRateLog->LogDouble(GetAngularRate());
 

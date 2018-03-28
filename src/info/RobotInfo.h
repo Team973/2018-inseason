@@ -22,27 +22,28 @@ static const int RIGHT_DRIVE_C_VICTOR_ID = 3;
 static const int ELEVATOR_CAN_ID = 4;
 static const double ELEVATOR_INCHES_PER_CLICK = 8.0 / 4096.0;
 static const double ELEVATOR_SOFT_HEIGHT_LIMIT = 80.5;
-static const double ELEVATOR_FEED_FORWARD = 0.05;
+static const double ELEVATOR_FEED_FORWARD = 0.10;
 
 // Solenoids
 static const int PCM_CAN_ID = 17;
 static const int CUBE_CLAMP_PCM_ID = 1;
-static const int CLAW_KICKER_PCM_ID = 2;
 static const int HANGER_PTO_PCM_ID = 0;
 static const int FORK_DEPLOY_PCM_ID = 5;
-static const int INTAKE_POSITION_PCM_ID = 3;
 static const int INTAKE_OPENCLOSE_PCM_ID = 4;
 
-// Claw
+// Wrist
 static const int CLAW_LEFT_ROLLER_CAN_ID = 5;
 static const int CLAW_RIGHT_ROLLER_CAN_ID = 12;
-static const int CUBE_BANNER_SENSOR_DIN = 0;
+static const int WRIST_CAN_ID = 7;
+static const int WRIST_REVERSE_SOFT_LIMIT = -80.0;
+static const int WRIST_FORWARD_SOFT_LIMIT = 90.0;
 
 // Hanger
 static const int FORKLIFT_TALON_CAN_ID = 6;
 
 // Digital
-static const int INTAKE_BEAM_BREAKER_SENSOR_DIN = 3;
+static const int RIGHT_INTAKE_BEAM_BREAKER_SENSOR_DIN = 2;
+static const int LEFT_INTAKE_BEAM_BREAKER_SENSOR_DIN = 3;
 static const int PRESSURE_DIN_ID = 1;
 
 // Relays
@@ -54,6 +55,11 @@ static const int OPERATOR_JOYSTICK_PORT = 1;
 
 // LEDs
 static const int NUM_LED = 26;
+
+// Constants
+static const double ROBOT_LOOP_PERIOD_SEC_PER_LOOP = 1.0 / 20.0;
+static const double ELEVATOR_MAX_SPEED = 4000.0;
+static const double WRIST_MAX_SPEED = 3000.0;
 
 // Drive
 static constexpr double DRIVE_WIDTH = 25.205;

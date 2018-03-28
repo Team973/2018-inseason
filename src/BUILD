@@ -4,7 +4,6 @@ cc_binary(
     srcs = glob([
         "*.cpp",
         "*.h",
-
     ]),
     copts = [
         "-lpthread",

@@ -5,18 +5,17 @@
 using namespace frc;
 
 namespace frc973 {
-Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
-                       Intake *intake, Claw *claw, ADXRS450_Gyro *gyro,
+Autonomous::Autonomous(Disabled *disabled, Drive *drive,
+                       IntakeAssembly *intakeAssembly, ADXRS450_Gyro *gyro,
                        GreyLight *greylight)
         : m_noAuto(new NoAuto())
         , m_forwardAuto(new ForwardAuto(drive))
-        , m_centerSwitchAuto(
-              new CenterSwitchAuto(drive, elevator, intake, claw))
-        , m_scaleAuto(new ScaleAuto(drive, elevator, intake, claw))
-        , m_scaleOpposite(new ScaleOpposite(drive, elevator, intake, claw))
-        , m_sideSwitch(new SideSwitch(drive, elevator, intake, claw))
-        , m_switchOpposite(new SwitchOpposite(drive, elevator, intake, claw))
-        , m_twoCubeAuto(new TwoCubeAuto(drive, elevator, intake, claw))
+        , m_centerSwitchAuto(new CenterSwitchAuto(drive, intakeAssembly))
+        , m_scaleAuto(new ScaleAuto(drive, intakeAssembly))
+        , m_scaleOpposite(new ScaleOpposite(drive, intakeAssembly))
+        , m_sideSwitch(new SideSwitch(drive, intakeAssembly))
+        , m_switchOpposite(new SwitchOpposite(drive, intakeAssembly))
+        , m_twoCubeAuto(new TwoCubeAuto(drive, intakeAssembly))
         , m_disabled(disabled)
         , m_greylight(greylight)
         , m_autoSignal(new LightPattern::AutoIndicator())
@@ -25,9 +24,7 @@ Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
         , m_routine(m_noAuto)
         , m_direction(AutoRoutineBase::AutoDirection::Left)
         , m_drive(drive)
-        , m_elevator(elevator)
-        , m_intake(intake)
-        , m_claw(claw)
+        , m_intakeAssembly(intakeAssembly)
         , m_gyro(gyro) {
 }
 
@@ -36,9 +33,8 @@ Autonomous::~Autonomous() {
 
 void Autonomous::AutonomousInit() {
     // Remember to zero all sensors here
-    m_elevator->SetPosition(Elevator::GROUND);
+    m_intakeAssembly->GoToIntakePosition(IntakeAssembly::STOW_PRESET);
     m_gyro->Reset();
-    m_claw->grab();
     std::cout << "Autonomous Start" << std::endl;
 
     DBStringPrintf(DB_LINE1, "%s", m_scoringLocations.c_str());
