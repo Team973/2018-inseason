@@ -34,7 +34,8 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_drive->SplineDrive(&center_right_switch::center_right_switch,
                                      Drive::RelativeTo::Now);
             }
-            m_intakeAssembly->GoToIntakePosition(IntakePreset::LOW_GOAL_PRESET);
+            m_intakeAssembly->GoToIntakePosition(
+                IntakeAssembly::LOW_GOAL_PRESET);
             m_autoTimer = GetMsecTime();
             m_autoState++;
             break;
@@ -58,7 +59,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                                          Drive::RelativeTo::SetPoint);
                 }
                 m_intakeAssembly->GoToIntakePosition(
-                    IntakePreset::GROUND_PRESET);
+                    IntakeAssembly::GROUND_PRESET);
                 m_autoState++;
             }
             break;
@@ -90,7 +91,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                         Drive::RelativeTo::Now);
                 }
                 m_intakeAssembly->GoToIntakePosition(
-                    IntakePreset::LOW_GOAL_PRESET);
+                    IntakeAssembly::LOW_GOAL_PRESET);
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
@@ -113,7 +114,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                         Drive::RelativeTo::SetPoint);
                 }
                 m_intakeAssembly->GoToIntakePosition(
-                    IntakePreset::LOW_GOAL_PRESET);
+                    IntakeAssembly::LOW_GOAL_PRESET);
                 m_autoState++;
             }
             break;
@@ -121,7 +122,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             if (m_drive->GetSplinePercentComplete() > 1.0) {
                 m_drive->OpenloopArcadeDrive(0.0, 0.0);
                 m_intakeAssembly->GoToIntakePosition(
-                    IntakePreset::GROUND_PRESET);
+                    IntakeAssembly::GROUND_PRESET);
                 m_autoState++;
             }
             break;

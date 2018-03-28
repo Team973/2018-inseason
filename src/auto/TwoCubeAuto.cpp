@@ -40,7 +40,7 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
         case 1:
             if (GetMsecTime() - m_autoTimer > 2000) {
                 m_intakeAssembly->GoToIntakePosition(
-                    IntakeAssembly::IntakePosition::scaleHigh);
+                    IntakeAssembly::SCALE_HIGH_PRESET);
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
@@ -65,7 +65,7 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                         Drive::RelativeTo::SetPoint);
                 }
                 m_intakeAssembly->GoToIntakePosition(
-                    IntakeAssembly::IntakePosition::ground);
+                    IntakeAssembly::GROUND_PRESET);
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
@@ -93,7 +93,7 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_intakeAssembly->GetWrist()->IsCubeIn()) {
                 m_intakeAssembly->StopIntake();
                 m_intakeAssembly->GoToIntakePosition(
-                    IntakeAssembly::IntakePosition::lowGoal);
+                    IntakeAssembly::LOW_GOAL_PRESET);
                 m_autoState++;
             }
             break;

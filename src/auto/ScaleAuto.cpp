@@ -40,7 +40,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
         case 1:
             if (GetMsecTime() - m_autoTimer > 4000) {
                 m_intakeAssembly->GoToIntakePosition(
-                    IntakeAssembly::IntakePosition::scaleHigh);
+                    IntakeAssembly::SCALE_HIGH_PRESET);
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
@@ -66,17 +66,13 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                         Drive::RelativeTo::SetPoint);
                 }
                 m_intakeAssembly->GoToIntakePosition(
-                    IntakePosition::GROUND_PRESET);
+                    IntakeAssembly::GROUND_PRESET);
                 m_intakeAssembly->StopIntake();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
         case 4:
-            if (m_drive->GetSplinePercentComplete() > 0.80) {
-                // m_elevator->SetPosition(Elevator::GROUND);
-                m_autoState++;
-            }
             if (m_drive->GetSplinePercentComplete() > 1.0) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
@@ -98,7 +94,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                  m_intakeAssembly->GetWrist()->IsCubeIn())) {
                 m_intakeAssembly->StopIntake();
                 m_intakeAssembly->GoToIntakePosition(
-                    IntakeAssembly::IntakePosition::lowGoal);
+                    IntakeAssembly::LOW_GOAL_PRESET);
                 m_autoState++;
             }
             break;

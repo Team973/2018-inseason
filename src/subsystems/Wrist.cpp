@@ -127,16 +127,6 @@ void Wrist::SetPositionStep(double position) {
 }
 
 float Wrist::GetPosition() const {
-    return WRIST_DEGREES_PER_CLICK *
-           ((float)m_wristMotor->GetSelectedSensorPosition(0));
-}
-
-void Wrist::ZeroPosition() {
-    m_wristMotor->SetSelectedSensorPosition(90.0 / WRIST_DEGREES_PER_CLICK, 0,
-                                            0);
-}
-
-float Wrist::GetPosition() {
     return NativeUnitsToDegrees(m_wristMotor->GetSelectedSensorPosition(0));
 }
 
@@ -203,12 +193,12 @@ void Wrist::TaskPeriodic(RobotMode mode) {
     }
 }
 
-double Wrist::DegreesToNativeUnits(double degrees) {
+double Wrist::DegreesToNativeUnits(double degrees) const {
     // return 1500 - (degrees / WRIST_DEGREES_PER_CLICK);
     return degrees / WRIST_DEGREES_PER_CLICK + 1500;
 }
 
-double Wrist::NativeUnitsToDegrees(double nativeUnits) {
+double Wrist::NativeUnitsToDegrees(double nativeUnits) const {
     // return (1500 - nativeUnits) * WRIST_DEGREES_PER_CLICK;
     return (nativeUnits - 1500) * WRIST_DEGREES_PER_CLICK;
 }

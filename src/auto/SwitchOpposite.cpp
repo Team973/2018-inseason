@@ -33,7 +33,7 @@ void SwitchOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
                     Drive::RelativeTo::Now);
             }
             m_intakeAssembly->GoToIntakePosition(
-                IntakeAssembly::IntakePosition::lowGoal);
+                IntakeAssembly::LOW_GOAL_PRESET);
             m_autoState++;
             break;
         case 1:
@@ -61,7 +61,7 @@ void SwitchOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             if (m_drive->GetSplinePercentComplete() > 1.0) {
                 m_drive->OpenloopArcadeDrive(0.0, 0.0);
                 m_intakeAssembly->GoToIntakePosition(
-                    IntakeAssembly::IntakePosition::ground);
+                    IntakeAssembly::GROUND_PRESET);
                 m_autoState++;
             }
             break;

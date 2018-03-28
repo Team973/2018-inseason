@@ -34,7 +34,6 @@ Teleop::~Teleop() {
 
 void Teleop::TeleopInit() {
     std::cout << "Teleop Start" << std::endl;
-    m_intakeMode = IntakeMode::manualPosition;
     m_intakeAssembly->SetPosManualInput();
     m_intakeAssembly->EnableCoastMode();
 }
@@ -77,17 +76,6 @@ void Teleop::TeleopPeriodic() {
     if (fabs(elevatorPosIncInput) > 0.25 || fabs(wristPosIncInput) > 0.25) {
         m_intakeAssembly->SetPosManualInput();
     }
-
-    if (m_intakeMode == IntakeMode::manualVoltage) {
-    }
-    else if (m_intakeMode == IntakeMode::manualPosition) {
-        m_intakeAssembly->SetPosManualInput(elevatorPosIncInput,
-                                            wristPosIncInput);
-    }
-    else if (m_intakeMode == IntakeMode::motionMagic) {
-    }
-
-    SmartDashboard::PutNumber("intake/modes/currentmode", (int)m_intakeMode);
 }
 
 void Teleop::TeleopStop() {
