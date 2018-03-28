@@ -193,6 +193,10 @@ PIDDriveController *Drive::PIDTurn(double turn, RelativeTo relativity,
     return m_pidDriveController;
 }
 
+double Drive::GetPIDDistError() {
+    return m_pidDriveController->GetDistError();
+}
+
 /**
  * Set a drive to use ConstantArcSpline drive controller
  *

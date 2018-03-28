@@ -121,6 +121,8 @@ public:
     PIDDriveController *PIDTurn(double angle, RelativeTo relativity,
                                 double powerCap);
 
+    double GetPIDDistError();
+
     /**
      * Set a drive to use ConstantArcSpline drive controller
      *

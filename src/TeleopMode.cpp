@@ -36,6 +36,7 @@ void Teleop::TeleopInit() {
     std::cout << "Teleop Start" << std::endl;
     m_intakeAssembly->SetPosManualInput();
     m_intakeAssembly->EnableCoastMode();
+    m_intakeAssembly->StopIntake();
 }
 
 void Teleop::TeleopPeriodic() {

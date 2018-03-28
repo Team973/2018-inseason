@@ -79,6 +79,10 @@ public:
         m_onTarget = false;
     }
 
+    double GetDistError() {
+        return m_targetDist - m_prevDist;
+    }
+
     void Start(DriveControlSignalReceiver *out) override {
         printf("Turning on PID Mode\n");
     }

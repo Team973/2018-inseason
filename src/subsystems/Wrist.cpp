@@ -70,6 +70,8 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_wristMotor->ConfigReverseSoftLimitEnable(true, 10);
     */
 
+    m_wristMotor->SetSelectedSensorPosition(DegreesToNativeUnits(-30.0), 0, 0);
+
     m_wristMotor->ConfigForwardLimitSwitchSource(
         LimitSwitchSource::LimitSwitchSource_FeedbackConnector,
         LimitSwitchNormal::LimitSwitchNormal_NormallyOpen, 10);
@@ -131,8 +133,8 @@ float Wrist::GetPosition() const {
 }
 
 void Wrist::ZeroPosition() {
-    m_wristMotor->SetSelectedSensorPosition(DegreesToNativeUnits(EXTENDED), 0,
-                                            0);
+    m_wristMotor->SetSelectedSensorPosition(DegreesToNativeUnits(EXTENDED - 10),
+                                            0, 0);
 }
 
 void Wrist::OpenClaw() {
@@ -174,8 +176,7 @@ void Wrist::TaskPeriodic(RobotMode mode) {
                    m_leftCubeSensor->Get(), m_rightCubeSensor->Get(),
                    IsCubeIn());
 
-    if (m_wristMotor->GetSensorCollection().IsFwdLimitSwitchClosed() &&
-        GetPosition() > EXTENDED) {
+    if (m_wristMotor->GetSensorCollection().IsFwdLimitSwitchClosed()) {
         ZeroPosition();
     }
 
