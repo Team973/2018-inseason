@@ -67,7 +67,12 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             if (m_drive->GetSplinePercentComplete() > 0.9) {
                 m_intakeAssembly->IntakeCube(-1.0);
                 m_intakeAssembly->DropCube();
-                m_drive->PIDDrive(44.0, 5.0, Drive::RelativeTo::Now, 0.9);
+                if (direction == AutoRoutineBase::AutoDirection::Left) {
+                    m_drive->PIDDrive(44.0, -5.0, Drive::RelativeTo::Now, 1.0);
+                }
+                else {
+                    m_drive->PIDDrive(44.0, 5.0, Drive::RelativeTo::Now, 1.0);
+                }
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
@@ -79,12 +84,13 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             if (m_intakeAssembly->GetWrist()->IsCubeIn() ||
                 GetMsecTime() - m_autoTimer > 3000) {
                 m_intakeAssembly->StopIntake();
-                m_drive->PIDDrive(-65.0, 0.0, Drive::RelativeTo::SetPoint, 0.9);
+                m_drive->PIDDrive(-63.0, 0.0, Drive::RelativeTo::SetPoint, 1.0);
+                m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
         case 5:
-            if (m_drive->OnTarget()) {
+            if (m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 2000) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
                         &center_left_switch::center_left_switch,
