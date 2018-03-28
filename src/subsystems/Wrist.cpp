@@ -44,7 +44,7 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_wristMotor->EnableCurrentLimit(true);
     m_wristMotor->ConfigPeakCurrentDuration(0, 10);
     m_wristMotor->ConfigPeakCurrentLimit(0, 10);
-    m_wristMotor->ConfigContinuousCurrentLimit(15, 10);
+    m_wristMotor->ConfigContinuousCurrentLimit(5, 10);
     m_wristMotor->ConfigPeakOutputForward(0.5, 10);
     m_wristMotor->ConfigPeakOutputReverse(-0.5, 10);
 
@@ -84,12 +84,12 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_leftRoller->EnableCurrentLimit(true);
     m_leftRoller->ConfigPeakCurrentDuration(0, 10);
     m_leftRoller->ConfigPeakCurrentLimit(0, 10);
-    m_leftRoller->ConfigContinuousCurrentLimit(15, 10);
+    m_leftRoller->ConfigContinuousCurrentLimit(5, 10);
 
     m_rightRoller->EnableCurrentLimit(true);
     m_rightRoller->ConfigPeakCurrentDuration(0, 10);
     m_rightRoller->ConfigPeakCurrentLimit(0, 10);
-    m_rightRoller->ConfigContinuousCurrentLimit(15, 10);
+    m_rightRoller->ConfigContinuousCurrentLimit(5, 10);
 
     m_bannerFilter->Add(m_leftCubeSensor);
     m_bannerFilter->Add(m_rightCubeSensor);
@@ -124,8 +124,8 @@ float Wrist::GetPosition() {
 }
 
 void Wrist::ZeroPosition() {
-    m_wristMotor->SetSelectedSensorPosition(DegreesToNativeUnits(EXTENDED), 0,
-                                            0);
+    m_wristMotor->SetSelectedSensorPosition(DegreesToNativeUnits(EXTENDED - 10),
+                                            0, 0);
 }
 
 void Wrist::OpenClaw() {
@@ -152,7 +152,7 @@ void Wrist::StopIntake() {
 }
 
 bool Wrist::IsCubeIn() {
-    return (!m_leftCubeSensor->Get() || !m_rightCubeSensor->Get());
+    return (/*!m_leftCubeSensor->Get() ||*/ !m_rightCubeSensor->Get());
 }
 
 void Wrist::TaskPeriodic(RobotMode mode) {
@@ -167,8 +167,7 @@ void Wrist::TaskPeriodic(RobotMode mode) {
                    m_leftCubeSensor->Get(), m_rightCubeSensor->Get(),
                    IsCubeIn());
 
-    if (m_wristMotor->GetSensorCollection().IsFwdLimitSwitchClosed() &&
-        GetPosition() > EXTENDED) {
+    if (m_wristMotor->GetSensorCollection().IsFwdLimitSwitchClosed()) {
         ZeroPosition();
     }
 

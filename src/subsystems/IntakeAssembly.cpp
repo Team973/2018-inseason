@@ -273,6 +273,7 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
                 m_wrist->StopIntake();
                 m_intakeSignal->Reset();
                 m_greyLight->SetPixelStateProcessor(m_intakeSignal);
+                m_controlMode = ControlMode::Idle;
             }
             break;
         case ControlMode::VaultStart:
