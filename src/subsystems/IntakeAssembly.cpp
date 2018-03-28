@@ -266,13 +266,9 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             break;
         case ControlMode::SwitchIntaking:
             GoToIntakePosition(GROUND_PRESET);
-            if (GetElevatorPosition() < 5.0) {
-                m_controlMode = ControlMode::SwitchStandby;
-            }
-            break;
-        case ControlMode::SwitchStandby:
-            if (m_wrist->IsCubeIn() ||
-                m_operatorJoystick->GetRawButton(DualAction::Back)) {
+            if (GetElevatorPosition() < 5.0 &&
+                (m_wrist->IsCubeIn() ||
+                 m_operatorJoystick->GetRawButton(DualAction::Back))) {
                 GoToIntakePosition(STOW_PRESET);
                 m_wrist->StopIntake();
                 m_intakeSignal->Reset();
@@ -282,9 +278,6 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
         case ControlMode::VaultStart:
             GoToIntakePosition(GROUND_PRESET);
             m_wrist->IntakeCube(-1.0);
-            m_controlMode = ControlMode::VaultStop;
-            break;
-        case ControlMode::VaultStop:
             if (m_wrist->IsCubeIn()) {
                 StopIntake();
             }
