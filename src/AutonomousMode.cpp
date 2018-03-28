@@ -148,7 +148,6 @@ void Autonomous::AutonomousInit() {
 
 void Autonomous::AutonomousPeriodic() {
     m_routine->Execute(m_direction);
-    // m_forwardAuto->Execute(m_direction);
 }
 
 void Autonomous::AutonomousStop() {

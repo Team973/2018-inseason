@@ -261,7 +261,6 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                         IntakeAssembly::OVER_BACK_PRESET);
                     */
                 break;
-
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
                     m_intakeAssembly->SetModeHanging(false);
