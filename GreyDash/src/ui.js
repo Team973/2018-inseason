@@ -25,6 +25,9 @@ for (let i = 0; i < config.charts.length; i += 1) {
   if (config.charts[i].settings.default === undefined) {
     config.charts[i].settings.default = false;
   }
+  if (config.charts[i].settings.show === undefined) {
+    config.charts[i].settings.show = true;
+  }
 }
 for (let i = 0; i < config.indicators.length; i += 1) {
   if (config.indicators[i].settings.fixedDecimals === undefined) {
@@ -32,6 +35,9 @@ for (let i = 0; i < config.indicators.length; i += 1) {
   }
   if (config.indicators[i].settings.default === undefined) {
     config.indicators[i].settings.default = false;
+  }
+  if (config.indicators[i].settings.show === undefined) {
+    config.indicators[i].settings.show = true;
   }
 }
 
@@ -81,94 +87,98 @@ const ui = {
  * Chart Listeners
  */
 for (let i = 0; i < config.charts.length; i += 1) {
-  config.charts[i].div = document.createElement('div');
-  config.charts[i].div.setAttribute('class', 'chartContainer');
+  if (config.charts[i].settings.show) {
+    config.charts[i].div = document.createElement('div');
+    config.charts[i].div.setAttribute('class', 'chartContainer');
 
-  config.charts[i].displayTitle = document.createElement('span');
-  config.charts[i].displayTitle.innerText = `${config.charts[i].title}`;
+    config.charts[i].displayTitle = document.createElement('span');
+    config.charts[i].displayTitle.innerText = `${config.charts[i].title}`;
 
-  config.charts[i].displayChart = document.createElement('canvas');
-  config.charts[i].displayChart.setAttribute('class', 'responsiveCharts');
-  config.charts[i].displayChart.setAttribute('name', `chart${i}`);
+    config.charts[i].displayChart = document.createElement('canvas');
+    config.charts[i].displayChart.setAttribute('class', 'responsiveCharts');
+    config.charts[i].displayChart.setAttribute('name', `chart${i}`);
 
-  config.charts[i].chart = new smoothie.SmoothieChart({
-    responsive: 'true',
-    interpolation: config.charts[i].settings.interpolation,
-    tooltip: config.charts[i].settings.tooltip,
-    minValue: config.charts[i].settings.minValue,
-    maxValue: config.charts[i].settings.maxValue,
-  });
-
-  config.charts[i].lines = {};
-  for (let line = 0; line < config.charts[i].keys.length; line += 1) {
-    const colors = ['red', 'blue', 'yellow', 'violet', 'orange', 'indigo'];
-    config.charts[i].lines[line] = new smoothie.TimeSeries();
-    config.charts[i].chart.addTimeSeries(config.charts[i].lines[line], {
-      strokeStyle: colors[line],
-      lineWidth: 3,
+    config.charts[i].chart = new smoothie.SmoothieChart({
+      responsive: 'true',
+      interpolation: config.charts[i].settings.interpolation,
+      tooltip: config.charts[i].settings.tooltip,
+      minValue: config.charts[i].settings.minValue,
+      maxValue: config.charts[i].settings.maxValue,
     });
-    NetworkTables.addKeyListener(config.charts[i].keys[line], (function bindIndicator(idx) {
-      return ((key, value) => {
-        config.charts[idx].lines[line].append(new Date().getTime(), value);
+
+    config.charts[i].lines = {};
+    for (let line = 0; line < config.charts[i].keys.length; line += 1) {
+      const colors = ['red', 'blue', 'yellow', 'violet', 'orange', 'indigo'];
+      config.charts[i].lines[line] = new smoothie.TimeSeries();
+      config.charts[i].chart.addTimeSeries(config.charts[i].lines[line], {
+        strokeStyle: colors[line],
+        lineWidth: 3,
       });
-    }(i)));
+      NetworkTables.addKeyListener(config.charts[i].keys[line], (function bindIndicator(idx) {
+        return ((key, value) => {
+          config.charts[idx].lines[line].append(new Date().getTime(), value);
+        });
+      }(i)));
+    }
+
+    config.charts[i].chart.streamTo(config.charts[i].displayChart, 0);
+
+    config.charts[i].div.appendChild(config.charts[i].displayTitle);
+    config.charts[i].div.appendChild(document.createElement('br'));
+    config.charts[i].div.appendChild(config.charts[i].displayChart);
+    if (config.charts[i].settings.default) {
+      ui.charts.appendChild(config.charts[i].div);
+    } else if (config.charts[i].settings.bothTabs) {
+      ui.charts.appendChild(config.charts[i].div);
+      // ui.debugCharts.appendChild(config.charts[i].div.cloneNode(true));
+    } else {
+      ui.debugCharts.appendChild(config.charts[i].div);
+    }
+
+    // TODO: duplicate the elements so they display on both, dont stream to multiple
+    // const chartTabs = document.getElementsByName(`chart${i}`);
+    // for (let multichart = 0; multichart < document.getElementsByName(`chart${i}`).length; multichart += 1) {
+    //   config.charts[i].chart.streamTo(chartTabs[multichart], 0);
+    // }
   }
-
-  config.charts[i].chart.streamTo(config.charts[i].displayChart, 0);
-
-  config.charts[i].div.appendChild(config.charts[i].displayTitle);
-  config.charts[i].div.appendChild(document.createElement('br'));
-  config.charts[i].div.appendChild(config.charts[i].displayChart);
-  if (config.charts[i].settings.default) {
-    ui.charts.appendChild(config.charts[i].div);
-  } else if (config.charts[i].settings.bothTabs) {
-    ui.charts.appendChild(config.charts[i].div);
-    // ui.debugCharts.appendChild(config.charts[i].div.cloneNode(true));
-  } else {
-    ui.debugCharts.appendChild(config.charts[i].div);
-  }
-
-  // TODO: duplicate the elements so they display on both, dont stream to multiple
-  // const chartTabs = document.getElementsByName(`chart${i}`);
-  // for (let multichart = 0; multichart < document.getElementsByName(`chart${i}`).length; multichart += 1) {
-  //   config.charts[i].chart.streamTo(chartTabs[multichart], 0);
-  // }
 }
 
 /**
  * Regular Listeners
  */
 for (let i = 0; i < config.indicators.length; i += 1) {
-  let unitvalue;
-  config.indicators[i].div = document.createElement('div');
-  config.indicators[i].div.setAttribute('id', `indicator${i}`);
+  if (config.indicators[i].settings.show) {
+    let unitvalue;
+    config.indicators[i].div = document.createElement('div');
+    config.indicators[i].div.setAttribute('id', `indicator${i}`);
 
-  config.indicators[i].displayTitle = document.createElement('span');
-  config.indicators[i].displayTitle.innerText = `${config.indicators[i].title}: `;
+    config.indicators[i].displayTitle = document.createElement('span');
+    config.indicators[i].displayTitle.innerText = `${config.indicators[i].title}: `;
 
-  config.indicators[i].displayValue = document.createElement('span');
+    config.indicators[i].displayValue = document.createElement('span');
 
-  NetworkTables.addKeyListener(config.indicators[i].key, (function bindIndicator(idx) {
-    return ((key, value) => {
-      if (config.indicators[idx].settings.fixedDecimals === true) {
-        unitvalue = `${value.toFixed(2)} ${config.indicators[idx].unit}`;
-      } else {
-        unitvalue = `${value} ${config.indicators[idx].unit}`;
-      }
-      config.indicators[idx].displayValue.innerText = unitvalue;
-    });
-  }(i)));
+    NetworkTables.addKeyListener(config.indicators[i].key, (function bindIndicator(idx) {
+      return ((key, value) => {
+        if (config.indicators[idx].settings.fixedDecimals === true) {
+          unitvalue = `${value.toFixed(2)} ${config.indicators[idx].unit}`;
+        } else {
+          unitvalue = `${value} ${config.indicators[idx].unit}`;
+        }
+        config.indicators[idx].displayValue.innerText = unitvalue;
+      });
+    }(i)));
 
-  config.indicators[i].displayTitle.appendChild(config.indicators[i].displayValue);
-  config.indicators[i].div.appendChild(config.indicators[i].displayTitle);
-  ui.indicators.appendChild(config.indicators[i].div);
-  if (config.indicators[i].settings.default) {
+    config.indicators[i].displayTitle.appendChild(config.indicators[i].displayValue);
+    config.indicators[i].div.appendChild(config.indicators[i].displayTitle);
     ui.indicators.appendChild(config.indicators[i].div);
-  } else if (config.indicators[i].settings.bothTabs) {
-    ui.indicators.appendChild(config.indicators[i].div);
-    ui.debugIndicators.appendChild(config.indicators[i].div.cloneNode(true));
-  } else {
-    ui.debugIndicators.appendChild(config.indicators[i].div);
+    if (config.indicators[i].settings.default) {
+      ui.indicators.appendChild(config.indicators[i].div);
+    } else if (config.indicators[i].settings.bothTabs) {
+      ui.indicators.appendChild(config.indicators[i].div);
+      ui.debugIndicators.appendChild(config.indicators[i].div.cloneNode(true));
+    } else {
+      ui.debugIndicators.appendChild(config.indicators[i].div);
+    }
   }
 }
 
@@ -218,10 +228,10 @@ NetworkTables.addKeyListener('/SmartDashboard/misc/timer', (key, value) => {
     // Stop countdown when timer reaches zero
     clearTimeout(countdown);
     return;
-} else if (value <= 15) {
+  } else if (value <= 15) {
     // Flash timer if less than 15 seconds left
-    ui.misc.timer.style.color = (s % 2 === 0) ? '#FF3030' : 'transparent';
-} else if (value <= 30) {
+    ui.misc.timer.style.color = (value % 2 === 0) ? '#FF3030' : 'transparent';
+  } else if (value <= 30) {
     // Solid red timer when less than 30 seconds left.
     ui.misc.timer.style.color = '#FF3030';
   }

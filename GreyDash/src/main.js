@@ -1,6 +1,7 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const electron = require('electron');
+const path = require('path');
 const wpilibNT = require('wpilib-nt-client');
 
 const client = new wpilibNT.Client();
@@ -104,7 +105,7 @@ function createWindow() {
       width,
       height,
       show: false,
-      icon: `${__dirname}/../build/icon.png`,
+      icon: path.join(__dirname, '..', 'build/icon.png'),
     });
   } else {
     mainWindow = new BrowserWindow({
@@ -112,7 +113,7 @@ function createWindow() {
       width: 1280,
       height: 720,
       show: false,
-      icon: `${__dirname}/../build/icon.png`,
+      icon: path.join(__dirname, '..', 'build/icon.png'),
     });
   }
   // Move window to top (left) of screen.
