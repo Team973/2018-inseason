@@ -223,12 +223,7 @@ NetworkTables.addKeyListener('/SmartDashboard/misc/timer', (key, value) => {
 
   // Add leading zero if seconds is one digit long, for proper time formatting.
   visualS = visualS < 10 ? `0${visualS}` : visualS;
-
-  if (value < 0) {
-    // Stop countdown when timer reaches zero
-    clearTimeout(countdown);
-    return;
-  } else if (value <= 15) {
+  if (value <= 15) {
     // Flash timer if less than 15 seconds left
     ui.misc.timer.style.color = (value % 2 === 0) ? '#FF3030' : 'transparent';
   } else if (value <= 30) {
