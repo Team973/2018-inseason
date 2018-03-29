@@ -27,7 +27,8 @@
       "settings": {
         "tooltip": true,
         "minValue": -360,
-        "maxValue": 360
+        "maxValue": 360,
+        "show": false
       },
       "title": "Drive Angles",
       "keys": [
@@ -39,7 +40,8 @@
       "settings": {
         "tooltip": true,
         "minValue": -120,
-        "maxValue": 120
+        "maxValue": 120,
+        "show": false
       },
       "title": "Drive Left Positions",
       "keys": [
@@ -51,7 +53,8 @@
       "settings": {
         "tooltip": true,
         "minValue": -120,
-        "maxValue": 120
+        "maxValue": 120,
+        "show": false
       },
       "title": "Drive Right Positions",
       "keys": [
@@ -63,7 +66,8 @@
       "settings": {
         "tooltip": true,
         "minValue": -144,
-        "maxValue": 144
+        "maxValue": 144,
+        "show": false
       },
       "title": "Drive Velocity (red left, blue right)",
       "keys": [
@@ -176,7 +180,8 @@
     },
     {
       "settings": {
-        "fixedDecimals": false
+        "fixedDecimals": false,
+        "show": false
       },
       "title": "Is cube in?",
       "unit": "",
@@ -184,7 +189,8 @@
     },
     {
       "settings": {
-        "fixedDecimals": false
+        "fixedDecimals": false,
+        "show": false
       },
       "title": "Intake Mode",
       "unit": "",
