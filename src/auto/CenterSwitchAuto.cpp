@@ -126,6 +126,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 }
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);
+                m_intakeAssembly->StopIntake();
                 m_autoState++;
             }
             break;

@@ -37,6 +37,7 @@ void Teleop::TeleopInit() {
     m_intakeAssembly->SetPosManualInput();
     m_intakeAssembly->EnableCoastMode();
     m_intakeAssembly->StopIntake();
+    m_hanger->DisengagePTO();
 }
 
 static bool s_intaking = false;
@@ -65,7 +66,7 @@ void Teleop::TeleopPeriodic() {
             false);  // gear set to false until solenoids get set up
     }
     else if (m_driveMode == DriveMode::Hanger) {
-        //m_hanger->SetHangerPower(y);
+        // m_hanger->SetHangerPower(y);
     }
 
     /**

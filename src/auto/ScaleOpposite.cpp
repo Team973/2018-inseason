@@ -36,7 +36,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             m_autoState++;
             break;
         case 1:
-            if (m_drive->GetSplinePercentComplete() > 1.0) {
+            if (m_drive->GetSplinePercentComplete() > 0.95) {
                 if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(
                         &left_scale_opposite_b::left_scale_opposite_b,
@@ -73,6 +73,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             break;
         case 5:
             if (m_drive->OnTarget()) {
+                m_intakeAssembly->StopIntake();
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);
                 m_autoState++;

@@ -51,7 +51,10 @@ void Autonomous::AutonomousInit() {
 
     switch (m_disabled->GetStartPosition()) {
         case AutoRoutineBase::RobotStartPosition::Left:
-            switch (GetSwitchScalePosition(m_scoringLocations)) {
+            m_scaleOpposite->Reset();
+            m_routine = m_scaleOpposite;
+            m_direction = AutoRoutineBase::AutoDirection::Right;
+            /*switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case SwitchScalePosition::LL:
                     m_twoCubeAuto->Reset();
                     m_routine = m_twoCubeAuto;
@@ -79,7 +82,7 @@ void Autonomous::AutonomousInit() {
                     break;
                 default:
                     break;
-            }
+            }*/
             break;
         case AutoRoutineBase::RobotStartPosition::Center:
             printf("Center Auto\n");
@@ -113,7 +116,10 @@ void Autonomous::AutonomousInit() {
             }
             break;
         case AutoRoutineBase::RobotStartPosition::Right:
-            switch (GetSwitchScalePosition(m_scoringLocations)) {
+            m_scaleOpposite->Reset();
+            m_routine = m_scaleOpposite;
+            m_direction = AutoRoutineBase::AutoDirection::Left;
+            /*switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case SwitchScalePosition::LL:
                     m_forwardAuto->Reset();
                     m_routine = m_forwardAuto;
@@ -141,7 +147,7 @@ void Autonomous::AutonomousInit() {
                     break;
                 default:
                     break;
-            }
+            }*/
             break;
         default:
             break;
