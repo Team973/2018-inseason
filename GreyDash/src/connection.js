@@ -1,19 +1,23 @@
-let address = document.getElementById('connectAddress'),
-  connect = document.getElementById('connect');
-
-// Set function to be called on NetworkTables connect. Not implemented.
-// NetworkTables.addWsConnectionListener(onNetworkTablesConnection, true);
-
-// Set function to be called when robot dis/connects
-NetworkTables.addRobotConnectionListener(onRobotConnection, false);
-
-// Sets function to be called when any NetworkTables key/value changes
-// NetworkTables.addGlobalListener(onValueChanged, true);
+const loginDialog = document.getElementById('loginDialog');
+const connectAddress = document.getElementById('connectAddress');
+const connectButton = document.getElementById('connectButton');
+const connectLoadingBar = document.getElementById('connectLoadingBar');
+const closeButton = document.getElementById('closeButton');
 
 // Function for hiding the connect box
 onkeydown = (key) => {
-  if (key.key === 'Escape') document.body.classList.toggle('login', false);
+  if (key.key === 'Escape') {
+    loginDialog.close();
+  }
 };
+
+if (!loginDialog.showModal) {
+  dialogPolyfill.registerDialog(loginDialog);
+}
+
+closeButton.addEventListener('click', () => {
+  loginDialog.close();
+});
 
 /**
  * Function to be called when robot connects
@@ -25,26 +29,39 @@ function onRobotConnection(connected) {
   ui.misc.robotState.textContent = state;
   if (connected) {
     // On connect hide the connect popup
-    document.body.classList.toggle('login', false);
+    loginDialog.close();
   } else {
     // On disconnect show the connect popup
-    document.body.classList.toggle('login', true);
+    loginDialog.showModal();
     // Add Enter key handler
-    address.onkeydown = (ev) => {
-      if (ev.key === 'Enter') connect.click();
+    connectAddress.onkeydown = (ev) => {
+      if (ev.key === 'Enter') connectButton.click();
     };
     // Enable the input and the button
-    address.disabled = connect.disabled = false;
-    connect.textContent = 'Connect';
+    connectAddress.disabled = false;
+    connectButton.disabled = false;
+    connectLoadingBar.hidden = true;
+    connectButton.textContent = 'Connect';
     // Add the default address and select 973
-    address.value = 'roborio-973-frc.local';
-    address.focus();
-    address.setSelectionRange(8, 11);
+    connectAddress.value = 'roborio-973-frc.local';
+    connectAddress.focus();
+    connectAddress.setSelectionRange(8, 11);
     // On click try to connect and disable the input and the button
-    connect.onclick = () => {
-      ipc.send('connect', address.value);
-      address.disabled = connect.disabled = true;
-      connect.textContent = 'Connecting...';
+    connectButton.onclick = () => {
+      ipc.send('connect', connectAddress.value);
+      connectAddress.disabled = true;
+      connectButton.disabled = true;
+      connectLoadingBar.hidden = false;
+      connectButton.textContent = 'Connecting...';
     };
   }
 }
+
+// Set function to be called on NetworkTables connect. Not implemented.
+// NetworkTables.addWsConnectionListener(onNetworkTablesConnection, true);
+
+// Set function to be called when robot dis/connects
+NetworkTables.addRobotConnectionListener(onRobotConnection, false);
+
+// Sets function to be called when any NetworkTables key/value changes
+// NetworkTables.addGlobalListener(onValueChanged, true);

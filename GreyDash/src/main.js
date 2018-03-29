@@ -1,16 +1,16 @@
-
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const electron = require('electron');
-const wpilib_NT = require('wpilib-nt-client');
+const path = require('path');
+const wpilibNT = require('wpilib-nt-client');
 
-const client = new wpilib_NT.Client();
+const client = new wpilibNT.Client();
 
 // The client will try to reconnect after 1 second
 client.setReconnectDelay(1000);
 
 /** Module to control application life. */
-const app = electron.app;
+const { app } = electron;
 
 /** Module to create native browser window. */
 const { BrowserWindow } = electron;
@@ -27,8 +27,8 @@ const ipc = electron.ipcMain;
 let mainWindow;
 let cameraWindow;
 
-let connectedFunc,
-  ready = false;
+let connectedFunc;
+let ready = false;
 
 const clientDataListener = (key, val, valType, mesgType, id, flags) => {
   if (val === 'true' || val === 'false') {
@@ -44,7 +44,7 @@ const clientDataListener = (key, val, valType, mesgType, id, flags) => {
 };
 function createWindow() {
   // Attempt to connect to the localhost
-  client.start((con, err) => {
+  client.start((con) => {
     const connectFunc = () => {
       console.log('Sending status');
       mainWindow.webContents.send('connected', con);
@@ -59,7 +59,7 @@ function createWindow() {
     connectedFunc = connectFunc;
   });
   // When the script starts running in the window set the ready variable
-  ipc.on('ready', (ev, mesg) => {
+  ipc.on('ready', () => {
     console.log('NetworkTables is ready');
     ready = mainWindow != null;
 
@@ -75,7 +75,7 @@ function createWindow() {
   // When the user chooses the address of the bot than try to connect
   ipc.on('connect', (ev, address, port) => {
     console.log(`Trying to connect to ${address}${port ? `:${port}` : ''}`);
-    const callback = (connected, err) => {
+    const callback = (connected) => {
       console.log('Sending status');
       mainWindow.webContents.send('connected', connected);
     };
@@ -86,12 +86,12 @@ function createWindow() {
     }
   });
   ipc.on('add', (ev, mesg) => {
-    client.Assign(mesg.val, mesg.key, (mesg.flags & 1) === 1);
+    client.Assign(mesg.val, mesg.key, (mesg.flags && 1) === 1);
   });
   ipc.on('update', (ev, mesg) => {
     client.Update(mesg.id, mesg.val);
   });
-  ipc.on('error', (ev, error) => {
+  ipc.on('windowError', (ev, error) => {
     console.log(error);
   });
   // Create the browser window.
@@ -105,7 +105,7 @@ function createWindow() {
       width,
       height,
       show: false,
-      icon: `${__dirname}/../build/icon.png`,
+      icon: path.join(__dirname, '..', 'build/icon.png'),
     });
   } else {
     mainWindow = new BrowserWindow({
@@ -113,7 +113,7 @@ function createWindow() {
       width: 1280,
       height: 720,
       show: false,
-      icon: `${__dirname}/../build/icon.png`,
+      icon: path.join(__dirname, '..', 'build/icon.png'),
     });
   }
   // Move window to top (left) of screen.

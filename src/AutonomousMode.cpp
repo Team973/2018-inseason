@@ -148,6 +148,10 @@ void Autonomous::AutonomousInit() {
 
 void Autonomous::AutonomousPeriodic() {
     m_routine->Execute(m_direction);
+
+    // Match time to display in dashboard
+    SmartDashboard::PutNumber("misc/timer",
+                              DriverStation::GetInstance().GetMatchTime());
 }
 
 void Autonomous::AutonomousStop() {
