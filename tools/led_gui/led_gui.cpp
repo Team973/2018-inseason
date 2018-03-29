@@ -1,6 +1,9 @@
 #include <SFML/Graphics.hpp>
 #include "lib/helpers/GreyLight.h"
 #include "lib/pixelprocessors/AutoIndicator.h"
+#include "lib/pixelprocessors/ReverseModifier.h"
+#include "lib/pixelprocessors/SolidColor.h"
+#include "lib/pixelprocessors/LengthModifier.h"
 
 
 #include <stdio.h>
@@ -50,8 +53,12 @@ int main(int argc, char* argv[]) {
         "LED Simulator");  // Window with label 'LED Simulator',
                            // x=numLed*diameter, y=diameter
     sf::CircleShape* LEDs = createCircles(numLEDs);
-    AutoIndicator* auto_i = new AutoIndicator();
-    led->SetPixelStateProcessor(auto_i);
+    SolidColor *m_disabledSignal = new LightPattern::SolidColor({255, 0, 0});
+    LengthModifier *m_leftSideSignal =
+          new LightPattern::LengthModifier(m_disabledSignal, 12);
+    ReverseModifier *m_rightSideSignal=
+          new LightPattern::ReverseModifier(m_leftSideSignal);
+    led->SetPixelStateProcessor(m_disabledSignal);
     int count = 1;
     int state = 0;
     while (window.isOpen()) {
@@ -60,17 +67,17 @@ int main(int argc, char* argv[]) {
           state++;
         }
         if(state==0){
-          auto_i->SetData("RRM");
+          led->SetPixelStateProcessor(m_disabledSignal);
         }
         if(state==1){
-          auto_i->SetData("LRL");
+          led->SetPixelStateProcessor(m_leftSideSignal);
         }
         if(state==2){
-          auto_i->SetData("RRL");
+          led->SetPixelStateProcessor(m_rightSideSignal);
 
         }
         if(state==3){
-          auto_i->SetData("RRLM");
+          state=0;
         }
         sf::Event event;
         while (window.pollEvent(event)) {

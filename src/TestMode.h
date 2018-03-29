@@ -6,9 +6,7 @@
 #include "lib/helpers/JoystickHelper.h"
 #include "lib/util/Util.h"
 #include "src/subsystems/Drive.h"
-#include "src/subsystems/Elevator.h"
-#include "src/subsystems/Claw.h"
-#include "src/subsystems/Intake.h"
+#include "src/subsystems/IntakeAssembly.h"
 #include "src/subsystems/Hanger.h"
 #include "lib/helpers/GreyLight.h"
 #include "lib/pixelprocessors/Flash.h"
@@ -19,8 +17,7 @@ namespace frc973 {
 class Test {
 public:
     Test(ObservableJoystick *driver, ObservableJoystick *codriver, Drive *drive,
-         Elevator *elevator, Intake *intake, Claw *claw, Hanger *hanger,
-         GreyLight *greylight);
+         IntakeAssembly *intakeAssembly, Hanger *hanger, GreyLight *greylight);
     virtual ~Test();
 
     void TestInit();
@@ -30,13 +27,6 @@ public:
     void HandleTestButton(uint32_t port, uint32_t button, bool pressedP);
 
 private:
-    enum class ElevatorMode
-    {
-        percentOutput,
-        motionMagic,
-        zero
-    };
-
     enum class DriveMode
     {
         AssistedArcade,
@@ -51,17 +41,21 @@ private:
         Velocity
     };
 
+    enum class IntakeMode
+    {
+        manualPosition,
+        manualVoltage,
+        motionMagic
+    };
+
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
 
     Drive *m_drive;
     DriveMode m_driveMode;
-    Elevator *m_elevator;
-    Claw *m_claw;
-    Intake *m_intake;
+    IntakeMode m_intakeMode;
+    IntakeAssembly *m_intakeAssembly;
     Hanger *m_hanger;
-
-    ElevatorMode m_elevatorMode;
 
     GreyLight *m_greylight;
     LightPattern::Flash *m_flashSignal;

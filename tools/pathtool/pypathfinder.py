@@ -7,6 +7,7 @@ Check the bottom of this file for exports.
 from ctypes import cdll
 import ctypes
 from collections import namedtuple
+import json
 import math
 
 def set_cdll_path(path=None):
@@ -236,3 +237,30 @@ def set_cdll_path(path=None):
             )
 
     return (Waypoint, Segment, generate_trajectory, generate_tank_trajectory)
+
+def parse_spline_file(source, cdllPath=None):
+    """
+    Read in the spline description file and generate the waypoints
+    described by that file
+    """
+    (Waypoint,
+     Segment,
+     generate_trajectory,
+     generate_tank_trajectory) = set_cdll_path(cdllPath)
+
+    with open(source) as inputFile:
+        sourceJSON = json.load(inputFile)
+        waypoints = []
+        for waypoint in sourceJSON["waypoints"]:
+            waypoints.append(
+                Waypoint(x=waypoint["x"], y=waypoint["y"],
+                         angle=(math.pi / 180.0) * waypoint["angle"])
+            )
+
+        left, right = generate_tank_trajectory(
+            waypoints, sourceJSON["timestep"],
+            sourceJSON["max_vel"], sourceJSON["max_accel"],
+            sourceJSON["max_jerk"], sourceJSON["wheelbase_width"],
+            reverse=sourceJSON.get('reverse', False))
+
+        return left, right, waypoints, sourceJSON

@@ -5,26 +5,26 @@
 using namespace frc;
 
 namespace frc973 {
-Autonomous::Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
-                       Intake *intake, Claw *claw, ADXRS450_Gyro *gyro)
+Autonomous::Autonomous(Disabled *disabled, Drive *drive,
+                       IntakeAssembly *intakeAssembly, ADXRS450_Gyro *gyro,
+                       GreyLight *greylight)
         : m_noAuto(new NoAuto())
         , m_forwardAuto(new ForwardAuto(drive))
-        , m_centerSwitchAuto(
-              new CenterSwitchAuto(drive, elevator, intake, claw))
-        , m_scaleAuto(new ScaleAuto(drive, elevator, intake, claw))
-        , m_scaleOpposite(new ScaleOpposite(drive, elevator, intake, claw))
-        , m_sideSwitch(new SideSwitch(drive, elevator, intake, claw))
-        , m_switchOpposite(new SwitchOpposite(drive, elevator, intake, claw))
-        , m_twoCubeAuto(new TwoCubeAuto(drive, elevator, intake, claw))
+        , m_centerSwitchAuto(new CenterSwitchAuto(drive, intakeAssembly))
+        , m_scaleAuto(new ScaleAuto(drive, intakeAssembly))
+        , m_scaleOpposite(new ScaleOpposite(drive, intakeAssembly))
+        , m_sideSwitch(new SideSwitch(drive, intakeAssembly))
+        , m_switchOpposite(new SwitchOpposite(drive, intakeAssembly))
+        , m_twoCubeAuto(new TwoCubeAuto(drive, intakeAssembly))
         , m_disabled(disabled)
+        , m_greylight(greylight)
+        , m_autoSignal(new LightPattern::AutoIndicator())
         , m_scoringLocations("")
         , m_switchScalePosition(SwitchScalePosition::NOT_YET_RECEIVED)
         , m_routine(m_noAuto)
         , m_direction(AutoRoutineBase::AutoDirection::Left)
         , m_drive(drive)
-        , m_elevator(elevator)
-        , m_intake(intake)
-        , m_claw(claw)
+        , m_intakeAssembly(intakeAssembly)
         , m_gyro(gyro) {
 }
 
@@ -33,9 +33,8 @@ Autonomous::~Autonomous() {
 
 void Autonomous::AutonomousInit() {
     // Remember to zero all sensors here
-    m_elevator->SetPosition(Elevator::GROUND);
+    m_intakeAssembly->GoToIntakePosition(IntakeAssembly::STOW_PRESET);
     m_gyro->Reset();
-    m_claw->grab();
     std::cout << "Autonomous Start" << std::endl;
 
     DBStringPrintf(DB_LINE1, "%s", m_scoringLocations.c_str());
@@ -47,6 +46,9 @@ void Autonomous::AutonomousInit() {
             DriverStation::GetInstance().GetGameSpecificMessage();
     }
 
+    m_autoSignal->SetData(m_scoringLocations);
+    m_greylight->SetPixelStateProcessor(m_autoSignal);
+
     switch (m_disabled->GetStartPosition()) {
         case AutoRoutineBase::RobotStartPosition::Left:
             switch (GetSwitchScalePosition(m_scoringLocations)) {
@@ -56,17 +58,17 @@ void Autonomous::AutonomousInit() {
                     m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::LR:
-                    m_sideSwitch->Reset();
-                    m_routine = m_sideSwitch;
-                    m_direction = AutoRoutineBase::AutoDirection::Left;
+                    m_scaleOpposite->Reset();
+                    m_routine = m_scaleOpposite;
+                    m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
                 case SwitchScalePosition::RL:
-                    m_switchOpposite->Reset();
+                    m_scaleAuto->Reset();
                     m_routine = m_scaleAuto;
                     m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::RR:
-                    m_switchOpposite->Reset();
+                    m_scaleOpposite->Reset();
                     m_routine = m_scaleOpposite;
                     m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
@@ -82,7 +84,7 @@ void Autonomous::AutonomousInit() {
             printf("Center Auto\n");
             switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case SwitchScalePosition::LL:
-                    m_scaleAuto->Reset();
+                    m_centerSwitchAuto->Reset();
                     m_routine = m_centerSwitchAuto;
                     m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
@@ -113,13 +115,13 @@ void Autonomous::AutonomousInit() {
             switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case SwitchScalePosition::LL:
                     m_switchOpposite->Reset();
-                    m_routine = m_scaleOpposite;
+                    m_routine = m_switchOpposite;
                     m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::LR:
-                    m_switchOpposite->Reset();
-                    m_routine = m_switchOpposite;
-                    m_direction = AutoRoutineBase::AutoDirection::Left;
+                    m_scaleAuto->Reset();
+                    m_routine = m_scaleAuto;
+                    m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
                 case SwitchScalePosition::RL:
                     m_sideSwitch->Reset();
@@ -128,7 +130,7 @@ void Autonomous::AutonomousInit() {
                     break;
                 case SwitchScalePosition::RR:
                     m_scaleAuto->Reset();
-                    m_routine = m_twoCubeAuto;
+                    m_routine = m_scaleAuto;
                     m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
                 case SwitchScalePosition::NOT_YET_RECEIVED:

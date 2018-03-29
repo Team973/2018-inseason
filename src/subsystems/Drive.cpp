@@ -193,6 +193,10 @@ PIDDriveController *Drive::PIDTurn(double turn, RelativeTo relativity,
     return m_pidDriveController;
 }
 
+double Drive::GetPIDDistError() {
+    return m_pidDriveController->GetDistError();
+}
+
 /**
  * Set a drive to use ConstantArcSpline drive controller
  *
@@ -465,8 +469,6 @@ void Drive::TaskPeriodic(RobotMode mode) {
 
     DBStringPrintf(DB_LINE9, "l %2.1lf r %2.1lf g %2.1lf", this->GetLeftDist(),
                    this->GetRightDist(), this->GetAngle());
-
-    DBStringPrintf(DB_LINE8, "d %2.1lf", this->GetDist());
 
     m_angleLog->LogDouble(GetAngle());
     m_angularRateLog->LogDouble(GetAngularRate());

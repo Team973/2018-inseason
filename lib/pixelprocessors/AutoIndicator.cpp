@@ -8,6 +8,7 @@
 #include "AutoIndicator.h"
 #include <iostream>
 namespace LightPattern {
+
 AutoIndicator::AutoIndicator() {
     m_gameData = "";
 }
@@ -21,54 +22,46 @@ void AutoIndicator::Tick(PixelState& state) {
         switch (m_gameData[0]) {
             case 'L':
                 std::fill(state.pixels.begin(),
-                          state.pixels.end() - column_width * 2,
-                          Color{255, 0, 255});
+                          state.pixels.end() - column_width * 2, LEFT_GREEN);
                 break;
             case 'R':
                 std::fill(state.pixels.begin(),
-                          state.pixels.end() - column_width * 2,
-                          Color{255, 255, 255});
+                          state.pixels.end() - column_width * 2, RIGHT_WHITE);
                 break;
             default:
                 std::fill(state.pixels.begin(),
                           state.pixels.end() - column_width * 2,
-                          Color{255, 0, 0});
+                          DEFAULT_FILL_RED);
         }
         switch (m_gameData[1]) {
             case 'L':
-                std::fill(state.pixels.begin(),
-                          state.pixels.end() - column_width * 2,
-                          Color{255, 0, 255});
+                std::fill(state.pixels.begin() + column_width,
+                          state.pixels.end() - column_width, LEFT_GREEN);
                 break;
             case 'R':
-                std::fill(state.pixels.begin(),
-                          state.pixels.end() - column_width * 2,
-                          Color{255, 255, 255});
+                std::fill(state.pixels.begin() + column_width,
+                          state.pixels.end() - column_width, RIGHT_WHITE);
                 break;
             default:
-                std::fill(state.pixels.begin(),
-                          state.pixels.end() - column_width * 2,
-                          Color{255, 0, 0});
+                std::fill(state.pixels.begin() + column_width,
+                          state.pixels.end() - column_width, DEFAULT_FILL_RED);
         }
         switch (m_gameData[2]) {
             case 'L':
-                std::fill(state.pixels.begin(),
-                          state.pixels.end() - column_width * 2,
-                          Color{255, 0, 255});
+                std::fill(state.pixels.begin() + column_width * 2,
+                          state.pixels.end(), LEFT_GREEN);
                 break;
             case 'R':
-                std::fill(state.pixels.begin(),
-                          state.pixels.end() - column_width * 2,
-                          Color{255, 255, 255});
+                std::fill(state.pixels.begin() + column_width * 2,
+                          state.pixels.end(), RIGHT_WHITE);
                 break;
             default:
-                std::fill(state.pixels.begin(),
-                          state.pixels.end() - column_width * 2,
-                          Color{255, 0, 0});
+                std::fill(state.pixels.begin() + column_width * 2,
+                          state.pixels.end(), DEFAULT_FILL_RED);
         }
     }
     else {
-        std::fill(state.pixels.begin(), state.pixels.end(), Color{255, 255, 0});
+        std::fill(state.pixels.begin(), state.pixels.end(), NO_MESSAGE_BLUE);
     }
 }
 }

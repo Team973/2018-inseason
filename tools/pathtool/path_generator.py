@@ -10,43 +10,15 @@ import sys
 import json
 import textwrap
 import math
-from pypathfinder import set_cdll_path
+from pypathfinder import parse_spline_file
 
-jsonPath = sys.argv[1]
-headerPath = sys.argv[2]
-cdllPath = sys.argv[3]
-
-Waypoint, Segment, generate_trajectory, generate_tank_trajectory = set_cdll_path(cdllPath)
-
-def openPointStructs(source):
-    """
-    Read in the spline description file and generate the waypoints
-    described by that file
-    """
-    with open(source) as inputFile:
-        sourceJSON = json.load(inputFile)
-        waypoints = []
-        for waypoint in sourceJSON["waypoints"]:
-            waypoints.append(
-                Waypoint(x=waypoint["x"], y=waypoint["y"],
-                         angle= (math.pi / 180.0) * waypoint["angle"])
-            )
-
-        left, right = generate_tank_trajectory(
-            waypoints, sourceJSON["timestep"],
-            sourceJSON["max_vel"], sourceJSON["max_accel"],
-            sourceJSON["max_jerk"], sourceJSON["wheelbase_width"],
-            reverse=sourceJSON.get('reverse', False))
-
-        return left, right, sourceJSON
-
-def writeHeader(target):
+def writeHeader(jsonPath, target, cdllPath):
     """
     Write the C++ header file containing the generated spline
     """
     header = open(target, "w+")
     with open(target, "w+") as header:
-        leftTraj, rightTraj, sourceJSON = openPointStructs(jsonPath)
+        leftTraj, rightTraj, waypoints, sourceJSON = parse_spline_file(jsonPath, cdllPath)
         header.write(textwrap.dedent("""\
             #pragma once
 
@@ -101,5 +73,10 @@ def printSegments(varname, trajectory, outfile):
             outfile.write(",\n")
     outfile.write("\n};\n")
 
-writeHeader(headerPath)
-print(headerPath)
+if __name__ == '__main__':
+    jsonPath = sys.argv[1]
+    headerPath = sys.argv[2]
+    cdllPath = sys.argv[3]
+
+    writeHeader(jsonPath, headerPath, cdllPath)
+    print(headerPath)

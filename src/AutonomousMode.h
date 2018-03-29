@@ -16,9 +16,9 @@
 #include "src/DisabledMode.h"
 #include "src/Robot.h"
 #include "src/subsystems/Drive.h"
-#include "src/subsystems/Elevator.h"
-#include "src/subsystems/Intake.h"
-#include "src/subsystems/Claw.h"
+#include "src/subsystems/IntakeAssembly.h"
+#include "lib/helpers/GreyLight.h"
+#include "lib/pixelprocessors/AutoIndicator.h"
 
 using namespace frc;
 
@@ -36,8 +36,8 @@ public:
         NOT_YET_RECEIVED
     };
 
-    Autonomous(Disabled *disabled, Drive *drive, Elevator *elevator,
-               Intake *intake, Claw *claw, ADXRS450_Gyro *gyro);
+    Autonomous(Disabled *disabled, Drive *drive, IntakeAssembly *intakeAssembly,
+               ADXRS450_Gyro *gyro, GreyLight *greylight);
     virtual ~Autonomous();
 
     void AutonomousInit();
@@ -57,6 +57,8 @@ private:
     TwoCubeAuto *m_twoCubeAuto;
 
     Disabled *m_disabled;
+    GreyLight *m_greylight;
+    LightPattern::AutoIndicator *m_autoSignal;
 
     std::string m_scoringLocations;
     Autonomous::SwitchScalePosition m_switchScalePosition;
@@ -64,9 +66,7 @@ private:
     AutoRoutineBase::AutoDirection m_direction;
 
     Drive *m_drive;
-    Elevator *m_elevator;
-    Intake *m_intake;
-    Claw *m_claw;
+    IntakeAssembly *m_intakeAssembly;
     ADXRS450_Gyro *m_gyro;
 };
 };

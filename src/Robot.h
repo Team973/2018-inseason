@@ -22,10 +22,10 @@
 #include "src/TestMode.h"
 #include "lib/helpers/JoystickHelper.h"
 #include "src/subsystems/Elevator.h"
-#include "src/subsystems/Claw.h"
-#include "src/subsystems/Intake.h"
+#include "src/subsystems/Wrist.h"
 #include "src/subsystems/Hanger.h"
 #include "src/subsystems/Drive.h"
+#include "src/subsystems/IntakeAssembly.h"
 #include "lib/logging/LogSpreadsheet.h"
 #include "lib/helpers/JoystickHelper.h"
 #include "lib/helpers/GreyCompressor.h"
@@ -99,20 +99,19 @@ private:
     VideoSink m_greyCam;
 
     Solenoid *m_cubeClamp;
-    Solenoid *m_clawKicker;
-    Solenoid *m_intakePosition;
-    Solenoid *m_intakeOpenClose;
     TalonSRX *m_rightRoller;
     TalonSRX *m_leftRoller;
-    DigitalInput *m_cubeSensor;
+    DigitalInput *m_rightCubeSensor;
+    DigitalInput *m_leftCubeSensor;
     TalonSRX *m_elevatorMotor;
+    TalonSRX *m_wristMotor;
     Solenoid *m_hangerPTO;
     Solenoid *m_forkDeploy;
     TalonSRX *m_forkliftTalon;
     GreyLight *m_greylight;
     Elevator *m_elevator;
-    Claw *m_claw;
-    Intake *m_intake;
+    Wrist *m_wrist;
+    IntakeAssembly *m_intakeAssembly;
     Drive *m_drive;
     Hanger *m_hanger;
 

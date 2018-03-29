@@ -10,8 +10,8 @@
 #include "src/auto/AutoRoutineBase.h"
 #include "lib/helpers/GreyLight.h"
 #include "lib/pixelprocessors/SolidColor.h"
-#include "lib/pixelprocessors/Wave.h"
-#include "lib/pixelprocessors/CenterMirror.h"
+#include "lib/pixelprocessors/LengthModifier.h"
+#include "lib/pixelprocessors/ReverseModifier.h"
 
 using namespace frc;
 using namespace cs;
@@ -20,8 +20,8 @@ namespace frc973 {
 class Disabled {
 public:
     Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
-             UsbCamera intakeCamera, UsbCamera forkCamera, VideoSink greyCam,
-             GreyLight *greylight);
+             IntakeAssembly *intakeAssembly, UsbCamera intakeCamera,
+             UsbCamera forkCamera, VideoSink greyCam, GreyLight *greylight);
     virtual ~Disabled();
 
     void DisabledInit();
@@ -45,9 +45,9 @@ private:
     VideoSink m_greyCam;
 
     GreyLight *m_greylight;
+    IntakeAssembly *m_intakeAssembly;
     LightPattern::SolidColor *m_disabledSignal;
-    LightPattern::Wave *m_leftSideSignal;
-    LightPattern::Wave *m_rightSideSignal;
-    LightPattern::CenterMirror *m_centerStartSignal;
+    LightPattern::LengthModifier *m_leftSideSignal;
+    LightPattern::ReverseModifier *m_rightSideSignal;
 };
 };

@@ -18,7 +18,7 @@ Hanger::Hanger(TaskMgr *scheduler, LogSpreadsheet *logger, Drive *drive,
         , m_forkCamera(forkCamera)
         , m_greyCam(greyCam)
         , m_greylight(greylight)
-        , m_ptoSignal(new LightPattern::SolidColor({255, 0, 0})) {
+        , m_ptoSignal(new LightPattern::SolidColor(HANGER_RED)) {
     this->m_scheduler->RegisterTask("Hanger", this, TASK_PERIODIC);
     m_forkliftTalon->SetNeutralMode(NeutralMode::Brake);
 }
@@ -31,7 +31,7 @@ void Hanger::EngagePTO() {
     m_hangerPTO->Set(true);
     printf("Setting fork camera\n");
     m_greyCam.SetSource(m_forkCamera);
-    m_ptoSignal->SetColor({255, 0, 0});
+    m_ptoSignal->SetColor(HANGER_RED);
     m_greylight->SetPixelStateProcessor(m_ptoSignal);
 }
 

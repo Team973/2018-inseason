@@ -1,10 +1,12 @@
 *.swp
+*.swo
 build/*
 test/build/*
 .DS_Store
 bazel-*
 *.pyc
 __pycache__/*
+tags
 
 ############
 # GreyDash #
