@@ -32,7 +32,6 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
                     &right_scale_opposite_a::right_scale_opposite_a,
                     Drive::RelativeTo::Now);
             }
-            m_autoTimer = GetMsecTime();
             m_autoState++;
             break;
         case 1:
@@ -51,28 +50,36 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 2:
-            if (GetMsecTime() - m_autoTimer > 7000) {
+            if (m_drive->GetSplinePercentComplete() > 0.7) {
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::SCALE_HIGH_PRESET);
-                m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
         case 3:
-            if (m_drive->GetSplinePercentComplete() > 0.85 ||
-                m_drive->OnTarget()) {
-                m_intakeAssembly->EjectCube();
+            if (m_drive->GetSplinePercentComplete() > 0.9) {
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::IntakePreset(Elevator::SCALE_HIGH,
+                                                 Wrist::EXTENDED));
                 m_autoState++;
             }
             break;
         case 4:
-            if (m_drive->GetSplinePercentComplete() > 1.0) {
-                m_drive->PIDDrive(-50.0, 0.0, Drive::RelativeTo::Now, 0.8);
+            if (m_drive->GetSplinePercentComplete() >= 1.0) {
+                m_intakeAssembly->EjectCube();
+                m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
         case 5:
-            if (m_drive->OnTarget()) {
+            if (GetMsecTime() - m_autoTimer > 1000) {
+                m_drive->PIDDrive(-50.0, 0.0, Drive::RelativeTo::Now, 0.8);
+                m_autoTimer = GetMsecTime();
+                m_autoState++;
+            }
+            break;
+        case 6:
+            if (GetMsecTime() - m_autoTimer > 2000) {
                 m_intakeAssembly->StopIntake();
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);
