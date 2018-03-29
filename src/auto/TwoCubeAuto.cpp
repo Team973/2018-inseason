@@ -70,7 +70,7 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_autoState++;
             }
             break;
-        case 4:
+        /*case 4:
             if (m_drive->GetSplinePercentComplete() > 1.0) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
@@ -104,7 +104,7 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_intakeAssembly->EjectCube();
                 m_autoState++;
             }
-            break;
+            break;*/
         default:
             break;
     }
