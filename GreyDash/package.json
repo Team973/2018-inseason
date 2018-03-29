@@ -1,6 +1,6 @@
 {
     "name": "GreyDash",
-    "version": "2018.1.0",
+    "version": "2018.2.0",
     "description": "Team 973's 2018 Dashboard for PowerUp.",
     "main": "src/main.js",
     "scripts": {
