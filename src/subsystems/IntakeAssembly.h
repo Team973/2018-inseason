@@ -130,8 +130,12 @@ private:
         SubForkPosition,
         SuperForkPosition,
         OverBackPosition,
+        PreHanging,
+        MidHanging,
         HangingAuto,
-        HangingManual,
+        HangingManual /*,
+         HangingPreExit,
+         HangingExit*/
     };
 
     TaskMgr *m_scheduler;

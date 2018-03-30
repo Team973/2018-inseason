@@ -93,8 +93,11 @@ private:
 
     TalonSRX *m_leftRoller;
     TalonSRX *m_rightRoller;
+
+public:
     TalonSRX *m_wristMotor;
 
+private:
     double m_position;
     double m_prevWristSetpoint;
     double m_wristPositionDelta;

@@ -104,11 +104,19 @@ void IntakeAssembly::SetPosManualInput() {
     else if (m_controlMode == ControlMode::HangingAuto) {
         m_controlMode = ControlMode::HangingManual;
     }
+    /*else if (m_controlMode == ControlMode::HangingPreExit) {
+        m_controlMode = ControlMode::HangingPreExit;
+    }*/
 }
 
 void IntakeAssembly::SetModeHanging(bool hanging) {
     if (hanging) {
-        m_controlMode = ControlMode::HangingAuto;
+        if (m_elevator->GetPosition() < 40.0) {
+            m_controlMode = ControlMode::PreHanging;
+        }
+        else {
+            m_controlMode = ControlMode::HangingAuto;
+        }
     }
     else {
         m_controlMode = ControlMode::ManualPosition;
@@ -224,6 +232,7 @@ void IntakeAssembly::Flash() {
     m_greyLight->SetPixelStateProcessor(m_intakeSignal);
 }
 
+bool s_posMode = false;
 void IntakeAssembly::TaskPeriodic(RobotMode mode) {
     DBStringPrintf(DBStringPos::DB_LINE8, "w %3.2f s %3.2f e %3.2f",
                    GetWristPosition(), m_interimPositionGoal.wristPosition,
@@ -240,6 +249,14 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
                                   3);
             double wristPosGoal = m_interimPositionGoal.wristPosition;
 
+            if (wristInc < 0.0) {
+                m_wrist->m_wristMotor->ConfigContinuousCurrentLimit(10, 0);
+                wristInc *= 3.0;
+            }
+            else {
+                m_wrist->m_wristMotor->ConfigContinuousCurrentLimit(5, 0);
+            }
+
             if (GetElevatorPosition() > 78.0 &&
                 GetWristPosition() < NOCOLLIDE_FORK_LOWER_BOUND &&
                 elevatorInput < 0.0) {
@@ -250,7 +267,7 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
                 wristPosGoal += wristInc * MAX_WRIST_SPEED * 1.0 / 20.0;
                 wristPosGoal = Util::bound(
                     wristPosGoal,
-                    GetWristPosition() - MAX_WRIST_SPEED * 1.5 / 20.0,
+                    GetWristPosition() - MAX_WRIST_SPEED * 3 / 20.0,
                     GetWristPosition() + MAX_WRIST_SPEED * 1.5 / 20.0);
             }
 
@@ -261,9 +278,24 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
 
             m_interimPositionGoal.wristPosition = wristPosGoal;
         } break;
+        case ControlMode::PreHanging:
+            m_elevator->SetPosition(36.0);
+            m_wrist->SetPosition(-30.0);
+            m_wrist->OpenClaw();
+            if (m_elevator->GetPosition() > 34.0) {
+                m_controlMode = ControlMode::MidHanging;
+            }
+            break;
+        case ControlMode::MidHanging:
+            m_wrist->SetPosition(-80.0);
+            if (m_wrist->GetPosition() < -70.0) {
+                m_controlMode = ControlMode::HangingAuto;
+            }
+            break;
         case ControlMode::HangingAuto:
             m_wrist->OpenClaw();
             SetPosition(HANGING_PRESET);
+            m_wrist->m_wristMotor->ConfigContinuousCurrentLimit(5, 0);
             if (GetPositionError() < 5.0) {
                 m_controlMode = ControlMode::HangingManual;
             }
@@ -271,11 +303,43 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
         case ControlMode::HangingManual: {
             double elevatorInput =
                 -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
-
-            m_wrist->SetPosition(HANGING_PRESET.wristPosition);
+            m_wrist->m_wristMotor->ConfigContinuousCurrentLimit(5, 0);
+            if (m_elevator->GetPosition() > 46.0) {
+                m_wrist->SetPosition(HANGING_PRESET.wristPosition);
+            }
+            else {
+                m_wrist->SetPosition(-30.0);
+            }
             m_wrist->OpenClaw();
             m_elevator->SetPower(elevatorInput + ELEVATOR_FEED_FORWARD);
         } break;
+        /*case ControlMode::HangingPreExit:
+            m_wrist->SetPosition(-30);
+            m_wrist->OpenClaw();
+            m_interimPositionGoal.wristPosition = -30.0;
+            if (fabs(m_wrist->GetPosition() + 30.0) < 5.0) {
+                m_controlMode = ControlMode::HangingExit;
+            }
+            break;
+        case ControlMode::HangingExit: {
+            double elevatorInput =
+                -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
+            double wristInc = pow(-m_operatorJoystick->GetRawAxisWithDeadband(
+                                      DualAction::RightXAxis),
+                                  3);
+            double wristPosGoal = m_interimPositionGoal.wristPosition;
+
+            m_wrist->m_wristMotor->ConfigContinuousCurrentLimit(10, 0);
+
+            wristPosGoal += wristInc * MAX_WRIST_SPEED * 1.0 / 20.0;
+            wristPosGoal = Util::bound(
+                wristPosGoal,
+                GetWristPosition() - MAX_WRIST_SPEED * 1.5 / 20.0,
+                GetWristPosition() + MAX_WRIST_SPEED * 1.5 / 20.0);
+
+            m_wrist->SetPositionStep(wristPosGoal);
+            m_elevator->SetPower(elevatorInput + ELEVATOR_FEED_FORWARD);
+          } break;*/
         case ControlMode::ManualVoltage: {
             double elevatorInput =
                 -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
