@@ -140,6 +140,11 @@ void IntakeAssembly::EjectCube() {
     m_controlMode = ControlMode::ManualPosition;
 }
 
+void IntakeAssembly::SlowEjectCube() {
+    m_wrist->SlowEjectCube();
+    m_controlMode = ControlMode::ManualPosition;
+}
+
 void IntakeAssembly::StopIntake() {
     m_wrist->StopIntake();
     m_controlMode = ControlMode::ManualPosition;
@@ -384,14 +389,14 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             break;
         case ControlMode::SwitchIntaking:
             GoToIntakePosition(GROUND_PRESET);
-            if (GetElevatorPosition() < 5.0 &&
+            /*if (GetElevatorPosition() < 5.0 &&
                 (m_wrist->IsCubeIn() ||
                  m_operatorJoystick->GetRawButton(DualAction::Back))) {
                 GoToIntakePosition(STOW_PRESET);
                 m_wrist->StopIntake();
                 m_intakeSignal->Reset();
                 m_greyLight->SetPixelStateProcessor(m_intakeSignal);
-            }
+            }*/
             break;
         case ControlMode::VaultStart:
             GoToIntakePosition(GROUND_PRESET);

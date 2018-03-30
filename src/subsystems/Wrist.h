@@ -64,6 +64,7 @@ public:
 
     void IntakeCube(double power);
     void EjectCube();
+    void SlowEjectCube();
     void StopIntake();
 
     bool IsCubeIn() const;

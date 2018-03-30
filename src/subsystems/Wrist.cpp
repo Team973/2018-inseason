@@ -38,7 +38,7 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_wristMotor->Config_kD(0, 0.0, 10);
     m_wristMotor->Config_kF(0, 0.0, 10);
     m_wristMotor->ConfigMotionCruiseVelocity(3750.0, 10);
-    m_wristMotor->ConfigMotionAcceleration(3200.0, 10);
+    m_wristMotor->ConfigMotionAcceleration(3700.0, 10);
     m_wristMotor->SelectProfileSlot(0, 0);
 
     m_wristMotor->EnableCurrentLimit(true);
@@ -154,6 +154,11 @@ void Wrist::IntakeCube(double power) {
 void Wrist::EjectCube() {
     m_leftRoller->Set(ControlMode::PercentOutput, 1.0);
     m_rightRoller->Set(ControlMode::PercentOutput, 1.0);
+}
+
+void Wrist::SlowEjectCube() {
+    m_leftRoller->Set(ControlMode::PercentOutput, 0.5);
+    m_rightRoller->Set(ControlMode::PercentOutput, 0.5);
 }
 
 void Wrist::StopIntake() {

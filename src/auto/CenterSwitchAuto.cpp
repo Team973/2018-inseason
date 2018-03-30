@@ -68,10 +68,10 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_intakeAssembly->IntakeCube(-1.0);
                 m_intakeAssembly->DropCube();
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
-                    m_drive->PIDDrive(44.0, -5.0, Drive::RelativeTo::Now, 1.0);
+                    m_drive->PIDDrive(44.0, -3.0, Drive::RelativeTo::Now, 1.0);
                 }
                 else {
-                    m_drive->PIDDrive(44.0, 5.0, Drive::RelativeTo::Now, 1.0);
+                    m_drive->PIDDrive(44.0, 3.0, Drive::RelativeTo::Now, 1.0);
                 }
                 m_autoTimer = GetMsecTime();
                 m_autoState++;

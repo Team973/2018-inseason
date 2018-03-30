@@ -79,6 +79,7 @@ public:
     void IntakeCube(double input);
     void VaultIntake();
     void EjectCube();
+    void SlowEjectCube();
     void StopIntake();
 
     void DropCube();

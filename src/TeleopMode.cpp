@@ -55,10 +55,10 @@ void Teleop::TeleopPeriodic() {
     double x =
         -m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
     bool quickturn = m_driverJoystick->GetRawButton(DualAction::RightBumper);
-    if (m_driverJoystick->GetRawButton(DualAction::RightTrigger)) {
+    /*if (m_driverJoystick->GetRawButton(DualAction::RightTrigger)) {
         x /= 3.0;
         y /= 3.0;
-    }
+    }*/
 
     if (m_driveMode == DriveMode::Cheesy) {
         m_drive->CheesyDrive(
@@ -81,6 +81,7 @@ void Teleop::TeleopPeriodic() {
         m_intakeAssembly->StopIntake();
         m_intakeAssembly->Flash();
         m_intakeAssembly->GoToIntakePosition(IntakeAssembly::STOW_PRESET);
+        s_intaking = false;
     }
 
     if (fabs(elevatorPosIncInput) > 0.25 || fabs(wristPosIncInput) > 0.25) {
@@ -129,7 +130,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
-                    m_intakeAssembly->EjectCube();
+                    m_intakeAssembly->SlowEjectCube();
                 }
                 else {
                     m_intakeAssembly->StopIntake();
@@ -144,9 +145,11 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::RightTrigger:
                 if (pressedP) {
+                    m_intakeAssembly->EjectCube();
                     // software low gear (in TeleopPeriodic)
                 }
                 else {
+                    m_intakeAssembly->StopIntake();
                 }
                 break;
             case DualAction::DPadUpVirtBtn:
