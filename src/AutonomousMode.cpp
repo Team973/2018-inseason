@@ -53,14 +53,14 @@ void Autonomous::AutonomousInit() {
         case AutoRoutineBase::RobotStartPosition::Left:
             switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case SwitchScalePosition::LL:
-                    m_twoCubeAuto->Reset();
-                    m_routine = m_twoCubeAuto;
+                    m_scaleAuto->Reset();
+                    m_routine = m_scaleAuto;
                     m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::LR:
-                    m_sideSwitch->Reset();
-                    m_routine = m_sideSwitch;
-                    m_direction = AutoRoutineBase::AutoDirection::Left;
+                    m_scaleOpposite->Reset();
+                    m_routine = m_scaleOpposite;
+                    m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
                 case SwitchScalePosition::RL:
                     m_scaleAuto->Reset();
@@ -68,9 +68,9 @@ void Autonomous::AutonomousInit() {
                     m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::RR:
-                    m_forwardAuto->Reset();
-                    m_routine = m_forwardAuto;
-                    m_direction = AutoRoutineBase::AutoDirection::Left;
+                    m_scaleOpposite->Reset();
+                    m_routine = m_scaleOpposite;
+                    m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
                 case SwitchScalePosition::NOT_YET_RECEIVED:
                     m_forwardAuto->Reset();
@@ -115,9 +115,9 @@ void Autonomous::AutonomousInit() {
         case AutoRoutineBase::RobotStartPosition::Right:
             switch (GetSwitchScalePosition(m_scoringLocations)) {
                 case SwitchScalePosition::LL:
-                    m_forwardAuto->Reset();
-                    m_routine = m_forwardAuto;
-                    m_direction = AutoRoutineBase::AutoDirection::Right;
+                    m_scaleOpposite->Reset();
+                    m_routine = m_scaleOpposite;
+                    m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::LR:
                     m_scaleAuto->Reset();
@@ -125,13 +125,13 @@ void Autonomous::AutonomousInit() {
                     m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
                 case SwitchScalePosition::RL:
-                    m_sideSwitch->Reset();
-                    m_routine = m_sideSwitch;
-                    m_direction = AutoRoutineBase::AutoDirection::Right;
+                    m_scaleOpposite->Reset();
+                    m_routine = m_scaleOpposite;
+                    m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 case SwitchScalePosition::RR:
-                    m_twoCubeAuto->Reset();
-                    m_routine = m_twoCubeAuto;
+                    m_scaleAuto->Reset();
+                    m_routine = m_scaleAuto;
                     m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
                 case SwitchScalePosition::NOT_YET_RECEIVED:
