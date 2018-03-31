@@ -135,6 +135,12 @@ void IntakeAssembly::VaultIntake() {
     m_wrist->CloseClaw();
 }
 
+void IntakeAssembly::WideIntake() {
+    m_controlMode = ControlMode::ManualPosition;
+    m_wrist->IntakeCube(-1.0);
+    m_wrist->JustOpenClaw();
+}
+
 void IntakeAssembly::FastEjectCube() {
     m_wrist->EjectCube(1.0);
     m_controlMode = ControlMode::ManualPosition;
@@ -146,7 +152,7 @@ void IntakeAssembly::EjectCube() {
 }
 
 void IntakeAssembly::SlowEjectCube() {
-    m_wrist->EjectCube(0.25);
+    m_wrist->EjectCube(0.35);
     m_controlMode = ControlMode::ManualPosition;
 }
 
@@ -191,7 +197,7 @@ void IntakeAssembly::EnableCoastMode() {
     m_elevator->EnableCoastMode();
 }
 
-const Wrist *IntakeAssembly::GetWrist() {
+Wrist *IntakeAssembly::GetWrist() {
     return m_wrist;
 }
 

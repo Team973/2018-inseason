@@ -78,6 +78,7 @@ public:
 
     void IntakeCube(double input);
     void VaultIntake();
+    void WideIntake();
     void FastEjectCube();
     void EjectCube();
     void HaltIntake();
@@ -95,7 +96,7 @@ public:
     void EnableBrakeMode();
     void EnableCoastMode();
 
-    const Wrist *GetWrist();
+    Wrist *GetWrist();
     const Elevator *GetElevator();
 
     double GetWristLowerBound(double elevatorPosition);

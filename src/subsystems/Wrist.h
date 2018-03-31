@@ -56,6 +56,7 @@ public:
      * When called, opens the claw arms
      */
     void OpenClaw();
+    void JustOpenClaw();
 
     /*
      * When called, closes claw arms

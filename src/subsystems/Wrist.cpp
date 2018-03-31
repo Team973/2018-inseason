@@ -146,6 +146,10 @@ void Wrist::CloseClaw() {
     m_cubeClamp->Set(false);
 }
 
+void Wrist::JustOpenClaw() {
+    m_cubeClamp->Set(true);
+}
+
 void Wrist::IntakeCube(double power) {
     m_leftRoller->Set(ControlMode::PercentOutput, power);
     m_rightRoller->Set(ControlMode::PercentOutput, power * 0.8);
@@ -157,8 +161,8 @@ void Wrist::EjectCube(double power) {
 }
 
 void Wrist::StopIntake() {
-    m_leftRoller->Set(ControlMode::PercentOutput, -0.2);
-    m_rightRoller->Set(ControlMode::PercentOutput, -0.2);
+    m_leftRoller->Set(ControlMode::PercentOutput, -0.15);
+    m_rightRoller->Set(ControlMode::PercentOutput, -0.15);
 }
 
 bool Wrist::IsCubeIn() const {

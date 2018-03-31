@@ -109,6 +109,8 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::BtnB:
                 if (pressedP) {
                 }
+                else {
+                }
                 break;
             case DualAction::BtnX:
                 if (pressedP) {
