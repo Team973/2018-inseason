@@ -151,14 +151,9 @@ void Wrist::IntakeCube(double power) {
     m_rightRoller->Set(ControlMode::PercentOutput, power * 0.8);
 }
 
-void Wrist::EjectCube() {
-    m_leftRoller->Set(ControlMode::PercentOutput, 1.0);
-    m_rightRoller->Set(ControlMode::PercentOutput, 1.0);
-}
-
-void Wrist::SlowEjectCube() {
-    m_leftRoller->Set(ControlMode::PercentOutput, 0.5);
-    m_rightRoller->Set(ControlMode::PercentOutput, 0.5);
+void Wrist::EjectCube(double power) {
+    m_leftRoller->Set(ControlMode::PercentOutput, power);
+    m_rightRoller->Set(ControlMode::PercentOutput, power);
 }
 
 void Wrist::StopIntake() {

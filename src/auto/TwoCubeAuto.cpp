@@ -48,7 +48,7 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
         case 2:
             if (m_drive->GetSplinePercentComplete() > 0.80 ||
                 m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
-                m_intakeAssembly->EjectCube();
+                m_intakeAssembly->FastEjectCube();
                 m_autoState++;
             }
             break;
@@ -101,7 +101,7 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             break;
         case 6:
             if (m_intakeAssembly->GetElevator()->GetPosition() > 20.0) {
-                m_intakeAssembly->EjectCube();
+                m_intakeAssembly->FastEjectCube();
                 m_autoState++;
             }
             break;*/

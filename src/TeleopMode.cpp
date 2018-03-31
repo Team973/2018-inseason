@@ -123,6 +123,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
+                    m_intakeAssembly->HaltIntake();
                     m_intakeAssembly->DropCube();
                 }
                 else {
@@ -133,7 +134,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                     m_intakeAssembly->SlowEjectCube();
                 }
                 else {
-                    m_intakeAssembly->StopIntake();
+                    m_intakeAssembly->HaltIntake();
                 }
                 break;
             case DualAction::RightBumper:
@@ -149,7 +150,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                     // software low gear (in TeleopPeriodic)
                 }
                 else {
-                    m_intakeAssembly->StopIntake();
+                    m_intakeAssembly->HaltIntake();
                 }
                 break;
             case DualAction::DPadUpVirtBtn:
@@ -160,7 +161,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
-                    m_driveMode = DriveMode::Hanger;
+                    m_driveMode = DriveMode::Cheesy;
                     m_hanger->DisengagePTO();
                 }
                 break;
@@ -238,7 +239,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                     m_intakeAssembly->EjectCube();
                 }
                 else {
-                    m_intakeAssembly->StopIntake();
+                    m_intakeAssembly->HaltIntake();
                 }
                 break;
             case DualAction::RightBumper:

@@ -66,7 +66,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             break;
         case 4:
             if (m_drive->GetSplinePercentComplete() >= 1.0) {
-                m_intakeAssembly->EjectCube();
+                m_intakeAssembly->FastEjectCube();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }

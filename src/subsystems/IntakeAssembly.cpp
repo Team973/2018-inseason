@@ -135,13 +135,23 @@ void IntakeAssembly::VaultIntake() {
     m_wrist->CloseClaw();
 }
 
+void IntakeAssembly::FastEjectCube() {
+    m_wrist->EjectCube(1.0);
+    m_controlMode = ControlMode::ManualPosition;
+}
+
 void IntakeAssembly::EjectCube() {
-    m_wrist->EjectCube();
+    m_wrist->EjectCube(0.5);
     m_controlMode = ControlMode::ManualPosition;
 }
 
 void IntakeAssembly::SlowEjectCube() {
-    m_wrist->SlowEjectCube();
+    m_wrist->EjectCube(0.25);
+    m_controlMode = ControlMode::ManualPosition;
+}
+
+void IntakeAssembly::HaltIntake() {
+    m_wrist->EjectCube(0.0);
     m_controlMode = ControlMode::ManualPosition;
 }
 

@@ -63,8 +63,7 @@ public:
     void CloseClaw();
 
     void IntakeCube(double power);
-    void EjectCube();
-    void SlowEjectCube();
+    void EjectCube(double power);
     void StopIntake();
 
     bool IsCubeIn() const;
