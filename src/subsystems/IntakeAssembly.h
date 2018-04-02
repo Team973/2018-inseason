@@ -78,7 +78,11 @@ public:
 
     void IntakeCube(double input);
     void VaultIntake();
+    void WideIntake();
+    void FastEjectCube();
     void EjectCube();
+    void HaltIntake();
+    void SlowEjectCube();
     void StopIntake();
 
     void DropCube();
@@ -92,7 +96,7 @@ public:
     void EnableBrakeMode();
     void EnableCoastMode();
 
-    const Wrist *GetWrist();
+    Wrist *GetWrist();
     const Elevator *GetElevator();
 
     double GetWristLowerBound(double elevatorPosition);
@@ -130,8 +134,10 @@ private:
         SubForkPosition,
         SuperForkPosition,
         OverBackPosition,
+        PreHanging,
+        MidHanging,
         HangingAuto,
-        HangingManual,
+        HangingManual
     };
 
     TaskMgr *m_scheduler;

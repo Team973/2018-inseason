@@ -37,7 +37,7 @@ void SideSwitch::Execute(AutoRoutineBase::AutoDirection direction) {
         case 1:
             if (m_drive->GetSplinePercentComplete() > 0.8 ||
                 m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
-                m_intakeAssembly->EjectCube();
+                m_intakeAssembly->FastEjectCube();
                 m_autoState++;
             }
             break;

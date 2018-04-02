@@ -38,7 +38,7 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             m_autoState++;
             break;
         case 1:
-            if (GetMsecTime() - m_autoTimer > 2000) {
+            if (GetMsecTime() - m_autoTimer > 4000) {
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::SCALE_HIGH_PRESET);
                 m_autoTimer = GetMsecTime();
@@ -48,7 +48,7 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
         case 2:
             if (m_drive->GetSplinePercentComplete() > 0.80 ||
                 m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
-                m_intakeAssembly->EjectCube();
+                m_intakeAssembly->FastEjectCube();
                 m_autoState++;
             }
             break;
@@ -70,7 +70,7 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_autoState++;
             }
             break;
-        case 4:
+        /*case 4:
             if (m_drive->GetSplinePercentComplete() > 1.0) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
@@ -83,6 +83,7 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                         Drive::RelativeTo::Now);
                 }
                 m_intakeAssembly->IntakeCube(-1.0);
+                m_intakeAssembly->DropCube();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
@@ -91,6 +92,7 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             if ((m_drive->GetSplinePercentComplete() > 0.8) ||
                 GetMsecTime() - m_autoTimer > 4000 ||
                 m_intakeAssembly->GetWrist()->IsCubeIn()) {
+                m_intakeAssembly->GrabCube();
                 m_intakeAssembly->StopIntake();
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::LOW_GOAL_PRESET);
@@ -99,10 +101,10 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             break;
         case 6:
             if (m_intakeAssembly->GetElevator()->GetPosition() > 20.0) {
-                m_intakeAssembly->EjectCube();
+                m_intakeAssembly->FastEjectCube();
                 m_autoState++;
             }
-            break;
+            break;*/
         default:
             break;
     }
