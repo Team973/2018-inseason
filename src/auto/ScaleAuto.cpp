@@ -49,9 +49,8 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             if (m_drive->GetSplinePercentComplete() > 1.0 ||
                 GetMsecTime() - m_autoTimer > 4000) {
                 m_intakeAssembly->GoToIntakePosition(
-                    IntakeAssembly::IntakePreset(
-                        Elevator::SCALE_HIGH,
-                        Wrist::EXTENDED));
+                    IntakeAssembly::IntakePreset(Elevator::SCALE_HIGH,
+                                                 Wrist::EXTENDED));
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }

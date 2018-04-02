@@ -74,6 +74,8 @@ public:
     void ObserveJoystickStateChange(uint32_t port, uint32_t button,
                                     bool pressedP) override;
 
+    static const int NUM_LED = 26;
+
 private:
     PowerDistributionPanel *m_pdp;
 

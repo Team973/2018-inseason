@@ -35,7 +35,6 @@ static constexpr double DRIVE_IPS_FROM_CPDS =
     1 * 10 / DRIVE_ENCODER_COUNT * DRIVE_DIST_PER_REVOLUTION;  // aka 0.0383
 };
 
-
 /**
  * Elevator Subsystem
  */
@@ -44,11 +43,7 @@ static constexpr double DRIVE_IPS_FROM_CPDS =
 static const int ELEVATOR_CAN_ID = 4;
 
 // Constants
-static const double ELEVATOR_INCHES_PER_CLICK = 8.0 / 4096.0;
-static const double ELEVATOR_SOFT_HEIGHT_LIMIT = 80.5;
 static const double ELEVATOR_FEED_FORWARD = 0.10;
-static const double ELEVATOR_MAX_SPEED = 4000.0;
-
 
 /**
  * Hanger Subsystem
@@ -60,7 +55,6 @@ static const int FORKLIFT_TALON_CAN_ID = 6;
 // Pnuematics
 static const int HANGER_PTO_PCM_ID = 0;
 static const int FORK_DEPLOY_PCM_ID = 5;
-
 
 /**
  * Intake Subsystem
@@ -77,19 +71,12 @@ static const int LEFT_INTAKE_BEAM_BREAKER_SENSOR_DIN = 3;
 // Pneumatics
 static const int CUBE_CLAMP_PCM_ID = 1;
 
-
 /**
  * Wrist Subsystem
  */
 
 // CAN IDs
 static const int WRIST_CAN_ID = 7;
-
-// Constants
-static const int WRIST_REVERSE_SOFT_LIMIT = -80.0;
-static const int WRIST_FORWARD_SOFT_LIMIT = 90.0;
-static const double WRIST_MAX_SPEED = 3000.0;
-
 
 /**
  * Pneumatics Hardware
@@ -103,15 +90,9 @@ static const int COMPRESSOR_RELAY = 0;
 
 
 /**
- * Misc
+ * Joysticks
  */
 
-// Joysticks
+// Port IDs
 static const int DRIVER_JOYSTICK_PORT = 0;
 static const int OPERATOR_JOYSTICK_PORT = 1;
-
-// LEDs
-static const int NUM_LED = 26;
-
-// Constants
-static const double ROBOT_LOOP_PERIOD_SEC_PER_LOOP = 1.0 / 20.0;

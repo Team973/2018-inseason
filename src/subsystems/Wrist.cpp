@@ -49,8 +49,7 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_wristMotor->ConfigPeakOutputForward(0.5, 10);
     m_wristMotor->ConfigPeakOutputReverse(-0.5, 10);
 
-    m_wristMotor->SetSelectedSensorPosition(DegreesToNativeUnits(-30),
-                                            0, 0);
+    m_wristMotor->SetSelectedSensorPosition(DegreesToNativeUnits(-30), 0, 0);
 
     /*if (this->GetPosition() > 180.0) {
         m_wristMotor->SetSelectedSensorPosition(
