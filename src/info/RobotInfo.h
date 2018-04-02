@@ -83,7 +83,7 @@ static const int WRIST_CAN_ID = 7;
  */
 
 // CAN IDs
-static const int PCM_CAN_ID = 17
+static const int PCM_CAN_ID = 17;
 
 // Digital Inputs
 static const int PRESSURE_DIN_ID = 1;
