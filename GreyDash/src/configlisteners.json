@@ -83,7 +83,18 @@
       },
       "title": "Elevator Current",
       "keys": [
-        "/SmartDashboard/drive/currents/current"
+        "/SmartDashboard/elevator/currents/current"
+      ]
+    },
+    {
+      "settings": {
+        "tooltip": true,
+        "minValue": 0,
+        "maxValue": 30
+      },
+      "title": "Wrist Current",
+      "keys": [
+        "/SmartDashboard/wrist/outputs/current"
       ]
     },
     {
