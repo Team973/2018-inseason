@@ -137,9 +137,7 @@ private:
         PreHanging,
         MidHanging,
         HangingAuto,
-        HangingManual /*,
-         HangingPreExit,
-         HangingExit*/
+        HangingManual
     };
 
     TaskMgr *m_scheduler;
