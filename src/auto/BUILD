@@ -35,6 +35,15 @@ cc_library(
         "//src/auto/profiles:leftswitchreset_header",
         "//src/auto/profiles:rightsideswitchbackoff_header",
         "//src/auto/profiles:leftsideswitchbackoff_header",
+        "//src/auto/profiles:secondleftscalebackoff_header",
+        "//src/auto/profiles:secondleftscaleintaking_header",
+        "//src/auto/profiles:thirdleftscalebackoff_header",
+        "//src/auto/profiles:thirdleftscaleintaking_header",
+        "//src/auto/profiles:secondrightscalebackoff_header",
+        "//src/auto/profiles:secondrightscaleintaking_header",
+        "//src/auto/profiles:thirdrightscalebackoff_header",
+        "//src/auto/profiles:thirdrightscaleintaking_header",
+
     ],
     visibility = ["//visibility:public"],
 )
