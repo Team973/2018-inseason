@@ -22,7 +22,7 @@
 #include "src/TestMode.h"
 #include "lib/helpers/JoystickHelper.h"
 #include "src/subsystems/Elevator.h"
-#include "src/subsystems/Intake.h"
+#include "src/subsystems/Claw.h"
 #include "src/subsystems/Wrist.h"
 #include "src/subsystems/Hanger.h"
 #include "src/subsystems/Drive.h"
@@ -111,7 +111,7 @@ private:
     TalonSRX *m_forkliftTalon;
     GreyLight *m_greylight;
     Elevator *m_elevator;
-    Intake *m_intake;
+    Claw *m_claw;
     Wrist *m_wrist;
     IntakeAssembly *m_intakeAssembly;
     Drive *m_drive;

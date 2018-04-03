@@ -1,4 +1,4 @@
-#include "src/subsystems/Intake.h"
+#include "src/subsystems/Claw.h"
 #include "WPILib.h"
 #include "ctre/Phoenix.h"
 #include "lib/util/WrapDash.h"
@@ -7,9 +7,9 @@ using namespace frc;
 using namespace ctre::phoenix::motorcontrol;
 
 namespace frc973 {
-Intake::Intake(TaskMgr *scheduler, LogSpreadsheet *logger,
-               DigitalInput *rightCubeSensor, DigitalInput *leftCubeSensor,
-               TalonSRX *leftRoller, TalonSRX *rightRoller, Solenoid *cubeClamp)
+Claw::Claw(TaskMgr *scheduler, LogSpreadsheet *logger,
+           DigitalInput *rightCubeSensor, DigitalInput *leftCubeSensor,
+           TalonSRX *leftRoller, TalonSRX *rightRoller, Solenoid *cubeClamp)
         : m_scheduler(scheduler)
         , m_rightCubeSensor(rightCubeSensor)
         , m_leftCubeSensor(leftCubeSensor)
@@ -42,43 +42,43 @@ Intake::Intake(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_bannerFilter->SetPeriodNanoSeconds(80000);
 }
 
-Intake::~Intake() {
+Claw::~Claw() {
     m_scheduler->UnregisterTask(this);
 }
 
-void Intake::OpenClaw() {
+void Claw::OpenClaw() {
     m_cubeClamp->Set(true);
 }
 
-void Intake::CloseClaw() {
+void Claw::CloseClaw() {
     m_cubeClamp->Set(false);
 }
 
-void Intake::IntakeCube(double power) {
+void Claw::IntakeCube(double power) {
     m_leftRoller->Set(ControlMode::PercentOutput, power);
     m_rightRoller->Set(ControlMode::PercentOutput, power * 0.8);
 }
 
-void Intake::EjectCube(double power) {
+void Claw::EjectCube(double power) {
     m_leftRoller->Set(ControlMode::PercentOutput, power);
     m_rightRoller->Set(ControlMode::PercentOutput, power);
 }
 
-void Intake::HoldCube() {
+void Claw::HoldCube() {
     m_leftRoller->Set(ControlMode::PercentOutput, -0.15);
     m_rightRoller->Set(ControlMode::PercentOutput, -0.15);
 }
 
-void Intake::StopIntake() {
+void Claw::StopIntake() {
     m_leftRoller->Set(ControlMode::PercentOutput, 0.0);
     m_rightRoller->Set(ControlMode::PercentOutput, 0.0);
 }
 
-bool Intake::IsCubeIn() const {
+bool Claw::IsCubeIn() const {
     return (!m_leftCubeSensor->Get() || !m_rightCubeSensor->Get());
 }
 
-void Intake::TaskPeriodic(RobotMode mode) {
+void Claw::TaskPeriodic(RobotMode mode) {
     DBStringPrintf(DBStringPos::DB_LINE5, "cube: l%d r %d c%d",
                    m_leftCubeSensor->Get(), m_rightCubeSensor->Get(),
                    IsCubeIn());

@@ -80,7 +80,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             if (m_drive->GetPIDDistError() < 5.0) {
                 m_intakeAssembly->GrabCube();
             }
-            if (m_intakeAssembly->GetIntake()->IsCubeIn() ||
+            if (m_intakeAssembly->GetClaw()->IsCubeIn() ||
                 GetMsecTime() - m_autoTimer > 3500) {
                 m_intakeAssembly->GrabCube();
                 m_autoTimer = GetMsecTime();

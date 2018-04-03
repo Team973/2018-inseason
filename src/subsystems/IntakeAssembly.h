@@ -8,7 +8,7 @@
 #include "lib/helpers/JoystickHelper.h"
 #include "lib/util/Util.h"
 #include "src/subsystems/Elevator.h"
-#include "src/subsystems/Intake.h"
+#include "src/subsystems/Claw.h"
 #include "src/subsystems/Wrist.h"
 #include "lib/helpers/GreyLight.h"
 #include "lib/pixelprocessors/Flash.h"
@@ -61,7 +61,7 @@ public:
 
     IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
                    ObservableJoystick *operatorJoystick, Elevator *elevator,
-                   Intake *intake, Wrist *wrist, GreyLight *greylight);
+                   Claw *claw, Wrist *wrist, GreyLight *greylight);
     virtual ~IntakeAssembly();
 
     /**
@@ -99,7 +99,7 @@ public:
     void EnableCoastMode();
 
     Wrist *GetWrist();
-    Intake *GetIntake();
+    Claw *GetClaw();
     Elevator *GetElevator();
 
     double GetWristLowerBound(double elevatorPosition);
@@ -147,7 +147,7 @@ private:
 
     ObservableJoystick *m_operatorJoystick;
     Elevator *m_elevator;
-    Intake *m_intake;
+    Claw *m_claw;
     Wrist *m_wrist;
     GreyLight *m_greyLight;
     LightPattern::Flash *m_intakeSignal;

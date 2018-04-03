@@ -12,12 +12,12 @@ namespace frc973 {
 class TaskMgr;
 class LogSpreadsheet;
 
-class Intake : public CoopTask {
+class Claw : public CoopTask {
 public:
-    Intake(TaskMgr *scheduler, LogSpreadsheet *logger,
-           DigitalInput *rightCubeSensor, DigitalInput *leftCubeSensor,
-           TalonSRX *leftRoller, TalonSRX *rightRoller, Solenoid *cubeClamp);
-    virtual ~Intake();
+    Claw(TaskMgr *scheduler, LogSpreadsheet *logger,
+         DigitalInput *rightCubeSensor, DigitalInput *leftCubeSensor,
+         TalonSRX *leftRoller, TalonSRX *rightRoller, Solenoid *cubeClamp);
+    virtual ~Claw();
 
     /*
      * When called, opens the claw arms
