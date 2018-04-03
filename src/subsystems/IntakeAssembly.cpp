@@ -122,48 +122,39 @@ void IntakeAssembly::SetModeHanging(bool hanging) {
 }
 
 void IntakeAssembly::RunIntake(double power) {
-    m_controlMode = ControlMode::SwitchIntaking;
     m_claw->RunIntake(power);
 }
 
 void IntakeAssembly::FastEjectCube() {
     m_claw->EjectCube(1.0);
-    m_controlMode = ControlMode::ManualPosition;
 }
 
 void IntakeAssembly::EjectCube() {
     m_claw->EjectCube(0.5);
-    m_controlMode = ControlMode::ManualPosition;
 }
 
 void IntakeAssembly::SlowEjectCube() {
     m_claw->EjectCube(0.35);
-    m_controlMode = ControlMode::ManualPosition;
 }
 
 void IntakeAssembly::HaltIntake() {
     m_claw->EjectCube(0.0);
-    m_controlMode = ControlMode::ManualPosition;
 }
 
 void IntakeAssembly::HoldCube() {
     m_claw->HoldCube();
-    m_controlMode = ControlMode::ManualPosition;
 }
 
 void IntakeAssembly::StopIntake() {
     m_claw->StopIntake();
-    m_controlMode = ControlMode::ManualPosition;
 }
 
 void IntakeAssembly::OpenClaw() {
     m_claw->OpenClaw();
-    m_controlMode = ControlMode::ManualPosition;
 }
 
 void IntakeAssembly::CloseClaw() {
     m_claw->CloseClaw();
-    m_controlMode = ControlMode::ManualPosition;
 }
 
 double IntakeAssembly::GetElevatorPosition() {
@@ -374,19 +365,6 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             break;
         case ControlMode::OverBackPosition:
             SetPosition(OVER_BACK_PRESET);
-            break;
-        case ControlMode::SwitchIntaking:
-            GoToIntakePosition(GROUND_PRESET);
-            break;
-        case ControlMode::VaultStart:
-            GoToIntakePosition(GROUND_PRESET);
-            m_claw->RunIntake(-1.0);
-            m_controlMode = ControlMode::VaultStop;
-            break;
-        case ControlMode::VaultStop:
-            if (m_claw->IsCubeIn()) {
-                HoldCube();
-            }
             break;
         case ControlMode::Zeroing:
             m_elevator->SetPower(-0.1);

@@ -88,7 +88,8 @@ void Teleop::TeleopPeriodic() {
         case CubeIntakeState::SwitchIntaking:
             m_intakeAssembly->RunIntake(-1.0);
             m_intakeAssembly->CloseClaw();
-            if (m_intakeAssembly->GetClaw()->IsCubeIn()) {
+            if (m_intakeAssembly->GetClaw()->IsCubeIn() or
+                m_operatorJoystick->GetRawButton(DualAction::Back)) {
                 m_cubeIntakeState = CubeIntakeState::Idle;
                 m_intakeAssembly->HoldCube();
                 m_intakeAssembly->Flash();
@@ -99,7 +100,8 @@ void Teleop::TeleopPeriodic() {
         case CubeIntakeState::VaultIntaking:
             m_intakeAssembly->RunIntake(-1.0);
             m_intakeAssembly->CloseClaw();
-            if (m_intakeAssembly->GetClaw()->IsCubeIn()) {
+            if (m_intakeAssembly->GetClaw()->IsCubeIn() or
+                m_operatorJoystick->GetRawButton(DualAction::Back)) {
                 m_cubeIntakeState = CubeIntakeState::Idle;
                 m_intakeAssembly->HoldCube();
                 m_intakeAssembly->Flash();
@@ -240,6 +242,8 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::LeftBumper:
                 if (pressedP) {
                     m_cubeIntakeState = CubeIntakeState::SwitchIntaking;
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::GROUND_PRESET);
                 }
                 else {
                     m_intakeAssembly->HoldCube();
@@ -249,6 +253,8 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::LeftTrigger:
                 if (pressedP) {
                     m_cubeIntakeState = CubeIntakeState::VaultIntaking;
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::GROUND_PRESET);
                 }
                 else {
                     m_intakeAssembly->HoldCube();
