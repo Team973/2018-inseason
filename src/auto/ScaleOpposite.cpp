@@ -1,4 +1,6 @@
 #include "src/auto/ScaleOpposite.h"
+#include "src/auto/profiles/leftscaleopposite_trajectory.h"
+#include "src/auto/profiles/rightscaleopposite_trajectory.h"
 #include "src/auto/profiles/secondleftscaleoppositebackoff_trajectory.h"
 #include "src/auto/profiles/secondleftscaleoppositeintaking_trajectory.h"
 #include "src/auto/profiles/secondrightscaleoppositebackoff_trajectory.h"
@@ -9,8 +11,8 @@
 #include "src/auto/profiles/thirdrightscaleoppositeintaking_trajectory.h"
 
 using namespace frc;
-using namespace left_scale;
-using namespace right_scale;
+using namespace left_scale_opposite;
+using namespace right_scale_opposite;
 using namespace second_left_scale_opposite_intaking;
 using namespace second_left_scale_opposite_backoff;
 using namespace second_right_scale_opposite_intaking;
@@ -83,7 +85,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 4:
-            if (m_intakeAssembly->IsCubeIn() ||
+            if (m_intakeAssembly->GetClaw()->IsCubeIn() ||
                 GetMsecTime() - m_autoTimer > 3000) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(&second_left_scale_opposite_backoff::
@@ -129,7 +131,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 7:
-            if (m_intakeAssembly->IsCubeIn() ||
+            if (m_intakeAssembly->GetClaw()->IsCubeIn() ||
                 GetMsecTime() - m_autoTimer > 3000) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(&third_left_scale_opposite_backoff::

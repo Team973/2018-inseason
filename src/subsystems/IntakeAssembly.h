@@ -57,6 +57,7 @@ public:
     static const IntakePreset SCALE_MID_PRESET;
     static const IntakePreset SCALE_HIGH_PRESET;
     static const IntakePreset OVER_BACK_PRESET;
+    static const IntakePreset SECOND_STACK_PRESET;
     static const IntakePreset HANGING_PRESET;
 
     IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
