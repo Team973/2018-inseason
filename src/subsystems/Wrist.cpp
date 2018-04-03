@@ -7,22 +7,13 @@ using namespace frc;
 using namespace ctre::phoenix::motorcontrol;
 
 namespace frc973 {
-Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
-             DigitalInput *rightCubeSensor, DigitalInput *leftCubeSensor,
-             TalonSRX *wristMotor, TalonSRX *leftRoller, TalonSRX *rightRoller,
-             Solenoid *cubeClamp)
-        : m_scheduler(scheduler)
+Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *wristMotor)
+        : m_wristMotor(wristMotor)
+        , m_scheduler(scheduler)
         , m_wristState(WristState::manualVoltage)
-        , m_rightCubeSensor(rightCubeSensor)
-        , m_leftCubeSensor(leftCubeSensor)
-        , m_cubeClamp(cubeClamp)
-        , m_leftRoller(leftRoller)
-        , m_rightRoller(rightRoller)
-        , m_wristMotor(wristMotor)
         , m_position(0.0)
         , m_prevWristSetpoint(0.0)
         , m_wristPositionDelta(0.0)
-        , m_bannerFilter(new DigitalGlitchFilter())
         , m_zeroingTime(0) {
     this->m_scheduler->RegisterTask("Wrist", this, TASK_PERIODIC);
 
@@ -80,28 +71,6 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_wristMotor->OverrideLimitSwitchesEnable(true);
 
     m_wristMotor->Set(ControlMode::PercentOutput, 0.0);
-
-    m_leftRoller->SetNeutralMode(NeutralMode::Brake);
-
-    m_rightRoller->SetNeutralMode(NeutralMode::Brake);
-    m_rightRoller->SetInverted(true);
-
-    m_leftRoller->Set(ControlMode::PercentOutput, 0.0);
-    m_rightRoller->Set(ControlMode::PercentOutput, 0.0);
-
-    m_leftRoller->EnableCurrentLimit(true);
-    m_leftRoller->ConfigPeakCurrentDuration(0, 10);
-    m_leftRoller->ConfigPeakCurrentLimit(0, 10);
-    m_leftRoller->ConfigContinuousCurrentLimit(50, 10);
-
-    m_rightRoller->EnableCurrentLimit(true);
-    m_rightRoller->ConfigPeakCurrentDuration(0, 10);
-    m_rightRoller->ConfigPeakCurrentLimit(0, 10);
-    m_rightRoller->ConfigContinuousCurrentLimit(50, 10);
-
-    m_bannerFilter->Add(m_leftCubeSensor);
-    m_bannerFilter->Add(m_rightCubeSensor);
-    m_bannerFilter->SetPeriodNanoSeconds(80000);
 }
 
 Wrist::~Wrist() {
@@ -136,39 +105,6 @@ void Wrist::ZeroPosition() {
                                             0, 0);
 }
 
-void Wrist::OpenClaw() {
-    m_cubeClamp->Set(true);
-    m_leftRoller->Set(ControlMode::PercentOutput, 0.0);
-    m_rightRoller->Set(ControlMode::PercentOutput, 0.0);
-}
-
-void Wrist::CloseClaw() {
-    m_cubeClamp->Set(false);
-}
-
-void Wrist::JustOpenClaw() {
-    m_cubeClamp->Set(true);
-}
-
-void Wrist::IntakeCube(double power) {
-    m_leftRoller->Set(ControlMode::PercentOutput, power);
-    m_rightRoller->Set(ControlMode::PercentOutput, power * 0.8);
-}
-
-void Wrist::EjectCube(double power) {
-    m_leftRoller->Set(ControlMode::PercentOutput, power);
-    m_rightRoller->Set(ControlMode::PercentOutput, power);
-}
-
-void Wrist::StopIntake() {
-    m_leftRoller->Set(ControlMode::PercentOutput, -0.15);
-    m_rightRoller->Set(ControlMode::PercentOutput, -0.15);
-}
-
-bool Wrist::IsCubeIn() const {
-    return (!m_leftCubeSensor->Get() || !m_rightCubeSensor->Get());
-}
-
 void Wrist::TaskPeriodic(RobotMode mode) {
     SmartDashboard::PutNumber("wrist/outputs/current",
                               m_wristMotor->GetOutputCurrent());
@@ -178,9 +114,6 @@ void Wrist::TaskPeriodic(RobotMode mode) {
         m_wristMotor->GetSensorCollection().GetPulseWidthPosition(),
         m_wristMotor->GetSensorCollection().IsFwdLimitSwitchClosed(),
         m_wristMotor->GetSensorCollection().IsRevLimitSwitchClosed());
-    DBStringPrintf(DBStringPos::DB_LINE5, "cube: l%d r %d c%d",
-                   m_leftCubeSensor->Get(), m_rightCubeSensor->Get(),
-                   IsCubeIn());
 
     if (m_wristMotor->GetSensorCollection().IsFwdLimitSwitchClosed()) {
         ZeroPosition();

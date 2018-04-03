@@ -7,7 +7,6 @@
 #include "src/info/RobotInfo.h"
 #include "lib/helpers/JoystickHelper.h"
 #include "lib/util/Util.h"
-#include "DigitalGlitchFilter.h"
 
 using namespace frc;
 
@@ -24,10 +23,7 @@ public:
 
     static constexpr double WRIST_DEGREES_PER_CLICK = 360.0 / 4096.0;
 
-    Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
-          DigitalInput *rightCubeSensor, DigitalInput *leftCubeSensor,
-          TalonSRX *wristMotor, TalonSRX *leftRoller, TalonSRX *rightRoller,
-          Solenoid *cubeClamp);
+    Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *wristMotor);
     virtual ~Wrist();
 
     /**
@@ -52,24 +48,9 @@ public:
 
     void ZeroPosition();
 
-    /*
-     * When called, opens the claw arms
-     */
-    void OpenClaw();
-    void JustOpenClaw();
-
-    /*
-     * When called, closes claw arms
-     */
-    void CloseClaw();
-
-    void IntakeCube(double power);
-    void EjectCube(double power);
-    void StopIntake();
-
-    bool IsCubeIn() const;
-
     void TaskPeriodic(RobotMode mode);
+
+    TalonSRX *m_wristMotor;
 
 private:
     /*
@@ -88,21 +69,9 @@ private:
     TaskMgr *m_scheduler;
     WristState m_wristState;
 
-    DigitalInput *m_rightCubeSensor;
-    DigitalInput *m_leftCubeSensor;
-    Solenoid *m_cubeClamp;
-
-    TalonSRX *m_leftRoller;
-    TalonSRX *m_rightRoller;
-
-public:
-    TalonSRX *m_wristMotor;
-
-private:
     double m_position;
     double m_prevWristSetpoint;
     double m_wristPositionDelta;
-    DigitalGlitchFilter *m_bannerFilter;
     uint32_t m_zeroingTime;
 };
 }

@@ -77,7 +77,7 @@ void Teleop::TeleopPeriodic() {
     double wristPosIncInput = pow(
         -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis), 3);
 
-    if (s_intaking && m_intakeAssembly->GetWrist()->IsCubeIn()) {
+    if (s_intaking && m_intakeAssembly->GetIntake()->IsCubeIn()) {
         m_intakeAssembly->StopIntake();
         m_intakeAssembly->Flash();
         m_intakeAssembly->GoToIntakePosition(IntakeAssembly::STOW_PRESET);
