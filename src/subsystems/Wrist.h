@@ -70,7 +70,6 @@ private:
     };
 
     TaskMgr *m_scheduler;
-    WristState m_wristState;
 
     double m_position;
     double m_prevWristSetpoint;

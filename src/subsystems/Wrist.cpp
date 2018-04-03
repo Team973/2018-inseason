@@ -10,7 +10,6 @@ namespace frc973 {
 Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *wristMotor)
         : m_wristMotor(wristMotor)
         , m_scheduler(scheduler)
-        , m_wristState(WristState::manualVoltage)
         , m_position(0.0)
         , m_prevWristSetpoint(0.0)
         , m_wristPositionDelta(0.0)
@@ -78,19 +77,16 @@ Wrist::~Wrist() {
 }
 
 void Wrist::SetPower(double power) {
-    m_wristState = WristState::manualVoltage;
     m_wristMotor->Set(ControlMode::PercentOutput, power);
 }
 
 void Wrist::SetPosition(double position) {
-    m_wristState = WristState::motionMagic;
     int position_clicks = DegreesToNativeUnits(Util::bound(
         position, WRIST_REVERSE_SOFT_LIMIT, WRIST_FORWARD_SOFT_LIMIT));
     m_wristMotor->Set(ControlMode::MotionMagic, position_clicks);
 }
 
 void Wrist::SetPositionStep(double position) {
-    m_wristState = WristState::motionMagic;
     int position_clicks = DegreesToNativeUnits(Util::bound(
         position, WRIST_REVERSE_SOFT_LIMIT, WRIST_FORWARD_SOFT_LIMIT));
     m_wristMotor->Set(ControlMode::Position, position_clicks);
@@ -117,19 +113,6 @@ void Wrist::TaskPeriodic(RobotMode mode) {
 
     if (m_wristMotor->GetSensorCollection().IsFwdLimitSwitchClosed()) {
         ZeroPosition();
-    }
-
-    switch (m_wristState) {
-        case WristState::manualVoltage:
-            break;
-        case WristState::motionMagic:
-            break;
-        case WristState::manualPosition:
-            m_wristMotor->Set(ControlMode::Position,
-                              m_wristPositionDelta + this->GetPosition());
-            break;
-        default:
-            break;
     }
 }
 
