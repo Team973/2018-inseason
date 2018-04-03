@@ -77,9 +77,8 @@ public:
     void SetPosManualInput();
     void SetModeHanging(bool hanging);
 
-    void IntakeCube(double input);
-    void VaultIntake();
-    void WideIntake();
+    void RunIntake(double input);
+
     void FastEjectCube();
     void EjectCube();
     void HaltIntake();
@@ -87,8 +86,8 @@ public:
     void HoldCube();
     void StopIntake();
 
-    void DropCube();
-    void GrabCube();
+    void OpenClaw();
+    void CloseClaw();
 
     double GetElevatorPosition();
     double GetWristPosition();

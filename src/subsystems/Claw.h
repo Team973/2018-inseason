@@ -29,7 +29,7 @@ public:
      */
     void CloseClaw();
 
-    void IntakeCube(double power);
+    void RunIntake(double power);
     void EjectCube(double power);
     void HoldCube();
     void StopIntake();

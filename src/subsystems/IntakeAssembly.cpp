@@ -121,22 +121,9 @@ void IntakeAssembly::SetModeHanging(bool hanging) {
     }
 }
 
-void IntakeAssembly::IntakeCube(double power) {
+void IntakeAssembly::RunIntake(double power) {
     m_controlMode = ControlMode::SwitchIntaking;
-    m_claw->IntakeCube(power);
-    m_claw->CloseClaw();
-}
-
-void IntakeAssembly::VaultIntake() {
-    m_controlMode = ControlMode::VaultStart;
-    m_claw->IntakeCube(-1.0);
-    m_claw->CloseClaw();
-}
-
-void IntakeAssembly::WideIntake() {
-    m_controlMode = ControlMode::ManualPosition;
-    m_claw->IntakeCube(-1.0);
-    m_claw->OpenClaw();
+    m_claw->RunIntake(power);
 }
 
 void IntakeAssembly::FastEjectCube() {
@@ -169,12 +156,12 @@ void IntakeAssembly::StopIntake() {
     m_controlMode = ControlMode::ManualPosition;
 }
 
-void IntakeAssembly::DropCube() {
+void IntakeAssembly::OpenClaw() {
     m_claw->OpenClaw();
     m_controlMode = ControlMode::ManualPosition;
 }
 
-void IntakeAssembly::GrabCube() {
+void IntakeAssembly::CloseClaw() {
     m_claw->CloseClaw();
     m_controlMode = ControlMode::ManualPosition;
 }
@@ -342,7 +329,7 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             }
             m_claw->OpenClaw();
             m_claw->StopIntake();
-            m_elevator->SetPower(elevatorInput + 
+            m_elevator->SetPower(elevatorInput +
                                  Elevator::ELEVATOR_FEED_FORWARD);
         } break;
         case ControlMode::ManualVoltage: {
@@ -393,7 +380,7 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             break;
         case ControlMode::VaultStart:
             GoToIntakePosition(GROUND_PRESET);
-            m_claw->IntakeCube(-1.0);
+            m_claw->RunIntake(-1.0);
             m_controlMode = ControlMode::VaultStop;
             break;
         case ControlMode::VaultStop:

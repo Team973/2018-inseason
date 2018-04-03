@@ -54,7 +54,7 @@ void Claw::CloseClaw() {
     m_cubeClamp->Set(false);
 }
 
-void Claw::IntakeCube(double power) {
+void Claw::RunIntake(double power) {
     m_leftRoller->Set(ControlMode::PercentOutput, power);
     m_rightRoller->Set(ControlMode::PercentOutput, power * 0.8);
 }
