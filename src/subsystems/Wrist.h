@@ -23,6 +23,9 @@ public:
 
     static constexpr double WRIST_DEGREES_PER_CLICK = 360.0 / 4096.0;
 
+    static const int WRIST_REVERSE_SOFT_LIMIT = -80.0;
+    static const int WRIST_FORWARD_SOFT_LIMIT = 90.0;
+
     Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *wristMotor);
     virtual ~Wrist();
 
