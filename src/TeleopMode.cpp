@@ -21,6 +21,7 @@ Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_drive(drive)
         , m_driveMode(DriveMode::Cheesy)
         , m_intakeAssembly(intakeAssembly)
+        , m_cubeIntakeState(CubeIntakeState::Idle)
         , m_endGameSignalSent(false)
         , m_enableForkDeploy(false)
         , m_hanger(hanger)
@@ -77,15 +78,35 @@ void Teleop::TeleopPeriodic() {
     double wristPosIncInput = pow(
         -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis), 3);
 
-    if (s_intaking && m_intakeAssembly->GetWrist()->IsCubeIn()) {
-        m_intakeAssembly->StopIntake();
-        m_intakeAssembly->Flash();
-        m_intakeAssembly->GoToIntakePosition(IntakeAssembly::STOW_PRESET);
-        s_intaking = false;
-    }
-
     if (fabs(elevatorPosIncInput) > 0.25 || fabs(wristPosIncInput) > 0.25) {
         m_intakeAssembly->SetPosManualInput();
+    }
+
+    switch (m_cubeIntakeState) {
+        case CubeIntakeState::Idle:
+            break;
+        case CubeIntakeState::SwitchIntaking:
+            m_intakeAssembly->RunIntake(-1.0);
+            m_intakeAssembly->CloseClaw();
+            if (m_intakeAssembly->GetClaw()->IsCubeIn() or
+                m_operatorJoystick->GetRawButton(DualAction::Back)) {
+                m_cubeIntakeState = CubeIntakeState::Idle;
+                m_intakeAssembly->HoldCube();
+                m_intakeAssembly->Flash();
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::STOW_PRESET);
+            }
+            break;
+        case CubeIntakeState::VaultIntaking:
+            m_intakeAssembly->RunIntake(-1.0);
+            m_intakeAssembly->CloseClaw();
+            if (m_intakeAssembly->GetClaw()->IsCubeIn() or
+                m_operatorJoystick->GetRawButton(DualAction::Back)) {
+                m_cubeIntakeState = CubeIntakeState::Idle;
+                m_intakeAssembly->HoldCube();
+                m_intakeAssembly->Flash();
+            }
+            break;
     }
 }
 
@@ -126,7 +147,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::LeftBumper:
                 if (pressedP) {
                     m_intakeAssembly->HaltIntake();
-                    m_intakeAssembly->DropCube();
+                    m_intakeAssembly->OpenClaw();
                 }
                 else {
                 }
@@ -220,20 +241,24 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
-                    m_intakeAssembly->IntakeCube(-1.0);
-                    s_intaking = true;
+                    m_cubeIntakeState = CubeIntakeState::SwitchIntaking;
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::GROUND_PRESET);
                 }
                 else {
-                    m_intakeAssembly->StopIntake();
-                    s_intaking = false;
+                    m_intakeAssembly->HoldCube();
+                    m_cubeIntakeState = CubeIntakeState::Idle;
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
-                    m_intakeAssembly->VaultIntake();
+                    m_cubeIntakeState = CubeIntakeState::VaultIntaking;
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::GROUND_PRESET);
                 }
                 else {
-                    m_intakeAssembly->StopIntake();
+                    m_intakeAssembly->HoldCube();
+                    m_cubeIntakeState = CubeIntakeState::Idle;
                 }
                 break;
             case DualAction::RightTrigger:

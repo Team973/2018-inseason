@@ -103,7 +103,8 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                         &two_cube_intaking_right::two_cube_intaking_right,
                         Drive::RelativeTo::SetPoint);
                 }
-                m_intakeAssembly->IntakeCube(-1.0);
+                m_intakeAssembly->RunIntake(-1.0);
+                m_intakeAssembly->CloseClaw();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
@@ -111,7 +112,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             break;
         case 5:
             if ((GetMsecTime() - m_autoTimer > 4000 ||
-                 m_intakeAssembly->GetWrist()->IsCubeIn())) {
+                 m_intakeAssembly->GetClaw()->IsCubeIn())) {
                 m_intakeAssembly->StopIntake();
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::LOW_GOAL_PRESET);

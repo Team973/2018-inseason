@@ -9,11 +9,12 @@ using namespace frc;
 namespace frc973 {
 IntakeAssembly::IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
                                ObservableJoystick *operatorJoystick,
-                               Elevator *elevator, Wrist *wrist,
+                               Elevator *elevator, Claw *claw, Wrist *wrist,
                                GreyLight *greylight)
         : m_scheduler(scheduler)
         , m_operatorJoystick(operatorJoystick)
         , m_elevator(elevator)
+        , m_claw(claw)
         , m_wrist(wrist)
         , m_greyLight(greylight)
         , m_intakeSignal(
@@ -49,7 +50,7 @@ const IntakeAssembly::IntakePreset IntakeAssembly::HANGING_PRESET =
 
 void IntakeAssembly::GoToIntakePosition(IntakePreset intakePosition) {
     m_endPositionGoal = intakePosition;
-    m_wrist->CloseClaw();
+    m_claw->CloseClaw();
 
     if (intakePosition == OVER_BACK_PRESET) {
         if (GetElevatorPosition() >= 77.0) {
@@ -120,57 +121,40 @@ void IntakeAssembly::SetModeHanging(bool hanging) {
     }
 }
 
-void IntakeAssembly::IntakeCube(double power) {
-    m_controlMode = ControlMode::SwitchIntaking;
-    m_wrist->IntakeCube(power);
-    m_wrist->CloseClaw();
-}
-
-void IntakeAssembly::VaultIntake() {
-    m_controlMode = ControlMode::VaultStart;
-    m_wrist->IntakeCube(-1.0);
-    m_wrist->CloseClaw();
-}
-
-void IntakeAssembly::WideIntake() {
-    m_controlMode = ControlMode::ManualPosition;
-    m_wrist->IntakeCube(-1.0);
-    m_wrist->JustOpenClaw();
+void IntakeAssembly::RunIntake(double power) {
+    m_claw->RunIntake(power);
 }
 
 void IntakeAssembly::FastEjectCube() {
-    m_wrist->EjectCube(1.0);
-    m_controlMode = ControlMode::ManualPosition;
+    m_claw->EjectCube(1.0);
 }
 
 void IntakeAssembly::EjectCube() {
-    m_wrist->EjectCube(0.5);
-    m_controlMode = ControlMode::ManualPosition;
+    m_claw->EjectCube(0.5);
 }
 
 void IntakeAssembly::SlowEjectCube() {
-    m_wrist->EjectCube(0.35);
-    m_controlMode = ControlMode::ManualPosition;
+    m_claw->EjectCube(0.35);
 }
 
 void IntakeAssembly::HaltIntake() {
-    m_wrist->EjectCube(0.0);
-    m_controlMode = ControlMode::ManualPosition;
+    m_claw->EjectCube(0.0);
+}
+
+void IntakeAssembly::HoldCube() {
+    m_claw->HoldCube();
 }
 
 void IntakeAssembly::StopIntake() {
-    m_wrist->StopIntake();
-    m_controlMode = ControlMode::ManualPosition;
+    m_claw->StopIntake();
 }
 
-void IntakeAssembly::DropCube() {
-    m_wrist->OpenClaw();
-    m_controlMode = ControlMode::ManualPosition;
+void IntakeAssembly::OpenClaw() {
+    m_claw->OpenClaw();
 }
 
-void IntakeAssembly::GrabCube() {
-    m_wrist->CloseClaw();
-    m_controlMode = ControlMode::ManualPosition;
+void IntakeAssembly::CloseClaw() {
+    m_claw->CloseClaw();
 }
 
 double IntakeAssembly::GetElevatorPosition() {
@@ -194,8 +178,12 @@ void IntakeAssembly::EnableCoastMode() {
     m_elevator->EnableCoastMode();
 }
 
-Wrist *IntakeAssembly::GetWrist() {
+const Wrist *IntakeAssembly::GetWrist() {
     return m_wrist;
+}
+
+const Claw *IntakeAssembly::GetClaw() {
+    return m_claw;
 }
 
 const Elevator *IntakeAssembly::GetElevator() {
@@ -299,7 +287,8 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
         case ControlMode::PreHanging:
             m_elevator->SetPosition(36.0);
             m_wrist->SetPosition(-30.0);
-            m_wrist->OpenClaw();
+            m_claw->OpenClaw();
+            m_claw->StopIntake();
             if (m_elevator->GetPosition() > 34.0) {
                 m_controlMode = ControlMode::MidHanging;
             }
@@ -311,7 +300,8 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             }
             break;
         case ControlMode::HangingAuto:
-            m_wrist->OpenClaw();
+            m_claw->OpenClaw();
+            m_claw->StopIntake();
             SetPosition(HANGING_PRESET);
             m_wrist->m_wristMotor->ConfigContinuousCurrentLimit(5, 0);
             if (GetPositionError() < 5.0) {
@@ -328,7 +318,8 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             else {
                 m_wrist->SetPosition(-30.0);
             }
-            m_wrist->OpenClaw();
+            m_claw->OpenClaw();
+            m_claw->StopIntake();
             m_elevator->SetPower(elevatorInput +
                                  Elevator::ELEVATOR_FEED_FORWARD);
         } break;
@@ -374,19 +365,6 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             break;
         case ControlMode::OverBackPosition:
             SetPosition(OVER_BACK_PRESET);
-            break;
-        case ControlMode::SwitchIntaking:
-            GoToIntakePosition(GROUND_PRESET);
-            break;
-        case ControlMode::VaultStart:
-            GoToIntakePosition(GROUND_PRESET);
-            m_wrist->IntakeCube(-1.0);
-            m_controlMode = ControlMode::VaultStop;
-            break;
-        case ControlMode::VaultStop:
-            if (m_wrist->IsCubeIn()) {
-                StopIntake();
-            }
             break;
         case ControlMode::Zeroing:
             m_elevator->SetPower(-0.1);

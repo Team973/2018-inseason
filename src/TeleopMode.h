@@ -48,10 +48,17 @@ private:
         Cheesy,
         Hanger
     };
-
     DriveMode m_driveMode;
 
     IntakeAssembly *m_intakeAssembly;
+    enum class CubeIntakeState
+    {
+        Idle,
+        SwitchIntaking,
+        VaultIntaking
+    };
+    CubeIntakeState m_cubeIntakeState;
+
     double m_elevatorPosition;
 
     uint32_t m_intakeModeTimer;

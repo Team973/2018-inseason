@@ -8,6 +8,7 @@
 #include "lib/helpers/JoystickHelper.h"
 #include "lib/util/Util.h"
 #include "src/subsystems/Elevator.h"
+#include "src/subsystems/Claw.h"
 #include "src/subsystems/Wrist.h"
 #include "lib/helpers/GreyLight.h"
 #include "lib/pixelprocessors/Flash.h"
@@ -60,7 +61,7 @@ public:
 
     IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
                    ObservableJoystick *operatorJoystick, Elevator *elevator,
-                   Wrist *wrist, GreyLight *greylight);
+                   Claw *claw, Wrist *wrist, GreyLight *greylight);
     virtual ~IntakeAssembly();
 
     /**
@@ -76,17 +77,17 @@ public:
     void SetPosManualInput();
     void SetModeHanging(bool hanging);
 
-    void IntakeCube(double input);
-    void VaultIntake();
-    void WideIntake();
+    void RunIntake(double input);
+
     void FastEjectCube();
     void EjectCube();
     void HaltIntake();
     void SlowEjectCube();
+    void HoldCube();
     void StopIntake();
 
-    void DropCube();
-    void GrabCube();
+    void OpenClaw();
+    void CloseClaw();
 
     double GetElevatorPosition();
     double GetWristPosition();
@@ -96,7 +97,8 @@ public:
     void EnableBrakeMode();
     void EnableCoastMode();
 
-    Wrist *GetWrist();
+    const Wrist *GetWrist();
+    const Claw *GetClaw();
     const Elevator *GetElevator();
 
     double GetWristLowerBound(double elevatorPosition);
@@ -127,9 +129,6 @@ private:
         ManualPosition,
         ManualVoltage,
         Zeroing,
-        SwitchIntaking,
-        VaultStart,
-        VaultStop,
         LowPosition,
         SubForkPosition,
         SuperForkPosition,
@@ -144,6 +143,7 @@ private:
 
     ObservableJoystick *m_operatorJoystick;
     Elevator *m_elevator;
+    Claw *m_claw;
     Wrist *m_wrist;
     GreyLight *m_greyLight;
     LightPattern::Flash *m_intakeSignal;
