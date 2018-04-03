@@ -39,7 +39,7 @@ void SwitchOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
         case 1:
             if (m_drive->GetSplinePercentComplete() > 1.0 ||
                 m_drive->OnTarget()) {
-                m_intakeAssembly->EjectCube();
+                m_intakeAssembly->FastEjectCube();
                 m_autoState++;
             }
             break;

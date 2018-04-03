@@ -106,6 +106,14 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
 
     m_rightDriveVictorC->Follow(*m_rightDriveTalonA);
     m_rightDriveVictorC->SetInverted(false);
+
+    logger->RegisterCell(m_angleLog);
+    logger->RegisterCell(m_angularRateLog);
+    logger->RegisterCell(m_leftDistLog);
+    logger->RegisterCell(m_leftDistRateLog);
+    logger->RegisterCell(m_rightDistLog);
+    logger->RegisterCell(m_rightDistRateLog);
+    logger->RegisterCell(m_currentLog);
 }
 
 Drive::~Drive(){};

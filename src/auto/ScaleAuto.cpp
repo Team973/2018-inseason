@@ -57,7 +57,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             break;
         case 3:
             if (GetMsecTime() - m_autoTimer > 500) {
-                m_intakeAssembly->EjectCube();
+                m_intakeAssembly->FastEjectCube();
             }
             if (GetMsecTime() - m_autoTimer > 1000) {
                 m_drive->PIDDrive(-24.0, 0.0, Drive::RelativeTo::Now, 0.5);

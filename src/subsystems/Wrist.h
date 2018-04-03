@@ -59,6 +59,7 @@ public:
      * When called, opens the claw arms
      */
     void OpenClaw();
+    void JustOpenClaw();
 
     /*
      * When called, closes claw arms
@@ -66,7 +67,7 @@ public:
     void CloseClaw();
 
     void IntakeCube(double power);
-    void EjectCube();
+    void EjectCube(double power);
     void StopIntake();
 
     bool IsCubeIn() const;
@@ -96,8 +97,11 @@ private:
 
     TalonSRX *m_leftRoller;
     TalonSRX *m_rightRoller;
+
+public:
     TalonSRX *m_wristMotor;
 
+private:
     double m_position;
     double m_prevWristSetpoint;
     double m_wristPositionDelta;

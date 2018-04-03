@@ -33,12 +33,12 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_wristMotor->SetNeutralMode(NeutralMode::Coast);
     m_wristMotor->SetInverted(true);
 
-    m_wristMotor->Config_kP(0, 3.0, 10);
+    m_wristMotor->Config_kP(0, 3.5, 10);
     m_wristMotor->Config_kI(0, 0.0, 10);
     m_wristMotor->Config_kD(0, 0.0, 10);
     m_wristMotor->Config_kF(0, 0.0, 10);
     m_wristMotor->ConfigMotionCruiseVelocity(3750.0, 10);
-    m_wristMotor->ConfigMotionAcceleration(3200.0, 10);
+    m_wristMotor->ConfigMotionAcceleration(3700.0, 10);
     m_wristMotor->SelectProfileSlot(0, 0);
 
     m_wristMotor->EnableCurrentLimit(true);
@@ -48,8 +48,6 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_wristMotor->EnableVoltageCompensation(true);
     m_wristMotor->ConfigPeakOutputForward(0.5, 10);
     m_wristMotor->ConfigPeakOutputReverse(-0.5, 10);
-
-    m_wristMotor->SetSelectedSensorPosition(DegreesToNativeUnits(-30), 0, 0);
 
     /*if (this->GetPosition() > 180.0) {
         m_wristMotor->SetSelectedSensorPosition(
@@ -94,16 +92,16 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_leftRoller->EnableCurrentLimit(true);
     m_leftRoller->ConfigPeakCurrentDuration(0, 10);
     m_leftRoller->ConfigPeakCurrentLimit(0, 10);
-    m_leftRoller->ConfigContinuousCurrentLimit(15, 10);
+    m_leftRoller->ConfigContinuousCurrentLimit(50, 10);
 
     m_rightRoller->EnableCurrentLimit(true);
     m_rightRoller->ConfigPeakCurrentDuration(0, 10);
     m_rightRoller->ConfigPeakCurrentLimit(0, 10);
-    m_rightRoller->ConfigContinuousCurrentLimit(15, 10);
+    m_rightRoller->ConfigContinuousCurrentLimit(50, 10);
 
     m_bannerFilter->Add(m_leftCubeSensor);
     m_bannerFilter->Add(m_rightCubeSensor);
-    m_bannerFilter->SetPeriodNanoSeconds(20000);
+    m_bannerFilter->SetPeriodNanoSeconds(80000);
 }
 
 Wrist::~Wrist() {
@@ -140,33 +138,40 @@ void Wrist::ZeroPosition() {
 
 void Wrist::OpenClaw() {
     m_cubeClamp->Set(true);
+    m_leftRoller->Set(ControlMode::PercentOutput, 0.0);
+    m_rightRoller->Set(ControlMode::PercentOutput, 0.0);
 }
 
 void Wrist::CloseClaw() {
     m_cubeClamp->Set(false);
 }
 
+void Wrist::JustOpenClaw() {
+    m_cubeClamp->Set(true);
+}
+
 void Wrist::IntakeCube(double power) {
+    m_leftRoller->Set(ControlMode::PercentOutput, power);
+    m_rightRoller->Set(ControlMode::PercentOutput, power * 0.8);
+}
+
+void Wrist::EjectCube(double power) {
     m_leftRoller->Set(ControlMode::PercentOutput, power);
     m_rightRoller->Set(ControlMode::PercentOutput, power);
 }
 
-void Wrist::EjectCube() {
-    m_leftRoller->Set(ControlMode::PercentOutput, 1.0);
-    m_rightRoller->Set(ControlMode::PercentOutput, 1.0);
-}
-
 void Wrist::StopIntake() {
-    m_leftRoller->Set(ControlMode::PercentOutput, -0.1);
-    m_rightRoller->Set(ControlMode::PercentOutput, -0.1);
+    m_leftRoller->Set(ControlMode::PercentOutput, -0.15);
+    m_rightRoller->Set(ControlMode::PercentOutput, -0.15);
 }
 
 bool Wrist::IsCubeIn() const {
-    return (/*!m_leftCubeSensor->Get() ||*/ !m_rightCubeSensor->Get());
+    return (!m_leftCubeSensor->Get() || !m_rightCubeSensor->Get());
 }
 
 void Wrist::TaskPeriodic(RobotMode mode) {
-    SmartDashboard::PutNumber("elevator/encoders/encoder", GetPosition());
+    SmartDashboard::PutNumber("wrist/outputs/current",
+                              m_wristMotor->GetOutputCurrent());
     DBStringPrintf(
         DBStringPos::DB_LINE7, "e %d pwp %d r %d f %d",
         m_wristMotor->GetClosedLoopError(0),
