@@ -112,7 +112,7 @@ class ObservableJoystick
         : public CoopTask
         , public Joystick {
 public:
-    static constexpr double DEADBAND_INPUT_THRESHOLD = 0.07;
+    static constexpr double DEADBAND_INPUT_THRESHOLD = 0.05;
     static constexpr double VIRTUAL_JOYSTICK_THRESHOLD = 0.5;
 
 protected:
