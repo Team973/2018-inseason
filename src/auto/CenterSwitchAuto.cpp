@@ -73,18 +73,13 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 }
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);
-                m_autoState++;
-            }
-            break;
-        case 3:
-            if (m_drive->GetSplinePercentComplete() > 0.9) {
                 m_intakeAssembly->RunIntake(-1.0);
                 m_intakeAssembly->OpenClaw();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
-        case 4:
+        case 3:
             if (m_intakeAssembly->GetClaw()->IsCubeIn() ||
                 GetMsecTime() - m_autoTimer > 3500) {
                 m_intakeAssembly->CloseClaw();
@@ -102,7 +97,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_autoState++;
             }
             break;
-        case 5:
+        case 4:
             if (GetMsecTime() - m_autoTimer > 500) {
                 m_intakeAssembly->StopIntake();
                 m_intakeAssembly->GoToIntakePosition(
@@ -111,14 +106,14 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_autoState++;
             }
             break;
-        case 6:
+        case 5:
             if (m_drive->GetSplinePercentComplete() > 0.80 ||
                 m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
                 m_intakeAssembly->FastEjectCube();
                 m_autoState++;
             }
             break;
-        case 7:
+        case 6:
             if (m_drive->OnTarget()) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(&third_center_left_switch_intaking::
@@ -138,7 +133,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_autoState++;
             }
             break;
-        case 8:
+        case 7:
             if (m_intakeAssembly->GetClaw()->IsCubeIn() ||
                 GetMsecTime() - m_autoTimer > 3500) {
                 m_intakeAssembly->CloseClaw();
@@ -158,13 +153,13 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_autoState++;
             }
             break;
-        case 9:
+        case 8:
             if (m_drive->GetSplinePercentComplete() > 0.8) {
                 m_intakeAssembly->FastEjectCube();
                 m_autoState++;
             }
             break;
-        case 10:
+        case 9:
             if (m_drive->GetSplinePercentComplete() > 0.9) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(&left_switch_reset::left_switch_reset,
@@ -181,7 +176,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_autoState++;
             }
             break;
-        case 11:
+        case 10:
             if (m_drive->GetSplinePercentComplete() > 1.0) {
                 m_drive->OpenloopArcadeDrive(0.0, 0.0);
                 m_intakeAssembly->GoToIntakePosition(
