@@ -82,7 +82,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 4:
-            if (m_intakeAssembly->IsCubeIn() ||
+            if (m_intakeAssembly->GetClaw()->IsCubeIn() ||
                 GetMsecTime() - m_autoTimer > 3000) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
@@ -126,7 +126,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 7:
-            if (m_intakeAssembly->IsCubeIn() ||
+            if (m_intakeAssembly->GetClaw()->IsCubeIn() ||
                 GetMsecTime() - m_autoTimer > 3000) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
