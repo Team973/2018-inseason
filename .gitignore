@@ -3,6 +3,7 @@
 build/*
 test/build/*
 .DS_Store
+.ropeproject
 bazel-*
 *.pyc
 __pycache__/*

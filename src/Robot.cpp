@@ -49,12 +49,12 @@ Robot::Robot()
         , m_forkliftTalon(new GreyTalonSRX(FORKLIFT_TALON_CAN_ID))
         , m_greylight(new GreyLight(NUM_LED))
         , m_elevator(new Elevator(this, m_logger, m_elevatorMotor))
-        , m_wrist(new Wrist(this, m_logger, m_leftCubeSensor, m_rightCubeSensor,
-                            m_wristMotor, m_leftRoller, m_rightRoller,
-                            m_cubeClamp))
+        , m_claw(new Claw(this, m_logger, m_rightCubeSensor, m_leftCubeSensor,
+                          m_leftRoller, m_rightRoller, m_cubeClamp))
+        , m_wrist(new Wrist(this, m_logger, m_wristMotor))
         , m_intakeAssembly(new IntakeAssembly(this, m_logger,
                                               m_operatorJoystick, m_elevator,
-                                              m_wrist, m_greylight))
+                                              m_claw, m_wrist, m_greylight))
         , m_drive(new Drive(this, m_logger, m_leftDriveTalonA,
                             m_leftDriveVictorB, m_leftDriveVictorC,
                             m_rightDriveTalonA, m_rightDriveVictorB,

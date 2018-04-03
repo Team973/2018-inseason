@@ -4,6 +4,7 @@
 #include <iostream>
 #include "src/auto/AutoRoutineBase.h"
 #include "src/subsystems/Drive.h"
+#include "src/subsystems/Claw.h"
 #include "src/subsystems/IntakeAssembly.h"
 
 using namespace frc;
