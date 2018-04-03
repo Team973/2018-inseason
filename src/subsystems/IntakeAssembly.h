@@ -97,9 +97,9 @@ public:
     void EnableBrakeMode();
     void EnableCoastMode();
 
-    Wrist *GetWrist();
-    Claw *GetClaw();
-    Elevator *GetElevator();
+    const Wrist *GetWrist();
+    const Claw *GetClaw();
+    const Elevator *GetElevator();
 
     double GetWristLowerBound(double elevatorPosition);
 
