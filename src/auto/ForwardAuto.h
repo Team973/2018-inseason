@@ -2,16 +2,21 @@
 
 #include "WPILib.h"
 #include <iostream>
-#include "src/auto/AutoRoutine.h"
+#include "src/auto/AutoRoutineBase.h"
+#include "src/subsystems/Drive.h"
 
 using namespace frc;
 namespace frc973 {
-class ForwardAuto : public AutoRoutine {
+class ForwardAuto : public AutoRoutineBase {
 public:
-    ForwardAuto(void);
-    virtual ~ForwardAuto(void);
+    ForwardAuto(Drive *drive);
+    virtual ~ForwardAuto();
 
-    void Execute(void) override;
-    void Reset(void);
+    void Execute(AutoRoutineBase::AutoDirection direction) override;
+
+    void Reset() override;
+
+private:
+    Drive *m_drive;
 };
 };

@@ -1,16 +1,10 @@
-/*
- * Claw.h
- *
- *  Created on: January 7, 2018
- *      Author: Kyle
- */
 #pragma once
 
 #include "WPILib.h"
-#include "Phoenix.h"
+#include "ctre/Phoenix.h"
 #include "lib/managers/CoopTask.h"
 #include "lib/logging/LogSpreadsheet.h"
-#include "src/info/RobotInfo.h"
+#include "DigitalGlitchFilter.h"
 
 using namespace frc;
 
@@ -20,20 +14,40 @@ class LogSpreadsheet;
 
 class Claw : public CoopTask {
 public:
-    Claw(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *rightRoller,
-         TalonSRX *leftRoller, DigitalInput *cubeSensor);
+    Claw(TaskMgr *scheduler, LogSpreadsheet *logger,
+         DigitalInput *rightCubeSensor, DigitalInput *leftCubeSensor,
+         TalonSRX *leftRoller, TalonSRX *rightRoller, Solenoid *cubeClamp);
     virtual ~Claw();
 
-    void Intake();
-    void Eject();
-    void Stop();
+    /*
+     * When called, opens the claw arms
+     */
+    void OpenClaw();
+
+    /*
+     * When called, closes claw arms
+     */
+    void CloseClaw();
+
+    void RunIntake(double power);
+    void EjectCube(double power);
+    void HoldCube();
+    void StopIntake();
+
+    bool IsCubeIn() const;
 
     void TaskPeriodic(RobotMode mode);
 
 private:
     TaskMgr *m_scheduler;
+
+    DigitalInput *m_rightCubeSensor;
+    DigitalInput *m_leftCubeSensor;
+    Solenoid *m_cubeClamp;
+
     TalonSRX *m_leftRoller;
     TalonSRX *m_rightRoller;
-    DigitalInput *m_cubeSensor;
+
+    DigitalGlitchFilter *m_bannerFilter;
 };
 }

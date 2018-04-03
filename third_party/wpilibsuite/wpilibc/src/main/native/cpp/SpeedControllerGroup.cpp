@@ -19,7 +19,7 @@ void SpeedControllerGroup::Set(double speed) {
 
 double SpeedControllerGroup::Get() const {
   if (!m_speedControllers.empty()) {
-    return m_speedControllers.front().get().Get();
+    return m_speedControllers.front().get().Get() * (m_isInverted ? -1 : 1);
   }
   return 0.0;
 }
@@ -42,11 +42,7 @@ void SpeedControllerGroup::StopMotor() {
   }
 }
 
-void SpeedControllerGroup::PIDWrite(double output) {
-  for (auto speedController : m_speedControllers) {
-    speedController.get().PIDWrite(output);
-  }
-}
+void SpeedControllerGroup::PIDWrite(double output) { Set(output); }
 
 void SpeedControllerGroup::InitSendable(SendableBuilder& builder) {
   builder.SetSmartDashboardType("Speed Controller");

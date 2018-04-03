@@ -50,9 +50,12 @@ public:
      * Receive calculated motor powers from a controller.
      * Should only be called from a child of DriveController.
      */
-    virtual void SetDriveOutput(double left, double right) = 0;
-    virtual void SetDriveControlMode(
-        ctre::phoenix::motorcontrol::ControlMode mode) = 0;
+    virtual void SetDriveOutputIPS(double left, double right) = 0;
+    virtual void SetDriveOutputPosInches(double left, double right) = 0;
+    virtual void SetDriveOutputVBus(double left, double right) = 0;
+
+    virtual void ConfigDriveCurrentLimit(double limit) = 0;
+    virtual void DisableDriveCurrentLimit() = 0;
 };
 
 /*
@@ -80,10 +83,10 @@ public:
      */
     virtual bool OnTarget() = 0;
 
-    virtual void Start() {
+    virtual void Start(DriveControlSignalReceiver *out) {
     }
 
-    virtual void Stop() {
+    virtual void Stop(DriveControlSignalReceiver *out) {
     }
 };
 
@@ -101,9 +104,8 @@ public:
      * controller (an object capable of calculating motor outputs) and uses it
      * to calculate drive outputs, then drive those drive outputs.
      */
-    DriveBase(TaskMgr *scheduler, DriveStateProvider *state,
-              DriveControlSignalReceiver *outpt,
-              DriveController *controller = nullptr);
+    DriveBase(TaskMgr *scheduler, DriveControlSignalReceiver *out,
+              DriveStateProvider *state, DriveController *controller = nullptr);
     virtual ~DriveBase();
     /**
      * When making calls to PID-like-commands, parameters can be relative to
@@ -140,12 +142,12 @@ public:
      */
     bool OnTarget();
 
-private:
+protected:
     TaskMgr *m_scheduler;
-
-    DriveStateProvider *m_stateProvider;
     DriveControlSignalReceiver *m_driveOutput;
 
+private:
+    DriveStateProvider *m_stateProvider;
     DriveController *m_controller;
 };
 }

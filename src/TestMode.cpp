@@ -1,16 +1,21 @@
 #include "src/TestMode.h"
+#include "src/auto/profiles/sample_trajectory.h"
 
 using namespace frc;
+using namespace sample;
 
 namespace frc973 {
 Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-           ObservableJoystick *tuning, Elevator *elevator)
+           Drive *drive, IntakeAssembly *intakeAssembly, Hanger *hanger,
+           GreyLight *greylight)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
-        , m_tuningJoystick(tuning)
-        , m_elevator(elevator)
-        , m_elevatorMode(ElevatorMode::percentOutput)
-        , m_elevatorPosition(0.0) {
+        , m_drive(drive)
+        , m_intakeAssembly(intakeAssembly)
+        , m_hanger(hanger)
+        , m_greylight(greylight)
+        , m_flashSignal(
+              new LightPattern::Flash({0, 255, 0}, {0, 0, 0}, 50, 50)) {
 }
 
 Test::~Test() {
@@ -18,32 +23,65 @@ Test::~Test() {
 
 void Test::TestInit() {
     std::cout << "Test Start" << std::endl;
+    m_driveMode = DriveMode::Openloop;
+    m_intakeMode = IntakeMode::manualPosition;
+    m_hanger->DisengagePTO();
 }
 
 void Test::TestPeriodic() {
-    if (m_elevatorPosition > 100.0) {
-        m_elevatorPosition = 100.0;  // does not allow value to exceed 100.0
-    }
-    else if (m_elevatorPosition < 0.0) {
-        m_elevatorPosition = 0.0;  // does not allow value to be under 0.0
+    double elevatorPosIncInput =
+        -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
+    double wristPosIncInput = pow(
+        -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis), 3);
+
+    if (fabs(elevatorPosIncInput) > 0.25 || fabs(wristPosIncInput) > 0.25) {
+        m_intakeAssembly->SetPosManualInput();
     }
 
-    double y = m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
-    printf("%1.3lf\n", y);
-    m_elevatorPosition +=
-        1.5 * Util::bound(m_driverJoystick->GetRawAxisWithDeadband(
-                              DualAction::RightYAxis),
-                          0.0, 100.0);  // Adds on 1.5 every call (20ms) to
-                                        // position while bounding it 10
+    if (m_intakeMode == IntakeMode::manualVoltage) {
+        double elevatorManualPower =
+            -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
+        double wristManualPower =
+            -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
 
-    if (m_elevatorMode == ElevatorMode::percentOutput) {
-        m_elevator->SetPower(y);
+        m_intakeAssembly->SetElevatorManualPower(
+            elevatorManualPower + Elevator::ELEVATOR_FEED_FORWARD);
+
+        m_intakeAssembly->SetWristManualPower(wristManualPower);
     }
-    else if (m_elevatorMode == ElevatorMode::motionMagic) {
-        m_elevator->SetMotionMagic(m_elevatorPosition);
+    else if (m_intakeMode == IntakeMode::manualPosition) {
     }
-    else if (m_elevatorMode == ElevatorMode::position) {
-        m_elevator->SetPosition(m_elevatorPosition);
+    else if (m_intakeMode == IntakeMode::motionMagic) {
+    }
+
+    double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
+    double x =
+        -m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
+    bool quickturn = m_driverJoystick->GetRawButton(DualAction::RightTrigger);
+
+    if (m_driverJoystick->GetRawButton(DualAction::RightBumper)) {
+    }
+    x /= 3.0;
+    y /= 3.0;
+
+    if (m_driveMode == DriveMode::AssistedArcade) {
+        m_drive->AssistedArcadeDrive(y, x);
+    }
+    else if (m_driveMode == DriveMode::Cheesy) {
+        m_drive->CheesyDrive(
+            y, x, quickturn,
+            false);  // gear set to false until solenoids get set up
+    }
+    else if (m_driveMode == DriveMode::Hanger) {
+        m_drive->HangerDrive(-y);
+    }
+    else if (m_driveMode == DriveMode::Openloop) {
+        m_drive->OpenloopArcadeDrive(y, x);
+    }
+    else if (m_driveMode == DriveMode::Velocity) {
+        m_drive->VelocityArcadeDrive(y, x);
+    }
+    else if (m_driveMode == DriveMode::Spline) {
     }
 }
 
@@ -55,21 +93,21 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
         switch (button) {
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::percentOutput;
                 }
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::motionMagic;
+                    m_hanger->DisengagePTO();
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::position;
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
+                    m_driveMode = DriveMode::Hanger;
+                    m_hanger->EngagePTO();
                 }
                 break;
             case DualAction::RightTrigger:
@@ -80,37 +118,51 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::RightBumper:
                 if (pressedP) {
+                    m_driveMode = DriveMode::Spline;
+                    m_drive->SplineDrive(&sample::sample,
+                                         Drive::RelativeTo::Now);
                 }
                 else {
                 }
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
+                    m_intakeMode = IntakeMode::motionMagic;
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::SCALE_MID_PRESET);
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
+                    m_intakeMode = IntakeMode::motionMagic;
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::SCALE_HIGH_PRESET);
                 }
                 break;
             case DualAction::BtnA:
                 if (pressedP) {
-                    m_elevatorMode = ElevatorMode::percentOutput;
+                    m_driveMode = DriveMode::Velocity;
                 }
                 break;
             case DualAction::BtnB:
                 if (pressedP) {
+                    m_driveMode = DriveMode::Openloop;
                 }
                 break;
             case DualAction::BtnX:
                 if (pressedP) {
+                    m_driveMode = DriveMode::AssistedArcade;
                 }
                 break;
             case DualAction::BtnY:
                 if (pressedP) {
+                    m_driveMode = DriveMode::Cheesy;
                 }
                 break;
             case DualAction::Start:
                 if (pressedP) {
+                    m_driveMode = DriveMode::PID;
+                    m_drive->PIDDrive(24, 0, Drive::RelativeTo::Now, 0.8);
                 }
                 break;
             case DualAction::Back:
@@ -123,18 +175,30 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
         switch (button) {
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
+                    m_intakeMode = IntakeMode::motionMagic;
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::STOW_PRESET);
                 }
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
+                    m_intakeMode = IntakeMode::motionMagic;
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::LOW_GOAL_PRESET);
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
+                    m_intakeMode = IntakeMode::motionMagic;
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::SCALE_MID_PRESET);
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
+                    m_intakeMode = IntakeMode::motionMagic;
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::VAULT_PRESET);
                 }
                 break;
             case DualAction::RightTrigger:
@@ -151,98 +215,59 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
+                    m_intakeAssembly->RunIntake(-1.0);
+                    m_intakeAssembly->CloseClaw();
+                }
+                else {
+                    m_intakeAssembly->StopIntake();
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
+                    m_intakeAssembly->EjectCube();
+                }
+                else {
+                    m_intakeAssembly->StopIntake();
                 }
                 break;
             case DualAction::BtnA:
                 if (pressedP) {
                 }
-                break;
-            case DualAction::BtnB:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::BtnX:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::BtnY:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::Start:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::Back:
-                if (pressedP) {
-                }
-                break;
-        }
-    }
-    else if (port == TUNING_JOYSTICK_PORT) {
-        switch (button) {
-            case DualAction::DPadUpVirtBtn:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::DPadDownVirtBtn:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::DPadRightVirtBtn:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::DPadLeftVirtBtn:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::RightTrigger:
-                if (pressedP) {
-                }
                 else {
-                }
-                break;
-            case DualAction::RightBumper:
-                if (pressedP) {
-                }
-                else {
-                }
-                break;
-            case DualAction::LeftBumper:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::LeftTrigger:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::BtnA:
-                if (pressedP) {
                 }
                 break;
             case DualAction::BtnB:
                 if (pressedP) {
                 }
+                else {
+                }
                 break;
             case DualAction::BtnX:
                 if (pressedP) {
+                }
+                else {
                 }
                 break;
             case DualAction::BtnY:
                 if (pressedP) {
                 }
+                else {
+                }
                 break;
             case DualAction::Start:
                 if (pressedP) {
+                    m_hanger->SetForkliftPower(0.5);
+                }
+                else {
+                    m_hanger->SetForkliftPower(0);
                 }
                 break;
             case DualAction::Back:
                 if (pressedP) {
+                    m_hanger->SetForkliftPower(-0.5);
+                }
+                else {
+                    m_hanger->SetForkliftPower(0);
                 }
                 break;
         }

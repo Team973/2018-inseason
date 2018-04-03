@@ -23,4 +23,15 @@ void DBStringPrintf(DBStringPos position, const char *formatstring, ...) {
 
     SmartDashboard::PutString(positionStrings[position], msg);
 }
+
+const char *matchTypeStrings[] = {
+    "None",
+    "Prac",
+    "Qual",
+    "Elim",
+};
+
+const char *MatchTypeToString(frc::DriverStation::MatchType matchType) {
+    return matchTypeStrings[matchType];
+}
 }

@@ -1,3 +1,12 @@
+/*
+ * TeleopMode.cpp
+ *
+ *  Created on: January 7, 2018
+ *      Authors: Kyle, Chris
+ *
+ *  Control map available at: https://goo.gl/MrViHA
+ */
+#include <cmath>
 #include "src/TeleopMode.h"
 #include "lib/helpers/JoystickHelper.h"
 
@@ -5,10 +14,20 @@ using namespace frc;
 
 namespace frc973 {
 Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
-               ObservableJoystick *tuning)
+               Drive *drive, IntakeAssembly *intakeAssembly, Hanger *hanger,
+               GreyLight *greylight)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
-        , m_tuningJoystick(tuning) {
+        , m_drive(drive)
+        , m_driveMode(DriveMode::Cheesy)
+        , m_intakeAssembly(intakeAssembly)
+        , m_cubeIntakeState(CubeIntakeState::Idle)
+        , m_endGameSignalSent(false)
+        , m_enableForkDeploy(false)
+        , m_hanger(hanger)
+        , m_greyLight(greylight)
+        , m_endGameSignal(
+              new LightPattern::Flash(END_GAME_RED, NO_COLOR, 50, 15)) {
 }
 
 Teleop::~Teleop() {
@@ -16,9 +35,79 @@ Teleop::~Teleop() {
 
 void Teleop::TeleopInit() {
     std::cout << "Teleop Start" << std::endl;
+    m_intakeAssembly->SetPosManualInput();
+    m_intakeAssembly->EnableCoastMode();
+    m_intakeAssembly->StopIntake();
+    m_hanger->DisengagePTO();
 }
 
+static bool s_intaking = false;
+
 void Teleop::TeleopPeriodic() {
+    if (!m_endGameSignalSent && Timer::GetMatchTime() < 40) {
+        m_endGameSignalSent = true;
+        m_endGameSignal->Reset();
+        m_greyLight->SetPixelStateProcessor(m_endGameSignal);
+    }
+    /**
+     * Driver Joystick
+     */
+    double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
+    double x =
+        -m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
+    bool quickturn = m_driverJoystick->GetRawButton(DualAction::RightBumper);
+    /*if (m_driverJoystick->GetRawButton(DualAction::RightTrigger)) {
+        x /= 3.0;
+        y /= 3.0;
+    }*/
+
+    if (m_driveMode == DriveMode::Cheesy) {
+        m_drive->CheesyDrive(
+            y, x, quickturn,
+            false);  // gear set to false until solenoids get set up
+    }
+    else if (m_driveMode == DriveMode::Hanger) {
+        // m_hanger->SetHangerPower(y);
+    }
+
+    /**
+     * Operator Joystick
+     */
+    double elevatorPosIncInput =
+        -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
+    double wristPosIncInput = pow(
+        -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis), 3);
+
+    if (fabs(elevatorPosIncInput) > 0.25 || fabs(wristPosIncInput) > 0.25) {
+        m_intakeAssembly->SetPosManualInput();
+    }
+
+    switch (m_cubeIntakeState) {
+        case CubeIntakeState::Idle:
+            break;
+        case CubeIntakeState::SwitchIntaking:
+            m_intakeAssembly->RunIntake(-1.0);
+            m_intakeAssembly->CloseClaw();
+            if (m_intakeAssembly->GetClaw()->IsCubeIn() or
+                m_operatorJoystick->GetRawButton(DualAction::Back)) {
+                m_cubeIntakeState = CubeIntakeState::Idle;
+                m_intakeAssembly->HoldCube();
+                m_intakeAssembly->Flash();
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::STOW_PRESET);
+            }
+            break;
+        case CubeIntakeState::VaultIntaking:
+            m_intakeAssembly->RunIntake(-1.0);
+            m_intakeAssembly->CloseClaw();
+            if (m_intakeAssembly->GetClaw()->IsCubeIn() or
+                m_operatorJoystick->GetRawButton(DualAction::Back)) {
+                m_cubeIntakeState = CubeIntakeState::Idle;
+                m_intakeAssembly->HoldCube();
+                m_intakeAssembly->Flash();
+            }
+            break;
+    }
 }
 
 void Teleop::TeleopStop() {
@@ -29,6 +118,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
         switch (button) {
             case DualAction::BtnA:
                 if (pressedP) {
+                    m_enableForkDeploy = true;
                 }
                 break;
             case DualAction::LJoystickBtn:
@@ -40,6 +130,8 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::BtnB:
                 if (pressedP) {
                 }
+                else {
+                }
                 break;
             case DualAction::BtnX:
                 if (pressedP) {
@@ -47,40 +139,53 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::BtnY:
                 if (pressedP) {
+                    if (m_enableForkDeploy || Timer::GetMatchTime() < 29) {
+                        m_hanger->DeployForks();
+                    }
                 }
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
+                    m_intakeAssembly->HaltIntake();
+                    m_intakeAssembly->OpenClaw();
                 }
                 else {
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
+                    m_intakeAssembly->SlowEjectCube();
                 }
                 else {
+                    m_intakeAssembly->HaltIntake();
                 }
                 break;
             case DualAction::RightBumper:
                 if (pressedP) {
+                    // quickturn (in TeleopPeriodic)
                 }
                 else {
                 }
                 break;
             case DualAction::RightTrigger:
                 if (pressedP) {
+                    m_intakeAssembly->EjectCube();
+                    // software low gear (in TeleopPeriodic)
                 }
                 else {
+                    m_intakeAssembly->HaltIntake();
                 }
                 break;
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
-                }
-                else {
+                    m_driveMode = DriveMode::Hanger;
+                    m_hanger->EngagePTO();
                 }
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
+                    m_driveMode = DriveMode::Cheesy;
+                    m_hanger->DisengagePTO();
                 }
                 break;
             case DualAction::DPadLeftVirtBtn:
@@ -89,6 +194,11 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
+                    m_driveMode = DriveMode::Hanger;
+                    m_drive->HangerDrive(1.0);
+                }
+                else {
+                    m_drive->HangerDrive(0.0);
                 }
                 break;
             case DualAction::Start:
@@ -96,7 +206,8 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 }
                 break;
             case DualAction::Back:
-
+                if (pressedP) {
+                }
                 break;
         }
     }
@@ -104,36 +215,58 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
         switch (button) {
             case DualAction::BtnY:
                 if (pressedP) {
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::SCALE_HIGH_PRESET);
                 }
                 break;
             case DualAction::BtnA:
                 if (pressedP) {
-                }
-                else {
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::GROUND_PRESET);
                 }
                 break;
             case DualAction::BtnX:
                 if (pressedP) {
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::SCALE_LOW_PRESET);
                 }
                 break;
             case DualAction::BtnB:
                 if (pressedP) {
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::LOW_GOAL_PRESET);
                 }
                 else {
                 }
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
+                    m_cubeIntakeState = CubeIntakeState::SwitchIntaking;
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::GROUND_PRESET);
+                }
+                else {
+                    m_intakeAssembly->HoldCube();
+                    m_cubeIntakeState = CubeIntakeState::Idle;
                 }
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
+                    m_cubeIntakeState = CubeIntakeState::VaultIntaking;
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::GROUND_PRESET);
+                }
+                else {
+                    m_intakeAssembly->HoldCube();
+                    m_cubeIntakeState = CubeIntakeState::Idle;
                 }
                 break;
             case DualAction::RightTrigger:
                 if (pressedP) {
+                    m_intakeAssembly->EjectCube();
                 }
                 else {
+                    m_intakeAssembly->HaltIntake();
                 }
                 break;
             case DualAction::RightBumper:
@@ -144,92 +277,45 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
+                    m_hanger->SetForkliftPower(-1.0);
                 }
                 else {
+                    m_hanger->SetForkliftPower(0);
                 }
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::OVER_BACK_PRESET);
                 }
+                /*
+                if (pressedP) {
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::STOW_PRESET);
+                }
+                    */
                 break;
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
+                    m_intakeAssembly->SetModeHanging(false);
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
+                    m_intakeAssembly->SetModeHanging(true);
                 }
                 break;
             case DualAction::Back:
                 if (pressedP) {
+                    // override banner sensor for switch automated pull
                 }
                 break;
             case DualAction::Start:
                 if (pressedP) {
-                }
-                break;
-        }
-    }
-    else if (port == TUNING_JOYSTICK_PORT) {
-        switch (button) {
-            case DualAction::DPadUpVirtBtn:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::DPadDownVirtBtn:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::DPadRightVirtBtn:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::DPadLeftVirtBtn:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::RightTrigger:
-                if (pressedP) {
+                    m_intakeAssembly->StartZeroPosition();
                 }
                 else {
-                }
-                break;
-            case DualAction::RightBumper:
-                if (pressedP) {
-                }
-                else {
-                }
-                break;
-            case DualAction::LeftBumper:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::LeftTrigger:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::BtnA:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::BtnB:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::BtnX:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::BtnY:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::Start:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::Back:
-                if (pressedP) {
+                    m_intakeAssembly->EndZeroPosition();
                 }
                 break;
         }

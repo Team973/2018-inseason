@@ -1,0 +1,64 @@
+::-webkit-scrollbar {
+    display: none;
+}
+
+html, body {
+    font-family: 'Roboto', 'Helvetica', sans-serif;
+}
+
+.content {
+    max-width: 95%;
+}
+
+
+/* Charts */
+
+.chartContainer {
+    padding: 0.2% 2% 0.2% 2%;
+}
+
+.responsiveCharts {
+    width: 100%;
+    height: 100px;
+}
+
+/* Indicators */
+.indicators {
+    padding: 0% 2% 0% 2%;
+}
+
+/* Gyro */
+
+.gyro {
+    width: 175px;
+    height: 175px;
+    display: block;
+    margin: auto;
+}
+
+.gyroDial {
+    -webkit-transform-origin: bottom;
+    -ms-transform-origin: bottom;
+    transform-origin: bottom;
+}
+
+.gyroNumber {
+    font: 25px Roboto, sans-serif;
+    text-anchor: middle;
+}
+
+svg {
+    stroke: orange;
+    fill: grey;
+    stroke-width: 2;
+    -webkit-transform-origin: center;
+    -ms-transform-origin: center;
+    transform-origin: center;
+}
+
+/* Timer */
+
+.timer {
+    text-align: center;
+    font: 125px Roboto, sans-serif;
+}

@@ -1,39 +1,46 @@
 #include "src/subsystems/Elevator.h"
 #include "WPILib.h"
 #include "ctre/Phoenix.h"
+#include "lib/util/WrapDash.h"
 
 using namespace frc;
 
 namespace frc973 {
 Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
-                   ObservableJoystick *driver, TalonSRX *motor)
+                   TalonSRX *elevatorMotor)
         : m_scheduler(scheduler)
-        , m_elevatorMotor(motor)
+        , m_elevatorMotor(elevatorMotor)
         , m_position(0.0)
-        , m_currLevel(Level::zero)
-        , m_talonMode(motorcontrol::ControlMode::PercentOutput)
-        , m_joystick(driver) {
+        , m_zeroingTime(0)
+        , m_elevatorState(ElevatorState::manualVoltage) {
     this->m_scheduler->RegisterTask("Elevator", this, TASK_PERIODIC);
 
     m_elevatorMotor->ConfigSelectedFeedbackSensor(
         ctre::phoenix::motorcontrol::FeedbackDevice::QuadEncoder, 0,
         10);  // 0 = Not cascaded PID Loop; 10 = in constructor, not in a loop
-    m_elevatorMotor->SetSensorPhase(false);
-    m_elevatorMotor->SetNeutralMode(NeutralMode::Brake);
+    m_elevatorMotor->SetSensorPhase(true);
+    m_elevatorMotor->SetNeutralMode(NeutralMode::Coast);
+    m_elevatorMotor->SetInverted(true);
 
-    m_elevatorMotor->ConfigNominalOutputForward(0.0, 10);
-    m_elevatorMotor->ConfigNominalOutputReverse(0.0, 10);
-    m_elevatorMotor->ConfigPeakOutputForward(1.0, 10);
-    m_elevatorMotor->ConfigPeakOutputReverse(-1.0, 10);
-
-    m_elevatorMotor->Config_kP(0, 0.05, 10);
+    m_elevatorMotor->Config_kP(0, 2.5, 10);
     m_elevatorMotor->Config_kI(0, 0.0, 10);
     m_elevatorMotor->Config_kD(0, 0.0, 10);
-    m_elevatorMotor->Config_kF(0, 0.005, 10);
-    m_elevatorMotor->ConfigMotionCruiseVelocity(100.0, 10);
-    m_elevatorMotor->ConfigMotionAcceleration(50.0, 10);
+    m_elevatorMotor->Config_kF(0, 0.0, 10);
+    m_elevatorMotor->ConfigMotionCruiseVelocity(3750.0, 10);
+    m_elevatorMotor->ConfigMotionAcceleration(4200.0, 10);
+    m_elevatorMotor->SelectProfileSlot(0, 0);
+
+    m_elevatorMotor->EnableCurrentLimit(true);
+    m_elevatorMotor->ConfigPeakCurrentDuration(0, 10);
+    m_elevatorMotor->ConfigPeakCurrentLimit(0, 10);
+    m_elevatorMotor->ConfigContinuousCurrentLimit(15, 10);
+    m_elevatorMotor->EnableVoltageCompensation(false);
+    m_elevatorMotor->ConfigForwardSoftLimitThreshold(
+        ELEVATOR_SOFT_HEIGHT_LIMIT / ELEVATOR_INCHES_PER_CLICK, 10);
+    m_elevatorMotor->ConfigForwardSoftLimitEnable(true, 10);
 
     m_elevatorMotor->Set(ControlMode::PercentOutput, 0.0);
+
     m_positionCell = new LogCell("Elevator Position", 32, true);
     logger->RegisterCell(m_positionCell);
 }
@@ -42,59 +49,45 @@ Elevator::~Elevator() {
     m_scheduler->UnregisterTask(this);
 }
 
-void Elevator::SetControlMode(ControlMode mode, double value) {
-    m_elevatorMotor->Set(mode, value);
-    m_talonMode = mode;
+void Elevator::SetPower(double power) {
+    m_elevatorState = ElevatorState::manualVoltage;
+    power = Util::bound(power, -0.2, 1.0);
+    m_elevatorMotor->Set(ControlMode::PercentOutput, power);
 }
 
 void Elevator::SetPosition(double position) {
-    this->SetControlMode(ControlMode::Position, position);
+    m_elevatorState = ElevatorState::motionMagic;
+    int position_clicks = position / ELEVATOR_INCHES_PER_CLICK;
+    m_elevatorMotor->Set(ControlMode::MotionMagic, position_clicks);
 }
 
-void Elevator::SetPower(double power) {
-    m_elevatorMotor->Set(ControlMode::PercentOutput, power);
-    SetLevel(Level::manual);
+float Elevator::GetPosition() const {
+    return ELEVATOR_INCHES_PER_CLICK *
+           ((float)m_elevatorMotor->GetSelectedSensorPosition(0));
 }
 
-void Elevator::SetMotionMagic(double position) {
-    Elevator::SetControlMode(ControlMode::MotionMagic, position);
+void Elevator::ZeroPosition() {
+    m_elevatorMotor->GetSensorCollection().SetQuadraturePosition(0, 0);
 }
 
-void Elevator::SetLevel(Level level) {
-    m_currLevel = level;
+void Elevator::EnableBrakeMode() {
+    m_elevatorMotor->SetNeutralMode(NeutralMode::Brake);
 }
 
-void Elevator::Reset() {
-    SetLevel(Level::zero);
+void Elevator::EnableCoastMode() {
+    m_elevatorMotor->SetNeutralMode(NeutralMode::Coast);
 }
 
 void Elevator::TaskPeriodic(RobotMode mode) {
-    m_positionCell->LogDouble(m_elevatorMotor->GetSelectedSensorPosition(0));
-    printf("Elevator Task Periodic\n");
-    switch (m_currLevel) {
-        case zero:
-            this->SetMotionMagic(0.0);
+    m_positionCell->LogDouble(GetPosition());
+    SmartDashboard::PutNumber("elevator/encoders/encoder", GetPosition());
+    DBStringPrintf(DBStringPos::DB_LINE0, "e %f", GetPosition());
+    switch (m_elevatorState) {
+        case manualVoltage:
             break;
-        case vault:
-            this->SetMotionMagic(3.0);
-            break;
-        case lowGoal:
-            this->SetMotionMagic(30.0);
-            break;
-        case scaleLow:
-            this->SetMotionMagic(50.0);
-            break;
-        case scaleMid:
-            this->SetMotionMagic(60.0);
-            break;
-        case scaleHigh:
-            this->SetMotionMagic(70.0);
-            break;
-        case manual:
-            this->SetPower(0.0);
+        case motionMagic:
             break;
         default:
-            this->Reset();
             break;
     }
 }

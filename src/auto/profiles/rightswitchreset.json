@@ -1,0 +1,15 @@
+{
+    "name": "right_switch_reset",
+    "timestep": 0.01,
+    "max_vel": 140.0,
+    "max_accel": 80.0,
+    "max_jerk": 120.0,
+    "wheelbase_width": 25.205,
+    "reverse": true,
+    "waypoints": [
+        { "x": 0, "y": 0, "angle": 0 },
+        { "x": -35, "y": 35, "angle": 90 },
+        { "x": 0, "y": 70, "angle": 180 },
+        { "x": 130, "y": 70, "angle": 180}
+    ]
+}

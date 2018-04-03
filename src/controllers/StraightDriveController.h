@@ -1,5 +1,8 @@
 /*
- * TrapDriveController.h
+ * StraightDriveController.h
+ *
+ *  Created on: Nov 5, 2015
+ *      Author: Andrew
  */
 
 #pragma once
@@ -28,18 +31,18 @@ public:
         return false;
     }
 
-    void Start() override {
-        m_needSetControlMode = true;
+    void Start(DriveControlSignalReceiver *out) override {
+        printf("Turning on Straight Mode\n");
     }
 
-    void Stop() override {
+    void Stop(DriveControlSignalReceiver *out) override {
+        printf("Turning off Straight Mode\n");
     }
 
 private:
     double m_throttle;
     double m_targetAngle;
     double m_prevAngle;
-    bool m_needSetControlMode;
 
     PID *m_turnPID;
 };

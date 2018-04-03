@@ -1,0 +1,13 @@
+{
+    "name": "two_cube_intaking_right",
+    "timestep": 0.01,
+    "max_vel": 90.0,
+    "max_accel": 40.0,
+    "max_jerk": 60.0,
+    "wheelbase_width": 25.205,
+    "waypoints": [
+        { "x": 0, "y": 0, "angle": 90 },
+        { "x": -50, "y": 35, "angle": 145 },
+        { "x": -125, "y": 46, "angle": 160 }
+    ]
+}

@@ -7,11 +7,13 @@
  * - Allen
  * - Chris L
  * - Garrett R
+ * - Cole B
  **/
 
 #pragma once
 
 #include "WPILib.h"
+#include "Phoenix.h"
 #include <iostream>
 #include "src/info/RobotInfo.h"
 #include "src/DisabledMode.h"
@@ -21,16 +23,27 @@
 #include "lib/helpers/JoystickHelper.h"
 #include "src/subsystems/Elevator.h"
 #include "src/subsystems/Claw.h"
+#include "src/subsystems/Wrist.h"
 #include "src/subsystems/Hanger.h"
 #include "src/subsystems/Drive.h"
+#include "src/subsystems/IntakeAssembly.h"
 #include "lib/logging/LogSpreadsheet.h"
 #include "lib/helpers/JoystickHelper.h"
+#include "lib/helpers/GreyCompressor.h"
+#include "lib/helpers/GreyTalon.h"
 #include "lib/bases/CoopMTRobot.h"
 #include "ctre/Phoenix.h"
+#include "lib/helpers/GreyTalon.h"
+#include "lib/helpers/GreyLight.h"
+
+using namespace frc;
+using namespace ctre;
+using namespace cs;
 
 namespace frc973 {
 class Disabled;
 class Autonomous;
+class Drive;
 
 class Robot
         : public CoopMTRobot
@@ -39,46 +52,76 @@ public:
     Robot();
     virtual ~Robot();
 
-    void Initialize();
+    void Initialize() override;
 
-    void DisabledStart();
-    void DisabledContinuous();
-    void DisabledStop();
+    void DisabledStart() override;
+    void DisabledContinuous() override;
+    void DisabledStop() override;
 
-    void AutonomousStart();
-    void AutonomousContinuous();
-    void AutonomousStop();
+    void AutonomousStart() override;
+    void AutonomousContinuous() override;
+    void AutonomousStop() override;
 
-    void TeleopStart();
-    void TeleopContinuous();
-    void TeleopStop();
+    void TeleopStart() override;
+    void TeleopContinuous() override;
+    void TeleopStop() override;
 
-    void TestStart();
-    void TestContinuous();
-    void TestStop();
+    void TestStart() override;
+    void TestContinuous() override;
+    void TestStop() override;
 
-    void RobotPeriodic() override;
+    void AllStateContinuous() override;
 
     void ObserveJoystickStateChange(uint32_t port, uint32_t button,
                                     bool pressedP) override;
 
+    static const int NUM_LED = 26;
+
 private:
+    PowerDistributionPanel *m_pdp;
+
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
-    ObservableJoystick *m_tuningJoystick;
+
+    TalonSRX *m_leftDriveTalonA;
+    VictorSPX *m_leftDriveVictorB;
+    VictorSPX *m_leftDriveVictorC;
+    TalonSRX *m_rightDriveTalonA;
+    VictorSPX *m_rightDriveVictorB;
+    VictorSPX *m_rightDriveVictorC;
+
+    ADXRS450_Gyro *m_gyro;
 
     LogSpreadsheet *m_logger;
+    LogCell *m_matchIdentifier;
+    LogCell *m_gameSpecificMessage;
 
-    TalonSRX *m_clawLeftRoller;
-    TalonSRX *m_clawRightRoller;
-    DigitalInput *m_clawCubeSensor;
+    UsbCamera m_forkCamera;
+    UsbCamera m_intakeCamera;
+    CameraServer *m_cameraServer;
+    VideoSink m_greyCam;
+
+    Solenoid *m_cubeClamp;
+    TalonSRX *m_rightRoller;
+    TalonSRX *m_leftRoller;
+    DigitalInput *m_rightCubeSensor;
+    DigitalInput *m_leftCubeSensor;
     TalonSRX *m_elevatorMotor;
-
+    TalonSRX *m_wristMotor;
+    Solenoid *m_hangerPTO;
+    Solenoid *m_forkDeploy;
+    TalonSRX *m_forkliftTalon;
+    GreyLight *m_greylight;
     Elevator *m_elevator;
     Claw *m_claw;
+    Wrist *m_wrist;
+    IntakeAssembly *m_intakeAssembly;
     Drive *m_drive;
     Hanger *m_hanger;
 
+    DigitalInput *m_airPressureSwitch;
+    Relay *m_compressorRelay;
+    GreyCompressor *m_compressor;
     Disabled *m_disabled;
     Autonomous *m_autonomous;
     Teleop *m_teleop;

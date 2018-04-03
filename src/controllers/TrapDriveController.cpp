@@ -1,3 +1,10 @@
+/*
+ * TrapDriveController.cpp
+ *
+ *  Created on: Nov 5, 2015
+ *      Author: Andrew
+ */
+
 #include "src/controllers/TrapDriveController.h"
 #include "lib/profiles/TrapProfile.h"
 #include "src/info/RobotInfo.h"
@@ -6,6 +13,7 @@
 namespace frc973 {
 
 using namespace Constants;
+using namespace frc;
 
 TrapDriveController::TrapDriveController(DriveStateProvider *state,
                                          LogSpreadsheet *logger)
@@ -24,7 +32,6 @@ TrapDriveController::TrapDriveController(DriveStateProvider *state,
         , m_a_pos_pid(1.9, 0.0, 0.0)
         , m_a_vel_pid(0.2, 0.0, 0.0)
         , m_done(false)
-        , m_needSetControlMode(false)
         , m_l_pos_setpt_log(new LogCell("linear pos incr goal"))
         , m_l_pos_real_log(new LogCell("linear pos incr actual"))
         , m_l_vel_setpt_log(new LogCell("linear vel incr goal"))
@@ -105,23 +112,18 @@ TrapDriveController *TrapDriveController::SetConstraints(double max_vel,
 
 void TrapDriveController::CalcDriveOutput(DriveStateProvider *state,
                                           DriveControlSignalReceiver *out) {
-    if (m_needSetControlMode == true) {
-        out->SetDriveControlMode(
-            ctre::phoenix::motorcontrol::ControlMode::Velocity);
-        m_needSetControlMode = false;
-    }
-
     double time = GetSecTime() - m_time_offset;
 
     Profiler::Waypoint goal = Profiler::TrapProfileUnsafe(
         time, m_dist, m_angle, m_max_vel, m_max_acc, m_start_halt, m_end_halt);
 
-    printf("trap drive d %lf a %lf vel %lf acc %lf start %d end %d\n", m_dist,
-           m_angle, m_max_vel, m_max_acc, m_start_halt, m_end_halt);
+    // printf("trap drive d %lf a %lf vel %lf acc %lf start %d end %d\n",
+    // m_dist,
+    //       m_angle, m_max_vel, m_max_acc, m_start_halt, m_end_halt);
 
     if (goal.error) {
         printf("trap drive error\n");
-        out->SetDriveOutput(1.0, -1.0);
+        out->SetDriveOutputIPS(1.0, -1.0);
         return;
     }
 
@@ -143,8 +145,8 @@ void TrapDriveController::CalcDriveOutput(DriveStateProvider *state,
     double linear_vel_term = m_l_vel_pid.CalcOutput(state->GetRate());
     double angular_dist_term = m_a_pos_pid.CalcOutput(AngleFromStart());
     double angular_vel_term = m_a_vel_pid.CalcOutput(state->GetAngularRate());
-    printf("angle_dist_term: %lf angle_from_start %lf angle_goal %lf\n",
-           angular_dist_term, AngleFromStart(), goal.angular_dist);
+    // printf("angle_dist_term: %lf angle_from_start %lf angle_goal %lf\n",
+    //        angular_dist_term, AngleFromStart(), goal.angular_dist);
 
     /* right side receives positive angle correction */
     double right_output = right_l_vel_ff + right_a_vel_ff + linear_dist_term +
@@ -154,7 +156,7 @@ void TrapDriveController::CalcDriveOutput(DriveStateProvider *state,
     double left_output = left_l_vel_ff + left_a_vel_ff + linear_dist_term +
                          linear_vel_term - angular_dist_term - angular_vel_term;
 
-    out->SetDriveOutput(left_output, right_output);
+    out->SetDriveOutputIPS(left_output, right_output);
 
     m_done = goal.done;
 
@@ -172,13 +174,6 @@ void TrapDriveController::CalcDriveOutput(DriveStateProvider *state,
 
     printf("TrapDriveController active time %lf pos %lf\n", time,
            goal.linear_dist);
-}
-
-void TrapDriveController::Start() {
-    m_needSetControlMode = true;
-}
-
-void TrapDriveController::Stop() {
 }
 
 double TrapDriveController::DistFromStart() const {

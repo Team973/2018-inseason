@@ -125,10 +125,9 @@ uint16_t Pixy::getBlocks(uint16_t maxBlocks) {
             blockType = NORMAL_BLOCK;
             return blockCount;
         }
-        else if (checksum ==
-                 PIXY_START_WORD_CC)  // we've reacehd the beginning
-                                      // of the next frame - checking
-                                      // for 0xaa56
+        else if (checksum == PIXY_START_WORD_CC)  // we've reacehd the beginning
+                                                  // of the next frame -
+                                                  // checking for 0xaa56
         {
             skipStart = true;
             blockType = CC_BLOCK;
