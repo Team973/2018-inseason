@@ -37,6 +37,9 @@ void CheesyDriveController::CalcDriveOutput(DriveStateProvider *state,
 void CheesyDriveController::SetJoysticks(double throttle, double turn,
                                          bool isQuickTurn, bool isHighGear) {
     double negInertia = turn - m_oldWheel;
+    if (isQuickTurn) {
+        turn = Util::signSquare(turn);
+    }
     m_oldWheel = turn;
 
     double turnNonLinearity;
