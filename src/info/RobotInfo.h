@@ -42,9 +42,6 @@ static constexpr double DRIVE_IPS_FROM_CPDS =
 // CAN IDs
 static const int ELEVATOR_CAN_ID = 4;
 
-// Constants
-static const double ELEVATOR_FEED_FORWARD = 0.10;
-
 /**
  * Hanger Subsystem
  */

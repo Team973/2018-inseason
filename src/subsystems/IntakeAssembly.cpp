@@ -257,7 +257,8 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             m_wrist->SetPositionStep(Util::bound(
                 wristPosGoal, GetWristLowerBound(GetElevatorPosition()),
                 UPPER_WRIST_BOUND));
-            m_elevator->SetPower(elevatorInput + ELEVATOR_FEED_FORWARD);
+            m_elevator->SetPower(elevatorInput +
+                                 Elevator::ELEVATOR_FEED_FORWARD);
 
             m_interimPositionGoal.wristPosition = wristPosGoal;
         } break;
@@ -274,7 +275,8 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
 
             m_wrist->SetPosition(HANGING_PRESET.wristPosition);
             m_wrist->OpenClaw();
-            m_elevator->SetPower(elevatorInput + ELEVATOR_FEED_FORWARD);
+            m_elevator->SetPower(elevatorInput +
+                                 Elevator::ELEVATOR_FEED_FORWARD);
         } break;
         case ControlMode::ManualVoltage: {
             double elevatorInput =
@@ -283,7 +285,8 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
                 DualAction::RightXAxis);
 
             m_wrist->SetPower(wristInput);
-            m_elevator->SetPower(elevatorInput + ELEVATOR_FEED_FORWARD);
+            m_elevator->SetPower(elevatorInput +
+                                 Elevator::ELEVATOR_FEED_FORWARD);
         } break;
         case ControlMode::LowPosition:
             SetPosition(m_endPositionGoal);

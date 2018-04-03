@@ -39,6 +39,7 @@ public:
 
     static constexpr double ELEVATOR_SOFT_HEIGHT_LIMIT = 80.5;
     static constexpr double ELEVATOR_INCHES_PER_CLICK = 8.0 / 4096.0;
+    static constexpr double ELEVATOR_FEED_FORWARD = 0.10;
 
     Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
              TalonSRX *elevatorMotor);
