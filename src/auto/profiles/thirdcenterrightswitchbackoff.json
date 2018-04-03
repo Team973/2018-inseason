@@ -1,5 +1,5 @@
 {
-    "name": "center_left_switch",
+    "name": "third_center_right_switch_backoff",
     "timestep": 0.01,
     "max_vel": 140.0,
     "max_accel": 80.0,
@@ -8,6 +8,7 @@
     "reverse": true,
     "waypoints": [
         { "x": 0, "y": 0, "angle": 0 },
-        { "x": -106, "y": -56, "angle": 0 }
+        { "x": -22, "y": 26, "angle": 45 },
+        { "x": -72, "y": 56, "angle": 135 }
     ]
 }
