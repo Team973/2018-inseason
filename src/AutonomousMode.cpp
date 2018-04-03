@@ -15,7 +15,6 @@ Autonomous::Autonomous(Disabled *disabled, Drive *drive,
         , m_scaleOpposite(new ScaleOpposite(drive, intakeAssembly))
         , m_sideSwitch(new SideSwitch(drive, intakeAssembly))
         , m_switchOpposite(new SwitchOpposite(drive, intakeAssembly))
-        , m_twoCubeAuto(new TwoCubeAuto(drive, intakeAssembly))
         , m_disabled(disabled)
         , m_greylight(greylight)
         , m_autoSignal(new LightPattern::AutoIndicator())
