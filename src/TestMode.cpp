@@ -44,8 +44,8 @@ void Test::TestPeriodic() {
         double wristManualPower =
             -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
 
-        m_intakeAssembly->SetElevatorManualPower(elevatorManualPower +
-                                                 ELEVATOR_FEED_FORWARD);
+        m_intakeAssembly->SetElevatorManualPower(
+            elevatorManualPower + Elevator::ELEVATOR_FEED_FORWARD);
 
         m_intakeAssembly->SetWristManualPower(wristManualPower);
     }
