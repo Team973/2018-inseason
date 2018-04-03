@@ -1,0 +1,13 @@
+{
+    "name": "third_left_scale_opposite_backoff",
+    "timestep": 0.01,
+    "max_vel": 140.0,
+    "max_accel": 80.0,
+    "max_jerk": 130.0,
+    "wheelbase_width": 25.205,
+    "reverse": true,
+    "waypoints": [
+      { "x" : 0, "y": 0, "angle" : 0},
+      { "x" : -32, "y": -24, "angle" : -55}
+    ]
+}

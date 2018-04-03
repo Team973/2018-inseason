@@ -43,7 +43,14 @@ cc_library(
         "//src/auto/profiles:secondrightscaleintaking_header",
         "//src/auto/profiles:thirdrightscalebackoff_header",
         "//src/auto/profiles:thirdrightscaleintaking_header",
-
+        "//src/auto/profiles:secondleftscaleoppositebackoff_header",
+        "//src/auto/profiles:secondleftscaleoppositeintaking_header",
+        "//src/auto/profiles:thirdleftscaleoppositebackoff_header",
+        "//src/auto/profiles:thirdleftscaleoppositeintaking_header",
+        "//src/auto/profiles:secondrightscaleoppositebackoff_header",
+        "//src/auto/profiles:secondrightscaleoppositeintaking_header",
+        "//src/auto/profiles:thirdrightscaleoppositebackoff_header",
+        "//src/auto/profiles:thirdrightscaleoppositeintaking_header",
     ],
     visibility = ["//visibility:public"],
 )
