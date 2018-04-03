@@ -9,19 +9,19 @@ namespace frc973 {
 using namespace Constants;
 using namespace trajectories;
 
-static constexpr double POSITION_KP = 1.5;
+static constexpr double POSITION_KP = 1.1;
 static constexpr double POSITION_KI = 0.0;
 static constexpr double POSITION_KD = 0.0;
 
-static constexpr double VELOCITY_KP = 1.0;
+static constexpr double VELOCITY_KP = 1.3;
 static constexpr double VELOCITY_KI = 0.0;
 static constexpr double VELOCITY_KD = 0.0;
 
-static constexpr double ANGULAR_POSITION_KP = 3.6;
+static constexpr double ANGULAR_POSITION_KP = 3.8;
 static constexpr double ANGULAR_POSITION_KI = 0.0;
 static constexpr double ANGULAR_POSITION_KD = 0.0;
 
-static constexpr double ACCEL_FF = 0.4;
+static constexpr double ACCEL_FF = 0.2;
 
 SplineDriveController::SplineDriveController(DriveStateProvider *state,
                                              LogSpreadsheet *logger)
@@ -155,14 +155,15 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
         m_done = false;
     }
     else {
-        printf("Done\n");
         m_done = true;
     }
 
-    SmartDashboard::PutNumber("drive/outputs/anglesetpoint", heading - 360.0);
-    SmartDashboard::PutNumber("drive/outputs/angleactual", AngleFromStart());
+    SmartDashboard::PutNumber("drive/outputs/anglesetpoint", Util::CalcAngleError(heading - 360.0, 0));
+    SmartDashboard::PutNumber("drive/outputs/angleactual", Util::CalcAngleError(AngleFromStart(), 0));
     SmartDashboard::PutNumber("drive/outputs/leftpossetpoint", leftDist);
     SmartDashboard::PutNumber("drive/outputs/rightpossetpoint", rightDist);
+    SmartDashboard::PutNumber("drive/outputs/leftposnow", LeftDistFromStart());
+    SmartDashboard::PutNumber("drive/outputs/rightposnow", RightDistFromStart());
     SmartDashboard::PutNumber("drive/outputs/leftvelff", left_l_vel_ff);
     SmartDashboard::PutNumber("drive/outputs/rightvelff", right_l_vel_ff);
 
