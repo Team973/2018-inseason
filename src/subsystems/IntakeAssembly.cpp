@@ -187,15 +187,15 @@ void IntakeAssembly::EnableCoastMode() {
     m_elevator->EnableCoastMode();
 }
 
-Wrist *IntakeAssembly::GetWrist() {
+const Wrist *IntakeAssembly::GetWrist() {
     return m_wrist;
 }
 
-Claw *IntakeAssembly::GetClaw() {
+const Claw *IntakeAssembly::GetClaw() {
     return m_claw;
 }
 
-Elevator *IntakeAssembly::GetElevator() {
+const Elevator *IntakeAssembly::GetElevator() {
     return m_elevator;
 }
 

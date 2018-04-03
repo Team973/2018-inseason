@@ -242,6 +242,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                     m_cubeIntakeState = CubeIntakeState::SwitchIntaking;
                 }
                 else {
+                    m_intakeAssembly->HoldCube();
                     m_cubeIntakeState = CubeIntakeState::Idle;
                 }
                 break;
@@ -250,6 +251,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                     m_cubeIntakeState = CubeIntakeState::VaultIntaking;
                 }
                 else {
+                    m_intakeAssembly->HoldCube();
                     m_cubeIntakeState = CubeIntakeState::Idle;
                 }
                 break;
