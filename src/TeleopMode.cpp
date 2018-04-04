@@ -87,23 +87,24 @@ void Teleop::TeleopPeriodic() {
             break;
         case CubeIntakeState::SwitchIntaking:
             m_intakeAssembly->RunIntake(-1.0);
-            m_intakeAssembly->CloseClaw();
+            m_intakeAssembly->SoftCloseClaw();
             if (m_intakeAssembly->GetClaw()->IsCubeIn() or
                 m_operatorJoystick->GetRawButton(DualAction::Back)) {
                 m_cubeIntakeState = CubeIntakeState::Idle;
                 m_intakeAssembly->HoldCube();
-                m_intakeAssembly->Flash();
+                m_intakeAssembly->HardCloseClaw() m_intakeAssembly->Flash();
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::STOW_PRESET);
             }
             break;
         case CubeIntakeState::VaultIntaking:
             m_intakeAssembly->RunIntake(-1.0);
-            m_intakeAssembly->CloseClaw();
+            m_intakeAssembly->SoftCloseClaw();
             if (m_intakeAssembly->GetClaw()->IsCubeIn() or
                 m_operatorJoystick->GetRawButton(DualAction::Back)) {
                 m_cubeIntakeState = CubeIntakeState::Idle;
                 m_intakeAssembly->HoldCube();
+                m_intakeAssembly->HardCloseClaw();
                 m_intakeAssembly->Flash();
             }
             break;

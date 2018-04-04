@@ -9,11 +9,13 @@ using namespace ctre::phoenix::motorcontrol;
 namespace frc973 {
 Claw::Claw(TaskMgr *scheduler, LogSpreadsheet *logger,
            DigitalInput *rightCubeSensor, DigitalInput *leftCubeSensor,
-           TalonSRX *leftRoller, TalonSRX *rightRoller, Solenoid *cubeClamp)
+           TalonSRX *leftRoller, TalonSRX *rightRoller, Solenoid *cubeClamp,
+           Solenoid *cubeSpring)
         : m_scheduler(scheduler)
         , m_rightCubeSensor(rightCubeSensor)
         , m_leftCubeSensor(leftCubeSensor)
         , m_cubeClamp(cubeClamp)
+        , m_cubeSpring(cubeSpring)
         , m_leftRoller(leftRoller)
         , m_rightRoller(rightRoller)
         , m_bannerFilter(new DigitalGlitchFilter()) {
@@ -48,10 +50,17 @@ Claw::~Claw() {
 
 void Claw::OpenClaw() {
     m_cubeClamp->Set(true);
+    m_cubeSpring->Set(true);
 }
 
-void Claw::CloseClaw() {
+void Claw::SoftCloseClaw() {
+    m_cubeClamp->Set(true);
+    m_cubeSpring->Set(false);
+}
+
+void Claw::HardCloseClaw() {
     m_cubeClamp->Set(false);
+    m_cubeSpring->Set(false);
 }
 
 void Claw::RunIntake(double power) {

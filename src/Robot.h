@@ -102,12 +102,14 @@ private:
     VideoSink m_greyCam;
 
     Solenoid *m_cubeClamp;
+    Solenoid *m_cubeSpring;
     TalonSRX *m_rightRoller;
     TalonSRX *m_leftRoller;
     DigitalInput *m_rightCubeSensor;
     DigitalInput *m_leftCubeSensor;
     TalonSRX *m_elevatorMotor;
     TalonSRX *m_wristMotor;
+
     Solenoid *m_hangerPTO;
     Solenoid *m_forkDeploy;
     TalonSRX *m_forkliftTalon;

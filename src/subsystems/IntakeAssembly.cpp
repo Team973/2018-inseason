@@ -153,8 +153,20 @@ void IntakeAssembly::OpenClaw() {
     m_claw->OpenClaw();
 }
 
-void IntakeAssembly::CloseClaw() {
-    m_claw->CloseClaw();
+void IntakeAssembly::SoftCloseClaw() {
+    m_claw->SoftCloseClaw();
+}
+
+void IntakeAssembly::HardCloseClaw() {
+    m_claw->HardCloseClaw();
+}
+
+void IntakeAssembly::FireSpring() {
+    m_claw->FireSpring();
+}
+
+void IntakeAssembly::RetractSpring() {
+    m_claw->RetractSpring();
 }
 
 double IntakeAssembly::GetElevatorPosition() {
