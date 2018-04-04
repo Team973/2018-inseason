@@ -34,11 +34,11 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
     std::cout << "Scale Auto" << std::endl;
     switch (m_autoState) {
         case 0:
-            if (direction == AutoRoutineBase::AutoDirection::Left) {
+            if (direction == AutoRoutineBase::AutoDirection::Right) {
                 m_drive->SplineDrive(&left_scale_opposite::left_scale_opposite,
                                      Drive::RelativeTo::Now);
             }
-            else if (direction == AutoRoutineBase::AutoDirection::Right) {
+            else if (direction == AutoRoutineBase::AutoDirection::Left) {
                 m_drive->SplineDrive(
                     &right_scale_opposite::right_scale_opposite,
                     Drive::RelativeTo::Now);
@@ -68,13 +68,13 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
                     IntakeAssembly::GROUND_PRESET);
                 m_intakeAssembly->OpenClaw();
                 m_intakeAssembly->RunIntake(-1.0);
-                if (direction == AutoRoutineBase::AutoDirection::Left) {
+                if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(
                         &second_left_scale_opposite_intaking::
                             second_left_scale_opposite_intaking,
                         Drive::RelativeTo::SetPoint);
                 }
-                else if (direction == AutoRoutineBase::AutoDirection::Right) {
+                else if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
                         &second_right_scale_opposite_intaking::
                             second_right_scale_opposite_intaking,
@@ -87,12 +87,12 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
         case 4:
             if (m_intakeAssembly->GetClaw()->IsCubeIn() ||
                 GetMsecTime() - m_autoTimer > 3000) {
-                if (direction == AutoRoutineBase::AutoDirection::Left) {
+                if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(&second_left_scale_opposite_backoff::
                                              second_left_scale_opposite_backoff,
                                          Drive::RelativeTo::SetPoint);
                 }
-                else if (direction == AutoRoutineBase::AutoDirection::Right) {
+                else if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
                         &second_right_scale_opposite_backoff::
                             second_right_scale_opposite_backoff,
@@ -115,12 +115,12 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
                     IntakeAssembly::GROUND_PRESET);
                 m_intakeAssembly->OpenClaw();
                 m_intakeAssembly->RunIntake(-1.0);
-                if (direction == AutoRoutineBase::AutoDirection::Left) {
+                if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(&third_left_scale_opposite_intaking::
                                              third_left_scale_opposite_intaking,
                                          Drive::RelativeTo::SetPoint);
                 }
-                else if (direction == AutoRoutineBase::AutoDirection::Right) {
+                else if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
                         &third_right_scale_opposite_intaking::
                             third_right_scale_opposite_intaking,
@@ -133,12 +133,12 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
         case 7:
             if (m_intakeAssembly->GetClaw()->IsCubeIn() ||
                 GetMsecTime() - m_autoTimer > 3000) {
-                if (direction == AutoRoutineBase::AutoDirection::Left) {
+                if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(&third_left_scale_opposite_backoff::
                                              third_left_scale_opposite_backoff,
                                          Drive::RelativeTo::SetPoint);
                 }
-                else if (direction == AutoRoutineBase::AutoDirection::Right) {
+                else if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(&third_right_scale_opposite_backoff::
                                              third_right_scale_opposite_backoff,
                                          Drive::RelativeTo::SetPoint);
