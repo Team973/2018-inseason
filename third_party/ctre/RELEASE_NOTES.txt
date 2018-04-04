@@ -1,10 +1,33 @@
+Phoenix Framework 5.3.1 Installer (Feb 26 2018):
+	Class Libraries (FRC C++ 2018_v14): Updated IMotorController interface.
+	Class Libraries (FRC Java 2018_v17): Updated IMotorController interface.
+	Class Libraries (FRC LabVIEW 2018_v15): Updated palette
+Phoenix Framework 5.3.0 Installer (Feb 20 2018):
+	Class Libraries (FRC C++ 2018_v13): getControlMode now part of IMotorController
+	Class Libraries (FRC C++ 2018_v13): Quadrature features now available in CANifier
+	Class Libraries (FRC C++ 2018_v13): Remote Sensor/Auxiliary PID/Motion Arc features now available
+	Class Libraries (FRC Java 2018_v16): getControlMode now part of IMotorController
+	Class Libraries (FRC Java 2018_v16): Quadrature features now available in CANifier
+	Class Libraries (FRC Java 2018_v16): Remote Sensor/Auxiliary PID/Motion Arc features now available
+	Class Libraries (FRC LabVIEW 2018_v14): Quadrature features now available in CANifier
+	Class Libraries (FRC LabVIEW 2018_v14): Remote Sensor/Auxiliary PID/Motion Arc features now available
+	Class Libraries (FRC LabVIEW 2018_v14): VI performance improvement (required thread-safe CCI)
+	Class Libraries (FRC CCI 2018_v15): Fixed issue where Quad Position/Velocty were improperly scaled by 4/8 at high values.
+	Class Libraries (FRC CCI 2018_v15): All CCI calls are now thread-safe for reentrancy
+	TalonSRX/Victor SPX Firmware (3.8): Remote Sensor/Auxiliary PID/Motion Arc features added.
+	CANifier Firmware (0.41): Ability to set Quadrature Position
+	CANifier Firmware (0.42): Fixed Quadrature position/velocity scaling issue
+	libfrccanfirmwareupdate.so (2018_2_21): CANifier self-test now shows pin state
+Phoenix Framework 5.2.2 Installer (Feb 20 2018):
+	Class Libraries (FRC CCI 2018_v14): Library Loading changed to address Watchdog Error
+	Class Libraries (FRC CCI 2018_v14): Built with Debug Symbols
 Phoenix Framework 5.2.1 Installer (Jan 11 2018):
 	Class Libraries (FRC C++ 2018_v12/
 			 FRC Java 2018_v15/
 			 FRC LabVIEW 2018_v13/
-			 FRC CCI 2018_v12): Individual Trajectory Point timeDur options changed.
+			 FRC CCI 2018_v13): Individual Trajectory Point timeDur options changed.
 						0ms is now an option.  15ms is no longer an option.
-	Talon SRX/Victor SPX Firmware (3.3): Changed to accomodate new Trajectory Point timeDur options.
+	Talon SRX Firmware (3.3): Changed to accomodate new Trajectory Point timeDur options.
 Phoenix Framework 5.2.0 Installer (Jan 10 2018):
 	Class Libraries (FRC C++ 2018_v11/
 			 FRC Java 2018_v14/
