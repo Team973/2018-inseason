@@ -92,7 +92,7 @@ void TwoCubeAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             if ((m_drive->GetSplinePercentComplete() > 0.8) ||
                 GetMsecTime() - m_autoTimer > 4000 ||
                 m_intakeAssembly->GetClaw()->IsCubeIn()) {
-                m_intakeAssembly->CloseClaw();
+                m_intakeAssembly->HardCloseClaw();
                 m_intakeAssembly->StopIntake();
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::LOW_GOAL_PRESET);

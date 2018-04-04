@@ -92,7 +92,8 @@ void Teleop::TeleopPeriodic() {
                 m_operatorJoystick->GetRawButton(DualAction::Back)) {
                 m_cubeIntakeState = CubeIntakeState::Idle;
                 m_intakeAssembly->HoldCube();
-                m_intakeAssembly->HardCloseClaw() m_intakeAssembly->Flash();
+                m_intakeAssembly->HardCloseClaw();
+                m_intakeAssembly->Flash();
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::STOW_PRESET);
             }

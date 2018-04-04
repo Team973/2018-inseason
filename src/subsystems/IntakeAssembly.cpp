@@ -50,7 +50,7 @@ const IntakeAssembly::IntakePreset IntakeAssembly::HANGING_PRESET =
 
 void IntakeAssembly::GoToIntakePosition(IntakePreset intakePosition) {
     m_endPositionGoal = intakePosition;
-    m_claw->CloseClaw();
+    m_claw->SoftCloseClaw();
 
     if (intakePosition == OVER_BACK_PRESET) {
         if (GetElevatorPosition() >= 77.0) {
@@ -159,14 +159,6 @@ void IntakeAssembly::SoftCloseClaw() {
 
 void IntakeAssembly::HardCloseClaw() {
     m_claw->HardCloseClaw();
-}
-
-void IntakeAssembly::FireSpring() {
-    m_claw->FireSpring();
-}
-
-void IntakeAssembly::RetractSpring() {
-    m_claw->RetractSpring();
 }
 
 double IntakeAssembly::GetElevatorPosition() {
