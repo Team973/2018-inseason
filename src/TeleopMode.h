@@ -55,7 +55,8 @@ private:
     {
         Idle,
         SwitchIntaking,
-        VaultIntaking
+        VaultIntaking,
+        SwitchIntakeDelay
     };
     CubeIntakeState m_cubeIntakeState;
 

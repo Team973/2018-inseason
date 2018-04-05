@@ -67,7 +67,7 @@ static const int LEFT_INTAKE_BEAM_BREAKER_SENSOR_DIN = 3;
 
 // Pneumatics
 static const int CUBE_CLAMP_PCM_ID = 1;
-static const int CUBE_SPRING_PCM_ID = 4;
+static const int CUBE_SPRING_PCM_ID = 2;
 
 /**
  * Wrist Subsystem

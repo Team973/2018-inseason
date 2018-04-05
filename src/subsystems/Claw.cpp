@@ -65,7 +65,7 @@ void Claw::HardCloseClaw() {
 
 void Claw::RunIntake(double power) {
     m_leftRoller->Set(ControlMode::PercentOutput, power);
-    m_rightRoller->Set(ControlMode::PercentOutput, power * 0.8);
+    m_rightRoller->Set(ControlMode::PercentOutput, power);
 }
 
 void Claw::EjectCube(double power) {
@@ -84,7 +84,7 @@ void Claw::StopIntake() {
 }
 
 bool Claw::IsCubeIn() const {
-    return (!m_leftCubeSensor->Get() || !m_rightCubeSensor->Get());
+    return (m_leftCubeSensor->Get() || m_rightCubeSensor->Get());
 }
 
 void Claw::TaskPeriodic(RobotMode mode) {
