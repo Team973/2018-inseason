@@ -88,7 +88,8 @@ public:
     void StopIntake();
 
     void OpenClaw();
-    void CloseClaw();
+    void SoftCloseClaw();
+    void HardCloseClaw();
 
     double GetElevatorPosition();
     double GetWristPosition();

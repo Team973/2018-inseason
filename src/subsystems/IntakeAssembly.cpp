@@ -52,7 +52,6 @@ const IntakeAssembly::IntakePreset IntakeAssembly::HANGING_PRESET =
 
 void IntakeAssembly::GoToIntakePosition(IntakePreset intakePosition) {
     m_endPositionGoal = intakePosition;
-    m_claw->CloseClaw();
 
     if (intakePosition == OVER_BACK_PRESET) {
         if (GetElevatorPosition() >= 77.0) {
@@ -132,11 +131,11 @@ void IntakeAssembly::FastEjectCube() {
 }
 
 void IntakeAssembly::EjectCube() {
-    m_claw->EjectCube(0.5);
+    m_claw->EjectCube(0.75);
 }
 
 void IntakeAssembly::SlowEjectCube() {
-    m_claw->EjectCube(0.35);
+    m_claw->EjectCube(0.5);
 }
 
 void IntakeAssembly::HaltIntake() {
@@ -155,8 +154,12 @@ void IntakeAssembly::OpenClaw() {
     m_claw->OpenClaw();
 }
 
-void IntakeAssembly::CloseClaw() {
-    m_claw->CloseClaw();
+void IntakeAssembly::SoftCloseClaw() {
+    m_claw->SoftCloseClaw();
+}
+
+void IntakeAssembly::HardCloseClaw() {
+    m_claw->HardCloseClaw();
 }
 
 double IntakeAssembly::GetElevatorPosition() {
