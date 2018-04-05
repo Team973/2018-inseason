@@ -16,7 +16,8 @@ class Claw : public CoopTask {
 public:
     Claw(TaskMgr *scheduler, LogSpreadsheet *logger,
          DigitalInput *rightCubeSensor, DigitalInput *leftCubeSensor,
-         TalonSRX *leftRoller, TalonSRX *rightRoller, Solenoid *cubeClamp);
+         TalonSRX *leftRoller, TalonSRX *rightRoller, Solenoid *cubeClamp,
+         Solenoid *cubeSpring);
     virtual ~Claw();
 
     /*
@@ -27,7 +28,8 @@ public:
     /*
      * When called, closes claw arms
      */
-    void CloseClaw();
+    void SoftCloseClaw();
+    void HardCloseClaw();
 
     void RunIntake(double power);
     void EjectCube(double power);
@@ -43,7 +45,9 @@ private:
 
     DigitalInput *m_rightCubeSensor;
     DigitalInput *m_leftCubeSensor;
+
     Solenoid *m_cubeClamp;
+    Solenoid *m_cubeSpring;
 
     TalonSRX *m_leftRoller;
     TalonSRX *m_rightRoller;

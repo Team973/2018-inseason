@@ -104,7 +104,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                         Drive::RelativeTo::SetPoint);
                 }
                 m_intakeAssembly->RunIntake(-1.0);
-                m_intakeAssembly->CloseClaw();
+                m_intakeAssembly->SoftCloseClaw();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }

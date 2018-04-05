@@ -158,12 +158,15 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
         m_done = true;
     }
 
-    SmartDashboard::PutNumber("drive/outputs/anglesetpoint", Util::CalcAngleError(heading - 360.0, 0));
-    SmartDashboard::PutNumber("drive/outputs/angleactual", Util::CalcAngleError(AngleFromStart(), 0));
+    SmartDashboard::PutNumber("drive/outputs/anglesetpoint",
+                              Util::CalcAngleError(heading - 360.0, 0));
+    SmartDashboard::PutNumber("drive/outputs/angleactual",
+                              Util::CalcAngleError(AngleFromStart(), 0));
     SmartDashboard::PutNumber("drive/outputs/leftpossetpoint", leftDist);
     SmartDashboard::PutNumber("drive/outputs/rightpossetpoint", rightDist);
     SmartDashboard::PutNumber("drive/outputs/leftposnow", LeftDistFromStart());
-    SmartDashboard::PutNumber("drive/outputs/rightposnow", RightDistFromStart());
+    SmartDashboard::PutNumber("drive/outputs/rightposnow",
+                              RightDistFromStart());
     SmartDashboard::PutNumber("drive/outputs/leftvelff", left_l_vel_ff);
     SmartDashboard::PutNumber("drive/outputs/rightvelff", right_l_vel_ff);
 

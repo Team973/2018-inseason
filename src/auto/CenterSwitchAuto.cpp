@@ -79,11 +79,11 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             break;
         case 4:
             if (m_drive->GetPIDDistError() < 5.0) {
-                m_intakeAssembly->CloseClaw();
+                m_intakeAssembly->HardCloseClaw();
             }
             if (m_intakeAssembly->GetClaw()->IsCubeIn() ||
                 GetMsecTime() - m_autoTimer > 3500) {
-                m_intakeAssembly->CloseClaw();
+                m_intakeAssembly->HardCloseClaw();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
