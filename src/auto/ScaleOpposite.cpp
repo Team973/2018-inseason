@@ -47,7 +47,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             m_autoState++;
             break;
         case 1:
-            if (m_drive->GetSplinePercentComplete() > 0.7) {
+            if (m_drive->GetSplinePercentComplete() > 0.6) {
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::OVER_BACK_PRESET);
                 m_autoTimer = GetMsecTime();
@@ -55,15 +55,16 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 2:
-            if (m_drive->OnTarget() ||
-                m_drive->GetSplinePercentComplete() > 0.9) {
+            if (m_drive->OnTarget() &&
+                m_intakeAssembly->GetPositionError() < 10.0) {
                 m_intakeAssembly->FastEjectCube();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
         case 3:
-            if (m_drive->OnTarget()) {
+            if (m_drive->OnTarget() &&
+                m_intakeAssembly->GetPositionError() < 10.0) {
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);
                 m_intakeAssembly->SoftCloseClaw();
@@ -105,7 +106,8 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 5:
-            if (m_drive->GetSplinePercentComplete() > 0.8) {
+            if (m_drive->GetSplinePercentComplete() > 0.8 &&
+                m_intakeAssembly->GetPositionError() < 10.0) {
                 m_intakeAssembly->FastEjectCube();
                 m_autoState++;
             }
@@ -151,13 +153,15 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 8:
-            if (m_drive->GetSplinePercentComplete() > 0.8) {
+            if (m_drive->GetSplinePercentComplete() > 0.8 &&
+                m_intakeAssembly->GetPositionError() < 10.0) {
                 m_intakeAssembly->FastEjectCube();
                 m_autoState++;
             }
             break;
         case 9:
-            if (m_drive->OnTarget()) {
+            if (m_drive->OnTarget() &&
+                m_intakeAssembly->GetPositionError() < 10.0) {
                 m_intakeAssembly->StopIntake();
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);

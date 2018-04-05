@@ -54,7 +54,8 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 2:
-            if (m_drive->OnTarget()) {
+            if (m_drive->OnTarget() &&
+                m_intakeAssembly->GetPositionError() < 10.0) {
                 m_intakeAssembly->EjectCube();
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);
@@ -106,7 +107,8 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 6:
-            if (m_drive->OnTarget()) {
+            if (m_drive->OnTarget() &&
+                m_intakeAssembly->GetPositionError() < 10.0) {
                 m_intakeAssembly->EjectCube();
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);
@@ -149,7 +151,8 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 8:
-            if (m_drive->GetSplinePercentComplete() > 0.8) {
+            if (m_drive->GetSplinePercentComplete() > 0.8 &&
+                m_intakeAssembly->GetPositionError() < 10.0) {
                 m_intakeAssembly->EjectCube();
                 m_autoState++;
             }

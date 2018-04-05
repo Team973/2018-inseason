@@ -52,8 +52,9 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             m_autoState++;
             break;
         case 1:
-            if (m_drive->GetSplinePercentComplete() > 0.80 ||
-                m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
+            if ((m_drive->GetSplinePercentComplete() > 0.80 &&
+                 m_intakeAssembly->GetPositionError() < 10.0) ||
+                GetMsecTime() - m_autoTimer > 4000) {
                 m_intakeAssembly->EjectCube();
                 m_autoState++;
             }
@@ -107,8 +108,9 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 5:
-            if (m_drive->GetSplinePercentComplete() > 0.80 ||
-                m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
+            if ((m_drive->GetSplinePercentComplete() > 0.80 &&
+                 m_intakeAssembly->GetPositionError() < 10.0) ||
+                GetMsecTime() - m_autoTimer > 4000) {
                 m_intakeAssembly->FastEjectCube();
                 m_autoState++;
             }
@@ -154,7 +156,8 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 8:
-            if (m_drive->GetSplinePercentComplete() > 0.8) {
+            if (m_drive->GetSplinePercentComplete() > 0.8 &&
+                m_intakeAssembly->GetPositionError() < 10.0) {
                 m_intakeAssembly->FastEjectCube();
                 m_autoState++;
             }
@@ -177,7 +180,8 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 10:
-            if (m_drive->GetSplinePercentComplete() > 1.0) {
+            if (m_drive->GetSplinePercentComplete() > 1.0 &&
+                m_intakeAssembly->GetPositionError() < 10.0) {
                 m_drive->OpenloopArcadeDrive(0.0, 0.0);
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);
