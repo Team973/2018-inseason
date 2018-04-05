@@ -36,6 +36,7 @@ Robot::Robot()
         , m_cameraServer(CameraServer::GetInstance())
         , m_greyCam(m_cameraServer->AddServer("serve_GreyCam", 1181))
         , m_cubeClamp(new Solenoid(PCM_CAN_ID, CUBE_CLAMP_PCM_ID))
+        , m_cubeSpring(new Solenoid(PCM_CAN_ID, CUBE_SPRING_PCM_ID))
         , m_rightRoller(new GreyTalonSRX(CLAW_RIGHT_ROLLER_CAN_ID))
         , m_leftRoller(new GreyTalonSRX(CLAW_LEFT_ROLLER_CAN_ID))
         , m_rightCubeSensor(
@@ -50,7 +51,8 @@ Robot::Robot()
         , m_greylight(new GreyLight(NUM_LED))
         , m_elevator(new Elevator(this, m_logger, m_elevatorMotor))
         , m_claw(new Claw(this, m_logger, m_rightCubeSensor, m_leftCubeSensor,
-                          m_leftRoller, m_rightRoller, m_cubeClamp))
+                          m_leftRoller, m_rightRoller, m_cubeClamp,
+                          m_cubeSpring))
         , m_wrist(new Wrist(this, m_logger, m_wristMotor))
         , m_intakeAssembly(new IntakeAssembly(this, m_logger,
                                               m_operatorJoystick, m_elevator,

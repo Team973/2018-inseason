@@ -216,7 +216,7 @@ void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::LeftBumper:
                 if (pressedP) {
                     m_intakeAssembly->RunIntake(-1.0);
-                    m_intakeAssembly->CloseClaw();
+                    m_intakeAssembly->SoftCloseClaw();
                 }
                 else {
                     m_intakeAssembly->StopIntake();
