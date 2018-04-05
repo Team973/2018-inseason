@@ -63,13 +63,13 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(&second_center_left_switch_intaking::
                                              second_center_left_switch_intaking,
-                                         Drive::RelativeTo::SetPoint);
+                                         Drive::RelativeTo::Now);
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(
                         &second_center_right_switch_intaking::
                             second_center_right_switch_intaking,
-                        Drive::RelativeTo::SetPoint);
+                        Drive::RelativeTo::Now);
                 }
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);
@@ -86,12 +86,12 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(&second_center_left_switch_backoff::
                                              second_center_left_switch_backoff,
-                                         Drive::RelativeTo::SetPoint);
+                                         Drive::RelativeTo::Now);
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(&second_center_right_switch_backoff::
                                              second_center_right_switch_backoff,
-                                         Drive::RelativeTo::SetPoint);
+                                         Drive::RelativeTo::Now);
                 }
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
@@ -118,12 +118,12 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(&third_center_left_switch_intaking::
                                              third_center_left_switch_intaking,
-                                         Drive::RelativeTo::SetPoint);
+                                         Drive::RelativeTo::Now);
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(&third_center_right_switch_intaking::
                                              third_center_right_switch_intaking,
-                                         Drive::RelativeTo::SetPoint);
+                                         Drive::RelativeTo::Now);
                 }
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::SECOND_STACK_PRESET);
@@ -142,12 +142,12 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(&third_center_left_switch_backoff::
                                              third_center_left_switch_backoff,
-                                         Drive::RelativeTo::SetPoint);
+                                         Drive::RelativeTo::Now);
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(&third_center_right_switch_backoff::
                                              third_center_right_switch_backoff,
-                                         Drive::RelativeTo::SetPoint);
+                                         Drive::RelativeTo::Now);
                 }
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
@@ -163,12 +163,12 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             if (m_drive->GetSplinePercentComplete() > 0.9) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(&left_switch_reset::left_switch_reset,
-                                         Drive::RelativeTo::SetPoint);
+                                         Drive::RelativeTo::Now);
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(
                         &right_switch_reset::right_switch_reset,
-                        Drive::RelativeTo::SetPoint);
+                        Drive::RelativeTo::Now);
                 }
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);

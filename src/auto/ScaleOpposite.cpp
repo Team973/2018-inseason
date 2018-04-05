@@ -72,13 +72,13 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
                     m_drive->SplineDrive(
                         &second_left_scale_opposite_intaking::
                             second_left_scale_opposite_intaking,
-                        Drive::RelativeTo::SetPoint);
+                        Drive::RelativeTo::Now);
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
                         &second_right_scale_opposite_intaking::
                             second_right_scale_opposite_intaking,
-                        Drive::RelativeTo::SetPoint);
+                        Drive::RelativeTo::Now);
                 }
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
@@ -90,13 +90,13 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
                 if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(&second_left_scale_opposite_backoff::
                                              second_left_scale_opposite_backoff,
-                                         Drive::RelativeTo::SetPoint);
+                                         Drive::RelativeTo::Now);
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
                         &second_right_scale_opposite_backoff::
                             second_right_scale_opposite_backoff,
-                        Drive::RelativeTo::SetPoint);
+                        Drive::RelativeTo::Now);
                 }
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::OVER_BACK_PRESET);
@@ -118,13 +118,13 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
                 if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(&third_left_scale_opposite_intaking::
                                              third_left_scale_opposite_intaking,
-                                         Drive::RelativeTo::SetPoint);
+                                         Drive::RelativeTo::Now);
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
                         &third_right_scale_opposite_intaking::
                             third_right_scale_opposite_intaking,
-                        Drive::RelativeTo::SetPoint);
+                        Drive::RelativeTo::Now);
                 }
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
@@ -136,12 +136,12 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
                 if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(&third_left_scale_opposite_backoff::
                                              third_left_scale_opposite_backoff,
-                                         Drive::RelativeTo::SetPoint);
+                                         Drive::RelativeTo::Now);
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(&third_right_scale_opposite_backoff::
                                              third_right_scale_opposite_backoff,
-                                         Drive::RelativeTo::SetPoint);
+                                         Drive::RelativeTo::Now);
                 }
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::OVER_BACK_PRESET);
