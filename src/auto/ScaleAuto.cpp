@@ -142,6 +142,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                         Drive::RelativeTo::Now);
                 }
                 m_intakeAssembly->HoldCube();
+                m_intakeAssembly->HardCloseClaw();
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::OVER_BACK_PRESET);
                 m_autoState++;

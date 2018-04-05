@@ -66,7 +66,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             if (m_drive->OnTarget()) {
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);
-                m_intakeAssembly->OpenClaw();
+                m_intakeAssembly->SoftCloseClaw();
                 m_intakeAssembly->RunIntake(-1.0);
                 if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(
@@ -98,6 +98,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
                             second_right_scale_opposite_backoff,
                         Drive::RelativeTo::Now);
                 }
+                m_intakeAssembly->HardCloseClaw();
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::OVER_BACK_PRESET);
                 m_autoState++;
@@ -113,7 +114,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             if (m_drive->OnTarget()) {
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);
-                m_intakeAssembly->OpenClaw();
+                m_intakeAssembly->SoftCloseClaw();
                 m_intakeAssembly->RunIntake(-1.0);
                 if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(&third_left_scale_opposite_intaking::
@@ -145,6 +146,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
                 }
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::OVER_BACK_PRESET);
+                m_intakeAssembly->HardCloseClaw();
                 m_autoState++;
             }
             break;

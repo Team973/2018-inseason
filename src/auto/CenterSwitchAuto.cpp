@@ -54,7 +54,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
         case 1:
             if (m_drive->GetSplinePercentComplete() > 0.80 ||
                 m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 4000) {
-                m_intakeAssembly->FastEjectCube();
+                m_intakeAssembly->EjectCube();
                 m_autoState++;
             }
             break;
@@ -74,7 +74,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);
                 m_intakeAssembly->RunIntake(-1.0);
-                m_intakeAssembly->OpenClaw();
+                m_intakeAssembly->SoftCloseClaw();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
@@ -82,7 +82,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
         case 3:
             if (m_intakeAssembly->GetClaw()->IsCubeIn() ||
                 GetMsecTime() - m_autoTimer > 3500) {
-                m_intakeAssembly->CloseClaw();
+                m_intakeAssembly->HardCloseClaw();
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(&second_center_left_switch_backoff::
                                              second_center_left_switch_backoff,
@@ -128,7 +128,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::SECOND_STACK_PRESET);
                 m_intakeAssembly->RunIntake(-1.0);
-                m_intakeAssembly->OpenClaw();
+                m_intakeAssembly->SoftCloseClaw();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
@@ -136,7 +136,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
         case 7:
             if (m_intakeAssembly->GetClaw()->IsCubeIn() ||
                 GetMsecTime() - m_autoTimer > 3500) {
-                m_intakeAssembly->CloseClaw();
+                m_intakeAssembly->HardCloseClaw();
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::OVER_BACK_PRESET);
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
