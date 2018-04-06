@@ -77,17 +77,21 @@ double GetAngularRateDegrees(TrajectoryDescription *trajectory, double time) {
     int index = (int)(time / trajectory->left_trajectory->dt);
     if (index >= GetLength(trajectory)) {
         return trajectory->right_trajectory[GetLength(trajectory) - 1]
-            .angular_rate;
+                   .angular_rate *
+               Constants::DEG_PER_RAD;
     }
-    return trajectory->left_trajectory[index].angular_rate;
+    return trajectory->left_trajectory[index].angular_rate *
+           Constants::DEG_PER_RAD;
 }
 
 double GetAngularAcceleration(TrajectoryDescription *trajectory, double time) {
     int index = (int)(time / trajectory->left_trajectory->dt);
     if (index >= GetLength(trajectory)) {
-        return trajectory->right_trajectory[GetLength(trajectory) -1]
-            .angular_accel;
+        return trajectory->right_trajectory[GetLength(trajectory) - 1]
+                   .angular_accel *
+               Constants::DEG_PER_RAD;
     }
-    return trajectory->left_trajectory[index].angular_accel;
+    return trajectory->left_trajectory[index].angular_accel *
+           Constants::DEG_PER_RAD;
 }
 }

@@ -21,12 +21,12 @@ static constexpr double ANGULAR_POSITION_KP = 0.0;
 static constexpr double ANGULAR_POSITION_KI = 0.0;
 static constexpr double ANGULAR_POSITION_KD = 0.0;
 
-static constexpr double ANGULAR_RATE_KP = 1.0;
+static constexpr double ANGULAR_RATE_KP = 0.4;
 static constexpr double ANGULAR_RATE_KI = 0.0;
 static constexpr double ANGULAR_RATE_KD = 0.0;
 
 static constexpr double ACCEL_FF = 0.2;
-static constexpr double ANGLE_ACCEL_FF = 5.0;
+static constexpr double ANGLE_ACCEL_FF = 0.2;
 
 SplineDriveController::SplineDriveController(DriveStateProvider *state,
                                              LogSpreadsheet *logger)
@@ -117,7 +117,8 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     double leftVel = trajectories::GetLeftDriveVelocity(m_trajectory, time);
     double rightVel = trajectories::GetRightDriveVelocity(m_trajectory, time);
     double heading = trajectories::GetHeadingDegrees(m_trajectory, time);
-    double angularRate = trajectories::GetAngularRateDegrees(m_trajectory, time);
+    double angularRate =
+        trajectories::GetAngularRateDegrees(m_trajectory, time);
 
     m_l_pos_pid.SetTarget(leftDist);
     m_r_pos_pid.SetTarget(rightDist);
@@ -136,7 +137,9 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
         ACCEL_FF * trajectories::GetLeftAcceleration(m_trajectory, time);
     double rightAccel_ff =
         ACCEL_FF * trajectories::GetRightAcceleration(m_trajectory, time);
-    double angleAccel_ff = ANGLE_ACCEL_FF * trajectories::GetAngularAcceleration(m_trajectory, time);
+    double angleAccel_ff =
+        ANGLE_ACCEL_FF *
+        trajectories::GetAngularAcceleration(m_trajectory, time);
 
     /* correction terms for error in {linear,angular} {position,velocioty */
     double left_linear_dist_term = m_l_pos_pid.CalcOutput(LeftDistFromStart());
@@ -169,12 +172,15 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
         m_done = true;
     }
 
-    SmartDashboard::PutNumber("drive/outputs/anglesetpoint", Util::CalcAngleError(heading - 360.0, 0));
-    SmartDashboard::PutNumber("drive/outputs/angleactual", Util::CalcAngleError(AngleFromStart(), 0));
+    SmartDashboard::PutNumber("drive/outputs/anglesetpoint",
+                              Util::CalcAngleError(heading - 360.0, 0));
+    SmartDashboard::PutNumber("drive/outputs/angleactual",
+                              Util::CalcAngleError(AngleFromStart(), 0));
     SmartDashboard::PutNumber("drive/outputs/leftpossetpoint", leftDist);
     SmartDashboard::PutNumber("drive/outputs/rightpossetpoint", rightDist);
     SmartDashboard::PutNumber("drive/outputs/leftposnow", LeftDistFromStart());
-    SmartDashboard::PutNumber("drive/outputs/rightposnow", RightDistFromStart());
+    SmartDashboard::PutNumber("drive/outputs/rightposnow",
+                              RightDistFromStart());
     SmartDashboard::PutNumber("drive/outputs/leftvelff", left_l_vel_ff);
     SmartDashboard::PutNumber("drive/outputs/rightvelff", right_l_vel_ff);
 
