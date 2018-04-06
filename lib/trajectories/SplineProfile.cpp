@@ -72,4 +72,22 @@ double GetPercentComplete(TrajectoryDescription *trajectory, double time) {
     int index = (int)(time / trajectory->left_trajectory->dt);
     return (float)(index) / (float)(GetLength(trajectory));
 }
+
+double GetAngularRateDegrees(TrajectoryDescription *trajectory, double time) {
+    int index = (int)(time / trajectory->left_trajectory->dt);
+    if (index >= GetLength(trajectory)) {
+        return trajectory->right_trajectory[GetLength(trajectory) - 1]
+            .angular_rate;
+    }
+    return trajectory->left_trajectory[index].angular_rate;
+}
+
+double GetAngularAcceleration(TrajectoryDescription *trajectory, double time) {
+    int index = (int)(time / trajectory->left_trajectory->dt);
+    if (index >= GetLength(trajectory)) {
+        return trajectory->right_trajectory[GetLength(trajectory) -1]
+            .angular_accel;
+    }
+    return trajectory->left_trajectory[index].angular_accel;
+}
 }

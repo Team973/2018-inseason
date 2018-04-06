@@ -17,11 +17,16 @@ static constexpr double VELOCITY_KP = 1.3;
 static constexpr double VELOCITY_KI = 0.0;
 static constexpr double VELOCITY_KD = 0.0;
 
-static constexpr double ANGULAR_POSITION_KP = 3.8;
+static constexpr double ANGULAR_POSITION_KP = 0.0;
 static constexpr double ANGULAR_POSITION_KI = 0.0;
 static constexpr double ANGULAR_POSITION_KD = 0.0;
 
+static constexpr double ANGULAR_RATE_KP = 1.0;
+static constexpr double ANGULAR_RATE_KI = 0.0;
+static constexpr double ANGULAR_RATE_KD = 0.0;
+
 static constexpr double ACCEL_FF = 0.2;
+static constexpr double ANGLE_ACCEL_FF = 5.0;
 
 SplineDriveController::SplineDriveController(DriveStateProvider *state,
                                              LogSpreadsheet *logger)
@@ -39,6 +44,7 @@ SplineDriveController::SplineDriveController(DriveStateProvider *state,
         , m_r_vel_pid(VELOCITY_KP, VELOCITY_KI, VELOCITY_KD)
         , m_a_pos_pid(ANGULAR_POSITION_KP, ANGULAR_POSITION_KI,
                       ANGULAR_POSITION_KD)
+        , m_a_rate_pid(ANGULAR_RATE_KP, ANGULAR_RATE_KI, ANGULAR_RATE_KD)
         , m_l_pos_setpt_log(new LogCell("s_left pos incr goal"))
         , m_l_pos_real_log(new LogCell("s_left pos incr actual"))
         , m_l_vel_setpt_log(new LogCell("s_left vel incr goal"))
@@ -57,6 +63,7 @@ SplineDriveController::SplineDriveController(DriveStateProvider *state,
     m_r_pos_pid.SetBounds(-100, 100);
     m_r_vel_pid.SetBounds(-100, 100);
     m_a_pos_pid.SetBounds(-100, 100);
+    m_a_rate_pid.SetBounds(-100, 100);
 
     if (logger) {
         logger->RegisterCell(m_l_pos_setpt_log);
@@ -110,12 +117,14 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     double leftVel = trajectories::GetLeftDriveVelocity(m_trajectory, time);
     double rightVel = trajectories::GetRightDriveVelocity(m_trajectory, time);
     double heading = trajectories::GetHeadingDegrees(m_trajectory, time);
+    double angularRate = trajectories::GetAngularRateDegrees(m_trajectory, time);
 
     m_l_pos_pid.SetTarget(leftDist);
     m_r_pos_pid.SetTarget(rightDist);
     m_l_vel_pid.SetTarget(leftVel);
     m_r_vel_pid.SetTarget(rightVel);
     // m_a_pos_pid.SetTarget(heading);
+    m_a_rate_pid.SetTarget(angularRate);
     double angle_error = Util::CalcAngleError(heading, AngleFromStart());
 
     /* vel feed forward for linear term */
@@ -127,6 +136,7 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
         ACCEL_FF * trajectories::GetLeftAcceleration(m_trajectory, time);
     double rightAccel_ff =
         ACCEL_FF * trajectories::GetRightAcceleration(m_trajectory, time);
+    double angleAccel_ff = ANGLE_ACCEL_FF * trajectories::GetAngularAcceleration(m_trajectory, time);
 
     /* correction terms for error in {linear,angular} {position,velocioty */
     double left_linear_dist_term = m_l_pos_pid.CalcOutput(LeftDistFromStart());
@@ -138,15 +148,16 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     double angular_dist_term =
         ANGULAR_POSITION_KP *
         angle_error;  // m_a_pos_pid.CalcOutput(AngleFromStart());
+    double angular_rate_term = m_a_rate_pid.CalcOutput(state->GetAngularRate());
 
     /* right side receives positive angle correction */
     double right_output = right_l_vel_ff + right_linear_dist_term +
                           right_linear_vel_term + angular_dist_term +
-                          rightAccel_ff;
+                          rightAccel_ff + angleAccel_ff + angular_rate_term;
     /* left side receives negative angle correction */
     double left_output = left_l_vel_ff + left_linear_dist_term +
                          left_linear_vel_term - angular_dist_term +
-                         leftAccel_ff;
+                         leftAccel_ff - angleAccel_ff - angular_rate_term;
 
     out->SetDriveOutputIPS(left_output, right_output);
 
