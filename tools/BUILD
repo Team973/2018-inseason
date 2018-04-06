@@ -26,7 +26,7 @@ sh_binary(
     srcs = ["//tools/doxygen:doxygen_build"],
     data = [
         "//tools/doxygen:doxyfile",
-        "//src:robot_src",
+        "//lib:lib_files",
+        "//src:src_files",
     ],
-    args = ["$(location //src:robot_src)"],
 )

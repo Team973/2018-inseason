@@ -1,6 +1,6 @@
 
 filegroup(
-    name = "robot_src",
+    name = "src_files",
     srcs = ["."],
     visibility = ["//visibility:public"],
 )

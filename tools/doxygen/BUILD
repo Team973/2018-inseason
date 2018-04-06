@@ -6,6 +6,6 @@ filegroup(
 
 filegroup(
   name = "doxyfile",
-  srcs = ["Doxyfile.in"],
+  srcs = ["Doxyfile"],
   visibility = ["//visibility:public"],
 )
