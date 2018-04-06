@@ -84,7 +84,7 @@ void Claw::StopIntake() {
 }
 
 bool Claw::IsCubeIn() const {
-    return (m_leftCubeSensor->Get() || m_rightCubeSensor->Get());
+    return (m_leftCubeSensor->Get());  // || m_rightCubeSensor->Get());
 }
 
 void Claw::TaskPeriodic(RobotMode mode) {

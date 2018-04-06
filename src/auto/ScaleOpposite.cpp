@@ -63,8 +63,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 3:
-            if (m_drive->OnTarget() &&
-                m_intakeAssembly->GetPositionError() < 10.0) {
+            if (GetMsecTime() - m_autoTimer > 1000) {
                 if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(
                         &second_left_scale_opposite_intaking::
@@ -77,18 +76,15 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
                             second_right_scale_opposite_intaking,
                         Drive::RelativeTo::Now);
                 }
-                m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
         case 4:
-            if (m_drive->GetSplinePercentComplete() > 0.2) {
-                m_intakeAssembly->GoToIntakePosition(
-                    IntakeAssembly::GROUND_PRESET);
-                m_intakeAssembly->SoftCloseClaw();
-                m_intakeAssembly->RunIntake(-1.0);
-                m_autoState = -1;
-            }
+            m_intakeAssembly->GoToIntakePosition(IntakeAssembly::GROUND_PRESET);
+            m_intakeAssembly->SoftCloseClaw();
+            m_intakeAssembly->RunIntake(-1.0);
+            m_autoTimer = GetMsecTime();
+            m_autoState++;
             break;
         case 5:
             if (m_intakeAssembly->GetClaw()->IsCubeIn() ||
@@ -114,11 +110,12 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             if (m_drive->GetSplinePercentComplete() > 0.8 &&
                 m_intakeAssembly->GetPositionError() < 10.0) {
                 m_intakeAssembly->FastEjectCube();
+                m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
         case 7:
-            if (m_drive->OnTarget()) {
+            if (m_drive->OnTarget() && GetMsecTime() - m_autoTimer > 1000) {
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);
                 m_intakeAssembly->SoftCloseClaw();
@@ -161,12 +158,14 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             if (m_drive->GetSplinePercentComplete() > 0.8 &&
                 m_intakeAssembly->GetPositionError() < 10.0) {
                 m_intakeAssembly->FastEjectCube();
+                m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
         case 10:
-            if (m_drive->OnTarget() &&
-                m_intakeAssembly->GetPositionError() < 10.0) {
+            if ((m_drive->OnTarget() &&
+                 m_intakeAssembly->GetPositionError() < 10.0) &&
+                GetMsecTime() - m_autoTimer > 1300) {
                 m_intakeAssembly->StopIntake();
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);
