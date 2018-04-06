@@ -13,7 +13,8 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *wristMotor)
         , m_position(0.0)
         , m_prevWristSetpoint(0.0)
         , m_wristPositionDelta(0.0)
-        , m_zeroingTime(0) {
+        , m_zeroingTime(0)
+        , m_prevLimSwitchState(false) {
     this->m_scheduler->RegisterTask("Wrist", this, TASK_PERIODIC);
 
     m_wristMotor->ConfigSelectedFeedbackSensor(
@@ -111,9 +112,14 @@ void Wrist::TaskPeriodic(RobotMode mode) {
         m_wristMotor->GetSensorCollection().IsFwdLimitSwitchClosed(),
         m_wristMotor->GetSensorCollection().IsRevLimitSwitchClosed());
 
-    if (m_wristMotor->GetSensorCollection().IsFwdLimitSwitchClosed()) {
+    bool currLimSwitchState =
+        m_wristMotor->GetSensorCollection().IsFwdLimitSwitchClosed();
+
+    if (m_prevLimSwitchState != currLimSwitchState) {
         ZeroPosition();
     }
+
+    m_prevLimSwitchState = currLimSwitchState;
 }
 
 double Wrist::DegreesToNativeUnits(double degrees) const {

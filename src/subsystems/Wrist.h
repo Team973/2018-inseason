@@ -75,5 +75,6 @@ private:
     double m_prevWristSetpoint;
     double m_wristPositionDelta;
     uint32_t m_zeroingTime;
+    bool m_prevLimSwitchState;
 };
 }
