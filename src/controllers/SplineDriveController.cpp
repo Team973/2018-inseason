@@ -21,7 +21,7 @@ static constexpr double ANGULAR_POSITION_KP = 0.0;
 static constexpr double ANGULAR_POSITION_KI = 0.0;
 static constexpr double ANGULAR_POSITION_KD = 0.0;
 
-static constexpr double ANGULAR_RATE_KP = 0.4;
+static constexpr double ANGULAR_RATE_KP = 1.6;
 static constexpr double ANGULAR_RATE_KI = 0.0;
 static constexpr double ANGULAR_RATE_KD = 0.0;
 
