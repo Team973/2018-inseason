@@ -5,10 +5,9 @@
     "max_accel": 80.0,
     "max_jerk": 120.0,
     "wheelbase_width": 25.205,
-    "reverse": false,
+    "reverse": true,
     "waypoints": [
         { "x": 0, "y": 0, "angle": 0 },
-        { "x": 50, "y": 30, "angle": 80 },
-        { "x": 72, "y": 56, "angle": 135 }
+        { "x": -72, "y": 56, "angle": 135 }
     ]
 }

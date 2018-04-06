@@ -2,12 +2,12 @@
 #include "lib/util/WrapDash.h"
 #include "src/auto/profiles/centerrightswitch_trajectory.h"
 #include "src/auto/profiles/centerleftswitch_trajectory.h"
-#include "src/auto/profiles/secondcenterrightswitchbackoff_trajectory.h"
-#include "src/auto/profiles/secondcenterleftswitchbackoff_trajectory.h"
+#include "src/auto/profiles/secondcenterrightswitchscoring_trajectory.h"
+#include "src/auto/profiles/secondcenterleftswitchscoring_trajectory.h"
 #include "src/auto/profiles/secondcenterrightswitchintaking_trajectory.h"
 #include "src/auto/profiles/secondcenterleftswitchintaking_trajectory.h"
-#include "src/auto/profiles/thirdcenterrightswitchbackoff_trajectory.h"
-#include "src/auto/profiles/thirdcenterleftswitchbackoff_trajectory.h"
+#include "src/auto/profiles/thirdcenterrightswitchscoring_trajectory.h"
+#include "src/auto/profiles/thirdcenterleftswitchscoring_trajectory.h"
 #include "src/auto/profiles/thirdcenterrightswitchintaking_trajectory.h"
 #include "src/auto/profiles/thirdcenterleftswitchintaking_trajectory.h"
 #include "src/auto/profiles/leftswitchreset_trajectory.h"
@@ -16,12 +16,12 @@
 using namespace frc;
 using namespace center_left_switch;
 using namespace center_right_switch;
-using namespace second_center_left_switch_backoff;
-using namespace second_center_right_switch_backoff;
+using namespace second_center_left_switch_scoring;
+using namespace second_center_right_switch_scoring;
 using namespace second_center_left_switch_intaking;
 using namespace second_center_right_switch_intaking;
-using namespace third_center_left_switch_backoff;
-using namespace third_center_right_switch_backoff;
+using namespace third_center_left_switch_scoring;
+using namespace third_center_right_switch_scoring;
 using namespace third_center_left_switch_intaking;
 using namespace third_center_right_switch_intaking;
 using namespace right_switch_reset;
@@ -47,7 +47,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                                      Drive::RelativeTo::Now);
             }
             m_intakeAssembly->GoToIntakePosition(
-                IntakeAssembly::OVER_BACK_PRESET);
+                IntakeAssembly::LOW_GOAL_PRESET);
             m_autoTimer = GetMsecTime();
             m_autoState++;
             break;
@@ -81,41 +81,46 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 3:
-            if (m_intakeAssembly->GetClaw()->IsCubeIn() ||
-                GetMsecTime() - m_autoTimer > 3500) {
-                m_intakeAssembly->HardCloseClaw();
-                if (direction == AutoRoutineBase::AutoDirection::Left) {
-                    m_drive->SplineDrive(&second_center_left_switch_backoff::
-                                             second_center_left_switch_backoff,
-                                         Drive::RelativeTo::Now);
-                }
-                else if (direction == AutoRoutineBase::AutoDirection::Right) {
-                    m_drive->SplineDrive(&second_center_right_switch_backoff::
-                                             second_center_right_switch_backoff,
-                                         Drive::RelativeTo::Now);
-                }
-                m_autoTimer = GetMsecTime();
+            if (m_drive->OnTarget()) {
+                m_drive->PIDDrive(50.0, 0.0, Drive::RelativeTo::SetPoint, 1.0);
                 m_autoState++;
             }
             break;
         case 4:
-            if (GetMsecTime() - m_autoTimer > 500) {
-                m_intakeAssembly->StopIntake();
-                m_intakeAssembly->GoToIntakePosition(
-                    IntakeAssembly::OVER_BACK_PRESET);
-                m_autoTimer = GetMsecTime();
+            if ((m_intakeAssembly->GetClaw()->IsCubeIn() &&
+                 m_drive->OnTarget()) ||
+                GetMsecTime() - m_autoTimer > 3500) {
+                m_intakeAssembly->HardCloseClaw();
+                m_drive->PIDDrive(-50.0, 0.0, Drive::RelativeTo::SetPoint, 1.0);
                 m_autoState++;
             }
             break;
         case 5:
-            if ((m_drive->GetSplinePercentComplete() > 0.80 &&
-                 m_intakeAssembly->GetPositionError() < 10.0) ||
-                GetMsecTime() - m_autoTimer > 4000) {
-                m_intakeAssembly->FastEjectCube();
+            if (m_drive->OnTarget()) {
+                if (direction == AutoRoutineBase::AutoDirection::Left) {
+                    m_drive->SplineDrive(&second_center_left_switch_scoring::
+                                             second_center_left_switch_scoring,
+                                         Drive::RelativeTo::Now);
+                }
+                else if (direction == AutoRoutineBase::AutoDirection::Right) {
+                    m_drive->SplineDrive(&second_center_right_switch_scoring::
+                                             second_center_right_switch_scoring,
+                                         Drive::RelativeTo::Now);
+                }
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::LOW_GOAL_PRESET);
+                m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
         case 6:
+            if (m_drive->GetSplinePercentComplete() > 0.8) {
+                m_intakeAssembly->FastEjectCube();
+                m_autoTimer = GetMsecTime();
+                m_autoState++;
+            }
+            break;
+        case 7:
             if (m_drive->OnTarget()) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(&third_center_left_switch_intaking::
@@ -135,34 +140,50 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_autoState++;
             }
             break;
-        case 7:
+        case 8:
+            if (m_drive->OnTarget()) {
+                m_drive->PIDDrive(50.0, 0.0, Drive::RelativeTo::SetPoint, 1.0);
+                m_autoState++;
+            }
+            break;
+        case 9:
+            if ((m_intakeAssembly->GetClaw()->IsCubeIn() &&
+                 m_drive->OnTarget()) ||
+                GetMsecTime() - m_autoTimer > 3500) {
+                m_intakeAssembly->HardCloseClaw();
+                m_drive->PIDDrive(-50.0, 0.0, Drive::RelativeTo::SetPoint, 1.0);
+                m_autoState++;
+            }
+            break;
+        case 10:
             if (m_intakeAssembly->GetClaw()->IsCubeIn() ||
                 GetMsecTime() - m_autoTimer > 3500) {
                 m_intakeAssembly->HardCloseClaw();
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::OVER_BACK_PRESET);
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
-                    m_drive->SplineDrive(&third_center_left_switch_backoff::
-                                             third_center_left_switch_backoff,
+                    m_drive->SplineDrive(&third_center_left_switch_scoring::
+                                             third_center_left_switch_scoring,
                                          Drive::RelativeTo::Now);
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Right) {
-                    m_drive->SplineDrive(&third_center_right_switch_backoff::
-                                             third_center_right_switch_backoff,
+                    m_drive->SplineDrive(&third_center_right_switch_scoring::
+                                             third_center_right_switch_scoring,
                                          Drive::RelativeTo::Now);
                 }
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
-        case 8:
-            if (m_drive->GetSplinePercentComplete() > 0.8 &&
-                m_intakeAssembly->GetPositionError() < 10.0) {
+        case 11:
+            if ((m_drive->GetSplinePercentComplete() > 0.80 &&
+                 m_intakeAssembly->GetPositionError() < 10.0) ||
+                GetMsecTime() - m_autoTimer > 4000) {
                 m_intakeAssembly->FastEjectCube();
                 m_autoState++;
             }
             break;
-        case 9:
+        case 12:
             if (m_drive->GetSplinePercentComplete() > 0.9) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(&left_switch_reset::left_switch_reset,
@@ -179,7 +200,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_autoState++;
             }
             break;
-        case 10:
+        case 13:
             if (m_drive->GetSplinePercentComplete() > 1.0 &&
                 m_intakeAssembly->GetPositionError() < 10.0) {
                 m_drive->OpenloopArcadeDrive(0.0, 0.0);
