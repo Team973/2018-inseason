@@ -1,5 +1,5 @@
 import unittest
-from pypathfinder import set_cdll_path, parse_spline_file
+from pypathfinder import set_cdll_path, parse_spline_file, angle_diff
 import math
 from itertools import tee
 
@@ -133,8 +133,14 @@ class TestPyPathfinder(unittest.TestCase):
 
         from pprint import pprint
         for segment in series:
-            self.assertAlmostEqual(segment.heading, angle_accum, delta=0.001)
-            self.assertAlmostEqual(segment.angular_rate, angle_rate_accum, delta=0.001)
+            self.assertLessEqual(
+                    abs(angle_diff(segment.heading, angle_accum)),
+                    0.001)
+            self.assertLessEqual(
+                    abs(angle_diff(segment.angular_rate, angle_rate_accum)),
+                    0.001)
+            self.assertLessEqual(abs(segment.angular_rate), 100)
+            self.assertLessEqual(abs(segment.angular_accel), 200)
 
             angle_accum += segment.angular_rate * timestep
             angle_rate_accum += segment.angular_accel * timestep

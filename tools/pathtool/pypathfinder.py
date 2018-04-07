@@ -257,9 +257,6 @@ def set_cdll_path(path=None):
                 idx = len(pySegments) - 1
             return idx
 
-        def angle_diff(a, b):
-            return ((a - b + 180) % 360) - 180
-
         for idx, segment in enumerate(pySegments):
             angular_rate = (angle_diff(pySegments[cap_idx(idx + 1)].heading,
                                        pySegments[cap_idx(idx)].heading)
@@ -316,3 +313,10 @@ def parse_spline_file(source, cdllPath=None):
         return (list(annotate(left, timestep)),
                 list(annotate(right, timestep)),
                 waypoints, sourceJSON)
+
+def angle_diff(a, b):
+    """
+    Calculate the difference between two angles (in radians) such that
+    the result is always between +/-PI
+    """
+    return ((a - b + math.pi) % (2 * math.pi)) - math.pi
