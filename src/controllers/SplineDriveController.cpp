@@ -17,7 +17,7 @@ static constexpr double VELOCITY_KP = 1.3;
 static constexpr double VELOCITY_KI = 0.0;
 static constexpr double VELOCITY_KD = 0.0;
 
-static constexpr double ANGULAR_POSITION_KP = 1.3;
+static constexpr double ANGULAR_POSITION_KP = 4.6;
 static constexpr double ANGULAR_POSITION_KI = 0.0;
 static constexpr double ANGULAR_POSITION_KD = 0.0;
 
