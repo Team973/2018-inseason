@@ -33,11 +33,17 @@ namespace frc973 {
 
 static constexpr int MAXHOSTNAMELEN = 128;
 
+/**
+ * Interface for a class that is managed and kept in sync with other threads.
+ */
 class CoopMTRobot
         : public IterativeRobot
         , public TaskMgr
         , public frc::RobotStateInterface {
 public:
+    /**
+     * A coop mt robot.
+     */
     CoopMTRobot();
     virtual ~CoopMTRobot();
 
@@ -52,14 +58,14 @@ public:
      * The following {Disabled,Autonomous,Teleop,Test}{Start,Stop,Continuous}
      * should be overridden to get behavior similar to overriding those
      * functions in Iterative Robot:
-     *   - <Mode>Start is called when robot first changes into this mode (like
-     * <Mode>Init in IterativeRobot).
-     *   - <Mode>Stop is called when robot moves to another mode from <Mode>.
-     *   - <Mode>Continuous is called repeatedly every 20ms (like <Mode>Periodic
+     *   - [Mode]Start is called when robot first changes into this mode (like
+     * [Mode]Init in IterativeRobot).
+     *   - [Mode]Stop is called when robot moves to another mode from [Mode].
+     *   - [Mode]Continuous is called repeatedly every 20ms (like [Mode]Periodic
      * in IterativeRobot).
-     *   - <Mode>Start is garaunteed to be called before <Mode>Continuous.
-     *   - <Mode>Stop for the previous mode is garaunteed to be called before
-     * <Mode>Start from the prevous mode.
+     *   - [Mode]Start is garaunteed to be called before [Mode]Continuous.
+     *   - [Mode]Stop for the previous mode is garaunteed to be called before
+     * [Mode]Start from the prevous mode.
      */
 
     /**
@@ -73,7 +79,7 @@ public:
     /**
      * DisabledStop is called when robot moves to another mode from Disabled.
      * DisabledStop for the previous mode is garaunteed to be called before
-     * <Mode>Start from the prevous mode.
+     * [Mode]Start from the prevous mode.
      */
     virtual void DisabledStop() {
     }
@@ -96,7 +102,7 @@ public:
     /**
      * AutonomousStop is called when robot moves to another mode from
      * Autonomous. AutonomousStop for the previous mode is garaunteed to be
-     * called before <Mode>Start from the prevous mode.
+     * called before [Mode]Start from the prevous mode.
      */
     virtual void AutonomousStop() {
     }
@@ -119,7 +125,7 @@ public:
     /**
      * TeleopStop is called when robot moves to another mode from Teleop.
      * TeleopStop for the previous mode is garaunteed to be called before
-     * <Mode>Start from the prevous mode.
+     * [Mode]Start from the prevous mode.
      */
     virtual void TeleopStop() {
     }
@@ -141,7 +147,7 @@ public:
 
     /**
      * TestStop is called when robot moves to another mode from Test. TestStop
-     * for the previous mode is garaunteed to be called before <Mode>Start from
+     * for the previous mode is garaunteed to be called before [Mode]Start from
      * the prevous mode.
      */
     virtual void TestStop() {

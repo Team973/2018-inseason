@@ -116,6 +116,9 @@ public:
     virtual bool OnTarget() = 0;
 };
 
+/**
+ * Interface for a simple control system that combines other simple controllers.
+ */
 class SimpleControlSystem : public CoopTask {
 public:
     /**

@@ -17,7 +17,7 @@ using namespace frc;
 
 namespace frc973 {
 
-/*
+/**
  * Interface for a class that determines the current state of the drivetrain.
  */
 class DriveStateProvider {
@@ -79,7 +79,7 @@ public:
     virtual double GetRate() const = 0;
 };
 
-/*
+/**
  * Interface for a class that can take drive output.
  */
 class DriveControlSignalReceiver {
@@ -130,7 +130,7 @@ public:
     virtual void DisableDriveCurrentLimit() = 0;
 };
 
-/*
+/**
  * Interface for anything that can use an angle provider, a dist provider, and
  * can use those to send some drive output to the DriveOutput. In general there
  * will be two drive controllers: One that calculates output based solely on
@@ -230,7 +230,14 @@ public:
     bool OnTarget();
 
 protected:
+    /**
+     * Task manager member.
+     */
     TaskMgr *m_scheduler;
+
+    /**
+     * Signal reciever member.
+     */
     DriveControlSignalReceiver *m_driveOutput;
 
 private:
