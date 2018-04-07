@@ -65,6 +65,9 @@ private:
     /* pid for angular pos */
     PID m_a_pos_pid;
 
+    /* pid for angular rate */
+    PID m_a_rate_pid;
+
     LogCell *m_l_pos_setpt_log;
     LogCell *m_l_pos_real_log;
     LogCell *m_l_vel_setpt_log;

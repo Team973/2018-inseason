@@ -74,6 +74,18 @@
     {
       "settings": {
         "tooltip": true,
+        "minValue": -144,
+        "maxValue": 144
+      },
+      "title": "Angular Velocity",
+      "keys": [
+        "/SmartDashboard/drive/outputs/angratesetpoint",
+        "/SmartDashboard/drive/outputs/angratenow"
+      ]
+    },
+    {
+      "settings": {
+        "tooltip": true,
         "minValue": 0,
         "maxValue": 30
       },

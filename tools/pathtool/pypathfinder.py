@@ -151,6 +151,15 @@ def set_cdll_path(path=None):
     Segment = namedtuple("Segment", ["dt", "x", "y", "position", "velocity",
                                      "acceleration", "jerk", "heading"])
 
+    """
+    Segment enhanced with angular rate and angular acceleration
+    """
+    EnhancedSegment = namedtuple("Segment", ["dt", "x", "y", "position",
+                                             "velocity", "acceleration",
+                                             "jerk", "heading",
+                                             "angular_rate",
+                                             "angular_accel"])
+
 
     def generate_trajectory(waypoints, timestep, max_vel, max_accel, max_jerk,
                             reverse=False):
@@ -236,7 +245,42 @@ def set_cdll_path(path=None):
                 [segment.toPySegment() for segment in rightBuff],
             )
 
-    return (Waypoint, Segment, generate_trajectory, generate_tank_trajectory)
+    def annotate_trajectory_angular_rate(pySegments, timestep):
+        def cap_idx(idx):
+            """
+            Cap an index such that it lies within the range of indeces
+            for the given series
+            """
+            if idx < 0:
+                idx = 0
+            if idx >= len(pySegments):
+                idx = len(pySegments) - 1
+            return idx
+
+        for idx, segment in enumerate(pySegments):
+            angular_rate = (angle_diff(pySegments[cap_idx(idx + 1)].heading,
+                                       pySegments[cap_idx(idx)].heading)
+                            / timestep)
+
+            angular_accel = ((angle_diff(pySegments[cap_idx(idx + 2)].heading,
+                                         pySegments[cap_idx(idx + 1)].heading)
+                              - angle_diff(pySegments[cap_idx(idx + 1)].heading,
+                                           pySegments[cap_idx(idx)].heading))
+                             / (timestep * timestep))
+
+            yield EnhancedSegment(dt=segment.dt, x=segment.x,
+                                  y=segment.y,
+                                  position=segment.position,
+                                  velocity=segment.velocity,
+                                  acceleration=segment.acceleration,
+                                  jerk=segment.jerk,
+                                  heading=segment.heading,
+                                  angular_rate=angular_rate,
+                                  angular_accel=angular_accel)
+
+    return (Waypoint, Segment, generate_trajectory, generate_tank_trajectory,
+            annotate_trajectory_angular_rate)
+        
 
 def parse_spline_file(source, cdllPath=None):
     """
@@ -246,7 +290,8 @@ def parse_spline_file(source, cdllPath=None):
     (Waypoint,
      Segment,
      generate_trajectory,
-     generate_tank_trajectory) = set_cdll_path(cdllPath)
+     generate_tank_trajectory,
+     annotate) = set_cdll_path(cdllPath)
 
     with open(source) as inputFile:
         sourceJSON = json.load(inputFile)
@@ -257,10 +302,21 @@ def parse_spline_file(source, cdllPath=None):
                          angle=(math.pi / 180.0) * waypoint["angle"])
             )
 
+        timestep = float(sourceJSON["timestep"])
+
         left, right = generate_tank_trajectory(
-            waypoints, sourceJSON["timestep"],
+            waypoints, timestep,
             sourceJSON["max_vel"], sourceJSON["max_accel"],
             sourceJSON["max_jerk"], sourceJSON["wheelbase_width"],
             reverse=sourceJSON.get('reverse', False))
 
-        return left, right, waypoints, sourceJSON
+        return (list(annotate(left, timestep)),
+                list(annotate(right, timestep)),
+                waypoints, sourceJSON)
+
+def angle_diff(a, b):
+    """
+    Calculate the difference between two angles (in radians) such that
+    the result is always between +/-PI
+    """
+    return ((a - b + math.pi) % (2 * math.pi)) - math.pi
