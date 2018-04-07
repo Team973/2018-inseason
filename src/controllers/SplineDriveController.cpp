@@ -17,16 +17,16 @@ static constexpr double VELOCITY_KP = 1.3;
 static constexpr double VELOCITY_KI = 0.0;
 static constexpr double VELOCITY_KD = 0.0;
 
-static constexpr double ANGULAR_POSITION_KP = 0.0;
+static constexpr double ANGULAR_POSITION_KP = 1.6;
 static constexpr double ANGULAR_POSITION_KI = 0.0;
 static constexpr double ANGULAR_POSITION_KD = 0.0;
 
-static constexpr double ANGULAR_RATE_KP = 1.6;
+static constexpr double ANGULAR_RATE_KP = 0.0;  // 3.0;
 static constexpr double ANGULAR_RATE_KI = 0.0;
 static constexpr double ANGULAR_RATE_KD = 0.0;
 
 static constexpr double ACCEL_FF = 0.2;
-static constexpr double ANGLE_ACCEL_FF = 0.2;
+static constexpr double ANGLE_ACCEL_FF = 0.1;
 
 SplineDriveController::SplineDriveController(DriveStateProvider *state,
                                              LogSpreadsheet *logger)
@@ -124,7 +124,7 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     m_r_pos_pid.SetTarget(rightDist);
     m_l_vel_pid.SetTarget(leftVel);
     m_r_vel_pid.SetTarget(rightVel);
-    // m_a_pos_pid.SetTarget(heading);
+    m_a_pos_pid.SetTarget(heading);
     m_a_rate_pid.SetTarget(angularRate);
     double angle_error = Util::CalcAngleError(heading, AngleFromStart());
 
@@ -183,6 +183,9 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
                               RightDistFromStart());
     SmartDashboard::PutNumber("drive/outputs/leftvelff", left_l_vel_ff);
     SmartDashboard::PutNumber("drive/outputs/rightvelff", right_l_vel_ff);
+    SmartDashboard::PutNumber("drive/outputs/angratesetpoint", angularRate);
+    SmartDashboard::PutNumber("drive/outputs/angratenow",
+                              state->GetAngularRate());
 
     DBStringPrintf(DB_LINE1, "lo%0.3lf ro%0.3lf", m_left_output,
                    m_right_output);
