@@ -11,6 +11,8 @@ struct Segment {
     double acceleration;
     double jerk;
     double heading;
+    double angular_rate;
+    double angular_accel;
 };
 
 struct TrajectoryDescription {
