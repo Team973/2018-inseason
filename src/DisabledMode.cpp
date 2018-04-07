@@ -18,10 +18,10 @@ Disabled::Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_greylight(greylight)
         , m_intakeAssembly(intakeAssembly)
         , m_disabledSignal(new LightPattern::SolidColor(DISABLED_RED))
-        , m_leftSideSignal(
-              new LightPattern::LengthModifier(m_disabledSignal, 12))
         , m_rightSideSignal(
-              new LightPattern::ReverseModifier(m_leftSideSignal)) {
+              new LightPattern::LengthModifier(m_disabledSignal, 12))
+        , m_leftSideSignal(
+              new LightPattern::ReverseModifier(m_rightSideSignal)) {
 }
 
 Disabled::~Disabled() {

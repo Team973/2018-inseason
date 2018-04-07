@@ -47,7 +47,7 @@ private:
     GreyLight *m_greylight;
     IntakeAssembly *m_intakeAssembly;
     LightPattern::SolidColor *m_disabledSignal;
-    LightPattern::LengthModifier *m_leftSideSignal;
-    LightPattern::ReverseModifier *m_rightSideSignal;
+    LightPattern::LengthModifier *m_rightSideSignal;
+    LightPattern::ReverseModifier *m_leftSideSignal;
 };
 };
