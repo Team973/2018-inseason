@@ -46,7 +46,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             m_autoState++;
             break;
         case 1:
-            if (m_drive->GetSplinePercentComplete() > 0.4) {
+            if (m_drive->GetSplinePercentComplete() > 0.8) {
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::OVER_BACK_PRESET);
                 m_autoTimer = GetMsecTime();
@@ -64,8 +64,8 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 3:
-            if (GetMsecTime() - m_autoTimer > 1000) {
-                m_intakeAssembly->SoftCloseClaw();
+            if (m_intakeAssembly->GetPositionError() < 10.0) {
+                m_intakeAssembly->OpenClaw();
                 m_intakeAssembly->RunIntake(-1.0);
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
@@ -82,6 +82,12 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 4:
+            if (m_drive->GetSplinePercentComplete() > 0.7) {
+                m_intakeAssembly->SoftCloseClaw();
+                m_autoState++;
+            }
+            break;
+        case 5:
             if (m_intakeAssembly->GetClaw()->IsCubeIn() ||
                 GetMsecTime() - m_autoTimer > 3000) {
                 m_intakeAssembly->HardCloseClaw();
@@ -96,20 +102,24 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                         &second_right_scale_backoff::second_right_scale_backoff,
                         Drive::RelativeTo::Now);
                 }
-                m_autoState++;
-            }
-            break;
-        case 5:
-            if (m_drive->GetSplinePercentComplete() > 0.2) {
-                m_intakeAssembly->GoToIntakePosition(
-                    IntakeAssembly::OVER_BACK_PRESET);
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
         case 6:
+            if (m_drive->GetSplinePercentComplete() > 0.4) {
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::HALF_STOW_PRESET);
+            }
+            if (m_drive->OnTarget()) {
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::OVER_BACK_PRESET);
+                m_autoState = -1;
+            }
+            break;
+        case 7:
             if (m_drive->OnTarget() &&
-                m_intakeAssembly->GetPositionError() < 10.0) {
+                m_intakeAssembly->GetPositionError() < 5.0) {
                 m_intakeAssembly->EjectCube();
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
@@ -125,14 +135,17 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_autoState++;
             }
             break;
-        case 7:
-            if (m_drive->GetSplinePercentComplete() > 0.2) {
+        case 8:
+            if (m_drive->GetSplinePercentComplete() > 0.1) {
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);
             }
-            if (m_drive->GetSplinePercentComplete() > 0.4) {
-                m_intakeAssembly->SoftCloseClaw();
+            if (m_drive->GetSplinePercentComplete() > 0.3) {
+                m_intakeAssembly->OpenClaw();
                 m_intakeAssembly->RunIntake(-1.0);
+            }
+            if (m_drive->GetSplinePercentComplete() > 0.7) {
+                m_intakeAssembly->SoftCloseClaw();
             }
             if (m_intakeAssembly->GetClaw()->IsCubeIn() ||
                 GetMsecTime() - m_autoTimer > 3500) {
@@ -153,14 +166,14 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_autoState++;
             }
             break;
-        case 8:
+        case 9:
             if (m_drive->GetSplinePercentComplete() > 0.8 &&
                 m_intakeAssembly->GetPositionError() < 10.0) {
                 m_intakeAssembly->EjectCube();
                 m_autoState++;
             }
             break;
-        case 9:
+        case 10:
             if (m_drive->OnTarget()) {
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);

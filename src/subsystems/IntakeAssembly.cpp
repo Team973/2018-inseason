@@ -49,6 +49,8 @@ const IntakeAssembly::IntakePreset IntakeAssembly::SECOND_STACK_PRESET =
     IntakeAssembly::IntakePreset(20.0, Wrist::EXTENDED);
 const IntakeAssembly::IntakePreset IntakeAssembly::HANGING_PRESET =
     IntakeAssembly::IntakePreset(61.5, -75);
+const IntakeAssembly::IntakePreset IntakeAssembly::HALF_STOW_PRESET =
+    IntakeAssembly::IntakePreset(Elevator::GROUND, Wrist::SCALE);
 
 void IntakeAssembly::GoToIntakePosition(IntakePreset intakePosition) {
     m_endPositionGoal = intakePosition;
