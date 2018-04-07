@@ -29,12 +29,26 @@ class SimpleControlSystem;
  * Used by the controller to get its input signal
  */
 class SimpleControlStateProvider {
+    /**
+     * A simple control state provider.
+     */
     SimpleControlStateProvider() {
     }
     virtual ~SimpleControlStateProvider() {
     }
 
+    /**
+     * Return the velocity of a system.
+     * @param system The control system.
+     * @return The velocity of the system.
+     */
     virtual double GetRate(SimpleControlSystem *system = nullptr) = 0;
+
+    /**
+     * Return the position of a system.
+     * @param system The control system.
+     * @return The position of the system.
+     */
     virtual double GetPosition(SimpleControlSystem *system = nullptr) = 0;
 };
 
@@ -43,6 +57,9 @@ class SimpleControlStateProvider {
  * The controller sends its output signal here
  */
 class SimpleControlSignalReceiver {
+    /**
+     * A simple control signal receiver.
+     */
     SimpleControlSignalReceiver() {
     }
     virtual ~SimpleControlSignalReceiver() {
@@ -51,39 +68,64 @@ class SimpleControlSignalReceiver {
     /**
      * Receive calculated motor powers from a controller.
      * Should only be called from a child of SimpleController.
+     * @param output Output to motors.
+     * @param system The control system.
      */
     virtual void SetControllerOutput(double output,
                                      SimpleControlSystem *system = nullptr) = 0;
 };
 
 /**
- * Interface for a simple controller.  One that receives system state from
- * a SimpleControlStateProvider and sends output to a
- * SimpleControlSignalReceiver.  This could be generalized with templates,
- * but this is easier to debug.
+ * Interface for a simple controller. One that receives system state from a
+ * SimpleControlStateProvider and sends output to a SimpleControlSignalReceiver.
+ * This could be generalized with templates, but this is easier to debug.
  */
 class SimpleController {
 public:
+    /**
+     * A SimpleController for driving.
+     * @param system The control system.
+     */
     SimpleController(SimpleControlSystem *system);
     virtual ~SimpleController();
 
+    /**
+     * Enable the controller.
+     */
     virtual void Enable();
+
+    /**
+     * Disable the controller.
+     */
     virtual void Disable();
 
     /**
      * Use the input signals from |angle| and |dist| and calculate some output,
      * then send that output to |out|.
+     * @param state The state provider for handling incoming messages.
+     * @param out Signal reciever for handling outgoing messages.
      */
     virtual void CalcControllerOutput(SimpleControlStateProvider *state,
                                       SimpleControlSignalReceiver *out) = 0;
+
     /**
-     * Check whether the controller thinks we are on target.
+     * Checks with the current controller to see if we are on target. If there
+     * is no controller currently selected, just return false.
+     * @return Whether the current controller things are done.
      */
     virtual bool OnTarget() = 0;
 };
 
 class SimpleControlSystem : public CoopTask {
 public:
+    /**
+     * A SimpleControlSystem for combining the controller, signal reciever, and
+     * state provider.
+     * @param scheduler The main task manager.
+     * @param state The state provider for handling incoming messages.
+     * @param out The signal reciever for handling outgoing messages.
+     * @param controller The drive controller for hangling movements.
+     */
     SimpleControlSystem(TaskMgr *scheduler, SimpleControlStateProvider *state,
                         SimpleControlSignalReceiver *out,
                         SimpleController *controller = nullptr)
@@ -98,6 +140,10 @@ public:
         m_scheduler->UnregisterTask(this);
     }
 
+    /**
+     * Set the active controller.
+     * @param controller The drive controller for hangling movements.
+     */
     void SetActiveController(SimpleController *controller) {
         if (m_activeController) {
             m_activeController->Disable();
@@ -106,6 +152,11 @@ public:
         m_activeController->Enable();
     }
 
+    /**
+     * Checks with the current controller to see if we are on target. If there
+     * is no controller currently selected, just return false.
+     * @return Whether the current controller things are done.
+     */
     bool OnTarget() {
         if (!m_activeController) {
             return false;
@@ -113,6 +164,11 @@ public:
         return m_activeController->OnTarget();
     }
 
+    /**
+     * Periodically recalculate drive outputs based on controller's drive
+     * method.
+     * @param mode The current operating mode of the robot.
+     */
     void TaskPostPeriodic(RobotMode mode) override {
         if (m_activeController != nullptr) {
             m_activeController->CalcControllerOutput(m_state, m_out);
