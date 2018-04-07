@@ -34,7 +34,7 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *wristMotor)
     m_wristMotor->EnableCurrentLimit(true);
     m_wristMotor->ConfigPeakCurrentDuration(0, 10);
     m_wristMotor->ConfigPeakCurrentLimit(0, 10);
-    m_wristMotor->ConfigContinuousCurrentLimit(5, 10);
+    m_wristMotor->ConfigContinuousCurrentLimit(10, 10);
     m_wristMotor->EnableVoltageCompensation(true);
     m_wristMotor->ConfigPeakOutputForward(0.5, 10);
     m_wristMotor->ConfigPeakOutputReverse(-0.5, 10);

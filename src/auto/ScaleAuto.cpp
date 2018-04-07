@@ -110,7 +110,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
         case 6:
             if (m_drive->OnTarget() &&
                 m_intakeAssembly->GetPositionError() < 10.0) {
-                m_intakeAssembly->FastEjectCube();
+                m_intakeAssembly->EjectCube();
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
                         &third_left_scale_intaking::third_left_scale_intaking,

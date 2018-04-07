@@ -8,6 +8,7 @@
     "reverse": true,
     "waypoints": [
         { "x": 0, "y": 0, "angle": 0},
-        { "x": -50, "y": 60, "angle": -75}
-    ]
+        { "x": -30, "y": 52, "angle": -75}
+    ],
+    "visual-y-offset": 27
 }

@@ -115,7 +115,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             break;
         case 6:
             if (m_drive->GetSplinePercentComplete() > 0.8) {
-                m_intakeAssembly->FastEjectCube();
+                m_intakeAssembly->EjectCube();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
