@@ -17,16 +17,16 @@ static constexpr double VELOCITY_KP = 1.3;
 static constexpr double VELOCITY_KI = 0.0;
 static constexpr double VELOCITY_KD = 0.0;
 
-static constexpr double ANGULAR_POSITION_KP = 1.6;
+static constexpr double ANGULAR_POSITION_KP = 1.3;
 static constexpr double ANGULAR_POSITION_KI = 0.0;
 static constexpr double ANGULAR_POSITION_KD = 0.0;
 
-static constexpr double ANGULAR_RATE_KP = 0.0;  // 3.0;
+static constexpr double ANGULAR_RATE_KP = 0.0;
 static constexpr double ANGULAR_RATE_KI = 0.0;
 static constexpr double ANGULAR_RATE_KD = 0.0;
 
 static constexpr double ACCEL_FF = 0.2;
-static constexpr double ANGLE_ACCEL_FF = 0.1;
+static constexpr double ANGLE_ACCEL_FF = 0.2;
 
 SplineDriveController::SplineDriveController(DriveStateProvider *state,
                                              LogSpreadsheet *logger)
