@@ -160,7 +160,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 GetMsecTime() - m_autoTimer > 3500) {
                 m_intakeAssembly->HardCloseClaw();
                 m_intakeAssembly->GoToIntakePosition(
-                    IntakeAssembly::OVER_BACK_PRESET);
+                    IntakeAssembly::LOW_GOAL_PRESET);
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(&third_center_left_switch_scoring::
                                              third_center_left_switch_scoring,
