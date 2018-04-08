@@ -26,7 +26,7 @@ class SimpleControlSystem;
 
 /**
  * Interface for something that can tell the current state of the system.
- * Used by the controller to get its input signal
+ * Used by the controller to get its input signal.
  */
 class SimpleControlStateProvider {
     /**

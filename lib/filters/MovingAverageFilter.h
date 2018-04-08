@@ -14,33 +14,32 @@
 
 namespace frc973 {
 
+/**
+ * Interface for something that needs this filter for moving averages.
+ */
 class MovingAverageFilter : public FilterBase {
 public:
     /**
      * Create a data filter by the moving average method.
-     *
-     * @param weight weight of the previous value when determining the
-     * filtered value
-     * @param initial value to consider as the previous value
+     * @param weight Weight of the previous value when determining the filtered
+     * value.
+     * @param initial Value to consider as the previous value.
      */
     MovingAverageFilter(double weight, double initial = 0.0);
     virtual ~MovingAverageFilter();
 
     /**
      * Calculate the filtered value given the original datapoint.
-     *
-     * @parm currentValue  the current data point that needs to be filtered
-     *
-     * @return result of filtering calculation.
+     * @param input The current data point that needs to be filtered.
+     * @return Result of filtering calculation.
      */
-    double Update(double input);
+    double Update(double input) override;
 
     /**
-     * Remember the latest value calculated by filtering
-     *
-     * @return result of previous filtering calcuation
+     * Return the last value sent to the filter.
+     * @return The last value.
      */
-    double GetLast(void);
+    double GetLast() override;
 
 private:
     double m_weight;

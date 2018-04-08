@@ -16,33 +16,24 @@
 
 namespace frc973 {
 
+/**
+ * Interface for something that needs this filter to debounce values.
+ */
 class Debouncer {
 public:
     /**
      * Create a Debouncer object with the given period in seconds.
-     *
-     * @param period in seconds to check for falses
+     * @param period Time to check for falses.
      */
-    Debouncer(double period) {
-        m_timeStart = 0.0;
-        m_period = period;
-        m_first = false;
-    }
+    Debouncer(double period);
+    virtual ~Debouncer();
 
-    virtual ~Debouncer() {
-        ;
-    }
-
-    bool Update(bool val) {
-        if (m_first) {
-            m_first = false;
-            m_timeStart = GetSecTime();
-        }
-        if (!val) {
-            m_timeStart = GetSecTime();
-        }
-        return (GetSecTime() - m_timeStart) > m_period;
-    }
+    /**
+     * Calculate the filtered value given the original datapoint.
+     * @param val The current data point that needs to be filtered.
+     * @return Result of filtering calculation.
+     */
+    bool Update(bool val);
 
 private:
     double m_timeStart;
