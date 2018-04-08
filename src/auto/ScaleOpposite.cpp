@@ -59,7 +59,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_intakeAssembly->GetPositionError() < 10.0) {
                 m_intakeAssembly->FastEjectCube();
                 m_autoTimer = GetMsecTime();
-                m_autoState++;
+                m_autoState = -1;
             }
             break;
         case 3:
