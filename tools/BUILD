@@ -26,7 +26,24 @@ sh_binary(
     srcs = ["//tools/doxygen:doxygen_build"],
     data = [
         "//tools/doxygen:doxyfile",
+        "//docs:docs",
         "//lib:lib_files",
         "//src:src_files",
+        "//third_party:thirdparty_files",
+        "//:readme",
     ],
+)
+
+sh_binary(
+    name = "generate-short-docs",
+    srcs = ["//tools/doxygen:doxygen_build"],
+    data = [
+        "//tools/doxygen:doxyfile",
+        "//docs:docs",
+        "//lib:lib_files",
+        "//src:src_files",
+        "//third_party:thirdparty_files",
+        "//:readme",
+    ],
+    args = ["short"],
 )
