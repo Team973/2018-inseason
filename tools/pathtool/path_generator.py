@@ -62,13 +62,14 @@ def printSegments(varname, trajectory, outfile):
     outfile.write("static Segment {}[] = {{\n".format(varname))
     for count, segment in enumerate(trajectory):
         outfile.write(
-            ("    {{.dt={}, .x={}, .y={}, .position={}, "
-             ".velocity={}, .acceleration={}, .jerk={}, "
-             ".heading={}}}"
+            ("    {{.dt={}, .x={}, .y={}, .position={}, \n"
+             "      .velocity={}, .acceleration={}, .jerk={}, \n"
+             "      .heading={}, .angular_rate={}, .angular_accel={}}}"
             ).format(segment.dt, segment.x, segment.y,
                      segment.position, segment.velocity,
                      segment.acceleration, segment.jerk,
-                     segment.heading))
+                     segment.heading, segment.angular_rate,
+                     segment.angular_accel))
         if count < len(trajectory) - 1:
             outfile.write(",\n")
     outfile.write("\n};\n")
