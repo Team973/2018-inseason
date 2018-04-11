@@ -16,62 +16,66 @@ using namespace frc;
 
 namespace frc973 {
 
-/*
+/**
  * Button mapping for the DualAction joystick
  */
 namespace DualAction {
-/*
+
+/**
  * Standard buttons... shouldn't need any explanation
  */
-const unsigned int BtnX = 1;
-const unsigned int BtnA = 2;
-const unsigned int BtnB = 3;
-const unsigned int BtnY = 4;
-const unsigned int LeftBumper = 5;
-const unsigned int RightBumper = 6;
-const unsigned int LeftTrigger = 7;
-const unsigned int RightTrigger = 8;
-const unsigned int Back = 9;
-const unsigned int Start = 10;
 
-/*
+const unsigned int BtnX = 1;         /**< Button X */
+const unsigned int BtnA = 2;         /**< Button A */
+const unsigned int BtnB = 3;         /**< Button B */
+const unsigned int BtnY = 4;         /**< Button Y */
+const unsigned int LeftBumper = 5;   /**< Left Bumper */
+const unsigned int RightBumper = 6;  /**< Right Bumper */
+const unsigned int LeftTrigger = 7;  /**< Left Trigger */
+const unsigned int RightTrigger = 8; /**< Right Trigger */
+const unsigned int Back = 9;         /**< Back Button */
+const unsigned int Start = 10;       /**< Start Button */
+
+/**
  * When you push down on the left and right joystick, that registers
  * as a button press
  */
-const unsigned int LJoystickBtn = 11;
-const unsigned int RJoystickBtn = 12;
 
-const unsigned int DPadUpVirtBtn = 22;
-const unsigned int DPadDownVirtBtn = 23;
-const unsigned int DPadLeftVirtBtn = 24;
-const unsigned int DPadRightVirtBtn = 25;
+const unsigned int LJoystickBtn = 11; /**< Left Joystick Button */
+const unsigned int RJoystickBtn = 12; /**< Right Joystick Button */
 
-/*
+const unsigned int DPadUpVirtBtn = 22;    /**< DPad Up Virtual Button */
+const unsigned int DPadDownVirtBtn = 23;  /**< DPad Down Virtual Button */
+const unsigned int DPadLeftVirtBtn = 24;  /**< DPad Left Virtual Button */
+const unsigned int DPadRightVirtBtn = 25; /**< DPad Right Virtual Button */
+
+/**
  * The following are 'virtual' buttons, one for each joystick axis.
- *  * Virtual buttons default to zero.
- *  * When you push the associated joystick axis above 0.5, it registers
- *  	as pressed
- *  * When you pull the associated joystick axis below -0.5, it registers
- *  	as released
+ *  - Virtual buttons default to zero.
+ *  - When you push the associated joystick axis above 0.5, it registers as
+ * pressed
+ *  - When you pull the associated joystick axis below -0.5, it registers as
+ * released
  */
-const unsigned int LXAxisVirtButton = 26;
-const unsigned int LYAxisVirtButton = 27;
-const unsigned int RXAxisVirtButton = 28;
-const unsigned int RYAxisVirtButton = 29;
-const unsigned int DXAxisVirtButton = 30;
-const unsigned int DYAxisVirtButton = 31;
 
-/*
+const unsigned int LXAxisVirtButton = 26; /**< Left X Axis Virtual Button */
+const unsigned int LYAxisVirtButton = 27; /**< Left Y Axis Virtual Button */
+const unsigned int RXAxisVirtButton = 28; /**< Right X Axis Virtual Button */
+const unsigned int RYAxisVirtButton = 29; /**< Right Y Axis Virtual Button */
+const unsigned int DXAxisVirtButton = 30; /**< DPad X Axis Virtual Button */
+const unsigned int DYAxisVirtButton = 31; /**< DPad Y Axis Virtual Button */
+
+/**
  * Not buttons but the numbers for each axis... can be used with
- * joystick.GetRawAxis
- * DPad axis only return 0.0, -1.0, and 1.0
+ * joystick.GetRawAxis. DPad axis only return 0.0, -1.0, and 1.0.
  */
-const unsigned int LeftXAxis = 0;
-const unsigned int LeftYAxis = 1;
-const unsigned int RightXAxis = 2;
-const unsigned int RightYAxis = 3;
-const unsigned int DPadXAxis = 4;
-const unsigned int DPadYAxis = 5;
+
+const unsigned int LeftXAxis = 0;  /**< Left X Axis */
+const unsigned int LeftYAxis = 1;  /**< Left Y Axis */
+const unsigned int RightXAxis = 2; /**< Right X Axis */
+const unsigned int RightYAxis = 3; /**< Right Y Axis */
+const unsigned int DPadXAxis = 4;  /**< DPad X Axis */
+const unsigned int DPadYAxis = 5;  /**< DPad Y Axis */
 }
 
 class ObservableJoystick;
@@ -90,13 +94,12 @@ public:
     }
 
     /**
-     * This function is provided by the subclass to handle a joystick
-     * button event notification.
-     *
-     * @param port Specifies the joystick port.
-     * @param button Specifies the joystick button
-     * @param newState If true, specifies the button has been pressed,
-     *        if false, specifies the button has been released.
+     * This function is provided by the subclass to handle a joystick button
+     * event notification.
+     * @param port The joystick port.
+     * @param button The joystick button.
+     * @param newState If true, specifies the button has been pressed, if false,
+     * specifies the button has been released.
      */
     virtual void ObserveJoystickStateChange(uint32_t port, uint32_t button,
                                             bool newState) = 0;
@@ -112,38 +115,40 @@ class ObservableJoystick
         : public CoopTask
         , public Joystick {
 public:
-    static constexpr double DEADBAND_INPUT_THRESHOLD = 0.05;
-    static constexpr double VIRTUAL_JOYSTICK_THRESHOLD = 0.5;
+    static constexpr double DEADBAND_INPUT_THRESHOLD =
+        0.05; /**< The deadband threshold on the joysticks. */
+    static constexpr double VIRTUAL_JOYSTICK_THRESHOLD =
+        0.5; /**< The virtual joystick threshold. */
 
 protected:
-    uint32_t m_port;
+    uint32_t m_port; /**< The port the joystick is plugged into. */
 
     /* For observer notification */
-    JoystickObserver *m_observer;
-    DriverStation *m_ds;
-    uint32_t m_prevBtn;
-    TaskMgr *m_scheduler;
-    LogCell *m_logCell;
+    JoystickObserver *m_observer; /**< The last left joystick's x axis value */
+    DriverStation *m_ds;          /**< The DriverStation operating on.*/
+    uint32_t m_prevBtn;           /**< The previous button.*/
+    TaskMgr *m_scheduler;         /**< The task manager object.*/
+    LogCell *m_logCell;           /**< The logger.*/
 
     /* For remembering states of sticky buttons */
-    bool m_lastLXVal;
-    bool m_lastLYVal;
-    bool m_lastRXVal;
-    bool m_lastRYVal;
-    bool m_lastDXVal;
-    bool m_lastDYVal;
+    bool m_lastLXVal; /**< The last left joystick's x axis value */
+    bool m_lastLYVal; /**< The last left joystick's y axis value */
+    bool m_lastRXVal; /**< The last right joystick's x axis value */
+    bool m_lastRYVal; /**< The last right joystick's y axis value */
+    bool m_lastDXVal; /**< The last d pad's x axis value */
+    bool m_lastDYVal; /**< The last d pad's y axis value */
 
 public:
     /**
-     * Create an instance of the ObservableJoystick object.  Requires the
+     * Create an instance of the ObservableJoystick object. Requires the
      * information to instantiate the underlying WPI-Joystick, as well as
      * references to the scheduler that will run it and the observer that
      * will observe its state.
-     *
-     * @param port Specifies the joystick port.
-     * @param notify Points to the JoystickObserver object for button event
-     *        notification callback.
-     * @param scheduler Points to the task manager this task will run on
+     * @param port The joystick port.
+     * @param observer The JoystickObserver object for button event notification
+     * callback.
+     * @param scheduler The task manager this task will run on.
+     * @param ds The driver station.
      */
     ObservableJoystick(uint16_t port, JoystickObserver *observer,
                        TaskMgr *scheduler, DriverStation *ds = nullptr);
@@ -151,42 +156,29 @@ public:
 
     /**
      * Register this joystick with a logger so that button state can be logged
-     * every time the periodic funciton is called.  Only registers with the
-     * first call
+     * every time the periodic funciton is called. Only registers with the
+     * first call.
+     * @param logger The spreadsheet to log to.
      */
     ObservableJoystick *RegisterLog(LogSpreadsheet *logger);
 
     /**
      * Get the value of the given axis with deadband.
-     *
      * @param axis Specifies the axis to get the value of.
      * @param fSquared Specifies whether the joystick input should be squared.
      * @param threshold Specifies the deadband threshold.
-     * @param hand Specifies the handedness of the joystick (default to right
-     *        hand).
      */
     float GetRawAxisWithDeadband(int axis, bool fSquared = false,
                                  double threshold = DEADBAND_INPUT_THRESHOLD);
 
-    /*
-     * Check whether the up button on the d pad is pressed
-     */
-    bool GetDPadUpVirtButton();
-
-    /*
-     * Check whether the down btton on the d pad is pressed
-     */
-    bool GetDPadDownVirtButton();
-
-    /*
-     * Check whetehr the left button on the d pad is pressed
-     */
-    bool GetDPadLeftVirtButton();
-
-    /*
-     * Check whether the right button on the d pad is pressed
-     */
-    bool GetDPadRightVirtButton();
+    bool GetDPadUpVirtButton(); /**< Check whether the up button on the d pad is
+                                   pressed. */
+    bool GetDPadDownVirtButton();  /**< Check whether the down button on the d
+                                      pad is pressed. */
+    bool GetDPadLeftVirtButton();  /**< Check whether the left button on the d
+                                      pad is pressed. */
+    bool GetDPadRightVirtButton(); /**< Check whether the right button on the d
+                                      pad is pressed. */
 
     /**
      * Pretend the Left X Axis is a button.  By default it is not pressed.
@@ -194,47 +186,55 @@ public:
      * that button is pressed.  If the user pulls it mostly backwards (say,
      * more than half way), say that button is released.  If it's anywhere
      * in between, rememember what it last was.
-     *
-     * @return whether the left X virtual button is pressed
+     */
+
+    /**
+     * Left X Virtual button.
+     * @return Whether the left X virtual button is pressed.
      */
     bool GetLXVirtButton();
 
-    /*
-     * Left Y Virtual button
+    /**
+     * Left Y Virtual button.
+     * @return Whether the left Y virtual button is pressed.
      */
     bool GetLYVirtButton();
 
-    /*
-     * Right X Virtual button
+    /**
+     * Right X Virtual button.
+     * @return Whether the right X virtual button is pressed.
      */
     bool GetRXVirtButton();
 
     /**
-     * Right Y Virtual button
+     * Right Y Virtual button.
+     * @return Whether the right Y virtual button is pressed.
      */
     bool GetRYVirtButton();
 
     /**
-     * DPad X virtual button
+     * DPad X Virtual button.
+     * @return Whether the DPad X virtual button is pressed.
      */
     bool GetDXVirtButton();
 
     /**
-     * DPad Y Virtual button
+     * DPad Y Virtual button.
+     * @return Whether the DPad Y virtual button is pressed.
      */
     bool GetDYVirtButton();
 
     /**
      * Get a bitstring containing the state of *all* buttons on the joystick.
-     * Including any 'virtual' buttons like the 'joystick buttons'
+     * Including any 'virtual' buttons like the 'joystick buttons'.
+     * @return The bitstring of all buttons.
      */
     uint32_t GetAllButtons();
 
     /**
      * This function is called by the TaskMgr to check and process Joystick
      * button events.
-     *
-     * @param mode Specifies the CoopTask callback types.
+     * @param mode The current operating mode of the robot.
      */
     void TaskPrePeriodic(RobotMode mode) override;
 };

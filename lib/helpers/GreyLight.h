@@ -20,12 +20,33 @@
 using namespace GreyLightType;
 using namespace LightPattern;
 
+/**
+ * Interface for a LED controller.
+ */
 class GreyLight {
 public:
+    /**
+     * Construct a GreyLight controller.
+     * @param numLEDs The number of LEDs to control.
+     */
     GreyLight(int numLEDs);
-    void SetPixelStateProcessor(PixelStateProcessor* processor);
-    PixelState GetState();
+
+    /**
+     * Start a Loop
+     */
     void Loop();
+
+    /**
+     * Return the current state of the LEDs.
+     * @return The current state.
+     */
+    PixelState GetState();
+
+    /**
+     * Set the pixel state processor.
+     * @param processor The pixel state processor.
+     */
+    void SetPixelStateProcessor(PixelStateProcessor* processor);
 
 private:
     PixelStateProcessor* m_processor;
