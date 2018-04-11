@@ -46,8 +46,8 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_drive->SplineDrive(&center_right_switch::center_right_switch,
                                      Drive::RelativeTo::Now);
             }
-            // m_intakeAssembly->GoToIntakePosition(
-            //  IntakeAssembly::LOW_GOAL_PRESET);
+            m_intakeAssembly->GoToIntakePosition(
+                IntakeAssembly::LOW_GOAL_PRESET);
             m_autoTimer = GetMsecTime();
             m_autoState++;
             break;
@@ -72,8 +72,8 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                             second_center_right_switch_intaking,
                         Drive::RelativeTo::Now);
                 }
-                // m_intakeAssembly->GoToIntakePosition(
-                //  IntakeAssembly::GROUND_PRESET);
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::GROUND_PRESET);
                 m_intakeAssembly->RunIntake(-1.0);
                 m_intakeAssembly->SoftCloseClaw();
                 m_autoState++;
@@ -107,8 +107,8 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                                              second_center_right_switch_scoring,
                                          Drive::RelativeTo::Now);
                 }
-                // m_intakeAssembly->GoToIntakePosition(
-                //  IntakeAssembly::LOW_GOAL_PRESET);
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::LOW_GOAL_PRESET);
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
@@ -132,8 +132,8 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                                              third_center_right_switch_intaking,
                                          Drive::RelativeTo::Now);
                 }
-                // m_intakeAssembly->GoToIntakePosition(
-                //  IntakeAssembly::SECOND_STACK_PRESET);
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::SECOND_STACK_PRESET);
                 m_intakeAssembly->RunIntake(-1.0);
                 m_intakeAssembly->SoftCloseClaw();
                 m_autoState++;
@@ -159,8 +159,8 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
         case 10:
             if (m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 3500) {
                 m_intakeAssembly->HardCloseClaw();
-                // m_intakeAssembly->GoToIntakePosition(
-                //  IntakeAssembly::LOW_GOAL_PRESET);
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::LOW_GOAL_PRESET);
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(&third_center_left_switch_scoring::
                                              third_center_left_switch_scoring,
@@ -194,8 +194,8 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                         &right_switch_reset::right_switch_reset,
                         Drive::RelativeTo::Now);
                 }
-                // m_intakeAssembly->GoToIntakePosition(
-                //  IntakeAssembly::GROUND_PRESET);
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::GROUND_PRESET);
                 m_intakeAssembly->StopIntake();
                 m_autoState++;
             }
@@ -204,8 +204,8 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             if (m_drive->GetSplinePercentComplete() > 1.0 &&
                 m_intakeAssembly->GetPositionError() < 10.0) {
                 m_drive->OpenloopArcadeDrive(0.0, 0.0);
-                // m_intakeAssembly->GoToIntakePosition(
-                //  IntakeAssembly::GROUND_PRESET);
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::GROUND_PRESET);
                 m_autoState++;
             }
             break;

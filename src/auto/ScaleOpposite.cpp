@@ -47,7 +47,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             m_autoState++;
             break;
         case 1:
-            if (m_drive->GetSplinePercentComplete() > 0.6) {
+            if (m_drive->GetSplinePercentComplete() > 0.8) {
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::OVER_BACK_PRESET);
                 m_autoTimer = GetMsecTime();
