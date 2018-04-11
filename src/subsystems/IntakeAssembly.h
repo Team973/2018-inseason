@@ -107,6 +107,7 @@ public:
     double GetWristLowerBound(double elevatorPosition);
 
     double GetPositionError();
+    double GetEndPositionError();
 
     void StartZeroPosition();
     void EndZeroPosition();

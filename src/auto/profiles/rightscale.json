@@ -2,13 +2,13 @@
     "name": "right_scale",
     "timestep": 0.01,
     "max_vel": 140.0,
-    "max_accel": 90.0,
+    "max_accel": 60.0,
     "max_jerk": 120.0,
     "wheelbase_width": 25.205,
     "reverse": true,
     "waypoints": [
         { "x": 0, "y": 0, "angle": 0},
         { "x": -200, "y": 0, "angle": 0},
-        { "x": -250, "y": 18, "angle": -30}
+        { "x": -254, "y": 18, "angle": -30}
     ]
 }

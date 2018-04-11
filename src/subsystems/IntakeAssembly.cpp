@@ -231,6 +231,12 @@ double IntakeAssembly::GetPositionError() {
         pow(m_interimPositionGoal.wristPosition - GetWristPosition(), 2));
 }
 
+double IntakeAssembly::GetEndPositionError() {
+    return sqrt(
+        pow(m_endPositionGoal.elevatorPosition - GetElevatorPosition(), 2) +
+        pow(m_endPositionGoal.wristPosition - GetWristPosition(), 2));
+}
+
 void IntakeAssembly::StartZeroPosition() {
     m_controlMode = ControlMode::Zeroing;
 }
