@@ -46,7 +46,7 @@ const IntakeAssembly::IntakePreset IntakeAssembly::SCALE_HIGH_PRESET =
 const IntakeAssembly::IntakePreset IntakeAssembly::OVER_BACK_PRESET =
     IntakeAssembly::IntakePreset(Elevator::SCALE_HIGH, Wrist::OVER_THE_BACK);
 const IntakeAssembly::IntakePreset IntakeAssembly::SECOND_STACK_PRESET =
-    IntakeAssembly::IntakePreset(20.0, Wrist::EXTENDED);
+    IntakeAssembly::IntakePreset(10.0, Wrist::EXTENDED);
 const IntakeAssembly::IntakePreset IntakeAssembly::HANGING_PRESET =
     IntakeAssembly::IntakePreset(61.5, -75);
 const IntakeAssembly::IntakePreset IntakeAssembly::HALF_STOW_PRESET =
