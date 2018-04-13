@@ -23,7 +23,7 @@ namespace frc973 {
 class DriveStateProvider {
 public:
     /**
-     *
+     * Construct a drive state provider.
      */
     DriveStateProvider() {
     }

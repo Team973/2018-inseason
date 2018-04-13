@@ -1,3 +1,4 @@
+licenses(["permissive"])
 
 cc_library(
     name = "json",
@@ -7,9 +8,5 @@ cc_library(
     hdrs = glob([
         "*.h",
     ]),
-    deps = [
-        "//third_party/wpilibsuite:wpilib",
-        "//third_party/ctre:ctre",
-    ],
     visibility = ["//visibility:public"],
 )
