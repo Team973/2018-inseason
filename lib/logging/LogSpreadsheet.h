@@ -23,9 +23,11 @@
 
 namespace frc973 {
 
-constexpr uint32_t DEFAULT_MAX_LOG_CELL_SIZE = 32; /**< The default maximum cell size. */
+constexpr uint32_t DEFAULT_MAX_LOG_CELL_SIZE =
+    32; /**< The default maximum cell size. */
 
-constexpr uint32_t LOG_CELL_FLAG_CLEAR_ON_READ = 1; /**< Clear the cell on read or not. */
+constexpr uint32_t LOG_CELL_FLAG_CLEAR_ON_READ =
+    1; /**< Clear the cell on read or not. */
 
 /**
  * Represents a column in the spreadsheet.  For the column to be printed, you
