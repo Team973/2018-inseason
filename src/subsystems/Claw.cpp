@@ -91,5 +91,9 @@ void Claw::TaskPeriodic(RobotMode mode) {
     DBStringPrintf(DBStringPos::DB_LINE5, "cube: l%d r %d c%d",
                    m_leftCubeSensor->Get(), m_rightCubeSensor->Get(),
                    IsCubeIn());
+    SmartDashboard::PutNumber("claw/currents/current",
+                              m_leftRoller->GetOutputCurrent());
+    SmartDashboard::PutNumber("claw/voltages/voltage",
+                              m_leftRoller->GetMotorOutputVoltage());
 }
 }
