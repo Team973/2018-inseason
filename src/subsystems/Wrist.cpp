@@ -60,7 +60,7 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *wristMotor)
     m_wristMotor->ConfigReverseSoftLimitEnable(true, 10);
     */
 
-    m_wristMotor->SetSelectedSensorPosition(DegreesToNativeUnits(-30.0), 0, 0);
+    m_wristMotor->SetSelectedSensorPosition(DegreesToNativeUnits(-35.0), 0, 0);
 
     m_wristMotor->ConfigForwardLimitSwitchSource(
         LimitSwitchSource::LimitSwitchSource_FeedbackConnector,
