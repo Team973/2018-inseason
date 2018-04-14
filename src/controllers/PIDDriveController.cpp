@@ -43,11 +43,12 @@ PIDDriveController::PIDDriveController()
         , m_drivePID(new PID(DRIVE_PID_KP, DRIVE_PID_KI, DRIVE_PID_KD))
         , m_turnPID(new PID(TURN_PID_KP, TURN_PID_KI, TURN_PID_KD))
         , m_speedCap(1.0)
+        , m_vmax(MAX_LINEAR_SPEED_IPS)
         , m_distTolerance(DEFAULT_DIST_TOLERANCE)
         , m_distRateTolerance(DEFAULT_DIST_RATE_TOLERANCE)
         , m_angleTolerance(DEFAULT_ANGLE_TOLERANCE)
         , m_angleRateTolerance(DEFAULT_ANGLE_RATE_TOLERANCE) {
-    m_drivePID->SetBounds(-MAX_LINEAR_SPEED_IPS, MAX_LINEAR_SPEED_IPS);
+    m_drivePID->SetBounds(-m_vmax, m_vmax);
     m_turnPID->SetBounds(-MAX_ANGULAR_RATE_DEG_PER_SEC,
                          MAX_ANGULAR_RATE_DEG_PER_SEC);
 }
@@ -63,7 +64,7 @@ void PIDDriveController::CalcDriveOutput(DriveStateProvider *state,
     m_prevAngle = state->GetAngle();
 
     double throttle = Util::bound(m_drivePID->CalcOutput(m_prevDist),
-                                  -MAX_LINEAR_SPEED_IPS, MAX_LINEAR_SPEED_IPS) *
+                                  -m_vmax, m_vmax) *
                       m_speedCap;
     double turn = Util::bound(m_turnPID->CalcOutput(m_prevAngle),
                               -MAX_ANGULAR_RATE_DEG_PER_SEC,
@@ -93,9 +94,9 @@ void PIDDriveController::CalcDriveOutput(DriveStateProvider *state,
 /*
  * dist and angle are relative to current position
  */
-void PIDDriveController::SetTarget(double dist, double angle,
-                                   DriveBase::RelativeTo relativity,
-                                   DriveStateProvider *state) {
+PIDDriveController *PIDDriveController::SetTarget(
+    double dist, double angle, DriveBase::RelativeTo relativity,
+    DriveStateProvider *state) {
     m_drivePID->Reset();
     m_turnPID->Reset();
 
@@ -121,5 +122,9 @@ void PIDDriveController::SetTarget(double dist, double angle,
     m_distRateTolerance = DEFAULT_DIST_RATE_TOLERANCE;
     m_angleTolerance = DEFAULT_ANGLE_TOLERANCE;
     m_angleRateTolerance = DEFAULT_ANGLE_RATE_TOLERANCE;
+    m_vmax = MAX_LINEAR_SPEED_IPS;
+    m_drivePID->SetBounds(-m_vmax, m_vmax);
+
+    return this;
 }
 }
