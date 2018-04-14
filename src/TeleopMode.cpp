@@ -142,6 +142,10 @@ void Teleop::TeleopPeriodic() {
 
     if (m_wristControlMode == WristControlMode::OpenLoop) {
         m_greyLight->SetPixelStateProcessor(m_wristEmergencySignal);
+        DBStringPrintf(DBStringPos::DB_LINE2, "OPEN LOOP WRIST");
+    }
+    else {
+        DBStringPrintf(DBStringPos::DB_LINE2, "closed loop wrist");
     }
 }
 
