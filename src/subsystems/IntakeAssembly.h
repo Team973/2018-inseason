@@ -111,6 +111,10 @@ public:
 
     void Flash();
 
+    void SetOpenLoopWrist(bool openLoop) {
+        m_openLoopWrist = openLoop;
+    }
+
     /**
      * Update function synonymous to TeleopContinuous that gets called
      *continuously
@@ -152,6 +156,8 @@ private:
 
     IntakePreset m_endPositionGoal;
     IntakePreset m_interimPositionGoal;
+
+    bool m_openLoopWrist;
 
     static constexpr double MAX_WRIST_SPEED = 180.0;
     static constexpr double MAX_ELEVATOR_SPEED = 50.0;

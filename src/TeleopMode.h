@@ -60,6 +60,15 @@ private:
     };
     CubeIntakeState m_cubeIntakeState;
 
+    enum class WristControlMode
+    {
+        ClosedLoop,
+        OpenLoop
+    };
+    WristControlMode m_wristControlMode;
+    Debouncer *m_wristControlModeDebouncer;
+    bool m_wristModeSwitchPrevState;
+
     double m_elevatorPosition;
 
     uint32_t m_intakeModeTimer;
@@ -70,6 +79,7 @@ private:
     Hanger *m_hanger;
     GreyLight *m_greyLight;
     LightPattern::Flash *m_endGameSignal;
-    LightPattern::SolidColor *m_ptoSignal;
+    LightPattern::SolidColor *m_wristEmergencySignal;
+    LightPattern::SolidColor *m_clear;
 };
 };

@@ -246,6 +246,10 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
                    GetWristPosition(), m_interimPositionGoal.wristPosition,
                    GetPositionError());
 
+    if (m_openLoopWrist) {
+        m_controlMode = ControlMode::ManualVoltage;
+    }
+
     switch (m_controlMode) {
         case ControlMode::Idle:
             break;
