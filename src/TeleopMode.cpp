@@ -31,10 +31,8 @@ Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_greyLight(greylight)
         , m_endGameSignal(
               new LightPattern::Flash(END_GAME_RED, NO_COLOR, 50, 15))
-        , m_wristEmergencySignal(
-              new LightPattern::SolidColor({255, 0, 255}))
-        , m_clear(
-              new LightPattern::SolidColor({0, 0, 0})) {
+        , m_wristEmergencySignal(new LightPattern::SolidColor({255, 0, 255}))
+        , m_clear(new LightPattern::SolidColor({0, 0, 0})) {
 }
 
 Teleop::~Teleop() {
@@ -121,9 +119,8 @@ void Teleop::TeleopPeriodic() {
             break;
     }
 
-    bool wristModeSwitch =
-        m_wristControlModeDebouncer->Update(
-                m_operatorJoystick->GetRawButton(DualAction::Back));
+    bool wristModeSwitch = m_wristControlModeDebouncer->Update(
+        m_operatorJoystick->GetRawButton(DualAction::Back));
 
     if (wristModeSwitch and !m_wristModeSwitchPrevState) {
         if (m_wristControlMode == WristControlMode::ClosedLoop) {
@@ -353,12 +350,12 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
             case DualAction::Back:
                 if (pressedP) {
                     // toggle emergency open-loop mode (hold 0.5 seconds)
-
                 }
                 break;
             case DualAction::Start:
                 if (pressedP) {
                     m_intakeAssembly->StartZeroPosition();
+                    m_intakeAssembly->OpenClaw();
                 }
                 else {
                     m_intakeAssembly->EndZeroPosition();

@@ -322,8 +322,9 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
         case ControlMode::ManualVoltage: {
             double elevatorInput =
                 -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
-            double wristInput = -m_operatorJoystick->GetRawAxisWithDeadband(
-                DualAction::RightXAxis);
+            double wristInput = pow(-m_operatorJoystick->GetRawAxisWithDeadband(
+                                        DualAction::RightXAxis),
+                                    3);
 
             m_wrist->SetPower(wristInput);
             m_elevator->SetPower(elevatorInput +

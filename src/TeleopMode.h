@@ -18,6 +18,7 @@
 #include "lib/helpers/GreyLight.h"
 #include "lib/pixelprocessors/Flash.h"
 #include "lib/pixelprocessors/SolidColor.h"
+#include "lib/util/WrapDash.h"
 
 using namespace frc;
 
