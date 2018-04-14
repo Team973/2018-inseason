@@ -1,5 +1,5 @@
 import unittest
-from pypathfinder import set_cdll_path, parse_spline_file
+from pypathfinder import set_cdll_path, parse_spline_file, angle_diff
 import math
 from itertools import tee
 
@@ -54,7 +54,7 @@ class TestPyPathfinder(unittest.TestCase):
         all the points to make sure they nominally satisfy the constraints
         of generation
         """
-        Waypoint, Segment, generate_trajectory, generate_tank_trajectory = set_cdll_path()
+        Waypoint, Segment, generate_trajectory, generate_tank_trajectory, _ = set_cdll_path()
 
         trajectory = generate_trajectory([
             Waypoint(x=-4, y=-1, angle=math.radians(45)),
@@ -73,7 +73,7 @@ class TestPyPathfinder(unittest.TestCase):
         """
         Generate a backwards trajectory and check that we act reasonable
         """
-        Waypoint, Segment, generate_trajectory, generate_tank_trajectory = set_cdll_path()
+        Waypoint, Segment, generate_trajectory, generate_tank_trajectory, _ = set_cdll_path()
 
         trajectory = generate_trajectory([
             Waypoint(x=4, y=1, angle=math.radians(45)),
@@ -94,7 +94,7 @@ class TestPyPathfinder(unittest.TestCase):
         constraints so what I'll do for now is just check that the
         function call doesn't crash
         """
-        Waypoint, Segment, generate_trajectory, generate_tank_trajectory = set_cdll_path()
+        Waypoint, Segment, generate_trajectory, generate_tank_trajectory, _ = set_cdll_path()
 
         lTraj, rTraj = generate_tank_trajectory([
             Waypoint(x=-4, y=-1, angle=math.radians(45)),
@@ -124,6 +124,36 @@ class TestPyPathfinder(unittest.TestCase):
             self.assertAlmostEqual(segment.dt, spline_desc['timestep'])
         self.assertEqual(len(spline_desc['waypoints']), 2)
         self.assertEqual(spline_desc['name'], 'test_spline')
+
+    def check_series_annotations(self, series):
+        angle_accum = 0
+        angle_rate_accum = 0
+
+        timestep = series[0].dt
+
+        from pprint import pprint
+        for segment in series:
+            self.assertLessEqual(
+                    abs(angle_diff(segment.heading, angle_accum)),
+                    0.001)
+            self.assertLessEqual(
+                    abs(angle_diff(segment.angular_rate, angle_rate_accum)),
+                    0.001)
+            self.assertLessEqual(abs(segment.angular_rate), 100)
+            self.assertLessEqual(abs(segment.angular_accel), 200)
+
+            angle_accum += segment.angular_rate * timestep
+            angle_rate_accum += segment.angular_accel * timestep
+
+    def test_angle_rate_annotation(self):
+        Waypoint, Segment, generate_trajectory, generate_tank_trajectory, annotate = set_cdll_path()
+
+        lTraj, rTraj, waypoints, spline_desc = parse_spline_file(
+                'tools/pathtool/test_spline_description.json')
+
+        self.check_series_annotations(lTraj)
+        self.check_series_annotations(rTraj)
+
 
 if __name__ == '__main__':
     unittest.main()
