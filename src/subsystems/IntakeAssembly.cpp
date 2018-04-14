@@ -293,12 +293,6 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             m_claw->OpenClaw();
             m_claw->StopIntake();
             if (m_elevator->GetPosition() > 34.0) {
-                m_controlMode = ControlMode::MidHanging;
-            }
-            break;
-        case ControlMode::MidHanging:
-            m_wrist->SetPosition(-80.0);
-            if (m_wrist->GetPosition() < -70.0) {
                 m_controlMode = ControlMode::HangingAuto;
             }
             break;
@@ -315,12 +309,7 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             double elevatorInput =
                 -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
             m_wrist->m_wristMotor->ConfigContinuousCurrentLimit(5, 0);
-            if (m_elevator->GetPosition() > 46.0) {
-                m_wrist->SetPosition(HANGING_PRESET.wristPosition);
-            }
-            else {
-                m_wrist->SetPosition(-30.0);
-            }
+            m_wrist->SetPosition(HANGING_PRESET.wristPosition);
             m_claw->OpenClaw();
             m_claw->StopIntake();
             m_elevator->SetPower(elevatorInput +
