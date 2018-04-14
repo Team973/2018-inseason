@@ -38,7 +38,8 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
     std::cout << "Scale Auto" << std::endl;
     switch (m_autoState) {
         case 0:
-            m_drive->PIDDrive(-220.0, 0.0, Drive::RelativeTo::Now, 1.5);
+            m_drive->PIDDrive(-220.0, 0.0, Drive::RelativeTo::Now, 1.0)
+                ->SetVMax(120.0);
             /*if (direction == AutoRoutineBase::AutoDirection::Right) {
                 m_drive->SplineDrive(&left_scale_opposite::left_scale_opposite,
                                      Drive::RelativeTo::Now);
@@ -71,12 +72,14 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
         case 3:
             if (m_drive->OnTarget()) {
                 if (direction == AutoRoutineBase::AutoDirection::Right) {
-                    m_drive->PIDDrive(0.0, 90.0, Drive::RelativeTo::SetPoint,
-                                      1.0);
+                    m_drive
+                        ->PIDDrive(0.0, 90.0, Drive::RelativeTo::SetPoint, 1.0)
+                        ->SetVMax(120.0);
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Left) {
-                    m_drive->PIDDrive(0.0, -90.0, Drive::RelativeTo::SetPoint,
-                                      1.0);
+                    m_drive
+                        ->PIDDrive(0.0, -90.0, Drive::RelativeTo::SetPoint, 1.0)
+                        ->SetVMax(120.0);
                 }
                 m_autoState++;
             }
@@ -87,7 +90,8 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
                     IntakeAssembly::OVER_BACK_PRESET);
             }
             if (m_drive->OnTarget()) {
-                m_drive->PIDDrive(-65.0, 0.0, Drive::RelativeTo::Now, 0.8);
+                m_drive->PIDDrive(-65.0, 0.0, Drive::RelativeTo::Now, 1.0)
+                    ->SetVMax(120.0);
                 m_autoState++;
             }
             break;
@@ -106,13 +110,15 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_intakeAssembly->OpenClaw();
                 m_intakeAssembly->RunIntake(-1.0);
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
-                    m_drive->PIDDrive(0.0, 55.0, Drive::RelativeTo::Now, 1.0);
+                    m_drive->PIDDrive(0.0, 55.0, Drive::RelativeTo::Now, 1.0)
+                        ->SetVMax(120.0);
                     /*m_drive->SplineDrive(
                         &second_left_scale_intaking::second_left_scale_intaking,
                         Drive::RelativeTo::Now);*/
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Right) {
-                    m_drive->PIDDrive(0.0, -55.0, Drive::RelativeTo::Now, 1.0);
+                    m_drive->PIDDrive(0.0, -55.0, Drive::RelativeTo::Now, 1.0)
+                        ->SetVMax(120.0);
                     /*
                                         m_drive->SplineDrive(&second_right_scale_intaking::
                                                                  second_right_scale_intaking,
@@ -140,7 +146,8 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_intakeAssembly->SoftCloseClaw();
             }
             if (m_drive->OnTarget()) {
-                m_drive->PIDDrive(55.0, 0.0, Drive::RelativeTo::Now, 1.0);
+                m_drive->PIDDrive(55.0, 0.0, Drive::RelativeTo::Now, 1.0)
+                    ->SetVMax(120.0);
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
