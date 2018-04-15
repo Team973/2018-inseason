@@ -35,7 +35,8 @@ CenterSwitchAuto::CenterSwitchAuto(Drive *drive, IntakeAssembly *intakeAssembly)
 CenterSwitchAuto::~CenterSwitchAuto(void) {
 }
 
-void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
+void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction,
+                               std::string scalePos) {
     switch (m_autoState) {
         case 0:
             if (direction == AutoRoutineBase::AutoDirection::Left) {
@@ -107,11 +108,12 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_drive->PIDDrive(-60.0, 0.0, Drive::RelativeTo::Now, 1.0);
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::HALF_STOW_PRESET);
+                m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
         case 6:
-            if (m_drive->OnTarget()) {
+            if (m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 1500) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(&second_center_left_switch_scoring::
                                              second_center_left_switch_scoring,
@@ -174,7 +176,15 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             break;
         case 11:
             if (GetMsecTime() - m_autoTimer > 250) {
-                m_drive->PIDDrive(-63.0, 0.0, Drive::RelativeTo::Now, 1.0);
+                if (scalePos == "L") {
+                    m_drive->SplineDrive(&left_switch_reset::left_switch_reset,
+                                         Drive::RelativeTo::Now);
+                }
+                else {
+                    m_drive->SplineDrive(
+                        &right_switch_reset::right_switch_reset,
+                        Drive::RelativeTo::Now);
+                }
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::HALF_STOW_PRESET);
                 m_autoState++;

@@ -5,16 +5,15 @@
 #include "src/auto/AutoRoutineBase.h"
 #include "src/subsystems/Drive.h"
 #include "src/subsystems/IntakeAssembly.h"
-#include "src/controllers/PIDDriveController.h"
 
 using namespace frc;
 namespace frc973 {
 class Disabled;
 
-class ScaleOpposite : public AutoRoutineBase {
+class SneakScale : public AutoRoutineBase {
 public:
-    ScaleOpposite(Drive *drive, IntakeAssembly *intakeAssembly);
-    virtual ~ScaleOpposite();
+    SneakScale(Drive *drive, IntakeAssembly *intakeAssembly);
+    virtual ~SneakScale();
 
     void Execute(AutoRoutineBase::AutoDirection direction,
                  std::string scalePos) override;

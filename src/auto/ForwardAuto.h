@@ -12,7 +12,8 @@ public:
     ForwardAuto(Drive *drive);
     virtual ~ForwardAuto();
 
-    void Execute(AutoRoutineBase::AutoDirection direction) override;
+    void Execute(AutoRoutineBase::AutoDirection direction,
+                 std::string scalePos) override;
 
     void Reset() override;
 

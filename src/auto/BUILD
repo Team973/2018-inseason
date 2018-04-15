@@ -25,6 +25,8 @@ cc_library(
         "//src/auto/profiles:thirdcenterrightswitchintaking_header",
         "//src/auto/profiles:leftscale_header",
         "//src/auto/profiles:rightscale_header",
+        "//src/auto/profiles:leftsneak_header",
+        "//src/auto/profiles:rightsneak_header",
         "//src/auto/profiles:leftscaleopposite_header",
         "//src/auto/profiles:rightscaleopposite_header",
         "//src/auto/profiles:rightswitchopposite_header",

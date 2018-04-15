@@ -30,7 +30,8 @@ ScaleAuto::ScaleAuto(Drive *drive, IntakeAssembly *intakeAssembly)
 ScaleAuto::~ScaleAuto() {
 }
 
-void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
+void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction,
+                        std::string scalePos) {
     std::cout << "Scale Auto" << std::endl;
     switch (m_autoState) {
         case 0:

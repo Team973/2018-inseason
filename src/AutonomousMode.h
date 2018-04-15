@@ -8,6 +8,7 @@
 #include "src/auto/ForwardAuto.h"
 #include "src/auto/CenterSwitchAuto.h"
 #include "src/auto/ScaleAuto.h"
+#include "src/auto/SneakScale.h"
 #include "src/auto/SwitchOpposite.h"
 #include "src/auto/ScaleOpposite.h"
 #include "src/auto/SideSwitch.h"
@@ -50,6 +51,7 @@ private:
     ForwardAuto *m_forwardAuto;
     CenterSwitchAuto *m_centerSwitchAuto;
     ScaleAuto *m_scaleAuto;
+    SneakScale *m_sneakScale;
     ScaleOpposite *m_scaleOpposite;
     SideSwitch *m_sideSwitch;
     SwitchOpposite *m_switchOpposite;
@@ -62,6 +64,7 @@ private:
     Autonomous::SwitchScalePosition m_switchScalePosition;
     AutoRoutineBase *m_routine;
     AutoRoutineBase::AutoDirection m_direction;
+    std::string m_scalePos;
 
     Drive *m_drive;
     IntakeAssembly *m_intakeAssembly;

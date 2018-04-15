@@ -18,7 +18,8 @@ SwitchOpposite::SwitchOpposite(Drive *drive, IntakeAssembly *intakeAssembly)
 SwitchOpposite::~SwitchOpposite(void) {
 }
 
-void SwitchOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
+void SwitchOpposite::Execute(AutoRoutineBase::AutoDirection direction,
+                             std::string scalePos) {
     std::cout << "Scale Auto" << std::endl;
     switch (m_autoState) {
         case 0:
