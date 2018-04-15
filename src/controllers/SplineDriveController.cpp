@@ -26,7 +26,8 @@ static constexpr double ANGULAR_RATE_KI = 0.0;
 static constexpr double ANGULAR_RATE_KD = 0.0;
 
 static constexpr double ACCEL_FF = 0.2;
-static constexpr double ANGLE_ACCEL_FF = 0.2;
+static constexpr double ANGLE_RATE_FF = 0.0;
+static constexpr double ANGLE_ACCEL_FF = 0.15;
 
 SplineDriveController::SplineDriveController(DriveStateProvider *state,
                                              LogSpreadsheet *logger)
@@ -140,6 +141,8 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     double angleAccel_ff =
         ANGLE_ACCEL_FF *
         trajectories::GetAngularAcceleration(m_trajectory, time);
+    double angleRate_ff =
+        ANGLE_RATE_FF * trajectories::GetAngularRateDegrees(m_trajectory, time);
 
     /* correction terms for error in {linear,angular} {position,velocioty */
     double left_linear_dist_term = m_l_pos_pid.CalcOutput(LeftDistFromStart());
@@ -156,11 +159,13 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
     /* right side receives positive angle correction */
     double right_output = right_l_vel_ff + right_linear_dist_term +
                           right_linear_vel_term + angular_dist_term +
-                          rightAccel_ff + angleAccel_ff + angular_rate_term;
+                          rightAccel_ff + angleAccel_ff + angular_rate_term +
+                          angleRate_ff;
     /* left side receives negative angle correction */
     double left_output = left_l_vel_ff + left_linear_dist_term +
                          left_linear_vel_term - angular_dist_term +
-                         leftAccel_ff - angleAccel_ff - angular_rate_term;
+                         leftAccel_ff - angleAccel_ff - angular_rate_term -
+                         angleRate_ff;
 
     out->SetDriveOutputIPS(left_output, right_output);
 

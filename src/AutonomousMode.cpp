@@ -15,7 +15,6 @@ Autonomous::Autonomous(Disabled *disabled, Drive *drive,
         , m_scaleOpposite(new ScaleOpposite(drive, intakeAssembly))
         , m_sideSwitch(new SideSwitch(drive, intakeAssembly))
         , m_switchOpposite(new SwitchOpposite(drive, intakeAssembly))
-        , m_twoCubeAuto(new TwoCubeAuto(drive, intakeAssembly))
         , m_disabled(disabled)
         , m_greylight(greylight)
         , m_autoSignal(new LightPattern::AutoIndicator())
@@ -103,10 +102,6 @@ void Autonomous::AutonomousInit() {
                     m_centerSwitchAuto->Reset();
                     m_routine = m_centerSwitchAuto;
                     m_direction = AutoRoutineBase::AutoDirection::Right;
-                    break;
-                case SwitchScalePosition::NOT_YET_RECEIVED:
-                    m_routine = m_forwardAuto;
-                    m_direction = AutoRoutineBase::AutoDirection::Left;
                     break;
                 default:
                     break;

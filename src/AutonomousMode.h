@@ -11,7 +11,6 @@
 #include "src/auto/SwitchOpposite.h"
 #include "src/auto/ScaleOpposite.h"
 #include "src/auto/SideSwitch.h"
-#include "src/auto/TwoCubeAuto.h"
 #include "lib/util/WrapDash.h"
 #include "src/DisabledMode.h"
 #include "src/Robot.h"
@@ -54,7 +53,6 @@ private:
     ScaleOpposite *m_scaleOpposite;
     SideSwitch *m_sideSwitch;
     SwitchOpposite *m_switchOpposite;
-    TwoCubeAuto *m_twoCubeAuto;
 
     Disabled *m_disabled;
     GreyLight *m_greylight;

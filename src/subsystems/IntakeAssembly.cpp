@@ -45,8 +45,12 @@ const IntakeAssembly::IntakePreset IntakeAssembly::SCALE_HIGH_PRESET =
     IntakeAssembly::IntakePreset(Elevator::SCALE_HIGH, Wrist::SCALE);
 const IntakeAssembly::IntakePreset IntakeAssembly::OVER_BACK_PRESET =
     IntakeAssembly::IntakePreset(Elevator::SCALE_HIGH, Wrist::OVER_THE_BACK);
+const IntakeAssembly::IntakePreset IntakeAssembly::SECOND_STACK_PRESET =
+    IntakeAssembly::IntakePreset(10.0, Wrist::EXTENDED);
 const IntakeAssembly::IntakePreset IntakeAssembly::HANGING_PRESET =
     IntakeAssembly::IntakePreset(61.5, -75);
+const IntakeAssembly::IntakePreset IntakeAssembly::HALF_STOW_PRESET =
+    IntakeAssembly::IntakePreset(Elevator::GROUND, Wrist::SCALE);
 
 void IntakeAssembly::GoToIntakePosition(IntakePreset intakePosition) {
     m_endPositionGoal = intakePosition;
@@ -225,6 +229,12 @@ double IntakeAssembly::GetPositionError() {
     return sqrt(
         pow(m_interimPositionGoal.elevatorPosition - GetElevatorPosition(), 2) +
         pow(m_interimPositionGoal.wristPosition - GetWristPosition(), 2));
+}
+
+double IntakeAssembly::GetEndPositionError() {
+    return sqrt(
+        pow(m_endPositionGoal.elevatorPosition - GetElevatorPosition(), 2) +
+        pow(m_endPositionGoal.wristPosition - GetWristPosition(), 2));
 }
 
 void IntakeAssembly::StartZeroPosition() {

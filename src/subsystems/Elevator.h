@@ -31,7 +31,7 @@ public:
 
     static constexpr double GROUND = 0.0;
     static constexpr double VAULT = 4.5;
-    static constexpr double LOW_GOAL = 30.0;
+    static constexpr double LOW_GOAL = 24.0;
     static constexpr double HANGING = 55.0;
     static constexpr double SCALE_LOW = 58.0;
     static constexpr double SCALE_MID = 70.0;
@@ -39,7 +39,7 @@ public:
 
     static constexpr double ELEVATOR_SOFT_HEIGHT_LIMIT = 80.5;
     static constexpr double ELEVATOR_INCHES_PER_CLICK = 8.0 / 4096.0;
-    static constexpr double ELEVATOR_FEED_FORWARD = 0.10;
+    static constexpr double ELEVATOR_FEED_FORWARD = 0.1;
 
     Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
              TalonSRX *elevatorMotor);

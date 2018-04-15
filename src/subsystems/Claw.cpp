@@ -29,15 +29,8 @@ Claw::Claw(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_leftRoller->Set(ControlMode::PercentOutput, 0.0);
     m_rightRoller->Set(ControlMode::PercentOutput, 0.0);
 
-    m_leftRoller->EnableCurrentLimit(true);
-    m_leftRoller->ConfigPeakCurrentDuration(0, 10);
-    m_leftRoller->ConfigPeakCurrentLimit(0, 10);
-    m_leftRoller->ConfigContinuousCurrentLimit(50, 10);
-
-    m_rightRoller->EnableCurrentLimit(true);
-    m_rightRoller->ConfigPeakCurrentDuration(0, 10);
-    m_rightRoller->ConfigPeakCurrentLimit(0, 10);
-    m_rightRoller->ConfigContinuousCurrentLimit(50, 10);
+    m_leftRoller->EnableCurrentLimit(false);
+    m_rightRoller->EnableCurrentLimit(false);
 
     m_bannerFilter->Add(m_leftCubeSensor);
     m_bannerFilter->Add(m_rightCubeSensor);
@@ -84,12 +77,16 @@ void Claw::StopIntake() {
 }
 
 bool Claw::IsCubeIn() const {
-    return (m_leftCubeSensor->Get() || m_rightCubeSensor->Get());
+    return (m_leftCubeSensor->Get());  // || m_rightCubeSensor->Get());
 }
 
 void Claw::TaskPeriodic(RobotMode mode) {
     DBStringPrintf(DBStringPos::DB_LINE5, "cube: l%d r %d c%d",
                    m_leftCubeSensor->Get(), m_rightCubeSensor->Get(),
                    IsCubeIn());
+    SmartDashboard::PutNumber("claw/currents/current",
+                              m_leftRoller->GetOutputCurrent());
+    SmartDashboard::PutNumber("claw/voltages/voltage",
+                              m_leftRoller->GetMotorOutputVoltage());
 }
 }
