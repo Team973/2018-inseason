@@ -138,7 +138,6 @@ private:
         SuperForkPosition,
         OverBackPosition,
         PreHanging,
-        MidHanging,
         HangingAuto,
         HangingManual
     };
