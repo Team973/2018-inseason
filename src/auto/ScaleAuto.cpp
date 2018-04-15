@@ -68,7 +68,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                 m_intakeAssembly->OpenClaw();
                 m_intakeAssembly->RunIntake(-1.0);
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
-                    m_drive->PIDDrive(0.0, 55.0, Drive::RelativeTo::Now, 1.0);
+                    m_drive->PIDDrive(0.0, 58.0, Drive::RelativeTo::Now, 1.0);
                     /*m_drive->SplineDrive(
                         &second_left_scale_intaking::second_left_scale_intaking,
                         Drive::RelativeTo::Now);*/
@@ -85,13 +85,18 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             break;
         case 4:
             if (m_drive->OnTarget()) {
-                m_drive->PIDDrive(59.0, 0.0, Drive::RelativeTo::Now, 1.0);
+                if (direction == AutoRoutineBase::AutoDirection::Left) {
+                    m_drive->PIDDrive(62.0, 0.0, Drive::RelativeTo::Now, 1.0);
+                }
+                else {
+                    m_drive->PIDDrive(59.0, 0.0, Drive::RelativeTo::Now, 1.0);
+                }
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
         case 5:
-            if (m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 3000) {
+            if (m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 2000) {
                 m_intakeAssembly->SoftCloseClaw();
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(
