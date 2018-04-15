@@ -177,8 +177,12 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::RightTrigger:
                 if (pressedP) {
-                    m_intakeAssembly->EjectCube();
-                    // software low gear (in TeleopPeriodic)
+                    if (m_intakeAssembly->GetElevator()->GetPosition() < 5.0) {
+                        m_intakeAssembly->FastEjectCube();
+                    }
+                    else {
+                        m_intakeAssembly->EjectCube();
+                    }
                 }
                 else {
                     m_intakeAssembly->HaltIntake();
