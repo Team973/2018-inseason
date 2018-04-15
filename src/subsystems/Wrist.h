@@ -76,5 +76,7 @@ private:
     double m_wristPositionDelta;
     uint32_t m_zeroingTime;
     bool m_prevLimSwitchState;
+    LogCell *m_limitSwitchStateCell;
+    LogCell *m_wristPositionCell;
 };
 }

@@ -43,9 +43,11 @@ public:
                                   DriveBase::RelativeTo relativity,
                                   DriveStateProvider *state);
 
-    PIDDriveController *SetVMax(double new_vmax_ips) {
-        m_drivePID->SetBounds(-m_vmax, m_vmax);
+    PIDDriveController *SetVMax(double new_vmax_ips, double new_avmax_dps) {
         m_vmax = new_vmax_ips;
+        m_avmax = new_avmax_dps;
+        m_drivePID->SetBounds(-m_vmax, m_vmax);
+        m_turnPID->SetBounds(-m_avmax, m_avmax);
         return this;
     }
 
@@ -111,6 +113,7 @@ private:
 
     double m_speedCap;
     double m_vmax;
+    double m_avmax;
 
     double m_distTolerance;
     double m_distRateTolerance;

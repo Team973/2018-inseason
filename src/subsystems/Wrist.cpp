@@ -71,6 +71,12 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *wristMotor)
     m_wristMotor->OverrideLimitSwitchesEnable(true);
 
     m_wristMotor->Set(ControlMode::PercentOutput, 0.0);
+
+    m_limitSwitchStateCell = new LogCell("Limit switch state", 32, true);
+    m_wristPositionCell = new LogCell("Wrist Position", 32, true);
+
+    logger->RegisterCell(m_limitSwitchStateCell);
+    logger->RegisterCell(m_wristPositionCell);
 }
 
 Wrist::~Wrist() {
@@ -114,6 +120,8 @@ void Wrist::TaskPeriodic(RobotMode mode) {
 
     bool currLimSwitchState =
         m_wristMotor->GetSensorCollection().IsFwdLimitSwitchClosed();
+    m_limitSwitchStateCell->LogInt(currLimSwitchState);
+    m_wristPositionCell->LogDouble(GetPosition());
 
     if (m_prevLimSwitchState != currLimSwitchState) {
         ZeroPosition();

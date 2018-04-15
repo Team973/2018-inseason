@@ -103,10 +103,6 @@ void Autonomous::AutonomousInit() {
                     m_routine = m_centerSwitchAuto;
                     m_direction = AutoRoutineBase::AutoDirection::Right;
                     break;
-                case SwitchScalePosition::NOT_YET_RECEIVED:
-                    m_routine = m_forwardAuto;
-                    m_direction = AutoRoutineBase::AutoDirection::Left;
-                    break;
                 default:
                     break;
             }
