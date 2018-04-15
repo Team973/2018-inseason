@@ -103,7 +103,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 5:
-            if (GetMsecTime() - m_autoTimer > 500) {
+            if (GetMsecTime() - m_autoTimer > 250) {
                 m_drive->PIDDrive(-60.0, 0.0, Drive::RelativeTo::Now, 1.0);
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::HALF_STOW_PRESET);
@@ -160,7 +160,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
                     IntakeAssembly::SECOND_STACK_PRESET);
             }
             if (m_drive->OnTarget()) {
-                m_drive->PIDDrive(43.0, -m_drive->GetAngle(),
+                m_drive->PIDDrive(41.0, -m_drive->GetAngle(),
                                   Drive::RelativeTo::Now, 1.0);
                 m_autoState++;
             }
@@ -173,7 +173,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             }
             break;
         case 11:
-            if (GetMsecTime() - m_autoTimer > 500) {
+            if (GetMsecTime() - m_autoTimer > 250) {
                 m_drive->PIDDrive(-63.0, 0.0, Drive::RelativeTo::Now, 1.0);
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::HALF_STOW_PRESET);

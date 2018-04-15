@@ -71,7 +71,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
             if (m_drive->OnTarget()) {
                 if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive
-                        ->PIDDrive(-224.0, 0.0, Drive::RelativeTo::SetPoint,
+                        ->PIDDrive(-228.0, 0.0, Drive::RelativeTo::SetPoint,
                                    0.9)
                         ->SetVMax(150.0, 360.0);
                 }
@@ -172,7 +172,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction) {
                         ->SetVMax(120.0, 360.0);
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Right) {
-                    m_drive->PIDDrive(60.0, 0.0, Drive::RelativeTo::Now, 1.0)
+                    m_drive->PIDDrive(64.0, 0.0, Drive::RelativeTo::Now, 1.0)
                         ->SetVMax(120.0, 360.0);
                 }
                 m_autoTimer = GetMsecTime();
