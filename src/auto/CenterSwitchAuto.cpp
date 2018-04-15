@@ -35,7 +35,8 @@ CenterSwitchAuto::CenterSwitchAuto(Drive *drive, IntakeAssembly *intakeAssembly)
 CenterSwitchAuto::~CenterSwitchAuto(void) {
 }
 
-void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
+void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction,
+                               std::string scalePos) {
     switch (m_autoState) {
         case 0:
             if (direction == AutoRoutineBase::AutoDirection::Left) {
@@ -174,7 +175,15 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction) {
             break;
         case 11:
             if (GetMsecTime() - m_autoTimer > 250) {
-                m_drive->PIDDrive(-63.0, 0.0, Drive::RelativeTo::Now, 1.0);
+                if (scalePos == "L") {
+                    m_drive->SplineDrive(&left_switch_reset::left_switch_reset,
+                                         Drive::RelativeTo::Now);
+                }
+                else {
+                    m_drive->SplineDrive(
+                        &right_switch_reset::right_switch_reset,
+                        Drive::RelativeTo::Now);
+                }
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::HALF_STOW_PRESET);
                 m_autoState++;

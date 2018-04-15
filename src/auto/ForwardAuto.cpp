@@ -9,7 +9,8 @@ ForwardAuto::ForwardAuto(Drive *drive) : m_drive(drive) {
 ForwardAuto::~ForwardAuto() {
 }
 
-void ForwardAuto::Execute(AutoRoutineBase::AutoDirection direction) {
+void ForwardAuto::Execute(AutoRoutineBase::AutoDirection direction,
+                          std::string scalePos) {
     switch (m_autoState) {
         case 0:
             m_drive->PIDDrive(-150.0, 0.0, Drive::RelativeTo::Now, 0.8);

@@ -22,6 +22,7 @@ Autonomous::Autonomous(Disabled *disabled, Drive *drive,
         , m_switchScalePosition(SwitchScalePosition::NOT_YET_RECEIVED)
         , m_routine(m_noAuto)
         , m_direction(AutoRoutineBase::AutoDirection::Left)
+        , m_scalePos("")
         , m_drive(drive)
         , m_intakeAssembly(intakeAssembly)
         , m_gyro(gyro) {
@@ -44,6 +45,8 @@ void Autonomous::AutonomousInit() {
         m_scoringLocations =
             DriverStation::GetInstance().GetGameSpecificMessage();
     }
+
+    m_scalePos = m_scoringLocations[1];
 
     m_autoSignal->SetData(m_scoringLocations);
     m_greylight->SetPixelStateProcessor(m_autoSignal);
@@ -144,7 +147,7 @@ void Autonomous::AutonomousInit() {
 }
 
 void Autonomous::AutonomousPeriodic() {
-    m_routine->Execute(m_direction);
+    m_routine->Execute(m_direction, m_scalePos);
     // Match time to display in dashboard
     SmartDashboard::PutNumber("misc/timer",
                               DriverStation::GetInstance().GetMatchTime());

@@ -18,7 +18,8 @@ SideSwitch::SideSwitch(Drive *drive, IntakeAssembly *intakeAssembly)
 SideSwitch::~SideSwitch() {
 }
 
-void SideSwitch::Execute(AutoRoutineBase::AutoDirection direction) {
+void SideSwitch::Execute(AutoRoutineBase::AutoDirection direction,
+                         std::string scalePos) {
     switch (m_autoState) {
         case 0:
             if (direction == AutoRoutineBase::AutoDirection::Left) {

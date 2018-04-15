@@ -62,6 +62,7 @@ private:
     Autonomous::SwitchScalePosition m_switchScalePosition;
     AutoRoutineBase *m_routine;
     AutoRoutineBase::AutoDirection m_direction;
+    std::string m_scalePos;
 
     Drive *m_drive;
     IntakeAssembly *m_intakeAssembly;

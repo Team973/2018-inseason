@@ -14,7 +14,8 @@ public:
     CenterSwitchAuto(Drive *drive, IntakeAssembly *intakeAssembly);
     virtual ~CenterSwitchAuto();
 
-    void Execute(AutoRoutineBase::AutoDirection direction) override;
+    void Execute(AutoRoutineBase::AutoDirection direction,
+                 std::string scalePos) override;
 
     void Reset() override;
 

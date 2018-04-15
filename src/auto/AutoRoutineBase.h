@@ -24,7 +24,7 @@ public:
     AutoRoutineBase();
     virtual ~AutoRoutineBase();
 
-    virtual void Execute(AutoDirection direction);
+    virtual void Execute(AutoDirection direction, std::string scalePos);
 
     virtual void Reset();
 
