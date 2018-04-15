@@ -108,11 +108,12 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction,
                 m_drive->PIDDrive(-60.0, 0.0, Drive::RelativeTo::Now, 1.0);
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::HALF_STOW_PRESET);
+                m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
         case 6:
-            if (m_drive->OnTarget()) {
+            if (m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 1500) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(&second_center_left_switch_scoring::
                                              second_center_left_switch_scoring,

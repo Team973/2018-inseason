@@ -12,6 +12,7 @@ Autonomous::Autonomous(Disabled *disabled, Drive *drive,
         , m_forwardAuto(new ForwardAuto(drive))
         , m_centerSwitchAuto(new CenterSwitchAuto(drive, intakeAssembly))
         , m_scaleAuto(new ScaleAuto(drive, intakeAssembly))
+        , m_sneakScale(new SneakScale(drive, intakeAssembly))
         , m_scaleOpposite(new ScaleOpposite(drive, intakeAssembly))
         , m_sideSwitch(new SideSwitch(drive, intakeAssembly))
         , m_switchOpposite(new SwitchOpposite(drive, intakeAssembly))
@@ -148,6 +149,7 @@ void Autonomous::AutonomousInit() {
 
 void Autonomous::AutonomousPeriodic() {
     m_routine->Execute(m_direction, m_scalePos);
+    // m_sneakScale->Execute(m_direction, m_scalePos);
     // Match time to display in dashboard
     SmartDashboard::PutNumber("misc/timer",
                               DriverStation::GetInstance().GetMatchTime());

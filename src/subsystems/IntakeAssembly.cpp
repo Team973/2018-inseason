@@ -21,7 +21,8 @@ IntakeAssembly::IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
               new LightPattern::Flash(INTAKE_GREEN, NO_COLOR, 50, 15))
         , m_controlMode(ControlMode::Idle)
         , m_endPositionGoal(STOW_PRESET)
-        , m_interimPositionGoal(STOW_PRESET) {
+        , m_interimPositionGoal(STOW_PRESET)
+        , m_openLoopWrist(false) {
     this->m_scheduler->RegisterTask("IntakeAssembly", this, TASK_PERIODIC);
 }
 
