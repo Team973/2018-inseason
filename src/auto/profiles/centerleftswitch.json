@@ -1,8 +1,8 @@
 {
     "name": "center_left_switch",
     "timestep": 0.01,
-    "max_vel": 140.0,
-    "max_accel": 80.0,
+    "max_vel": 130.0,
+    "max_accel": 70.0,
     "max_jerk": 2400.0,
     "wheelbase_width": 25.205,
     "waypoints": [

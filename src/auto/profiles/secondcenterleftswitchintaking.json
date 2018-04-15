@@ -8,6 +8,6 @@
     "reverse": true,
     "waypoints": [
         { "x": 0, "y": 0, "angle": 0 },
-        { "x": -70, "y": -54, "angle": 0 }
+        { "x": -76, "y": 45, "angle": 0 }
     ]
 }

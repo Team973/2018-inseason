@@ -29,15 +29,8 @@ Claw::Claw(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_leftRoller->Set(ControlMode::PercentOutput, 0.0);
     m_rightRoller->Set(ControlMode::PercentOutput, 0.0);
 
-    m_leftRoller->EnableCurrentLimit(true);
-    m_leftRoller->ConfigPeakCurrentDuration(0, 10);
-    m_leftRoller->ConfigPeakCurrentLimit(0, 10);
-    m_leftRoller->ConfigContinuousCurrentLimit(50, 10);
-
-    m_rightRoller->EnableCurrentLimit(true);
-    m_rightRoller->ConfigPeakCurrentDuration(0, 10);
-    m_rightRoller->ConfigPeakCurrentLimit(0, 10);
-    m_rightRoller->ConfigContinuousCurrentLimit(50, 10);
+    m_leftRoller->EnableCurrentLimit(false);
+    m_rightRoller->EnableCurrentLimit(false);
 
     m_bannerFilter->Add(m_leftCubeSensor);
     m_bannerFilter->Add(m_rightCubeSensor);
