@@ -53,7 +53,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction,
             m_autoState++;
             break;
         case 1:
-            if ((m_drive->GetSplinePercentComplete() > 0.80 &&
+            if ((m_drive->GetSplinePercentComplete() > 0.75 &&
                  m_intakeAssembly->GetPositionError() < 10.0) ||
                 GetMsecTime() - m_autoTimer > 4000) {
                 m_intakeAssembly->EjectCube();
@@ -61,7 +61,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction,
             }
             break;
         case 2:
-            if (m_drive->GetSplinePercentComplete() > 0.9) {
+            if (m_drive->GetSplinePercentComplete() > 0.85) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(&second_center_left_switch_intaking::
                                              second_center_left_switch_intaking,
