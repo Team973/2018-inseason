@@ -162,7 +162,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction,
                     IntakeAssembly::SECOND_STACK_PRESET);
             }
             if (m_drive->OnTarget()) {
-                m_drive->PIDDrive(41.0, -m_drive->GetAngle(),
+                m_drive->PIDDrive(47.0, -m_drive->GetAngle(),
                                   Drive::RelativeTo::Now, 1.0);
                 m_autoState++;
             }
