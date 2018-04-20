@@ -61,7 +61,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction,
             }
             break;
         case 2:
-            if (m_drive->GetSplinePercentComplete() > 0.85) {
+            if (m_drive->GetSplinePercentComplete() > 0.9) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->SplineDrive(&second_center_left_switch_intaking::
                                              second_center_left_switch_intaking,

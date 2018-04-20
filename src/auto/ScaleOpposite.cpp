@@ -36,7 +36,6 @@ ScaleOpposite::~ScaleOpposite() {
 
 void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction,
                             std::string scalePos) {
-    std::cout << "Scale Auto" << std::endl;
     switch (m_autoState) {
         case 0:
             m_drive->PIDDrive(-228.0, 0.0, Drive::RelativeTo::Now, 0.9)
@@ -123,11 +122,11 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction,
         case 5:
             if (m_drive->GetPIDDistError() < 10.0 &&
                 m_intakeAssembly->GetEndPositionError() < 20.0) {
-                m_intakeAssembly->RunIntake(0.5);
+                m_intakeAssembly->RunIntake(0.65);
             }
             if (m_drive->OnTarget() &&
                 m_intakeAssembly->GetEndPositionError() < 10.0) {
-                m_intakeAssembly->RunIntake(0.5);
+                m_intakeAssembly->RunIntake(0.65);
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);
                 m_autoTimer = GetMsecTime();
@@ -174,7 +173,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction,
         case 7:
             if (m_drive->OnTarget()) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
-                    m_drive->PIDDrive(61.0, 0.0, Drive::RelativeTo::Now, 1.0)
+                    m_drive->PIDDrive(65.0, 0.0, Drive::RelativeTo::Now, 1.0)
                         ->SetVMax(120.0, 360.0);
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Right) {
@@ -215,7 +214,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction,
         case 10:
             if (m_drive->GetSplinePercentComplete() > 0.9 &&
                 m_intakeAssembly->GetPositionError() < 10.0) {
-                m_intakeAssembly->SlowEjectCube();
+                m_intakeAssembly->EjectCube();
                 m_autoTimer = GetMsecTime();
                 m_autoState = -1;
             }

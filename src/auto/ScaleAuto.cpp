@@ -32,7 +32,6 @@ ScaleAuto::~ScaleAuto() {
 
 void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction,
                         std::string scalePos) {
-    std::cout << "Scale Auto" << std::endl;
     switch (m_autoState) {
         case 0:
             if (direction == AutoRoutineBase::AutoDirection::Left) {
@@ -90,7 +89,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction,
                     m_drive->PIDDrive(62.0, 0.0, Drive::RelativeTo::Now, 1.0);
                 }
                 else {
-                    m_drive->PIDDrive(59.0, 0.0, Drive::RelativeTo::Now, 1.0);
+                    m_drive->PIDDrive(62.0, 0.0, Drive::RelativeTo::Now, 1.0);
                 }
                 m_autoTimer = GetMsecTime();
                 m_autoState++;

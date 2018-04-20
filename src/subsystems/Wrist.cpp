@@ -13,7 +13,7 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *wristMotor,
         , m_scheduler(scheduler)
         , m_greylight(greylight)
         , m_wristEmergencySignal(
-              new LightPattern::Flash(WRIST_EMERGENCY_RED, {0, 0, 0}, 50, 15))
+              new LightPattern::Flash(WRIST_EMERGENCY_RED, {0, 0, 0}, 50, 30))
         , m_position(0.0)
         , m_prevWristSetpoint(0.0)
         , m_wristPositionDelta(0.0)
@@ -101,8 +101,8 @@ void Wrist::SetPosition(double position) {
 }
 
 void Wrist::SetPositionStep(double position) {
-    int position_clicks = DegreesToNativeUnits(Util::bound(
-        position, WRIST_REVERSE_SOFT_LIMIT, WRIST_FORWARD_SOFT_LIMIT));
+    int position_clicks = DegreesToNativeUnits(
+        Util::bound(position, WRIST_REVERSE_SOFT_LIMIT, 1000000));
     m_wristMotor->Set(ControlMode::Position, position_clicks);
 }
 
