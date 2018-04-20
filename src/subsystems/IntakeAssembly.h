@@ -117,6 +117,10 @@ public:
 
     void SetOpenLoopWrist(bool openLoop) {
         m_openLoopWrist = openLoop;
+        if (!openLoop) {
+            m_interimPositionGoal.wristPosition = GetWristPosition();
+            m_controlMode = ControlMode::ManualPosition;
+        }
     }
 
     /**
@@ -137,6 +141,7 @@ private:
         Idle,
         ManualPosition,
         ManualVoltage,
+        VoltageWristPIDElevator,
         Zeroing,
         LowPosition,
         SubForkPosition,

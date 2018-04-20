@@ -87,6 +87,9 @@ void Teleop::TeleopPeriodic() {
 
     switch (m_cubeIntakeState) {
         case CubeIntakeState::Idle:
+            if (m_wristControlMode == WristControlMode::OpenLoop) {
+                m_greyLight->SetPixelStateProcessor(m_wristEmergencySignal);
+            }
             break;
         case CubeIntakeState::SwitchIntaking:
             m_intakeAssembly->RunIntake(-1.0);
@@ -125,6 +128,7 @@ void Teleop::TeleopPeriodic() {
     if (wristModeSwitch and !m_wristModeSwitchPrevState) {
         if (m_wristControlMode == WristControlMode::ClosedLoop) {
             m_wristControlMode = WristControlMode::OpenLoop;
+            m_greyLight->SetPixelStateProcessor(m_wristEmergencySignal);
             m_intakeAssembly->SetOpenLoopWrist(true);
         }
         else if (m_wristControlMode == WristControlMode::OpenLoop) {
@@ -138,7 +142,6 @@ void Teleop::TeleopPeriodic() {
     m_wristModeSwitchPrevState = wristModeSwitch;
 
     if (m_wristControlMode == WristControlMode::OpenLoop) {
-        m_greyLight->SetPixelStateProcessor(m_wristEmergencySignal);
         DBStringPrintf(DBStringPos::DB_LINE2, "OPEN LOOP WRIST");
     }
     else {

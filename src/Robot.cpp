@@ -53,7 +53,7 @@ Robot::Robot()
         , m_claw(new Claw(this, m_logger, m_rightCubeSensor, m_leftCubeSensor,
                           m_leftRoller, m_rightRoller, m_cubeClamp,
                           m_cubeSpring))
-        , m_wrist(new Wrist(this, m_logger, m_wristMotor))
+        , m_wrist(new Wrist(this, m_logger, m_wristMotor, m_greylight))
         , m_intakeAssembly(new IntakeAssembly(this, m_logger,
                                               m_operatorJoystick, m_elevator,
                                               m_claw, m_wrist, m_greylight))

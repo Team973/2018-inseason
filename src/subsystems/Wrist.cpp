@@ -7,9 +7,13 @@ using namespace frc;
 using namespace ctre::phoenix::motorcontrol;
 
 namespace frc973 {
-Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *wristMotor)
+Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *wristMotor,
+             GreyLight *greylight)
         : m_wristMotor(wristMotor)
         , m_scheduler(scheduler)
+        , m_greylight(greylight)
+        , m_wristEmergencySignal(
+              new LightPattern::Flash(WRIST_EMERGENCY_RED, {0, 0, 0}, 50, 15))
         , m_position(0.0)
         , m_prevWristSetpoint(0.0)
         , m_wristPositionDelta(0.0)
@@ -74,9 +78,12 @@ Wrist::Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *wristMotor)
 
     m_limitSwitchStateCell = new LogCell("Limit switch state", 32, true);
     m_wristPositionCell = new LogCell("Wrist Position", 32, true);
+    m_wristPulseWidthPosCell =
+        new LogCell("Wrist Pulse Width Position", 32, true);
 
     logger->RegisterCell(m_limitSwitchStateCell);
     logger->RegisterCell(m_wristPositionCell);
+    logger->RegisterCell(m_wristPulseWidthPosCell);
 }
 
 Wrist::~Wrist() {
@@ -88,8 +95,8 @@ void Wrist::SetPower(double power) {
 }
 
 void Wrist::SetPosition(double position) {
-    int position_clicks = DegreesToNativeUnits(Util::bound(
-        position, WRIST_REVERSE_SOFT_LIMIT, WRIST_FORWARD_SOFT_LIMIT));
+    int position_clicks = DegreesToNativeUnits(
+        Util::bound(position, WRIST_REVERSE_SOFT_LIMIT, 1000000));
     m_wristMotor->Set(ControlMode::MotionMagic, position_clicks);
 }
 
@@ -117,6 +124,12 @@ void Wrist::TaskPeriodic(RobotMode mode) {
         m_wristMotor->GetSensorCollection().GetPulseWidthPosition(),
         m_wristMotor->GetSensorCollection().IsFwdLimitSwitchClosed(),
         m_wristMotor->GetSensorCollection().IsRevLimitSwitchClosed());
+
+    if (fabs(GetPosition() - m_prevWristSetpoint) > 50.0) {
+        m_wristEmergencySignal->Reset();
+        m_greylight->SetPixelStateProcessor(m_wristEmergencySignal);
+    }
+    m_prevWristSetpoint = GetPosition();
 
     bool currLimSwitchState =
         m_wristMotor->GetSensorCollection().IsFwdLimitSwitchClosed();
