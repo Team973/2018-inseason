@@ -53,6 +53,7 @@ public:
     static const IntakePreset GROUND_PRESET;
     static const IntakePreset VAULT_PRESET;
     static const IntakePreset LOW_GOAL_PRESET;
+    static const IntakePreset AUTO_LOW_GOAL_PRESET;
     static const IntakePreset SCALE_LOW_PRESET;
     static const IntakePreset SCALE_MID_PRESET;
     static const IntakePreset SCALE_HIGH_PRESET;

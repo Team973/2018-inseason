@@ -122,12 +122,12 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction,
             break;
         case 5:
             if (m_drive->GetPIDDistError() < 10.0 &&
-                m_intakeAssembly->GetPositionError() < 25.0) {
-                m_intakeAssembly->RunIntake(1.0);
+                m_intakeAssembly->GetEndPositionError() < 20.0) {
+                m_intakeAssembly->RunIntake(0.4);
             }
             if (m_drive->OnTarget() &&
-                m_intakeAssembly->GetPositionError() < 10.0) {
-                m_intakeAssembly->RunIntake(1.0);
+                m_intakeAssembly->GetEndPositionError() < 10.0) {
+                m_intakeAssembly->RunIntake(0.4);
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);
                 m_autoTimer = GetMsecTime();
@@ -136,7 +136,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction,
             break;
         case 6:
             if (m_intakeAssembly->GetElevator()->GetPosition() < 30.0 ||
-                GetMsecTime() - m_autoTimer > 1000) {
+                GetMsecTime() - m_autoTimer > 1500) {
                 m_intakeAssembly->OpenClaw();
                 m_intakeAssembly->RunIntake(-1.0);
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
@@ -178,7 +178,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction,
                         ->SetVMax(120.0, 360.0);
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Right) {
-                    m_drive->PIDDrive(62.0, 0.0, Drive::RelativeTo::Now, 1.0)
+                    m_drive->PIDDrive(65.0, 0.0, Drive::RelativeTo::Now, 1.0)
                         ->SetVMax(120.0, 360.0);
                 }
                 m_autoTimer = GetMsecTime();
@@ -215,7 +215,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction,
         case 10:
             if (m_drive->GetSplinePercentComplete() > 0.9 &&
                 m_intakeAssembly->GetPositionError() < 10.0) {
-                m_intakeAssembly->EjectCube();
+                m_intakeAssembly->SlowEjectCube();
                 m_autoTimer = GetMsecTime();
                 m_autoState = -1;
             }

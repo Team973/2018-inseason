@@ -38,6 +38,8 @@ const IntakeAssembly::IntakePreset IntakeAssembly::VAULT_PRESET =
     IntakeAssembly::IntakePreset(Elevator::VAULT, Wrist::EXTENDED);
 const IntakeAssembly::IntakePreset IntakeAssembly::LOW_GOAL_PRESET =
     IntakeAssembly::IntakePreset(Elevator::LOW_GOAL, Wrist::EXTENDED);
+const IntakeAssembly::IntakePreset IntakeAssembly::AUTO_LOW_GOAL_PRESET =
+    IntakeAssembly::IntakePreset(Elevator::LOW_GOAL + 6.0, Wrist::EXTENDED);
 const IntakeAssembly::IntakePreset IntakeAssembly::SCALE_LOW_PRESET =
     IntakeAssembly::IntakePreset(Elevator::SCALE_LOW, Wrist::SCALE);
 const IntakeAssembly::IntakePreset IntakeAssembly::SCALE_MID_PRESET =

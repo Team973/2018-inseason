@@ -57,7 +57,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction,
         case 2:
             if (m_drive->GetSplinePercentComplete() > 0.9 &&
                 m_intakeAssembly->GetEndPositionError() < 10.0) {
-                m_intakeAssembly->EjectCube();
+                m_intakeAssembly->RunIntake(0.9);
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);
                 m_autoTimer = GetMsecTime();
@@ -75,7 +75,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction,
                         Drive::RelativeTo::Now);*/
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Right) {
-                    m_drive->PIDDrive(0.0, -55.0, Drive::RelativeTo::Now, 1.0);
+                    m_drive->PIDDrive(0.0, -58.0, Drive::RelativeTo::Now, 1.0);
                     /*
                                         m_drive->SplineDrive(&second_right_scale_intaking::
                                                                  second_right_scale_intaking,
@@ -131,7 +131,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction,
             break;
         case 8:
             if (m_intakeAssembly->GetWrist()->GetPosition() < -30.0) {
-                m_intakeAssembly->EjectCube();
+                m_intakeAssembly->SlowEjectCube();
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);
                 m_autoState = -1;

@@ -48,7 +48,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction,
                                      Drive::RelativeTo::Now);
             }
             m_intakeAssembly->GoToIntakePosition(
-                IntakeAssembly::LOW_GOAL_PRESET);
+                IntakeAssembly::AUTO_LOW_GOAL_PRESET);
             m_autoTimer = GetMsecTime();
             m_autoState++;
             break;
@@ -125,7 +125,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction,
                                          Drive::RelativeTo::Now);
                 }
                 m_intakeAssembly->GoToIntakePosition(
-                    IntakeAssembly::LOW_GOAL_PRESET);
+                    IntakeAssembly::AUTO_LOW_GOAL_PRESET);
                 m_intakeAssembly->HoldCube();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
