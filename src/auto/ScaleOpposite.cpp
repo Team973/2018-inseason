@@ -123,11 +123,11 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction,
         case 5:
             if (m_drive->GetPIDDistError() < 10.0 &&
                 m_intakeAssembly->GetEndPositionError() < 20.0) {
-                m_intakeAssembly->RunIntake(0.4);
+                m_intakeAssembly->RunIntake(0.5);
             }
             if (m_drive->OnTarget() &&
                 m_intakeAssembly->GetEndPositionError() < 10.0) {
-                m_intakeAssembly->RunIntake(0.4);
+                m_intakeAssembly->RunIntake(0.5);
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);
                 m_autoTimer = GetMsecTime();

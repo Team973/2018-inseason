@@ -131,7 +131,7 @@ void ScaleAuto::Execute(AutoRoutineBase::AutoDirection direction,
             break;
         case 8:
             if (m_intakeAssembly->GetWrist()->GetPosition() < -30.0) {
-                m_intakeAssembly->SlowEjectCube();
+                m_intakeAssembly->EjectCube();
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);
                 m_autoState = -1;

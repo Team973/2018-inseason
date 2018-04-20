@@ -102,13 +102,15 @@ void IntakeAssembly::SetWristManualPower(double input) {
 
 void IntakeAssembly::SetPosManualInput() {
     if (m_controlMode != ControlMode::HangingAuto and
-        m_controlMode != ControlMode::HangingManual) {
+        m_controlMode != ControlMode::HangingManual and
+        m_controlMode != ControlMode::PreHanging) {
         if (m_controlMode != ControlMode::ManualPosition) {
             m_interimPositionGoal.wristPosition = GetWristPosition();
         }
         m_controlMode = ControlMode::ManualPosition;
     }
-    else if (m_controlMode == ControlMode::HangingAuto) {
+    else if (m_controlMode == ControlMode::HangingAuto or
+             m_controlMode == ControlMode::PreHanging) {
         m_controlMode = ControlMode::HangingManual;
     }
 }
@@ -326,7 +328,12 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             double elevatorInput =
                 -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
             m_wrist->m_wristMotor->ConfigContinuousCurrentLimit(5, 0);
-            m_wrist->SetPosition(HANGING_PRESET.wristPosition);
+            if (GetElevatorPosition() > 34.0) {
+                m_wrist->SetPosition(HANGING_PRESET.wristPosition);
+            }
+            else {
+                m_wrist->SetPosition(-30.0);
+            }
             m_claw->OpenClaw();
             m_claw->StopIntake();
             m_elevator->SetPower(elevatorInput +

@@ -23,7 +23,7 @@ Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_intakeAssembly(intakeAssembly)
         , m_cubeIntakeState(CubeIntakeState::Idle)
         , m_wristControlMode(WristControlMode::ClosedLoop)
-        , m_wristControlModeDebouncer(new Debouncer(0.5))
+        , m_wristControlModeDebouncer(new Debouncer(1.0))
         , m_wristModeSwitchPrevState(false)
         , m_endGameSignalSent(false)
         , m_enableForkDeploy(false)
