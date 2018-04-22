@@ -143,7 +143,7 @@ void IntakeAssembly::SetModeHanging(bool hanging) {
             }
         }
         else {
-            m_controlMode = ControlMode::ManualPosition;
+            m_controlMode = ControlMode::Idle;
         }
     }
 }
@@ -287,6 +287,7 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
 
     switch (m_controlMode) {
         case ControlMode::Idle:
+            m_elevator->SetPower(0.0);
             break;
         case ControlMode::ManualPosition: {
             double elevatorInput =
