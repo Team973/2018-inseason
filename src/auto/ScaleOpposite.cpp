@@ -36,7 +36,6 @@ ScaleOpposite::~ScaleOpposite() {
 
 void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction,
                             std::string scalePos) {
-    std::cout << "Scale Auto" << std::endl;
     switch (m_autoState) {
         case 0:
             m_drive->PIDDrive(-228.0, 0.0, Drive::RelativeTo::Now, 0.9)
@@ -121,9 +120,13 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction,
             }
             break;
         case 5:
+            if (m_drive->GetPIDDistError() < 10.0 &&
+                m_intakeAssembly->GetEndPositionError() < 20.0) {
+                m_intakeAssembly->RunIntake(0.65);
+            }
             if (m_drive->OnTarget() &&
-                m_intakeAssembly->GetPositionError() < 10.0) {
-                m_intakeAssembly->RunIntake(0.85);
+                m_intakeAssembly->GetEndPositionError() < 10.0) {
+                m_intakeAssembly->RunIntake(0.65);
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::GROUND_PRESET);
                 m_autoTimer = GetMsecTime();
@@ -131,7 +134,8 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction,
             }
             break;
         case 6:
-            if (m_intakeAssembly->GetElevator()->GetPosition() < 30.0) {
+            if (m_intakeAssembly->GetElevator()->GetPosition() < 30.0 ||
+                GetMsecTime() - m_autoTimer > 1500) {
                 m_intakeAssembly->OpenClaw();
                 m_intakeAssembly->RunIntake(-1.0);
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
@@ -169,11 +173,11 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction,
         case 7:
             if (m_drive->OnTarget()) {
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
-                    m_drive->PIDDrive(63.0, 0.0, Drive::RelativeTo::Now, 1.0)
+                    m_drive->PIDDrive(65.0, 0.0, Drive::RelativeTo::Now, 1.0)
                         ->SetVMax(120.0, 360.0);
                 }
                 else if (direction == AutoRoutineBase::AutoDirection::Right) {
-                    m_drive->PIDDrive(64.0, 0.0, Drive::RelativeTo::Now, 1.0)
+                    m_drive->PIDDrive(65.0, 0.0, Drive::RelativeTo::Now, 1.0)
                         ->SetVMax(120.0, 360.0);
                 }
                 m_autoTimer = GetMsecTime();

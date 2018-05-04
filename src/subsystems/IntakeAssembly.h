@@ -53,6 +53,7 @@ public:
     static const IntakePreset GROUND_PRESET;
     static const IntakePreset VAULT_PRESET;
     static const IntakePreset LOW_GOAL_PRESET;
+    static const IntakePreset AUTO_LOW_GOAL_PRESET;
     static const IntakePreset SCALE_LOW_PRESET;
     static const IntakePreset SCALE_MID_PRESET;
     static const IntakePreset SCALE_HIGH_PRESET;
@@ -116,6 +117,10 @@ public:
 
     void SetOpenLoopWrist(bool openLoop) {
         m_openLoopWrist = openLoop;
+        if (!openLoop) {
+            m_interimPositionGoal.wristPosition = GetWristPosition();
+            m_controlMode = ControlMode::ManualPosition;
+        }
     }
 
     /**
@@ -136,6 +141,7 @@ private:
         Idle,
         ManualPosition,
         ManualVoltage,
+        VoltageWristPIDElevator,
         Zeroing,
         LowPosition,
         SubForkPosition,

@@ -48,12 +48,12 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction,
                                      Drive::RelativeTo::Now);
             }
             m_intakeAssembly->GoToIntakePosition(
-                IntakeAssembly::LOW_GOAL_PRESET);
+                IntakeAssembly::AUTO_LOW_GOAL_PRESET);
             m_autoTimer = GetMsecTime();
             m_autoState++;
             break;
         case 1:
-            if ((m_drive->GetSplinePercentComplete() > 0.80 &&
+            if ((m_drive->GetSplinePercentComplete() > 0.75 &&
                  m_intakeAssembly->GetPositionError() < 10.0) ||
                 GetMsecTime() - m_autoTimer > 4000) {
                 m_intakeAssembly->EjectCube();
@@ -125,7 +125,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction,
                                          Drive::RelativeTo::Now);
                 }
                 m_intakeAssembly->GoToIntakePosition(
-                    IntakeAssembly::LOW_GOAL_PRESET);
+                    IntakeAssembly::AUTO_LOW_GOAL_PRESET);
                 m_intakeAssembly->HoldCube();
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
@@ -162,7 +162,7 @@ void CenterSwitchAuto::Execute(AutoRoutineBase::AutoDirection direction,
                     IntakeAssembly::SECOND_STACK_PRESET);
             }
             if (m_drive->OnTarget()) {
-                m_drive->PIDDrive(41.0, -m_drive->GetAngle(),
+                m_drive->PIDDrive(47.0, -m_drive->GetAngle(),
                                   Drive::RelativeTo::Now, 1.0);
                 m_autoState++;
             }

@@ -7,6 +7,8 @@
 #include "src/info/RobotInfo.h"
 #include "lib/helpers/JoystickHelper.h"
 #include "lib/util/Util.h"
+#include "lib/helpers/GreyLight.h"
+#include "lib/pixelprocessors/Flash.h"
 
 using namespace frc;
 
@@ -26,7 +28,10 @@ public:
     static const int WRIST_REVERSE_SOFT_LIMIT = -80.0;
     static const int WRIST_FORWARD_SOFT_LIMIT = 90.0;
 
-    Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *wristMotor);
+    static constexpr Color WRIST_EMERGENCY_RED = {255, 0, 0};
+
+    Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *wristMotor,
+          GreyLight *greylight);
     virtual ~Wrist();
 
     /**
@@ -70,6 +75,8 @@ private:
     };
 
     TaskMgr *m_scheduler;
+    GreyLight *m_greylight;
+    LightPattern::Flash *m_wristEmergencySignal;
 
     double m_position;
     double m_prevWristSetpoint;
@@ -78,5 +85,6 @@ private:
     bool m_prevLimSwitchState;
     LogCell *m_limitSwitchStateCell;
     LogCell *m_wristPositionCell;
+    LogCell *m_wristPulseWidthPosCell;
 };
 }

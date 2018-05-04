@@ -9,6 +9,7 @@
     "waypoints": [
         { "x": 0, "y": 0, "angle": 0},
         { "x": -200, "y": 0, "angle": 0},
-        { "x": -260, "y": 18, "angle": -36}
-    ]
+        { "x": -264, "y": 22, "angle": -43}
+    ],
+    "visual_x_offset": 300
 }
