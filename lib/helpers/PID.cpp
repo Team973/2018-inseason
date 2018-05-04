@@ -15,6 +15,7 @@ PID::PID(double Kp, double Ki, double Kd, uint32_t flags) {
 
     m_timeLastUpdateSec = 0.0;
     m_prevPos = NAN;
+    m_prevErr = NAN;
     m_integral = 0;
     m_icap = 0;
 
@@ -33,6 +34,7 @@ PID::PID(double gains[3], uint32_t flags) {
 
     m_timeLastUpdateSec = 0.0;
     m_prevPos = NAN;
+    m_prevErr = NAN;
     m_integral = 0;
     m_icap = 0;
 
@@ -96,11 +98,45 @@ double PID::CalcOutput(double actual, uint32_t time) {
         m_integral += error * deltaTimeSec;
 
         if (m_prevPos != NAN) {
-            derivative = (m_prevPos - actual) / deltaTimeSec;
+            derivative = (actual - m_prevPos) / deltaTimeSec;
         }
     }
     m_timeLastUpdateSec = GetSecTime();
     m_prevPos = actual;
+
+    output = m_Kp * error + Util::bound(m_Ki * m_integral, -m_icap, m_icap) +
+             m_Kd * derivative;
+
+    if (m_flags & PID_SPEED_CTRL) {
+        output += m_lastOutput;
+    }
+
+    output = Util::bound(output, m_min, m_max);
+    m_lastOutput = output;
+
+    return output;
+}
+
+double PID::CalcOutputWithError(double error, uint32_t time) {
+    double derivative = 0;
+    double output;
+
+    /**
+     * m_timeLastUpdate will be zero if this is the first call ever or first
+     * call since a reset.  In this case there aren't enough samples to
+     * integrate or differentiate.
+     */
+    if (m_timeLastUpdateSec != 0.0) {
+        double deltaTimeSec = GetSecTime() - m_timeLastUpdateSec;
+
+        m_integral += error * deltaTimeSec;
+
+        if (m_prevPos != NAN) {
+            derivative = (error - m_prevErr) / deltaTimeSec;
+        }
+    }
+    m_timeLastUpdateSec = GetSecTime();
+    m_prevErr = error;
 
     output = m_Kp * error + Util::bound(m_Ki * m_integral, -m_icap, m_icap) +
              m_Kd * derivative;

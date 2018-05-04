@@ -120,6 +120,8 @@ public:
      */
     double CalcOutput(double actual, uint32_t timeMs);
 
+    double CalcOutputWithError(double error, uint32_t timeMs);
+
     /**
      * Get the previous output of the PID controller.
      *
@@ -146,6 +148,7 @@ private:
 
     double m_timeLastUpdateSec;
     double m_prevPos;
+    double m_prevErr;
     double m_integral;
     double m_icap;
 
