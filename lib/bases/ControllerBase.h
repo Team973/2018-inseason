@@ -25,8 +25,8 @@ namespace frc973 {
 class SimpleControlSystem;
 
 /**
- * Interface for something that can tell the current state of the system.
- * Used by the controller to get its input signal.
+ * Interface for something that can tell the current state of the system. Used
+ * by the controller to get its input signal.
  */
 class SimpleControlStateProvider {
     /**
@@ -103,7 +103,7 @@ public:
      * Use the input signals from |angle| and |dist| and calculate some output,
      * then send that output to |out|.
      * @param state The state provider for handling incoming messages.
-     * @param out Signal reciever for handling outgoing messages.
+     * @param out Signal receiver for handling outgoing messages.
      */
     virtual void CalcControllerOutput(SimpleControlStateProvider *state,
                                       SimpleControlSignalReceiver *out) = 0;
@@ -122,11 +122,11 @@ public:
 class SimpleControlSystem : public CoopTask {
 public:
     /**
-     * A SimpleControlSystem for combining the controller, signal reciever, and
+     * A SimpleControlSystem for combining the controller, signal receiver, and
      * state provider.
      * @param scheduler The main task manager.
      * @param state The state provider for handling incoming messages.
-     * @param out The signal reciever for handling outgoing messages.
+     * @param out The signal receiver for handling outgoing messages.
      * @param controller The drive controller for hangling movements.
      */
     SimpleControlSystem(TaskMgr *scheduler, SimpleControlStateProvider *state,

@@ -150,7 +150,7 @@ public:
      * Use the input signals from |angle| and |dist| and calculate some output,
      * then send that output to |out|.
      * @param state The state provider for handling incoming messages.
-     * @param out The signal reciever for handling outgoing messages.
+     * @param out The signal receiver for handling outgoing messages.
      */
     virtual void CalcDriveOutput(DriveStateProvider *state,
                                  DriveControlSignalReceiver *out) = 0;
@@ -164,14 +164,14 @@ public:
 
     /**
      * Start the drive controller.
-     * @param out The signal reciever for handling outgoing messages.
+     * @param out The signal receiver for handling outgoing messages.
      */
     virtual void Start(DriveControlSignalReceiver *out) {
     }
 
     /**
      * Stop the drive controller.
-     * @param out The signal reciever for handling outgoing messages.
+     * @param out The signal receiver for handling outgoing messages.
      */
     virtual void Stop(DriveControlSignalReceiver *out) {
     }
@@ -189,7 +189,7 @@ public:
      * controller (an object capable of calculating motor outputs) and uses it
      * to calculate drive outputs, then drive those drive outputs.
      * @param scheduler
-     * @param out The signal reciever for handling outgoing messages.
+     * @param out The signal receiver for handling outgoing messages.
      * @param state The state provider for handling incoming messages.
      * @param controller The drive controller for hangling movements.
      */
@@ -236,7 +236,7 @@ protected:
     TaskMgr *m_scheduler;
 
     /**
-     * Signal reciever member.
+     * Signal receiver member.
      */
     DriveControlSignalReceiver *m_driveOutput;
 
