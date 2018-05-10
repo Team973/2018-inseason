@@ -8,13 +8,29 @@
 
 using namespace frc;
 namespace frc973 {
+
+/**
+ * Side Switch auto.
+ */
 class SideSwitch : public AutoRoutineBase {
 public:
+    /**
+     * Construct a Side Switch auto.
+     * @param drive Drive subsystem.
+     * @param intakeAssembly Intake Assembly Subsytstem.
+     */
     SideSwitch(Drive *drive, IntakeAssembly *intakeAssembly);
     virtual ~SideSwitch();
 
+    /**
+     * Called every robot cycle, runs state machine.
+     * @param direction Side of switch/Scale to score on.
+     */
     void Execute(AutoRoutineBase::AutoDirection direction) override;
 
+    /**
+     * Resets the auto to the beginning.
+     */
     void Reset() override;
 
 private:

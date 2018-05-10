@@ -10,13 +10,28 @@ using namespace frc;
 namespace frc973 {
 class Disabled;
 
+/**
+ * Scale Opposite auto.
+ */
 class ScaleOpposite : public AutoRoutineBase {
 public:
+    /**
+     * Construct a Scale Opposite auto.
+     * @param drive Drive subsystem.
+     * @param intakeAssembly Intake Assembly Subsytstem.
+     */
     ScaleOpposite(Drive *drive, IntakeAssembly *intakeAssembly);
     virtual ~ScaleOpposite();
 
+    /**
+     * Called every robot cycle, runs state machine.
+     * @param direction Side of switch/Scale to score on.
+     */
     void Execute(AutoRoutineBase::AutoDirection direction) override;
 
+    /**
+     * Resets the auto to the beginning.
+     */
     void Reset() override;
 
 private:
