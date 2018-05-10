@@ -14,49 +14,72 @@ namespace frc973 {
 class TaskMgr;
 class LogSpreadsheet;
 
+/**
+ * Wrist subsystem.
+ */
 class Wrist : public CoopTask {
 public:
-    static constexpr double STOW = -35.0;
-    static constexpr double SCALE = 20.0;
-    static constexpr double EXTENDED = 90.0;
-    static constexpr double OVER_THE_BACK = -80.0;
+    static constexpr double STOW = -35.0;          /**< The stow preset. */
+    static constexpr double SCALE = 20.0;          /**< The scale preset. */
+    static constexpr double EXTENDED = 90.0;       /**< The extended preset. */
+    static constexpr double OVER_THE_BACK = -80.0; /**< The overhead preset. */
 
-    static constexpr double WRIST_DEGREES_PER_CLICK = 360.0 / 4096.0;
+    static constexpr double WRIST_DEGREES_PER_CLICK =
+        360.0 / 4096.0; /**< The encoder's degrees/click. */
 
-    static const int WRIST_REVERSE_SOFT_LIMIT = -80.0;
-    static const int WRIST_FORWARD_SOFT_LIMIT = 90.0;
+    static const int WRIST_REVERSE_SOFT_LIMIT =
+        -80.0; /**< The max backwards limit. */
+    static const int WRIST_FORWARD_SOFT_LIMIT =
+        90.0; /**< The max forwards limit. */
 
+    /**
+     * Construct a wrist.
+     * @param scheduler TaskMgr object.
+     * @param logger LogSpreadsheet object.
+     * @param wristMotor The Talon to control the wrist.
+     */
     Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *wristMotor);
     virtual ~Wrist();
 
     /**
-     * Sets Wrist Position using Motion Magic
-     *
-     * @param position: the position goal
-     **/
+     * Set the wrist position using Motion Magic.
+     * @param position The position goal.
+     */
     void SetPosition(double position);
+
+    /**
+     * Set the wrist position step.
+     * @param position The position goal.
+     */
     void SetPositionStep(double position);
 
     /**
-     * Sets Elevator Power
-     *
-     * @param power: power being sent to the motor from -1.0 to 1.0
-     **/
+     * Set the elevator power.
+     * @param power The power being sent to the motor from -1.0 to 1.0.
+     */
     void SetPower(double power);
 
     /**
-     * @return: returns current elevator position in sensor units
-     **/
+     * Get the current position.
+     * @return The current position in sensor units.
+     */
     float GetPosition() const;
 
+    /**
+     * Zero the position.
+     */
     void ZeroPosition();
 
+    /**
+     * Continously check wrist stuff.
+     * @param mode The current robot mode.
+     */
     void TaskPeriodic(RobotMode mode);
 
-    TalonSRX *m_wristMotor;
+    TalonSRX *m_wristMotor; /**< The wrist Talon. */
 
 private:
-    /*
+    /**
      * Convert a number from degrees to native encoder units and vise versa
      */
     double DegreesToNativeUnits(double degrees) const;
