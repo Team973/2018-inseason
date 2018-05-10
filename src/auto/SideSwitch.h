@@ -25,8 +25,10 @@ public:
     /**
      * Called every robot cycle, runs state machine.
      * @param direction Side of switch/Scale to score on.
+     * @param scalePos The scale position.
      */
-    void Execute(AutoRoutineBase::AutoDirection direction) override;
+    void Execute(AutoRoutineBase::AutoDirection direction,
+                 std::string scalePos) override;
 
     /**
      * Resets the auto to the beginning.

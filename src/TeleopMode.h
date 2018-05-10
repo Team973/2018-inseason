@@ -18,6 +18,7 @@
 #include "lib/helpers/GreyLight.h"
 #include "lib/pixelprocessors/Flash.h"
 #include "lib/pixelprocessors/SolidColor.h"
+#include "lib/util/WrapDash.h"
 
 using namespace frc;
 
@@ -55,10 +56,19 @@ private:
     {
         Idle,
         SwitchIntaking,
-        VaultIntaking,
+        ManualIntaking,
         SwitchIntakeDelay
     };
     CubeIntakeState m_cubeIntakeState;
+
+    enum class WristControlMode
+    {
+        ClosedLoop,
+        OpenLoop
+    };
+    WristControlMode m_wristControlMode;
+    Debouncer *m_wristControlModeDebouncer;
+    bool m_wristModeSwitchPrevState;
 
     double m_elevatorPosition;
 
@@ -70,6 +80,7 @@ private:
     Hanger *m_hanger;
     GreyLight *m_greyLight;
     LightPattern::Flash *m_endGameSignal;
-    LightPattern::SolidColor *m_ptoSignal;
+    LightPattern::SolidColor *m_wristEmergencySignal;
+    LightPattern::SolidColor *m_clear;
 };
 };

@@ -39,9 +39,10 @@ public:
 
     /**
      * Called every robot cycle, runs state machine. Overwritten by child class.
-     * @param direction Side of switch/Scale to score on.
+     * @param direction The side of switch/Scale to score on.
+     * @param scalePos The scale position.
      */
-    virtual void Execute(AutoDirection direction);
+    virtual void Execute(AutoDirection direction, std::string scalePos);
 
     /**
      * Resets the auto to the beginning.

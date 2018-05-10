@@ -70,16 +70,21 @@ public:
     static constexpr double FORK_AVOIDANCE_MAX_HEIGHT =
         78.0; /**< The fork max height. */
 
-    static const IntakePreset STOW_PRESET;      /**< The stow preset. */
-    static const IntakePreset GROUND_PRESET;    /**< The ground preset. */
-    static const IntakePreset VAULT_PRESET;     /**< The vault preset. */
-    static const IntakePreset LOW_GOAL_PRESET;  /**< The stow preset. */
+    static const IntakePreset STOW_PRESET;     /**< The stow preset. */
+    static const IntakePreset GROUND_PRESET;   /**< The ground preset. */
+    static const IntakePreset VAULT_PRESET;    /**< The vault preset. */
+    static const IntakePreset LOW_GOAL_PRESET; /**< The stow preset. */
+    static const IntakePreset
+        AUTO_LOW_GOAL_PRESET; /**< The auto low goal preset. */
     static const IntakePreset SCALE_LOW_PRESET; /**< The lower scale preset. */
     static const IntakePreset SCALE_MID_PRESET; /**< The middle scale preset. */
     static const IntakePreset
         SCALE_HIGH_PRESET;                      /**< The higher scale preset. */
     static const IntakePreset OVER_BACK_PRESET; /**< The overhead preset. */
+    static const IntakePreset
+        SECOND_STACK_PRESET;                    /**< The second stack preset. */
     static const IntakePreset HANGING_PRESET;   /**< The hang preset. */
+    static const IntakePreset HALF_STOW_PRESET; /**< The half stow preset. */
 
     /**
      * Contruct an intake assembly.
@@ -190,11 +195,20 @@ public:
      * @return The position error.
      */
     double GetPositionError();
+    double GetEndPositionError();
 
     void StartZeroPosition(); /**< Start zeroing. */
     void EndZeroPosition();   /**< End zeroing and set the zeros. */
 
     void Flash(); /**< Flash the lights for driver feedback. */
+
+    void SetOpenLoopWrist(bool openLoop) {
+        m_openLoopWrist = openLoop;
+        if (!openLoop) {
+            m_interimPositionGoal.wristPosition = GetWristPosition();
+            m_controlMode = ControlMode::ManualPosition;
+        }
+    }
 
     /**
      * Update function synonymous to TeleopContinuous that gets called
@@ -216,13 +230,13 @@ private:
         Idle,
         ManualPosition,
         ManualVoltage,
+        VoltageWristPIDElevator,
         Zeroing,
         LowPosition,
         SubForkPosition,
         SuperForkPosition,
         OverBackPosition,
         PreHanging,
-        MidHanging,
         HangingAuto,
         HangingManual
     };
@@ -240,6 +254,8 @@ private:
 
     IntakePreset m_endPositionGoal;
     IntakePreset m_interimPositionGoal;
+
+    bool m_openLoopWrist;
 
     static constexpr double MAX_WRIST_SPEED = 180.0;
     static constexpr double MAX_ELEVATOR_SPEED = 50.0;

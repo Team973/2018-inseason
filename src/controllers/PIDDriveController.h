@@ -8,16 +8,20 @@
 #pragma once
 
 #include "lib/bases/DriveBase.h"
+#include "lib/helpers/PID.h"
 
 using namespace frc;
 
 namespace frc973 {
 
+<<<<<<< HEAD
 class PID;
 
 /**
  * PID Drive controller.
  */
+=======
+>>>>>>> dev
 class PIDDriveController : public DriveController {
 public:
     /**
@@ -49,8 +53,17 @@ public:
      * @param relativity Point relative to new setpoint.
      * @param state The state provider for handling incoming messages.
      */
-    void SetTarget(double dist, double heading,
-                   DriveBase::RelativeTo relativity, DriveStateProvider *state);
+    PIDDriveController *SetTarget(double dist, double heading,
+                                  DriveBase::RelativeTo relativity,
+                                  DriveStateProvider *state);
+
+    PIDDriveController *SetVMax(double new_vmax_ips, double new_avmax_dps) {
+        m_vmax = new_vmax_ips;
+        m_avmax = new_avmax_dps;
+        m_drivePID->SetBounds(-m_vmax, m_vmax);
+        m_turnPID->SetBounds(-m_avmax, m_avmax);
+        return this;
+    }
 
     /**
      * Scale the pseed down by newCap
@@ -130,6 +143,8 @@ private:
     PID *m_turnPID;
 
     double m_speedCap;
+    double m_vmax;
+    double m_avmax;
 
     double m_distTolerance;
     double m_distRateTolerance;

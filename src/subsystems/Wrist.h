@@ -7,6 +7,8 @@
 #include "src/info/RobotInfo.h"
 #include "lib/helpers/JoystickHelper.h"
 #include "lib/util/Util.h"
+#include "lib/helpers/GreyLight.h"
+#include "lib/pixelprocessors/Flash.h"
 
 using namespace frc;
 
@@ -22,7 +24,7 @@ public:
     static constexpr double STOW = -35.0;          /**< The stow preset. */
     static constexpr double SCALE = 20.0;          /**< The scale preset. */
     static constexpr double EXTENDED = 90.0;       /**< The extended preset. */
-    static constexpr double OVER_THE_BACK = -80.0; /**< The overhead preset. */
+    static constexpr double OVER_THE_BACK = -60.0; /**< The overhead preset. */
 
     static constexpr double WRIST_DEGREES_PER_CLICK =
         360.0 / 4096.0; /**< The encoder's degrees/click. */
@@ -32,13 +34,18 @@ public:
     static const int WRIST_FORWARD_SOFT_LIMIT =
         90.0; /**< The max forwards limit. */
 
+    static constexpr Color WRIST_EMERGENCY_RED = {
+        255, 0, 0}; /**< Emergency LED Color */
+
     /**
      * Construct a wrist.
      * @param scheduler TaskMgr object.
      * @param logger LogSpreadsheet object.
      * @param wristMotor The Talon to control the wrist.
+     * @param greylight The GreyLight instance to control LEDs.
      */
-    Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *wristMotor);
+    Wrist(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *wristMotor,
+          GreyLight *greylight);
     virtual ~Wrist();
 
     /**
@@ -93,10 +100,16 @@ private:
     };
 
     TaskMgr *m_scheduler;
+    GreyLight *m_greylight;
+    LightPattern::Flash *m_wristEmergencySignal;
 
     double m_position;
     double m_prevWristSetpoint;
     double m_wristPositionDelta;
     uint32_t m_zeroingTime;
+    bool m_prevLimSwitchState;
+    LogCell *m_limitSwitchStateCell;
+    LogCell *m_wristPositionCell;
+    LogCell *m_wristPulseWidthPosCell;
 };
 }

@@ -33,7 +33,7 @@ Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_elevatorMotor->EnableCurrentLimit(true);
     m_elevatorMotor->ConfigPeakCurrentDuration(0, 10);
     m_elevatorMotor->ConfigPeakCurrentLimit(0, 10);
-    m_elevatorMotor->ConfigContinuousCurrentLimit(15, 10);
+    m_elevatorMotor->ConfigContinuousCurrentLimit(25, 10);
     m_elevatorMotor->EnableVoltageCompensation(false);
     m_elevatorMotor->ConfigForwardSoftLimitThreshold(
         ELEVATOR_SOFT_HEIGHT_LIMIT / ELEVATOR_INCHES_PER_CLICK, 10);
@@ -51,7 +51,7 @@ Elevator::~Elevator() {
 
 void Elevator::SetPower(double power) {
     m_elevatorState = ElevatorState::manualVoltage;
-    power = Util::bound(power, -0.2, 1.0);
+    power = Util::bound(power, -0.6, 1.0);
     m_elevatorMotor->Set(ControlMode::PercentOutput, power);
 }
 
@@ -81,6 +81,8 @@ void Elevator::EnableCoastMode() {
 void Elevator::TaskPeriodic(RobotMode mode) {
     m_positionCell->LogDouble(GetPosition());
     SmartDashboard::PutNumber("elevator/encoders/encoder", GetPosition());
+    SmartDashboard::PutNumber("elevator/outputs/current",
+                              m_elevatorMotor->GetOutputCurrent());
     DBStringPrintf(DBStringPos::DB_LINE0, "e %f", GetPosition());
     switch (m_elevatorState) {
         case manualVoltage:

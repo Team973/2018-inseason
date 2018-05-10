@@ -9,7 +9,7 @@ AutoRoutineBase::AutoRoutineBase() : m_autoState(0) {
 AutoRoutineBase::~AutoRoutineBase() {
 }
 
-void AutoRoutineBase::Execute(AutoDirection direction) {
+void AutoRoutineBase::Execute(AutoDirection direction, std::string scalePos) {
     std::cout << "Routine Start" << std::endl;
 }
 

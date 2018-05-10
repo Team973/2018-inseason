@@ -37,18 +37,18 @@ public:
 
     static constexpr double GROUND = 0.0;      /**< Ground preset. */
     static constexpr double VAULT = 4.5;       /**< Vault preset. */
-    static constexpr double LOW_GOAL = 30.0;   /**< Switch preset. */
+    static constexpr double LOW_GOAL = 24.0;   /**< Switch preset. */
     static constexpr double HANGING = 55.0;    /**< Hang preset. */
     static constexpr double SCALE_LOW = 58.0;  /**< Lower scale preset. */
     static constexpr double SCALE_MID = 70.0;  /**< Middle scale preset. */
-    static constexpr double SCALE_HIGH = 79.5; /**< Higher scale preset. */
+    static constexpr double SCALE_HIGH = 77.5; /**< Higher scale preset. */
 
     static constexpr double ELEVATOR_SOFT_HEIGHT_LIMIT =
         80.5; /**< Soft elevator height. */
     static constexpr double ELEVATOR_INCHES_PER_CLICK =
         8.0 / 4096.0; /**< Encoder in/click */
     static constexpr double ELEVATOR_FEED_FORWARD =
-        0.10; /**< The elevator's feed forward. */
+        0.1; /**< The elevator's feed forward. */
 
     /**
      * Contruct an elevator.

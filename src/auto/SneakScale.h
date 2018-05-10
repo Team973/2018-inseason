@@ -10,24 +10,27 @@ using namespace frc;
 namespace frc973 {
 class Disabled;
 
+=======
 /**
- * Two Cube auto.
+ * Sneak Scale auto.
  */
-class TwoCubeAuto : public AutoRoutineBase {
+class SneakScale : public AutoRoutineBase {
 public:
     /**
-     * Construct a Two Cube auto.
+     * Construct a Sneak Scale auto.
      * @param drive Drive subsystem.
      * @param intakeAssembly Intake Assembly Subsytstem.
      */
-    TwoCubeAuto(Drive *drive, IntakeAssembly *intakeAssembly);
-    virtual ~TwoCubeAuto();
+    SneakScale(Drive *drive, IntakeAssembly *intakeAssembly);
+    virtual ~SneakScale();
 
     /**
      * Called every robot cycle, runs state machine.
      * @param direction Side of switch/Scale to score on.
+     * @param scalePos The scale position.
      */
-    void Execute(AutoRoutineBase::AutoDirection direction) override;
+    void Execute(AutoRoutineBase::AutoDirection direction,
+                 std::string scalePos) override;
 
     /**
      * Resets the auto to the beginning.

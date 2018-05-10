@@ -3,10 +3,10 @@
     "timestep": 0.01,
     "max_vel": 140.0,
     "max_accel": 80.0,
-    "max_jerk": 120.0,
+    "max_jerk": 2400.0,
     "wheelbase_width": 25.205,
     "waypoints": [
         { "x": 0, "y": 0, "angle": 0 },
-        { "x": 106, "y": 56, "angle": 0 }
+        { "x": 104, "y": 48, "angle": 0 }
     ]
 }

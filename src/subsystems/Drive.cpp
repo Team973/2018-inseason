@@ -350,12 +350,8 @@ void Drive::TaskPeriodic(RobotMode mode) {
     m_angle = m_gyro->GetAngle();
 
     // Austin ADXRS450_Gyro config
-    double currRate = m_gyro->GetRate();
-    if (currRate == 0) {
-    }
-    else {
-        m_angleRate = currRate;
-    }
+    m_angleRate = -1.0 * ((GetRightRate() - GetLeftRate()) / 2.0) /
+                  (DRIVE_WIDTH / 2.0) * Constants::DEG_PER_RAD;
 
     DBStringPrintf(DB_LINE9, "l %2.1lf r %2.1lf g %2.1lf", this->GetLeftDist(),
                    this->GetRightDist(), this->GetAngle());
