@@ -25,12 +25,15 @@ CoopMTRobot::CoopMTRobot(void)
         , TaskMgr()
         , m_prevMode(RobotMode::MODE_DISABLED)
         , m_robotModeMutex(PTHREAD_MUTEX_INITIALIZER) {
+    printf("Going to construct frc::Schedulern\n");
+    Scheduler::GetInstance();
+    printf("Successfully constructed frc::Scheduler\n");
 }
 
 CoopMTRobot::~CoopMTRobot() {
 }
 
-void CoopMTRobot::RobotInit(void) {
+void CoopMTRobot::RobotInit() {
     char hostName[MAXHOSTNAMELEN];
     gethostname(hostName, ARRAYSIZE(hostName));
     printf(ESC_PREFIX SGR_FG_BLACK ESC_SEP SGR_BG_WHITE ESC_SUFFIX
@@ -53,7 +56,7 @@ void CoopMTRobot::RobotInit(void) {
     Initialize();
 }
 
-void CoopMTRobot::DisabledInit(void) {
+void CoopMTRobot::DisabledInit() {
     this->ModeStop(this->m_prevMode);
     pthread_mutex_lock(&m_robotModeMutex);
     this->m_prevMode = RobotMode::MODE_DISABLED;
@@ -61,7 +64,7 @@ void CoopMTRobot::DisabledInit(void) {
     this->ModeStart(this->m_prevMode);
 }
 
-void CoopMTRobot::AutonomousInit(void) {
+void CoopMTRobot::AutonomousInit() {
     this->ModeStop(this->m_prevMode);
     pthread_mutex_lock(&m_robotModeMutex);
     this->m_prevMode = RobotMode::MODE_AUTO;
@@ -69,7 +72,7 @@ void CoopMTRobot::AutonomousInit(void) {
     this->ModeStart(this->m_prevMode);
 }
 
-void CoopMTRobot::TeleopInit(void) {
+void CoopMTRobot::TeleopInit() {
     this->ModeStop(this->m_prevMode);
     pthread_mutex_lock(&m_robotModeMutex);
     this->m_prevMode = RobotMode::MODE_TELEOP;
@@ -77,7 +80,7 @@ void CoopMTRobot::TeleopInit(void) {
     this->ModeStart(this->m_prevMode);
 }
 
-void CoopMTRobot::TestInit(void) {
+void CoopMTRobot::TestInit() {
     this->ModeStop(this->m_prevMode);
     pthread_mutex_lock(&m_robotModeMutex);
     this->m_prevMode = RobotMode::MODE_TEST;
@@ -85,7 +88,7 @@ void CoopMTRobot::TestInit(void) {
     this->ModeStart(this->m_prevMode);
 }
 
-void CoopMTRobot::DisabledPeriodic(void) {
+void CoopMTRobot::DisabledPeriodic() {
     uint64_t startTime = GetUsecTime();
 
     this->TaskPrePeriodicAll(this->m_prevMode);
@@ -118,7 +121,7 @@ void CoopMTRobot::DisabledPeriodic(void) {
     }
 }
 
-void CoopMTRobot::AutonomousPeriodic(void) {
+void CoopMTRobot::AutonomousPeriodic() {
     this->TaskPrePeriodicAll(this->m_prevMode);
     this->AutonomousContinuous();
     this->AllStateContinuous();
@@ -126,7 +129,7 @@ void CoopMTRobot::AutonomousPeriodic(void) {
     this->TaskPostPeriodicAll(this->m_prevMode);
 }
 
-void CoopMTRobot::TeleopPeriodic(void) {
+void CoopMTRobot::TeleopPeriodic() {
     this->TaskPrePeriodicAll(this->m_prevMode);
     this->TeleopContinuous();
     this->AllStateContinuous();
@@ -134,7 +137,7 @@ void CoopMTRobot::TeleopPeriodic(void) {
     this->TaskPostPeriodicAll(this->m_prevMode);
 }
 
-void CoopMTRobot::TestPeriodic(void) {
+void CoopMTRobot::TestPeriodic() {
     this->TaskPrePeriodicAll(this->m_prevMode);
     this->TestContinuous();
     this->AllStateContinuous();
