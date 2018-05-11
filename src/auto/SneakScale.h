@@ -10,7 +10,6 @@ using namespace frc;
 namespace frc973 {
 class Disabled;
 
-=======
 /**
  * Sneak Scale auto.
  */

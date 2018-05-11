@@ -14,14 +14,9 @@ using namespace frc;
 
 namespace frc973 {
 
-<<<<<<< HEAD
-class PID;
-
 /**
  * PID Drive controller.
  */
-=======
->>>>>>> dev
 class PIDDriveController : public DriveController {
 public:
     /**
