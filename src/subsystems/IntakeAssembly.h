@@ -202,6 +202,10 @@ public:
 
     void Flash(); /**< Flash the lights for driver feedback. */
 
+    /**
+     * Set the wrist to open loop control.
+     * @param openLoop Whether or not to set the wrist to open loop.
+     */
     void SetOpenLoopWrist(bool openLoop) {
         m_openLoopWrist = openLoop;
         if (!openLoop) {

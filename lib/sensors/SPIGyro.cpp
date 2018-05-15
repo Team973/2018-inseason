@@ -10,6 +10,9 @@
 
 namespace frc973 {
 
+/**
+ * Some nifty byte swapping.
+ */
 uint32_t swapTheBytes(uint32_t dword) {
     return ((dword >> 24) & 0x000000FF) | ((dword >> 8) & 0x0000FF00) |
            ((dword << 8) & 0x00FF0000) | ((dword << 24) & 0xFF000000);

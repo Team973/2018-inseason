@@ -56,13 +56,13 @@ public:
 
     /**
      * Log an integer.
-     * @param integer The integer to be logged in the cell.
+     * @param val The integer to be logged in the cell.
      */
     void LogInt(int val);
 
     /**
      * Log a double.
-     * @param double The double to be logged in the cell.
+     * @param val The double to be logged in the cell.
      */
     void LogDouble(double val);
 

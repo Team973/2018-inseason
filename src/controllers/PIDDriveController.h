@@ -52,6 +52,11 @@ public:
                                   DriveBase::RelativeTo relativity,
                                   DriveStateProvider *state);
 
+    /**
+     * Set the maximum velocities.
+     * @param new_vmax_ips The new maximum velocity in inches/second.
+     * @param new_avmax_ips The new maximum angular velocity in degrees/second.
+     */
     PIDDriveController *SetVMax(double new_vmax_ips, double new_avmax_dps) {
         m_vmax = new_vmax_ips;
         m_avmax = new_avmax_dps;
