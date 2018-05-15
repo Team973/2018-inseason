@@ -32,9 +32,10 @@ public:
     GreyLight(int numLEDs);
 
     /**
-     * Start a Loop
+     * Set the pixel state processor.
+     * @param processor The pixel state processor.
      */
-    void Loop();
+    void SetPixelStateProcessor(PixelStateProcessor* processor);
 
     /**
      * Return the current state of the LEDs.
@@ -43,10 +44,9 @@ public:
     PixelState GetState();
 
     /**
-     * Set the pixel state processor.
-     * @param processor The pixel state processor.
+     * Start a Loop
      */
-    void SetPixelStateProcessor(PixelStateProcessor* processor);
+    void Loop();
 
 private:
     PixelStateProcessor* m_processor;
