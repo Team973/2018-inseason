@@ -153,8 +153,9 @@ void SplineDriveController::CalcDriveOutput(DriveStateProvider *state,
         m_r_vel_pid.CalcOutput(state->GetRightRate());
     double angular_dist_term =
         ANGULAR_POSITION_KP *
-        angle_error;  // m_a_pos_pid.CalcOutput(AngleFromStart());
-    double angular_rate_term = m_a_rate_pid.CalcOutput(state->GetAngularRate());
+        angle_error;  // m_a_pos_pid.CalcOutputWithError(angle_error);
+    double angular_rate_term =
+        m_a_rate_pid.CalcOutputWithError(angularRate - state->GetAngularRate());
 
     /* right side receives positive angle correction */
     double right_output = right_l_vel_ff + right_linear_dist_term +

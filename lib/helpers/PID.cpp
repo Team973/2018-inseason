@@ -117,6 +117,10 @@ double PID::CalcOutput(double actual, uint32_t time) {
     return output;
 }
 
+double PID::CalcOutputWithError(double error) {
+    return CalcOutputWithError(error, GetMsecTime());
+}
+
 double PID::CalcOutputWithError(double error, uint32_t time) {
     double derivative = 0;
     double output;

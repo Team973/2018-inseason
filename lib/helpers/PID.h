@@ -120,6 +120,8 @@ public:
      */
     double CalcOutput(double actual, uint32_t timeMs);
 
+    double CalcOutputWithError(double error);
+
     double CalcOutputWithError(double error, uint32_t timeMs);
 
     /**
