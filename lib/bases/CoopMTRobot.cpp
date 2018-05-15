@@ -25,7 +25,7 @@ CoopMTRobot::CoopMTRobot(void)
         , TaskMgr()
         , m_prevMode(RobotMode::MODE_DISABLED)
         , m_robotModeMutex(PTHREAD_MUTEX_INITIALIZER) {
-    printf("Going to construct frc::Schedulern\n");
+    printf("Going to construct frc::Scheduler\n");
     Scheduler::GetInstance();
     printf("Successfully constructed frc::Scheduler\n");
 }
