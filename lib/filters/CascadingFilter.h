@@ -16,7 +16,8 @@
 namespace frc973 {
 
 /**
- * Interface for something that needs to use multiple filters in a sequence.
+ * A direct-use filter for something that needs to use multiple filters in a
+ * sequence.
  */
 class CascadingFilter : FilterBase {
 public:

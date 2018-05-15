@@ -43,7 +43,7 @@ public:
         }
 
         /**
-         * Checks if the elevator height and the wrist angle are equal.
+         * Checks two IntakePresets to see if they are equal.
          */
         inline bool operator==(const IntakePreset &rhs) const {
             return this->elevatorPosition == rhs.elevatorPosition &&

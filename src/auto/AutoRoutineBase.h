@@ -13,12 +13,12 @@ namespace frc973 {
 class AutoRoutineBase {
 public:
     /**
-     * Side of switch/scale to score on.
+     * The side for the auto to set as a goal.
      */
     enum AutoDirection
     {
-        Left, /**< enum value Left */
-        Right /**< enum value Right */
+        Left, /**< Left goal. */
+        Right /**< Right goal. */
     };
 
     /**
@@ -26,9 +26,9 @@ public:
      */
     enum class RobotStartPosition
     {
-        Left,   /**< enum value Left */
-        Center, /**< enum value Center */
-        Right   /**< enum value Right */
+        Left,   /**< Left side of alliance wall. */
+        Center, /**< Center of alliance wall. */
+        Right   /**< Right side of alliance wall. */
     };
 
     /**

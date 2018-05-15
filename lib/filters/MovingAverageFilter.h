@@ -15,7 +15,7 @@
 namespace frc973 {
 
 /**
- * Interface for something that needs this filter for moving averages.
+ * A direct-use filter for something that needs to filter moving averages.
  */
 class MovingAverageFilter : public FilterBase {
 public:
@@ -33,13 +33,13 @@ public:
      * @param input The current data point that needs to be filtered.
      * @return Result of filtering calculation.
      */
-    double Update(double input) override;
+    double Update(double input);
 
     /**
      * Return the last value sent to the filter.
      * @return The last value.
      */
-    double GetLast() override;
+    double GetLast();
 
 private:
     double m_weight;

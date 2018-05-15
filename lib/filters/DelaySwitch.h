@@ -19,9 +19,9 @@
 namespace frc973 {
 
 /**
- * Interface for something that needs to delay between on/off.
- * Note: this class does not inherit from FilterBase because it returns
- * booleans rather than doubles.  And no, we are not going to use templates!
+ * A direct-use filter for something that needs to delay between on/off. Note:
+ * this class does not inherit from FilterBase because it returns booleans
+ * rather than doubles. And no, we are not going to use templates!
  */
 class DelaySwitch {
 public:

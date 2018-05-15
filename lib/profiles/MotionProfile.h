@@ -8,6 +8,9 @@ namespace frc973 {
 
 namespace Profiler {
 
+/**
+ * Interface for a new waypoint in a motion profile.
+ */
 struct NewWaypoint {
     double time;
 

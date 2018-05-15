@@ -34,7 +34,14 @@ namespace frc973 {
 static constexpr int MAXHOSTNAMELEN = 128;
 
 /**
- * Interface for a class that is managed and kept in sync with other threads.
+ * CoopMTRobot extends the IterativeRobot robot program framework. It is an
+ * interface for a cooperative multitasking robot that is managed and kept in
+ * sync with other threads. Each task returns after some period of time. The
+ * CoopMTRobot class is intended to be subclassed by a user creating a robot
+ * program. In addition to Continuous() functions from this class being called
+ * each time a new packet is received from the driver station, tasks registered
+ * with this class (via the TaskMgr interface) are also called each time a new
+ * packet is received from the driver station.
  */
 class CoopMTRobot
         : public IterativeRobot
@@ -42,7 +49,7 @@ class CoopMTRobot
         , public frc::RobotStateInterface {
 public:
     /**
-     * A coop mt robot.
+     * Constuct a Coop MT Robot.
      */
     CoopMTRobot();
     virtual ~CoopMTRobot();
@@ -173,88 +180,92 @@ protected:
      */
 
     /**
-     * Start the robot program.
+     * Start the robot program. Don't implement this in any child classes.
      */
     void RobotInit() override;
 
     /**
-     * Stop the previous mode and start Disabled.
+     * Stop the previous mode and start Disabled. Don't implement this in any
+     * child classes.
      */
     void DisabledInit() override;
 
     /**
-     * Stop the previous mode and start Autonomous.
+     * Stop the previous mode and start Autonomous. Don't implement this in any
+     * child classes.
      */
     void AutonomousInit() override;
 
     /**
-     * Stop the previous mode and start Teleop.
+     * Stop the previous mode and start Teleop. Don't implement this in any
+     * child classes.
      */
     void TeleopInit() override;
 
     /**
-     * Stop the previous mode and start Test.
+     * Stop the previous mode and start Test. Don't implement this in any child
+     * classes.
      */
     void TestInit() override;
 
     /**
-     * Start the Disabled loop.
+     * Start the Disabled loop. Don't implement this in any child classes.
      */
     void DisabledPeriodic() override;
 
     /**
-     * Start the Autonomous loop.
+     * Start the Autonomous loop. Don't implement this in any child classes.
      */
     void AutonomousPeriodic() override;
 
     /**
-     * Start the Teleop loop.
+     * Start the Teleop loop. Don't implement this in any child classes.
      */
     void TeleopPeriodic() override;
 
     /**
-     * Start the Test loop.
+     * Start the Test loop. Don't implement this in any child classes.
      */
     void TestPeriodic() override;
 
     /**
-     * Stop a robot mode.
+     * Stop a robot mode. Don't implement this in any child classes.
      * @param toStop The robot mode to stop.
      */
     void ModeStop(RobotMode toStop);
 
     /**
-     * Start a robot mode.
+     * Start a robot mode. Don't implement this in any child classes.
      * @param toStart The robot mode to start.
      */
     void ModeStart(RobotMode toStart);
 
     /**
-     * Return disabled status.
+     * Return disabled status. Don't implement this in any child classes.
      * @return Whether the robot is disabled or not.
      */
     bool IsDisabled() const override;
 
     /**
-     * Return enabled status.
+     * Return enabled status. Don't implement this in any child classes.
      * @return Whether the robot is enabled or not.
      */
     bool IsEnabled() const override;
 
     /**
-     * Return teleop status.
+     * Return teleop status. Don't implement this in any child classes.
      * @return Whether the robot is enabled in teleop or not.
      */
     bool IsOperatorControl() const override;
 
     /**
-     * Return autonomous status.
+     * Return autonomous status. Don't implement this in any child classes.
      * @return Whether the robot is enabled in autonomous or not.
      */
     bool IsAutonomous() const override;
 
     /**
-     * Return test status.
+     * Return test status. Don't implement this in any child classes.
      * @return Whether the robot is enabled in test or not.
      */
     bool IsTest() const override;

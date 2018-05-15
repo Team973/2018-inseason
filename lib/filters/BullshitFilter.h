@@ -16,8 +16,7 @@
 namespace frc973 {
 
 /**
- * Interface for something that needs this filter to check against absurd
- * values.
+ * A direct-use filter for something that needs to check against absurd values.
  */
 class BullshitFilter : public FilterBase {
 public:

@@ -8,6 +8,9 @@ namespace frc973 {
 
 namespace Profiler {
 
+/**
+ * Interface for a waypoint in a trap profile.
+ */
 struct Waypoint {
     double time;
 
@@ -20,6 +23,16 @@ struct Waypoint {
     bool done;
     bool error;
 
+    /**
+     * Construct a new waypoint.
+     * @param time_ The time.
+     * @param linear_vel_ The linear velocity.
+     * @param linear_dist_ The linear distance.
+     * @param angular_vel_ The angular velocity.
+     * @param angular_dist_ The angular distance.
+     * @param done_ Whether it's done.
+     * @param error_ Whether it errored.
+     */
     Waypoint(double time_, double linear_vel_, double linear_dist_,
              double angular_vel_, double angular_dist_, bool done_, bool error_)
             : time(time_)
@@ -45,17 +58,17 @@ static_cast<double>(D);
 };*/
 
 /**
- * TrapProfileUnsafe does the calculation at runtime like one would expect
- * and is a normal function.  Do not call this function directly, it is
- * dangerous.  Instead, call TrapProfile.
+ * TrapProfileUnsafe does the calculation at runtime like one would expect and
+ * is a normal function. Do not call this function directly, it is dangerous.
+ * Instead, call TrapProfile.
  */
 Waypoint TrapProfileUnsafe(double time, double distance, double angle,
                            double max_velocity, double max_acceleration,
                            bool start_halt, bool end_halt);
 
 /**
- * Safely generates a trapazoidal motion profile.  Checks at compile time
- * for profile safety.
+ * Safely generates a trapazoidal motion profile. Checks at compile time for
+ * profile safety.
  */
 template <typename DISTANCE, typename ANGLE, typename MAX_VELOCITY,
           typename MAX_ACCELERATION, bool START_HALT, bool END_HALT>

@@ -26,7 +26,7 @@ public:
     virtual ~PIDDriveController();
 
     /**
-     * Calculate motor output.
+     * Calculate motor output given the most recent sensor updates.
      * @param state The state provider for handling incoming messages.
      * @param out The signal receiver for handling outgoing messages.
      */

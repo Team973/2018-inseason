@@ -14,7 +14,8 @@ using namespace frc;
 namespace frc973 {
 
 /**
- * Trap Drive controller.
+ * Trap Drive controller. Follows a constant arc spline with a trapazoidal
+ * motion profile: https://www.linearmotiontips.com/how-to-calculate-velocity/.
  */
 class TrapDriveController : public DriveController {
 public:
@@ -49,8 +50,7 @@ public:
     TrapDriveController *SetConstraints(double max_vel, double max_acc);
 
     /**
-     * Calculate motor output given the most recent joystick commands.
-     * In this case just return the most recent joystick commands.
+     * Calculate motor output given the most recent sensor updates.
      * @param state The state provider for handling incoming messages.
      * @param out The signal receiver for handling outgoing messages.
      */

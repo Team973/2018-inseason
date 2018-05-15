@@ -17,7 +17,7 @@ using namespace frc;
 namespace frc973 {
 
 /**
- * Straight Drive controller.
+ * Straight Drive controller. Outputs a constant angle using PID.
  */
 class StraightDriveController : public DriveController {
 public:
@@ -28,7 +28,7 @@ public:
     virtual ~StraightDriveController();
 
     /**
-     * Sets target for robot to reach.
+     * Sets target for robot to reach using PID.
      * @param relativeTo Point relative to the new setpoint.
      * @param throttle Power to motors.
      * @param angle Angle to turn.
@@ -38,8 +38,7 @@ public:
                    double angle, DriveStateProvider *state);
 
     /**
-     * Calculate motor output given the most recent joystick commands.
-     * In this case just return the most recent joystick commands.
+     * Calculate motor output given the most recent sensor updates.
      * @param state The state provider for handling incoming messages.
      * @param out The signal receiver for handling outgoing messages.
      */

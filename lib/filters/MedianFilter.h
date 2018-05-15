@@ -12,7 +12,7 @@
 namespace frc973 {
 
 /**
- * Interface for something that needs this filter for median values.
+ * A direct-use filter for something that needs to filter median values.
  */
 class MedianFilter : public FilterBase {
 public:

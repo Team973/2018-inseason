@@ -94,7 +94,7 @@ public:
     }
 
     /**
-     * This function is provided by the subclass to handle a joystick button
+     * This function is overriden by the subclass to handle a joystick button
      * event notification.
      * @param port The joystick port.
      * @param button The joystick button.
@@ -124,7 +124,8 @@ protected:
     uint32_t m_port; /**< The port the joystick is plugged into. */
 
     /* For observer notification */
-    JoystickObserver *m_observer; /**< The last left joystick's x axis value */
+    JoystickObserver *m_observer; /**< The class to notify whenever a change in
+                                     the joystick occurs. */
     DriverStation *m_ds;          /**< The DriverStation operating on.*/
     uint32_t m_prevBtn;           /**< The previous button.*/
     TaskMgr *m_scheduler;         /**< The task manager object.*/

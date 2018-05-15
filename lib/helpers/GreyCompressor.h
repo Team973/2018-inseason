@@ -20,12 +20,13 @@ using namespace frc;
 namespace frc973 {
 
 /**
- * Interface for a compressor object.
+ * CoopTask for a compressor object. GreyComperssor will check the pressure
+ * every robot cycle and controll the compressor accordingly.
  */
 class GreyCompressor : public CoopTask {
 public:
     /**
-     * GreyCompressor creates a new compressor object.  The name Compressor
+     * GreyCompressor creates a new compressor object. The name Compressor
      * conflicts with wpilib's compressor object which requires us to run the
      * compressor off the pcm.
      * @param pressureSwitch The pressure switch that it will read from.

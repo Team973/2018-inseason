@@ -131,10 +131,8 @@ public:
 };
 
 /**
- * Interface for anything that can use an angle provider, a dist provider, and
- * can use those to send some drive output to the DriveOutput. In general there
- * will be two drive controllers: One that calculates output based solely on
- * joystick values and one that calcualtes output based solely on pid.
+ * Interface that uses a DriveStateProvider, calculates output, and sends it to
+ * DriveControlSignalReceiver. This is the base for all drive controllers.
  */
 class DriveController {
 public:
@@ -147,8 +145,8 @@ public:
     }
 
     /**
-     * Use the input signals from |angle| and |dist| and calculate some output,
-     * then send that output to |out|.
+     * Use the input signals from the |state| and calculate some output, then
+     * send that output to the |out|.
      * @param state The state provider for handling incoming messages.
      * @param out The signal receiver for handling outgoing messages.
      */
@@ -163,14 +161,14 @@ public:
     virtual bool OnTarget() = 0;
 
     /**
-     * Start the drive controller.
+     * Called when the drive controller is set active by the Drive subsystem.
      * @param out The signal receiver for handling outgoing messages.
      */
     virtual void Start(DriveControlSignalReceiver *out) {
     }
 
     /**
-     * Stop the drive controller.
+     * Called when the drive controller is set inactive by the Drive subsystem.
      * @param out The signal receiver for handling outgoing messages.
      */
     virtual void Stop(DriveControlSignalReceiver *out) {
@@ -191,7 +189,7 @@ public:
      * @param scheduler
      * @param out The signal receiver for handling outgoing messages.
      * @param state The state provider for handling incoming messages.
-     * @param controller The drive controller for hangling movements.
+     * @param controller The drive controller for handling movements.
      */
     DriveBase(TaskMgr *scheduler, DriveControlSignalReceiver *out,
               DriveStateProvider *state, DriveController *controller = nullptr);
@@ -204,9 +202,9 @@ public:
      */
     enum RelativeTo
     {
-        Absolute, /**< Relative to the world */
-        Now,      /**< Relative to the current position */
-        SetPoint  /**< Relative to the current setpoint */
+        Absolute, /**< Relative to where the robot was turned on. */
+        Now,      /**< Relative to the current position. */
+        SetPoint  /**< Relative to the current setpoint. */
     };
 
     /**
