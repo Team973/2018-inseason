@@ -35,43 +35,78 @@ namespace frc973 {
 #define PIXY_RCS_MAX_POS 1000L
 #define PIXY_RCS_CENTER_POS ((PIXY_RCS_MAX_POS - PIXY_RCS_MIN_POS) / 2)
 
+/**
+ * Pixy cam.
+ */
 class Pixy {
 public:
+    /**
+     * Construct a Pixy.
+     */
     Pixy();
     ~Pixy();
 
+    /**
+     * New block structure.
+     */
     struct Block {
-        void print();  // Prints block structure - prints psixy stat(xy
-                       // coordinates, height, width, etc.)
+        /**
+         * Prints block structure - prints pixy stat(xy coordinates, height,
+         * width, etc.)
+         */
+        void print();
 
-        uint16_t signature;  // Identification number for your object - you
-                             // could set it in the pixymon
-        uint16_t x;          // 0 pixel - 320 pixel
-        uint16_t y;          // 0 pixel - 200 pixel
-        uint16_t width;
-        uint16_t height;
-        uint16_t angle;  // Only appears when using Color Code
+        uint16_t signature; /**< The identification number for your object - you
+                               could set it in the pixymon. */
+        uint16_t x;         /**< 0 pixel - 320 pixel */
+        uint16_t y;         /**< 0 pixel - 200 pixel */
+        uint16_t width;     /**< The width of the image. */
+        uint16_t height;    /**< The height of the image. */
+        uint16_t angle;     /**< Only appears when using Color Code */
     };
 
+    /**
+     * Defines the type of block to use.
+     */
     enum BlockType
     {
-        NORMAL_BLOCK,  // Regular color recognition
-        CC_BLOCK  // Color-Code Recognition (gives how much object is tilted)
+        NORMAL_BLOCK, /**< Regular color recognition */
+        CC_BLOCK /**< Color-Code Recognition (gives how much object is tilted).
+                  */
     };
 
-    bool getStart();     // Checking if the the frame is a new frame
-    uint16_t getWord();  // Getting two Bytes from Pixy (The full information)
-    uint8_t getByte();   // Gets a byte from Pixy
-    uint16_t getBlocks(
-        uint16_t maxBlocks);  // Gives how many (signature) object is detected
+    /**
+     * Checking if the frame is a new frame.
+     * @return Whether the frame is a new frame.
+     */
+    bool getStart();
+
+    /**
+     * Getting two Bytes from Pixy (The full information).
+     * @return The word.
+     */
+    uint16_t getWord();
+
+    /**
+     * Gets a byte from Pixy.
+     * @return The byte.
+     */
+    uint8_t getByte();
+
+    /**
+     * Gives how many (signature) object is detected
+     * @param maxBlocks The max number of blocks.
+     * @return The blocks.
+     */
+    uint16_t getBlocks(uint16_t maxBlocks);
 
 private:
-    I2C* i2c;             // Declare i2c
-    BlockType blockType;  // it is the enum on the top
+    I2C* i2c;             // Declare i2c.
+    BlockType blockType;  // it is the enum on the top.
     bool skipStart;  // skips to check 0xaa55, which is byte that tells pixy it
-                     // is start of new frame
+                     // is start of new frame.
     uint16_t blockCount;  // How many signatured objects are there?
 public:
-    Block blocks[100];  // array that stores blockCount array
+    Block blocks[100]; /**< array that stores blockCount array */
 };
 }

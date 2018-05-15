@@ -5,7 +5,7 @@
 namespace frc973 {
 
 static constexpr bool PIXY_SIM_NOISE = false;
-int num_cs_errors = 0;
+int num_cs_errors = 0; /**< The number of CS errors. */
 
 #define RUN_LOG_ERR(x) \
     { x; }
@@ -61,7 +61,7 @@ bool Pixy::getStart() {
             return true;
         }
         else if (w == PIXY_START_WORDX) {
-            // when byte recieved was 0x55aa instead of otherway around, the
+            // when byte received was 0x55aa instead of otherway around, the
             // code syncs the byte
             printf("Pixy: reorder");
             getByte();  // resync
