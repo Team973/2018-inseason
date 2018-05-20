@@ -195,6 +195,11 @@ public:
      * @return The position error.
      */
     double GetPositionError();
+
+    /**
+     * Get the end position error.
+     * @return The end position error.
+     */
     double GetEndPositionError();
 
     void StartZeroPosition(); /**< Start zeroing. */

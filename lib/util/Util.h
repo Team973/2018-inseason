@@ -17,7 +17,7 @@ enum RobotMode
     MODE_TELEOP,   /**< TeleOp mode. */
     MODE_TEST      /**< Test mode. */
 };
-extern const char *robotModes[];
+extern const char *robotModes[]; /**< The robotModes external character type. */
 
 /**
  * GetRobotModeString queries the default RobotStateInterface,

@@ -52,11 +52,12 @@ struct Color {
  * Collection of parameters for each frame of data.
  */
 struct PixelState {
-    unsigned int frame;        /**< The current frame (+1 per tick). */
-    unsigned int fps;          /**< The framerate. */
-    unsigned int numLEDs;      /**< The number of LEDs. */
-    unsigned int delta;        /**< The time in milliseconds since last tick. */
-    std::vector<Color> pixels; /** The array of pixels (this gets displayed). */
+    unsigned int frame;   /**< The current frame (+1 per tick). */
+    unsigned int fps;     /**< The framerate. */
+    unsigned int numLEDs; /**< The number of LEDs. */
+    unsigned int delta;   /**< The time in milliseconds since last tick. */
+    std::vector<Color>
+        pixels; /**< The array of pixels (this gets displayed). */
 };
 }
 #endif /* SRC_MODULES_GREYLIGHTTYPES_H_ */

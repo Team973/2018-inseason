@@ -22,8 +22,8 @@ public:
      * Construct a LinearScale Modulator.
      * @param minColor The Color to represent the minimum value.
      * @param maxColor The Color to represent the maximum value.
-     * @param minValue The minimum value to be represented by minColor.
-     * @param maxValue The maximum value to be represented by m_maxColor.
+     * @param minVal The minimum value to be represented by minColor.
+     * @param maxVal The maximum value to be represented by m_maxColor.
      * @param modulator The PixelStateProcessor for the line to be overlayed on.
      */
     LinearScale(Color minColor, Color maxColor, double minVal, double maxVal,
@@ -31,8 +31,7 @@ public:
 
     /**
      * Update the primary and secondary Color.
-     * @param first The primary Color to flash.
-     * @param second The secondary Color to flash.
+     * @param state The PixelState.
      */
     void Tick(PixelState& state);
 

@@ -26,6 +26,10 @@ public:
      */
     LengthModifier(PixelStateProcessor* processor, int numLEDs);
 
+    /**
+     * Generate a new frame of LED Data.
+     * @param state The PixelState for the frame.
+     */
     void Tick(PixelState& state) override;
 
 private:
