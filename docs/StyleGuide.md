@@ -80,8 +80,8 @@ void function() {
 }
 ```
 
-### Rule #4: #ifndef and #pragma directives
-Instead of using the #ifndef and #define directives, use `#pragma once` in the beginning of header files.
+### Rule #4: `#ifndef` and `#pragma` directives
+Instead of using the `#ifndef` and `#define` directives, use `#pragma once` in the beginning of header files.
 ```c++
 #pragma once
 
@@ -202,7 +202,7 @@ void Shoot() {
 };
 ```
 
-### Rule #14: #include directive
+### Rule #14: `#include` directive
 When using `#include`, standard libraries should be included in brackets i.e. `#include <stdio.h>`. All other files should use quotes, and should have the full path from the WORKSPACE file i.e. `#include "src/lib/util/Util.h"`.
 ```c++
 #include <stdio.h>
