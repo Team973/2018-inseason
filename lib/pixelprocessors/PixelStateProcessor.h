@@ -22,15 +22,16 @@ public:
      * @param state The PixelState for the frame.
      */
     virtual void Tick(PixelState& state) = 0;
+
     /**
-     * Reset the PixelStateProcessor
+     * Reset the PixelStateProcessor.
      */
     virtual void Reset(){};
     // empty virtual to stop compiler warnings
 };
 
 /**
- * An object that manipulates Pixel Data to further extend PixelStateProcessors
+ * An object that manipulates Pixel Data to further extend PixelStateProcessors.
  */
 class PixelStateProcessorModulator : public PixelStateProcessor {
 public:
@@ -41,6 +42,7 @@ public:
     void Tick(PixelState& state) {
         this->processor->Tick(state);
     }
+
     /**
      * Set the processor to manipulate.
      * @param processor PixelStateProcessor to manipulate.
@@ -48,13 +50,15 @@ public:
     void SetProcessor(PixelStateProcessor* processor) {
         this->processor = processor;
     }
+
     /**
      * Reset the PixelStateModulator
      */
     void Reset() {
         this->processor->Reset();
     }
-    PixelStateProcessor* processor;
+
+    PixelStateProcessor* processor; /**< The PixelStateProcessor. */
 };
 }
 

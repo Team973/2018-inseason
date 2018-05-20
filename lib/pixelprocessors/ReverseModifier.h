@@ -15,15 +15,16 @@
 
 namespace LightPattern {
 /**
- * PixelStateModulator to reverse a PixelStateProcessor
+ * PixelStateModulator to reverse a PixelStateProcessor.
  */
 class ReverseModifier : public PixelStateProcessorModulator {
 public:
     /**
      * Construct a ReverseModifier.
-     * @param processor The PixelStateProcessor to reverse
+     * @param processor The PixelStateProcessor to reverse.
      */
     ReverseModifier(PixelStateProcessor* processor);
+
     /**
      * Generate a new frame of LED Data.
      * @param state The PixelState for the frame.

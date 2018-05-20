@@ -16,16 +16,17 @@ namespace GreyLightType {
  * Data representation of a Color in (r,g,b) format.
  */
 struct Color {
-    // 0-255
-    uint8_t r;
-    uint8_t g;
-    uint8_t b;
+    uint8_t r; /**< The red amount (0-255) */
+    uint8_t g; /**< The green amount (0-255) */
+    uint8_t b; /**< The blue amount (0-255) */
+
     /**
-     * Generate an intermediate Color
-     * @param other Color to gradient to.
-     * @param percentR Percentage of r channel
-     * @param percentG Percentage of g channel
-     * @param percentB Percentage of b channel
+     * Generate an intermediate Color.
+     * @param other The Color to gradient to.
+     * @param percentR The Percentage of r channel.
+     * @param percentG The Percentage of g channel.
+     * @param percentB The Percentage of b channel.
+     * @return The Color.
      */
     Color gradientTo(Color other, double percentR, double percentG,
                      double percentB) const {
@@ -35,32 +36,27 @@ struct Color {
             uint8_t(b + (other.b - b) * percentB),
         };
     }
+
     /**
-     * Generate an intermediate Color
-     * @param other Color to gradient to.
-     * @param percent Percentage of transition to generate
+     * Generate an intermediate Color.
+     * @param other The Color to gradient to.
+     * @param percent The Percentage of transition to generate.
+     * @return The gradientTo.
      */
     Color gradientTo(Color other, double percent) const {
         return gradientTo(other, percent, percent, percent);
     }
 };
+
 /**
  * Collection of parameters for each frame of data.
  */
 struct PixelState {
-    // the current frame (+1 per tick)
-    unsigned int frame;
-
-    // framerate
-    unsigned int fps;
-
-    unsigned int numLEDs;
-
-    // time in milliseconds since last tick
-    unsigned int delta;
-
-    // the array of pixels (this gets displayed)
-    std::vector<Color> pixels;
+    unsigned int frame;        /**< The current frame (+1 per tick). */
+    unsigned int fps;          /**< The framerate. */
+    unsigned int numLEDs;      /**< The number of LEDs. */
+    unsigned int delta;        /**< The time in milliseconds since last tick. */
+    std::vector<Color> pixels; /** The array of pixels (this gets displayed). */
 };
 }
 #endif /* SRC_MODULES_GREYLIGHTTYPES_H_ */

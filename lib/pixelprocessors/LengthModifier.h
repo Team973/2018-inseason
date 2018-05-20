@@ -21,10 +21,11 @@ class LengthModifier : public PixelStateProcessorModulator {
 public:
     /**
      * Construct a Length Modifier.
-     * @param processor The PixelStateProcessor to modify the length of
-     * @param numLEDs The length the processor should run at
+     * @param processor The PixelStateProcessor to modify the length of.
+     * @param numLEDs The length the processor should run at.
      */
     LengthModifier(PixelStateProcessor* processor, int numLEDs);
+
     void Tick(PixelState& state) override;
 
 private:

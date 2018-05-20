@@ -22,21 +22,22 @@ static constexpr Color DEFAULT_FILL_RED = {255, 0, 0};
 /**
  * PixelStateProcessor to visualize Autonomous info.
  */
-
 class AutoIndicator : public PixelStateProcessor {
 public:
     /**
      * Construct an AutoIndicator Processor.
      */
     AutoIndicator();
+
     /**
      * Generate a new frame of LED Data.
      * @param state The PixelState for the frame.
      */
     void Tick(PixelState& state) override;
+
     /**
      * Update recieved info for visualization.
-     * @param gameDataStr the game data recieved from FMS.
+     * @param gameDataStr The game data recieved from FMS.
      */
     void SetData(std::string gameDataStr);
 

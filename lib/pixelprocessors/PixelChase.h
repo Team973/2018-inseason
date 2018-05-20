@@ -20,10 +20,11 @@ class PixelChase : public PixelStateProcessorModulator {
 public:
     /**
      * Construct a PixelChase Modulator.
-     * @param processor The PixelStateProcessor to overlay
-     * @param background The Color to overlay processor on to
+     * @param processor The PixelStateProcessor to overlay.
+     * @param background The Color to overlay processor on to.
      */
     PixelChase(PixelStateProcessor* processor, Color background);
+
     /**
      * Generate a new frame of LED Data.
      * @param state The PixelState for the frame.
@@ -33,8 +34,8 @@ public:
 private:
     /**
      * Generates the pattern to use for the "inch-worm".
-     * @param n Current Frame number
-     * @return Binary visual representation of "inch-worm"
+     * @param n The current Frame number.
+     * @return The binary visual representation of "inch-worm".
      */
     uint16_t GetFrame(int n);
     Color m_background;

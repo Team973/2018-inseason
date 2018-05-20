@@ -25,31 +25,35 @@ class Flash : public PixelStateProcessor {
 public:
     /**
      * Construct a Flash Processor.
-     * @param first The primary Color to flash
-     * @param second The secondary Color to flash
-     * @param hz The frequency to flash at
+     * @param first The primary Color to flash.
+     * @param second The secondary Color to flash.
+     * @param hz The frequency to flash at.
      * @param count The number of times to alternate Colors, omit or -1 for
-     * infinite
+     * infinite.
      */
     Flash(Color first, Color second, int hz, int count = -1);
+
     /**
      * Generate a new frame of LED Data.
      * @param state The PixelState for the frame.
      */
     void Tick(PixelState& state) override;
+
     /**
      * Update the primary and secondary Color.
-     * @param first The primary Color to flash
-     * @param second The secondary Color to flash
+     * @param first The primary Color to flash.
+     * @param second The secondary Color to flash.
      */
     void SetColors(Color first, Color second);
+
     /**
      * Set the frequency of the flash.
-     * @param hz The frequency to flash at
+     * @param hz The frequency to flash at.
      */
     void SetFrequency(int hz);
+
     /**
-     * Reset the flash count
+     * Reset the flash count.
      */
     void Reset() override;
 

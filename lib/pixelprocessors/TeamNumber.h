@@ -21,12 +21,14 @@ public:
      * Construct a TeamNumber Processor with Default Colors.
      */
     TeamNumber();
+
     /**
      * Construct a TeamNumber Processor.
-     * @param foreground The foreground Color
-     * @param background The background Color
+     * @param foreground The foreground Color.
+     * @param background The background Color.
      */
     TeamNumber(Color foreground, Color background);
+
     /**
      * Generate a new frame of LED Data.
      * @param state The PixelState for the frame.

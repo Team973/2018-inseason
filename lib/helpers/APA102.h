@@ -28,7 +28,7 @@ public:
 
     /**
      * Update APA102 strip with new data.
-     * @param pixels Vector of pixels to send to the APA102 strip.
+     * @param pixels The vector of pixels to send to the APA102 strip.
      */
     void Show(std::vector<Color> pixels);
 
