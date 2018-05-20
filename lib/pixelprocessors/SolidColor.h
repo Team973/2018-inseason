@@ -13,12 +13,29 @@
 #include <vector>
 
 namespace LightPattern {
-
+/**
+ * PixelStateProcessor to fill Pixel Data with a solid Color.
+ */
 class SolidColor : public PixelStateProcessor {
 public:
+    /**
+     * Construct a SolidColor Processor that is Green (default).
+     */
     SolidColor();
+    /**
+     * Construct a SolidColor Processor.
+     * @param color The Color to set all pixels to.
+     */
     SolidColor(Color color);
+    /**
+     * Generate a new frame of LED Data.
+     * @param state The PixelState for the frame.
+     */
     void Tick(PixelState& state) override;
+    /**
+     * Set the Color.
+     * @param color The Color to set all pixels to.
+     */
     void SetColor(Color color);
 
 private:

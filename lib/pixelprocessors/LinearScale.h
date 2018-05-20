@@ -12,11 +12,32 @@
 
 namespace LightPattern {
 
+/**
+ * PixelStateModulator that overlays a singular bar of a bargraph over a
+ * processor.
+ */
 class LinearScale : public PixelStateProcessorModulator {
 public:
+    /**
+     * Construct a LinearScale Modulator.
+     * @param minColor The Color to represent the minimum value
+     * @param maxColor The Color to represent the maximum value
+     * @param minValue The minimum value to be represented by minColor
+     * @param maxValue The maximum value to be represented by m_maxColor
+     * @param modulator The PixelStateProcessor for the line to be overlayed on
+     */
     LinearScale(Color minColor, Color maxColor, double minVal, double maxVal,
                 PixelStateProcessor* modulator);
+    /**
+     * Update the primary and secondary Color.
+     * @param first The primary Color to flash
+     * @param second The secondary Color to flash
+     */
     void Tick(PixelState& state);
+    /**
+     * Set the current value to be represented.
+     * @param value The current value to be repesented on the linear scale
+     */
     void UpdateValue(double value);
 
 private:

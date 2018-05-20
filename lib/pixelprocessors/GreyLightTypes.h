@@ -12,13 +12,21 @@
 #include <vector>
 
 namespace GreyLightType {
-
+/**
+ * Data representation of a Color in (r,g,b) format.
+ */
 struct Color {
     // 0-255
     uint8_t r;
     uint8_t g;
     uint8_t b;
-
+    /**
+     * Generate an intermediate Color
+     * @param other Color to gradient to.
+     * @param percentR Percentage of r channel
+     * @param percentG Percentage of g channel
+     * @param percentB Percentage of b channel
+     */
     Color gradientTo(Color other, double percentR, double percentG,
                      double percentB) const {
         return Color{
@@ -27,11 +35,18 @@ struct Color {
             uint8_t(b + (other.b - b) * percentB),
         };
     }
+    /**
+     * Generate an intermediate Color
+     * @param other Color to gradient to.
+     * @param percent Percentage of transition to generate
+     */
     Color gradientTo(Color other, double percent) const {
         return gradientTo(other, percent, percent, percent);
     }
 };
-
+/**
+ * Collection of parameters for each frame of data.
+ */
 struct PixelState {
     // the current frame (+1 per tick)
     unsigned int frame;

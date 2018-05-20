@@ -22,13 +22,13 @@ public:
     /**
      * Construct an APA102 system.
      * @param numLEDs The number of LEDs to control.
-     * @param port The SPI port of the APA102.
+     * @param port The SPI port the APA102 strip is wired to.
      */
     APA102(int numLEDs, frc::SPI::Port port = frc::SPI::Port::kMXP);
 
     /**
-     * Show a specific color.
-     * @param pixels The color to show.
+     * Update APA102 strip with new data.
+     * @param pixels Vector of pixels to send to the APA102 strip.
      */
     void Show(std::vector<Color> pixels);
 

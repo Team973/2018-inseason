@@ -12,10 +12,25 @@
 #include "PixelStateProcessor.h"
 
 namespace LightPattern {
+/**
+ * PixelStateProcessor to light up 9 pixels, a gap, 7 pixels, a gap, 3 pixels.
+ */
 class TeamNumber : public PixelStateProcessor {
 public:
+    /**
+     * Construct a TeamNumber Processor with Default Colors.
+     */
     TeamNumber();
+    /**
+     * Construct a TeamNumber Processor.
+     * @param foreground The foreground Color
+     * @param background The background Color
+     */
     TeamNumber(Color foreground, Color background);
+    /**
+     * Generate a new frame of LED Data.
+     * @param state The PixelState for the frame.
+     */
     void Tick(PixelState& state) override;
 
 private:
