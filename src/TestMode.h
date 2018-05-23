@@ -14,16 +14,46 @@
 using namespace frc;
 
 namespace frc973 {
+
+/**
+ * Controls the test mode.
+ */
 class Test {
 public:
+    /**
+     * Constuct a test mode.
+     * @param driver The driver's joystick.
+     * @param codriver The co-driver's joystick.
+     * @param drive The drive subsystem.
+     * @param intakeAssembly The intakeAssembly subsystem.
+     * @param hanger The hanger subsystem.
+     * @param greylight The GreyLight system.
+     */
     Test(ObservableJoystick *driver, ObservableJoystick *codriver, Drive *drive,
          IntakeAssembly *intakeAssembly, Hanger *hanger, GreyLight *greylight);
     virtual ~Test();
 
+    /**
+     * Start of test.
+     */
     void TestInit();
+
+    /**
+     * Loop of test.
+     */
     void TestPeriodic();
+
+    /**
+     * Stop of test.
+     */
     void TestStop();
 
+    /**
+     * Button handler for the test mode.
+     * @param port The port the joystick is connected to.
+     * @param button The button.
+     * @param pressedP The button's new status.
+     */
     void HandleTestButton(uint32_t port, uint32_t button, bool pressedP);
 
 private:

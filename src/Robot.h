@@ -45,6 +45,9 @@ class Disabled;
 class Autonomous;
 class Drive;
 
+/**
+ * Defines the robot.
+ */
 class Robot
         : public CoopMTRobot
         , public JoystickObserver {
