@@ -9,7 +9,7 @@ namespace frc973 {
 namespace Profiler {
 
 /**
- * Interface for a waypoint in a trap profile.
+ * Waypoint represents an intermittent setpoint in a trap profile
  */
 struct Waypoint {
     double time;

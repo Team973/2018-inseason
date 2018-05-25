@@ -9,7 +9,7 @@ namespace frc973 {
 namespace Profiler {
 
 /**
- * Interface for a new waypoint in a motion profile.
+ * NewWaypoint represents an intermittent setpoint in a motion profile
  */
 struct NewWaypoint {
     double time;
