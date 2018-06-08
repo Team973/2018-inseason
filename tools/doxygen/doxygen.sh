@@ -10,7 +10,7 @@ fi
 doxygen tools/doxygen/Doxyfile
 
 case "$(uname -s)" in
-    Linux*)     xdg-open documentation/html/index.html;;
-    Darwin*)    open documentation/html/index.html;;
+    Linux*)     xdg-open docs/doxygen/index.html;;
+    Darwin*)    open docs/doxygen/index.html;;
     *)          exit 1;;
 esac
