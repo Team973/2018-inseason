@@ -8,8 +8,8 @@ bazel-*
 *.pyc
 __pycache__/*
 tags
-html/*
-latex/*
+tools/doxygen/Doxyfile
+tools/doxygen/Doxyfile.long
 
 ############
 # GreyDash #
