@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['r',['r',['../struct_grey_light_type_1_1_color.html#a1389c227da20c7d3921d4bdcc4895796',1,'GreyLightType::Color']]],
+  ['rad_5fper_5fdeg',['RAD_PER_DEG',['../namespacefrc973_1_1_constants.html#a6fbc863e017b178758e82c51bf61a9ba',1,'frc973::Constants']]],
+  ['rctype',['RCType',['../structcv_1_1cudacodec_1_1_encoder_params.html#a174458d4987ebe57ec7efa2b8670dd09',1,'cv::cudacodec::EncoderParams']]],
+  ['read',['read',['../struct_cv_type_info.html#a6ba91ffbc845274368ea66b9c8319d7c',1,'CvTypeInfo']]],
+  ['rect',['rect',['../struct_cv_connected_comp.html#a1f86bb7ed32ddf315d19521e20beabcc',1,'CvConnectedComp']]],
+  ['refcount',['refcount',['../classcv_1_1cuda_1_1_gpu_mat.html#af528e8b675a72fd79ff1f399b7dd42df',1,'cv::cuda::GpuMat']]],
+  ['release',['release',['../struct_cv_type_info.html#a710d618588dc17f7c5f6bb54c8e50831',1,'CvTypeInfo']]],
+  ['remote_5fid',['remote_id',['../struct_n_t___connection_info.html#abc07959851c53c5d378fbd8ac6797bb8',1,'NT_ConnectionInfo::remote_id()'],['../structnt_1_1_connection_info.html#abd6756b834c10c0b0ddbef85003d4efc',1,'nt::ConnectionInfo::remote_id()']]],
+  ['remote_5fip',['remote_ip',['../struct_n_t___connection_info.html#a30da15ce52b23bbbc867a201548e1d48',1,'NT_ConnectionInfo::remote_ip()'],['../structnt_1_1_connection_info.html#ac68ecd3cbafe77f22de289bd2b0f79ce',1,'nt::ConnectionInfo::remote_ip()']]],
+  ['remote_5fport',['remote_port',['../struct_n_t___connection_info.html#a62e6f419f8918e0e3c72aa2a627685e1',1,'NT_ConnectionInfo::remote_port()'],['../structnt_1_1_connection_info.html#a374d9048e0a8f8b877ec15ce4f20ec02',1,'nt::ConnectionInfo::remote_port()']]],
+  ['remotelossofsignal',['RemoteLossOfSignal',['../structctre_1_1phoenix_1_1motorcontrol_1_1_faults.html#accc444fe321ff0f52ca5274e1b305086',1,'ctre::phoenix::motorcontrol::Faults::RemoteLossOfSignal()'],['../structctre_1_1phoenix_1_1motorcontrol_1_1_sticky_faults.html#a1f30c03d06c0198baacdad26ef63131f',1,'ctre::phoenix::motorcontrol::StickyFaults::RemoteLossOfSignal()']]],
+  ['response',['response',['../classcv_1_1_key_point.html#acbb7a7d1608c7b14edec418f5098f2d7',1,'cv::KeyPoint']]],
+  ['right_5ftrajectory',['right_trajectory',['../structtrajectories_1_1_trajectory_description.html#a5ebb5715d8565fb957b2f2530222f602',1,'trajectories::TrajectoryDescription']]],
+  ['rightbumper',['RightBumper',['../namespacefrc973_1_1_dual_action.html#a8e1cd1b82c0b328de45a2dd33415f1c7',1,'frc973::DualAction']]],
+  ['righttrigger',['RightTrigger',['../namespacefrc973_1_1_dual_action.html#a29935a6ec5ca8bd737075a43e7f73142',1,'frc973::DualAction']]],
+  ['rightxaxis',['RightXAxis',['../namespacefrc973_1_1_dual_action.html#ac654459952e27b98061c0f5516e4dbf6',1,'frc973::DualAction']]],
+  ['rightyaxis',['RightYAxis',['../namespacefrc973_1_1_dual_action.html#a4202dd26b4541214b304987f24fe63dd',1,'frc973::DualAction']]],
+  ['rjoystickbtn',['RJoystickBtn',['../namespacefrc973_1_1_dual_action.html#ac9d6c0284e672866e98dbb24d9ded14e',1,'frc973::DualAction']]],
+  ['robotmodes',['robotModes',['../namespacefrc973.html#ae397e1cbcbcbe0f5564963294e2a19d0',1,'frc973']]],
+  ['roi',['roi',['../struct___ipl_image.html#a697184a2da29652d664ae540ec36839b',1,'_IplImage']]],
+  ['rows',['rows',['../classcv_1_1cuda_1_1_gpu_mat.html#a7385022ca9114e5f5058dbb2f12467cb',1,'cv::cuda::GpuMat::rows()'],['../classcv_1_1_mat.html#abed816466c45234254d25bc59c31245e',1,'cv::Mat::rows()'],['../classcv_1_1_u_mat.html#a8137e5d25233b57db5616f227f1772ee',1,'cv::UMat::rows()']]],
+  ['rxaxisvirtbutton',['RXAxisVirtButton',['../namespacefrc973_1_1_dual_action.html#ad4e281ef2d9270900ea222d2be8e472d',1,'frc973::DualAction']]],
+  ['ryaxisvirtbutton',['RYAxisVirtButton',['../namespacefrc973_1_1_dual_action.html#a392af24891adaaf158710c4c86c9488c',1,'frc973::DualAction']]]
+];
