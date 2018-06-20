@@ -1,16 +1,33 @@
 #!/bin/bash
+set -e
 
 if [[ $1 = 'short' ]]; then
-  sed 's/CHANGE_ME/NO/g' tools/doxygen/Doxyfile.in > tools/doxygen/Doxyfile
-  doxygen tools/doxygen/Doxyfile
-elif [[ $1 = 'open' ]]; then
-    return 0
-else
-    sed 's/CHANGE_ME/YES/g' tools/doxygen/Doxyfile.in > tools/doxygen/Doxyfile.long
-    sed 's/lib src/lib src third_party/g' tools/doxygen/Doxyfile.long > tools/doxygen/Doxyfile
+    echo "Creating Doxyfile..."
+    cp tools/doxygen/Doxyfile.in tools/doxygen/Doxyfile
+    sed -i '' 's|$QUIET_OPTION|NO|g' tools/doxygen/Doxyfile
+    sed -i '' 's|$WARN_OPTION|YES|g' tools/doxygen/Doxyfile
+    sed -i '' 's|$WARN_UNDOC_OPTION|YES|g' tools/doxygen/Doxyfile
+    sed -i '' 's|$WARN_DOC_ERROR_OPTION|YES|g' tools/doxygen/Doxyfile
+    sed -i '' 's|$INPUT_ITEMS|docs README.md lib src|g' tools/doxygen/Doxyfile
+    echo "Generating short docs..."
     doxygen tools/doxygen/Doxyfile
+    rm tools/doxygen/Doxyfile
+elif [[ $1 = 'open' ]]; then
+    echo
+else
+    echo "Creating Doxyfile..."
+    cp tools/doxygen/Doxyfile.in tools/doxygen/Doxyfile
+    sed -i '' 's|$QUIET_OPTION|YES|g' tools/doxygen/Doxyfile
+    sed -i '' 's|$WARN_OPTION|NO|g' tools/doxygen/Doxyfile
+    sed -i '' 's|$WARN_UNDOC_OPTION|NO|g' tools/doxygen/Doxyfile
+    sed -i '' 's|$WARN_DOC_ERROR_OPTION|NO|g' tools/doxygen/Doxyfile
+    sed -i '' 's|$INPUT_ITEMS|docs README.md lib src third_party|g' tools/doxygen/Doxyfile
+    echo "Generating docs..."
+    doxygen tools/doxygen/Doxyfile
+    rm tools/doxygen/Doxyfile
 fi
 
+echo "Opening..."
 case "$(uname -s)" in
     Linux*)     xdg-open docs/doxygen/index.html;;
     Darwin*)    open docs/doxygen/index.html;;
