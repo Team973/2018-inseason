@@ -16,11 +16,9 @@ BullshitFilter::BullshitFilter(MinBehavior minBehavior, double min,
         , m_maxBehavior(maxBehavior)
         , m_max(max)
         , m_last(0.0) {
-    ;
 }
 
 BullshitFilter::~BullshitFilter() {
-    ;
 }
 
 double BullshitFilter::Update(double in) {
@@ -56,5 +54,4 @@ double BullshitFilter::Update(double in) {
 double BullshitFilter::GetLast() {
     return m_last;
 }
-
-} /* namespace frc973 */
+}

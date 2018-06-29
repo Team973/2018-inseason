@@ -14,35 +14,49 @@ using namespace frc;
 
 namespace frc973 {
 
+/**
+ * PID Drive controller.
+ */
 class PIDDriveController : public DriveController {
 public:
+    /**
+     * Construct a PID Drive controller.
+     */
     PIDDriveController();
     virtual ~PIDDriveController();
 
-    /*
-     * Calculate the motor output to achieve the most recently set setpoint.
-     * This reads in position data from the angle and dist providers and uses
-     * the pid object to decide on an ideal set of outputs
+    /**
+     * Calculate motor output given the most recent sensor updates.
+     * @param state The state provider for handling incoming messages.
+     * @param out The signal receiver for handling outgoing messages.
      */
     void CalcDriveOutput(DriveStateProvider *state,
                          DriveControlSignalReceiver *out) override;
 
-    /*
-     * On CalcDriveOutput, the robot sets the internal m_onTarget flag if it
-     * is within tolerance of the target.  This method returns whether we are
-     * on target.
+    /**
+     * Checks with the controller to see if we are on target.
+     * @return Whether the controller things are done.
      */
     bool OnTarget() override {
         return m_onTarget;
     }
 
-    /*
-     * Set the target position/heading relative to absolute world
+    /**
+     * Set the target position/heading relative to absolute world.
+     * @param dist Distance to travel.
+     * @param heading Heading when moving.
+     * @param relativity Point relative to new setpoint.
+     * @param state The state provider for handling incoming messages.
      */
     PIDDriveController *SetTarget(double dist, double heading,
                                   DriveBase::RelativeTo relativity,
                                   DriveStateProvider *state);
 
+    /**
+     * Set the maximum velocities.
+     * @param new_vmax_ips The new maximum velocity in inches/second.
+     * @param new_avmax_dps The new maximum angular velocity in degrees/second.
+     */
     PIDDriveController *SetVMax(double new_vmax_ips, double new_avmax_dps) {
         m_vmax = new_vmax_ips;
         m_avmax = new_avmax_dps;
@@ -51,17 +65,18 @@ public:
         return this;
     }
 
-    /*
-     * Scale the pseed down by |newCap|
-     *
-     * |newCap| of 1.0 means max speed
+    /**
+     * Scale the pseed down by newCap
+     * @param newCap The new cap (1.0 is max).
      */
     void SetCap(double newCap) {
         m_speedCap = Util::bound(newCap, 0.0, 1.0);
     }
 
-    /*
+    /**
      * Set the tolerance for distance exiting
+     * @param dist Distance tolerance.
+     * @param rate Rate tolerance.
      */
     PIDDriveController *SetDistTolerance(double dist = 2.0, double rate = 2.0) {
         m_distTolerance = dist;
@@ -69,8 +84,10 @@ public:
         return this;
     }
 
-    /*
+    /**
      * Set the tolerance for distance exiting
+     * @param angle Angle tolerance.
+     * @param rate Angle-Rate tolerance.
      */
     PIDDriveController *SetAngleTolerance(double angle = 2.0,
                                           double rate = 2.0) {
@@ -79,6 +96,9 @@ public:
         return this;
     }
 
+    /**
+     * Default variables.
+     */
     void Zero() {
         m_prevDist = 0.0;
         m_prevAngle = 0.0;
@@ -86,15 +106,26 @@ public:
         m_targetAngle = 0.0;
         m_onTarget = false;
     }
-
+    /**
+     * Return the distance error.
+     * @return The distance error.
+     */
     double GetDistError() {
         return m_targetDist - m_prevDist;
     }
 
+    /**
+     * Start the drive controller.
+     * @param out The signal receiver for handling outgoing messages.
+     */
     void Start(DriveControlSignalReceiver *out) override {
         printf("Turning on PID Mode\n");
     }
 
+    /**
+     * Stop the drive controller.
+     * @param out The signal receiver for handling outgoing messages.
+     */
     void Stop(DriveControlSignalReceiver *out) override {
         printf("Turning off PID Mode\n");
     }

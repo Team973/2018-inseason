@@ -9,22 +9,29 @@
 
 namespace frc973 {
 
+/**
+ * Interface for a filter. If all filters implement this interface, they can be
+ * passed around generically (like in the cascading filter filter).
+ */
 class FilterBase {
 public:
     /**
-     * Interface for a filter.  If all filters implement this interface, they
-     * can be passed around generically (like in the cascading filter filter).
+     * Construct a filter.
      */
     FilterBase();
     virtual ~FilterBase();
 
     /**
-     * Filter the given value and return the filterd value
-     *
-     * @param input value to filter
-     * @return filtered value
+     * Calculate the filtered value given the original datapoint.
+     * @param input The current data point that needs to be filtered.
+     * @return Result of filtering calculation.
      */
     virtual double Update(double input) = 0;
+
+    /**
+     * Return the last value sent to the filter.
+     * @return The last value.
+     */
     virtual double GetLast() = 0;
 };
 }

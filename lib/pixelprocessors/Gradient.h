@@ -13,10 +13,22 @@
 #include "PixelStateProcessor.h"
 
 namespace LightPattern {
-
+/**
+ * PixelStateProcessor to generate a Gradient.
+ */
 class Gradient : public PixelStateProcessor {
 public:
+    /**
+     * Construct a Gradient.
+     * @param gradientStart The Color to gradient from.
+     * @param gradientEnd The Color to gradient to.
+     */
     Gradient(Color gradientStart, Color gradientEnd);
+
+    /**
+     * Generate a new frame of LED Data.
+     * @param state The PixelState for the frame.
+     */
     void Tick(PixelState& state) override;
 
 private:

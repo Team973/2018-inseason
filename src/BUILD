@@ -1,4 +1,10 @@
 
+filegroup(
+    name = "src_files",
+    srcs = ["."],
+    visibility = ["//visibility:public"],
+)
+
 cc_binary(
     name = "robot",
     srcs = glob([
