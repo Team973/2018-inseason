@@ -10,16 +10,16 @@ Documentation in the GitHub Pages should be kept up-to-date as much as possible.
 
 If you are offline, you can open the documentation by running the following command:
 
-    bazel run //tools:open-docs
+    bazel run //tools/doxygen:open-docs
 
 ## Generate Regular Documentation
 
 Regular documentation is the recommended way of generating documentation. It will convert 973 code to HTML as well as all code in the `third_party` subdirectory. To generate regular documentation, use the following command:
 
-    bazel run //tools:generate-docs
+    bazel run //tools/doxygen:generate-docs
 
 ## Generate Short Documentation
 
 Short documentation is all of the 973 code converted to HTML. It takes significantly less time to generate than the standard documentation. This is not recommended for beginners because it doesn't include WPILIB. This will cause a loss of complete dependency trees as well. To generate short documentation, use the following command:
 
-    bazel run //tools:generate-short-docs
+    bazel run //tools/doxygen:generate-short-docs
