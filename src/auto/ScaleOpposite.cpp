@@ -185,6 +185,8 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction,
         case 8:
             if (m_drive->OnTarget() || GetMsecTime() - m_autoTimer > 2000) {
                 m_intakeAssembly->SoftCloseClaw();
+                m_intakeAssembly->GoToIntakePosition(
+                    IntakeAssembly::STOW_PRESET);
                 if (direction == AutoRoutineBase::AutoDirection::Left) {
                     m_drive->PIDDrive(0.0, 110.0, Drive::RelativeTo::Now, 1.0)
                         ->SetVMax(120.0, 360.0);
@@ -228,7 +230,7 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction,
                 m_intakeAssembly->GetEndPositionError() < 10.0) {
                 m_intakeAssembly->RunIntake(0.65);
                 m_intakeAssembly->GoToIntakePosition(
-                    IntakeAssembly::GROUND_PRESET);
+                    IntakeAssembly::HALF_STOW_PRESET);
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }

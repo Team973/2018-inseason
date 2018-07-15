@@ -5,6 +5,7 @@
 #include "src/auto/AutoRoutineBase.h"
 #include "src/subsystems/Drive.h"
 #include "src/subsystems/IntakeAssembly.h"
+#include "src/controllers/PIDDriveController.h"
 
 using namespace frc;
 namespace frc973 {
