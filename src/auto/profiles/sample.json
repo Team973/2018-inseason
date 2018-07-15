@@ -1,14 +1,12 @@
 {
     "name": "sample",
     "timestep": 0.01,
-    "max_vel": 100.0,
-    "max_accel": 90.0,
-    "max_jerk": 130.0,
+    "max_vel": 50.0,
+    "max_accel": 50.0,
+    "max_jerk": 50.0,
     "wheelbase_width": 25.205,
     "waypoints": [
       { "x": 0, "y": 0, "angle": 0 },
-      { "x": 50, "y": 50, "angle": 90},
-      { "x": 50, "y": 134, "angle": 90},
-      { "x": 106, "y": 184, "angle": 0}
+      { "x": 50, "y": 50, "angle": 60}
     ]
 }
