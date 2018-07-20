@@ -12,8 +12,14 @@ if [[ $1 = 'short' ]]; then
     echo "Generating short docs..."
     doxygen tools/doxygen/Doxyfile
     rm tools/doxygen/Doxyfile
+    echo "Done generating. Run open-docs to open the generated files."
 elif [[ $1 = 'open' ]]; then
-    echo
+    echo "Opening..."
+    case "$(uname -s)" in
+        Linux*)     xdg-open docs/doxygen/index.html;;
+        Darwin*)    open docs/doxygen/index.html;;
+        *)          exit 1;;
+    esac
 else
     echo "Creating Doxyfile..."
     cp tools/doxygen/Doxyfile.in tools/doxygen/Doxyfile
@@ -25,11 +31,5 @@ else
     echo "Generating docs..."
     doxygen tools/doxygen/Doxyfile
     rm tools/doxygen/Doxyfile
+    echo "Done generating. Run open-docs to open the generated files."
 fi
-
-echo "Opening..."
-case "$(uname -s)" in
-    Linux*)     xdg-open docs/doxygen/index.html;;
-    Darwin*)    open docs/doxygen/index.html;;
-    *)          exit 1;;
-esac
