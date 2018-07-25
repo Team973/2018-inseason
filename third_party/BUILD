@@ -1,6 +1,6 @@
 
 filegroup(
-    name = "thirdparty_files",
+    name = "third_party",
     srcs = ["."],
     visibility = ["//visibility:public"],
 )

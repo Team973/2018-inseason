@@ -1,52 +1,28 @@
-filegroup(
-    name = "doxygen_build",
-    srcs = ["doxygen.sh"],
-    visibility = ["//visibility:public"],
-)
-
-filegroup(
-  name = "doxyfile",
-  srcs = ["Doxyfile.in"],
-  visibility = ["//visibility:public"],
-)
-
-sh_binary(
+genrule(
     name = "generate-docs",
-    srcs = ["//tools/doxygen:doxygen_build"],
-    data = [
-        "//tools/doxygen:doxyfile",
+    srcs = [
+        ":doxygen.sh",
+        ":Doxyfile.in",
         "//docs:docs",
-        "//lib:lib_files",
-        "//src:src_files",
-        "//third_party:thirdparty_files",
+        "//lib:lib",
+        "//src:src",
+        "//third_party:third_party",
         "//:readme",
     ],
+    outs = ["docs.zip"],
+    cmd = "sh $(location :doxygen.sh) $(location docs.zip)",
 )
 
-sh_binary(
+genrule(
     name = "generate-short-docs",
-    srcs = ["//tools/doxygen:doxygen_build"],
-    data = [
-        "//tools/doxygen:doxyfile",
+    srcs = [
+        ":doxygen.sh",
+        ":Doxyfile.in",
         "//docs:docs",
-        "//lib:lib_files",
-        "//src:src_files",
-        "//third_party:thirdparty_files",
+        "//lib:lib",
+        "//src:src",
         "//:readme",
     ],
-    args = ["short"],
-)
-
-sh_binary(
-    name = "open-docs",
-    srcs = ["//tools/doxygen:doxygen_build"],
-    data = [
-        "//tools/doxygen:doxyfile",
-        "//docs:docs",
-        "//lib:lib_files",
-        "//src:src_files",
-        "//third_party:thirdparty_files",
-        "//:readme",
-    ],
-    args = ["open"],
+    outs = ["shortdocs.zip"],
+    cmd = "sh $(location :doxygen.sh) short $(location shortdocs.zip)",
 )

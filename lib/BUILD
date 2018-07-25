@@ -1,5 +1,5 @@
 filegroup(
-    name = "lib_files",
+    name = "lib",
     srcs = ["."],
     visibility = ["//visibility:public"],
 )

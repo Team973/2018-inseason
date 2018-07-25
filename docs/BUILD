@@ -1,6 +1,5 @@
-
 filegroup(
     name = "docs",
-    srcs = glob(["*.md"]),
+    srcs = ["."],
     visibility = ["//visibility:public"],
 )

@@ -2,34 +2,31 @@
 set -e
 
 if [[ $1 = 'short' ]]; then
-    echo "Creating Doxyfile..."
-    cp tools/doxygen/Doxyfile.in tools/doxygen/Doxyfile
-    sed 's|$QUIET_OPTION|NO|g' <tools/doxygen/Doxyfile >tools/doxygen/Doxyfile
-    sed 's|$WARN_OPTION|YES|g' <tools/doxygen/Doxyfile >tools/doxygen/Doxyfile
-    sed 's|$WARN_UNDOC_OPTION|YES|g' <tools/doxygen/Doxyfile >tools/doxygen/Doxyfile
-    sed 's|$WARN_DOC_ERROR_OPTION|YES|g' <tools/doxygen/Doxyfile >tools/doxygen/Doxyfile
-    sed 's|$INPUT_ITEMS|docs README.md lib src|g' <tools/doxygen/Doxyfile >tools/doxygen/Doxyfile
-    echo "Generating short docs..."
-    doxygen tools/doxygen/Doxyfile
-    rm tools/doxygen/Doxyfile
-    echo "Done generating. Run open-docs to open the generated files."
-elif [[ $1 = 'open' ]]; then
-    echo "Opening..."
-    case "$(uname -s)" in
-        Linux*)     xdg-open docs/doxygen/index.html;;
-        Darwin*)    open docs/doxygen/index.html;;
-        *)          exit 1;;
-    esac
+  echo "Creating Doxyfile..."
+  cp tools/doxygen/Doxyfile.in tools/doxygen/Doxyfile
+  sed -i '' 's|$QUIET_OPTION|NO|g' tools/doxygen/Doxyfile
+  sed -i '' 's|$WARN_OPTION|YES|g' tools/doxygen/Doxyfile
+  sed -i '' 's|$WARN_UNDOC_OPTION|YES|g' tools/doxygen/Doxyfile
+  sed -i '' 's|$WARN_DOC_ERROR_OPTION|YES|g' tools/doxygen/Doxyfile
+  sed -i '' 's|$INPUT_ITEMS|docs README.md lib src|g' tools/doxygen/Doxyfile
+  echo "Generating short docs..."
+  doxygen tools/doxygen/Doxyfile
+  rm tools/doxygen/Doxyfile
+  zip -r $2 tools/doxygen/docs/doxygen
+  rm -r tools/doxygen/docs
+  echo "Done generating. Run open-docs to open the generated files."
 else
-    echo "Creating Doxyfile..."
-    cp tools/doxygen/Doxyfile.in tools/doxygen/Doxyfile
-    sed 's|$QUIET_OPTION|YES|g' <tools/doxygen/Doxyfile >tools/doxygen/Doxyfile
-    sed 's|$WARN_OPTION|NO|g' <tools/doxygen/Doxyfile >tools/doxygen/Doxyfile
-    sed 's|$WARN_UNDOC_OPTION|NO|g' <tools/doxygen/Doxyfile >tools/doxygen/Doxyfile
-    sed 's|$WARN_DOC_ERROR_OPTION|NO|g' <tools/doxygen/Doxyfile >tools/doxygen/Doxyfile
-    sed 's|$INPUT_ITEMS|docs README.md lib src third_party|g' <tools/doxygen/Doxyfile >tools/doxygen/Doxyfile
-    echo "Generating docs..."
-    doxygen tools/doxygen/Doxyfile
-    rm tools/doxygen/Doxyfile
-    echo "Done generating. Run open-docs to open the generated files."
+  echo "Creating Doxyfile..."
+  cp tools/doxygen/Doxyfile.in tools/doxygen/Doxyfile
+  sed -i '' 's|$QUIET_OPTION|NO|g' tools/doxygen/Doxyfile
+  sed -i '' 's|$WARN_OPTION|YES|g' tools/doxygen/Doxyfile
+  sed -i '' 's|$WARN_UNDOC_OPTION|YES|g' tools/doxygen/Doxyfile
+  sed -i '' 's|$WARN_DOC_ERROR_OPTION|YES|g' tools/doxygen/Doxyfile
+  sed -i '' 's|$INPUT_ITEMS|docs README.md lib src third_party|g' tools/doxygen/Doxyfile
+  echo "Generating short docs..."
+  doxygen tools/doxygen/Doxyfile
+  rm tools/doxygen/Doxyfile
+  zip -r $1 tools/doxygen/docs/doxygen
+  rm -r tools/doxygen/docs
+  echo "Done generating. Run open-docs to open the generated files."
 fi

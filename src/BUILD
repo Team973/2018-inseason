@@ -1,6 +1,5 @@
-
 filegroup(
-    name = "src_files",
+    name = "src",
     srcs = ["."],
     visibility = ["//visibility:public"],
 )
