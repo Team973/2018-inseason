@@ -10,7 +10,7 @@ genrule(
         "//:readme",
     ],
     outs = ["docs.zip"],
-    cmd = "sh $(location :doxygen.sh) $(location docs.zip)",
+    cmd = "bash $(location :doxygen.sh) $(location docs.zip)",
 )
 
 genrule(
@@ -24,5 +24,5 @@ genrule(
         "//:readme",
     ],
     outs = ["shortdocs.zip"],
-    cmd = "sh $(location :doxygen.sh) short $(location shortdocs.zip)",
+    cmd = "bash $(location :doxygen.sh) short $(location shortdocs.zip)",
 )
