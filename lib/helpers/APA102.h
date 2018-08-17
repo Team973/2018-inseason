@@ -14,9 +14,22 @@
 
 using namespace GreyLightType;
 
+/**
+ * Interface for an LED system.
+ */
 class APA102 {
 public:
+    /**
+     * Construct an APA102 system.
+     * @param numLEDs The number of LEDs to control.
+     * @param port The SPI port the APA102 strip is wired to.
+     */
     APA102(int numLEDs, frc::SPI::Port port = frc::SPI::Port::kMXP);
+
+    /**
+     * Update APA102 strip with new data.
+     * @param pixels The vector of pixels to send to the APA102 strip.
+     */
     void Show(std::vector<Color> pixels);
 
 private:

@@ -10,11 +10,9 @@
 namespace frc973 {
 
 CascadingFilter::CascadingFilter() : m_last(0.0) {
-    ;
 }
 
 CascadingFilter::~CascadingFilter() {
-    ;
 }
 
 void CascadingFilter::PushFilter(FilterBase *child) {
@@ -34,5 +32,4 @@ double CascadingFilter::Update(double in) {
 double CascadingFilter::GetLast() {
     return m_last;
 }
-
-} /* namespace frc973 */
+}

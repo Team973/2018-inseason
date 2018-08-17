@@ -11,11 +11,9 @@ namespace frc973 {
 
 DelaySwitch::DelaySwitch(double filteratude)
         : m_prevValue(false), m_filter(filteratude) {
-    ;
 }
 
 DelaySwitch::~DelaySwitch() {
-    ;
 }
 
 /*

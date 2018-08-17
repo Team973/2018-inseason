@@ -5,18 +5,29 @@
 
 namespace frc973 {
 
+/**
+ * Interface for the GreyTalonSRX wrapper to be used on TalonSRX's.
+ */
 class GreyTalonSRX
         : public virtual BaseMotorController
         , public virtual TalonSRX {
 public:
+    /**
+     * Construct a GreyTalonSRX to wrap over a Talon SRX.
+     * @param canId The Talon SRX's CAN id.
+     */
     GreyTalonSRX(int canId)
             : BaseMotorController(canId | 0x02040000), TalonSRX(canId) {
         FactoryReset(this);
     }
-
     virtual ~GreyTalonSRX() {
     }
 
+    /**
+     * Factory reset a specific Talon SRX.
+     * @param motor The Talon SRX to reset.
+     * @return The resetted Talon SRX.
+     */
     TalonSRX* FactoryReset(TalonSRX* motor) {
         motor->ConfigSelectedFeedbackSensor(FeedbackDevice::None, 0,
                                             10);  // 0 = Not cascaded PID Loop;
