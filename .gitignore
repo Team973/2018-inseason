@@ -3,10 +3,13 @@
 build/*
 test/build/*
 .DS_Store
+.ropeproject
 bazel-*
 *.pyc
 __pycache__/*
 tags
+tools/doxygen/Doxyfile
+tools/doxygen/Doxyfile.long
 
 ############
 # GreyDash #

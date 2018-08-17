@@ -9,11 +9,13 @@ using namespace ctre::phoenix::motorcontrol;
 namespace frc973 {
 Claw::Claw(TaskMgr *scheduler, LogSpreadsheet *logger,
            DigitalInput *rightCubeSensor, DigitalInput *leftCubeSensor,
-           TalonSRX *leftRoller, TalonSRX *rightRoller, Solenoid *cubeClamp)
+           TalonSRX *leftRoller, TalonSRX *rightRoller, Solenoid *cubeClamp,
+           Solenoid *cubeSpring)
         : m_scheduler(scheduler)
         , m_rightCubeSensor(rightCubeSensor)
         , m_leftCubeSensor(leftCubeSensor)
         , m_cubeClamp(cubeClamp)
+        , m_cubeSpring(cubeSpring)
         , m_leftRoller(leftRoller)
         , m_rightRoller(rightRoller)
         , m_bannerFilter(new DigitalGlitchFilter()) {
@@ -27,15 +29,8 @@ Claw::Claw(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_leftRoller->Set(ControlMode::PercentOutput, 0.0);
     m_rightRoller->Set(ControlMode::PercentOutput, 0.0);
 
-    m_leftRoller->EnableCurrentLimit(true);
-    m_leftRoller->ConfigPeakCurrentDuration(0, 10);
-    m_leftRoller->ConfigPeakCurrentLimit(0, 10);
-    m_leftRoller->ConfigContinuousCurrentLimit(50, 10);
-
-    m_rightRoller->EnableCurrentLimit(true);
-    m_rightRoller->ConfigPeakCurrentDuration(0, 10);
-    m_rightRoller->ConfigPeakCurrentLimit(0, 10);
-    m_rightRoller->ConfigContinuousCurrentLimit(50, 10);
+    m_leftRoller->EnableCurrentLimit(false);
+    m_rightRoller->EnableCurrentLimit(false);
 
     m_bannerFilter->Add(m_leftCubeSensor);
     m_bannerFilter->Add(m_rightCubeSensor);
@@ -48,15 +43,22 @@ Claw::~Claw() {
 
 void Claw::OpenClaw() {
     m_cubeClamp->Set(true);
+    m_cubeSpring->Set(true);
 }
 
-void Claw::CloseClaw() {
+void Claw::SoftCloseClaw() {
+    m_cubeClamp->Set(true);
+    m_cubeSpring->Set(false);
+}
+
+void Claw::HardCloseClaw() {
     m_cubeClamp->Set(false);
+    m_cubeSpring->Set(false);
 }
 
 void Claw::RunIntake(double power) {
     m_leftRoller->Set(ControlMode::PercentOutput, power);
-    m_rightRoller->Set(ControlMode::PercentOutput, power * 0.8);
+    m_rightRoller->Set(ControlMode::PercentOutput, power);
 }
 
 void Claw::EjectCube(double power) {
@@ -75,12 +77,16 @@ void Claw::StopIntake() {
 }
 
 bool Claw::IsCubeIn() const {
-    return (!m_leftCubeSensor->Get() || !m_rightCubeSensor->Get());
+    return (m_leftCubeSensor->Get() || m_rightCubeSensor->Get());
 }
 
 void Claw::TaskPeriodic(RobotMode mode) {
     DBStringPrintf(DBStringPos::DB_LINE5, "cube: l%d r %d c%d",
                    m_leftCubeSensor->Get(), m_rightCubeSensor->Get(),
                    IsCubeIn());
+    SmartDashboard::PutNumber("claw/currents/current",
+                              m_leftRoller->GetOutputCurrent());
+    SmartDashboard::PutNumber("claw/voltages/voltage",
+                              m_leftRoller->GetMotorOutputVoltage());
 }
 }

@@ -23,19 +23,49 @@ namespace frc973 {
 
 class TaskMgr;
 
+/**
+ * Interface for a CoopTask.
+ */
 class CoopTask {
 public:
+    /**
+     * Construct a CoopTask.
+     */
     CoopTask();
     virtual ~CoopTask();
 
+    /**
+     * Beginning of a robot mode.
+     * @param mode The current operating mode of the robot.
+     */
     virtual void TaskStartMode(RobotMode mode) {
     }
+
+    /**
+     * End of a robot mode.
+     * @param mode The current operating mode of the robot.
+     */
     virtual void TaskStopMode(RobotMode mode) {
     }
+
+    /**
+     * Runs before periodic.
+     * @param mode The current operating mode of the robot.
+     */
     virtual void TaskPrePeriodic(RobotMode mode) {
     }
+
+    /**
+     * Main periodic loop.
+     * @param mode The current operating mode of the robot.
+     */
     virtual void TaskPeriodic(RobotMode mode) {
     }
+
+    /**
+     * Runs after periodic.
+     * @param mode The current operating mode of the robot.
+     */
     virtual void TaskPostPeriodic(RobotMode mode) {
     }
 };

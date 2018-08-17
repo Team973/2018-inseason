@@ -1,0 +1,17 @@
+{
+    "name": "left_scale_opposite",
+    "timestep": 0.01,
+    "max_vel": 100.0,
+    "max_accel": 80.0,
+    "max_jerk": 80.0,
+    "wheelbase_width": 25.205,
+    "reverse": true,
+    "waypoints": [
+      { "x": 0, "y": 0, "angle": 0 },
+      { "x": -150, "y": 12, "angle" : -15},
+      { "x": -200, "y": -50, "angle": -90},
+      { "x": -200, "y": -170, "angle": -90},
+      { "x": -230, "y": -200, "angle": -50},
+      { "x": -265, "y": -230, "angle": -20}
+    ]
+}

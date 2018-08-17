@@ -74,5 +74,10 @@ echo "Not found - probing for $TARGET..."
 ssh -4 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$TARGET_USER@$TARGET" true > /dev/null 2>&1
 deploy
 
+TARGET="172.22.11.2"
+echo "Not found - falling back to USB"
+ssh -4 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$TARGET_USER@$TARGET" true > /dev/null 2>&1
+deploy
+
 echo "Not found - giving up."
 exit 1

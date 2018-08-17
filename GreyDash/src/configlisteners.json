@@ -26,8 +26,8 @@
     {
       "settings": {
         "tooltip": true,
-        "minValue": -360,
-        "maxValue": 360
+        "minValue": -180,
+        "maxValue": 180
       },
       "title": "Drive Angles",
       "keys": [
@@ -38,25 +38,25 @@
     {
       "settings": {
         "tooltip": true,
-        "minValue": -120,
-        "maxValue": 120
+        "minValue": -20,
+        "maxValue": 320
       },
       "title": "Drive Left Positions",
       "keys": [
         "/SmartDashboard/drive/outputs/leftpossetpoint",
-        "/SmartDashboard/drive/outputs/leftencoder"
+        "/SmartDashboard/drive/outputs/leftposnow"
       ]
     },
     {
       "settings": {
         "tooltip": true,
-        "minValue": -120,
-        "maxValue": 120
+        "minValue": -20,
+        "maxValue": 320
       },
       "title": "Drive Right Positions",
       "keys": [
         "/SmartDashboard/drive/outputs/rightpossetpoint",
-        "/SmartDashboard/drive/outputs/rightencoder"
+        "/SmartDashboard/drive/outputs/rightposnow"
       ]
     },
     {
@@ -69,6 +69,18 @@
       "keys": [
         "/SmartDashboard/drive/outputs/leftvelff",
         "/SmartDashboard/drive/outputs/rightvelff"
+      ]
+    },
+    {
+      "settings": {
+        "tooltip": true,
+        "minValue": -144,
+        "maxValue": 144
+      },
+      "title": "Angular Velocity",
+      "keys": [
+        "/SmartDashboard/drive/outputs/angratesetpoint",
+        "/SmartDashboard/drive/outputs/angratenow"
       ]
     },
     {

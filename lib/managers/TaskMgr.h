@@ -33,8 +33,14 @@ namespace frc973 {
 
 class CoopTask;
 
+/**
+ * Interface for a Task Manager.
+ */
 class TaskMgr {
 protected:
+    /**
+     * Contruct a Task Manager.
+     */
     TaskMgr();
 
 public:
@@ -42,79 +48,63 @@ public:
 
     /**
      * Register CoopTask object.  If the task is already registered, the flags
-     * 		passed here are added to those flags for which the task was
-     * already registered.  If the task registry is already full, return  false.
-     *
+     * passed here are added to those flags for which the task was already
+     * registered.  If the task registry is already full, return false.
      * @param taskName Specifies the name of the task being registered (for
-     * 		debug purposes)
-     * @param task Specifies the task to be registered
+     * debug purposes).
+     * @param task Specifies the task to be registered.
      * @param flags Specifies which callbacks should be called for the given
-     * 		task
-     *
-     * @return Returns true if the task was successfully registered.  False
-     * 		otherwise.
+     * task.
+     * @return Returns true if the task was successfully registered. False
+     * otherwise.
      */
     bool RegisterTask(const char *taskName, CoopTask *task, uint32_t flags);
 
     /**
-     * Function to unregister CoopTask
-     *
-     * @param task Specifies the CoopTask to unregister
-     *
+     * Function to unregister CoopTask.
+     * @param task Specifies the CoopTask to unregister.
      * @return Retuns true if CoopTask successfully unregistered, false
-     * 		otherwise (for example if the task was not registered).
+     * otherwise (for example if the task was not registered).
      */
     bool UnregisterTask(CoopTask *task);
 
 protected:
     /**
      * Calls the TaskStartMode method of all CoopTask objects registered with
-     * 		the TASK_START_MODE flag
-     *
-     * @param mode Specifies robot operation mode
+     * the TASK_START_MODE flag.
+     * @param mode The current operating mode of the robot.
      */
     void TaskStartModeAll(RobotMode mode);
 
     /**
-     * Calls the TaskStopMode method of all CoopTask objects registered with
-     * 		the TASK_STOP_MODE flag
-     *
-     * @param mode Specifies robot operation mode
+     * Calls the TaskStopMode method of all CoopTask objects registered with the
+     * TASK_STOP_MODE flag.
+     * @param mode The current operating mode of the robot.
      */
     void TaskStopModeAll(RobotMode mode);
 
     /**
      * Calls the TaskPrePreiodic method of all CoopTask objects registered with
-     * 		the TASK_PRE_PERIODIC flag
-     *
-     * @param mode Specifies robot operation mode
+     * the TASK_PRE_PERIODIC flag.
+     * @param mode The current operating mode of the robot.
      */
     void TaskPrePeriodicAll(RobotMode mode);
 
     /**
-     * Calls the TaskPreiodic method of all CoopTask objects registered with
-     * 		the TASK_PERIODIC flag
-     *
-     * @param mode Specifies robot operation mode
+     * Calls the TaskPreiodic method of all CoopTask objects registered with the
+     * TASK_PERIODIC flag.
+     * @param mode The current operating mode of the robot.
      */
     void TaskPeriodicAll(RobotMode mode);
 
     /**
-     * Calls the TaskPostPeriodic method of all CoopTask objects registered
-     * 		with the TASK_POST_PERIODIC flag
-     *
-     * @param mode Specifies robot operation mode
+     * Calls the TaskPostPeriodic method of all CoopTask objects registered with
+     * the TASK_POST_PERIODIC flag.
+     * @param mode The current operating mode of the robot.
      */
     void TaskPostPeriodicAll(RobotMode mode);
 
 private:
-    /**
-     * Returns the index of the given task int he register tasks list
-     *
-     * @param Task to look up
-     *
-     * @return If found, the task index is returned.  Otherwise it returns -1
-     */
     int FindTask(CoopTask *task);
 
     int m_numTasks;

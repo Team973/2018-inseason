@@ -8,6 +8,9 @@
 
 namespace frc973 {
 
+/**
+ * The position strings.
+ */
 const char *positionStrings[] = {
     "DB/String 0", "DB/String 1", "DB/String 2", "DB/String 3", "DB/String 4",
     "DB/String 5", "DB/String 6", "DB/String 7", "DB/String 8", "DB/String 9",
@@ -24,6 +27,9 @@ void DBStringPrintf(DBStringPos position, const char *formatstring, ...) {
     SmartDashboard::PutString(positionStrings[position], msg);
 }
 
+/**
+ * The match type strings.
+ */
 const char *matchTypeStrings[] = {
     "None",
     "Prac",

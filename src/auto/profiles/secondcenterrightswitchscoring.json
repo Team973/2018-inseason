@@ -1,0 +1,13 @@
+{
+    "name": "second_center_right_switch_scoring",
+    "timestep": 0.01,
+    "max_vel": 140.0,
+    "max_accel": 80.0,
+    "max_jerk": 2400.0,
+    "wheelbase_width": 25.205,
+    "waypoints": [
+      { "x": 0, "y": 0, "angle": 0 },
+      { "x": 100, "y": -54, "angle": 0 }
+    ],
+    "visual_y_offset": 150
+}

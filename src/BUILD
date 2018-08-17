@@ -1,3 +1,8 @@
+filegroup(
+    name = "src",
+    srcs = ["."],
+    visibility = ["//visibility:public"],
+)
 
 cc_binary(
     name = "robot",

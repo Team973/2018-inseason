@@ -118,25 +118,11 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
 
 Drive::~Drive(){};
 
-/**
- * Sets Drive controller to AssistedArcadeDrive
- *
- * @param throttle  Left joystick y-axis value
- * @param turn      Right joystick x-axis value
- */
 void Drive::AssistedArcadeDrive(double throttle, double turn) {
     this->SetDriveController(m_assistedArcadeDriveController);
     m_assistedArcadeDriveController->SetJoysticks(throttle, turn);
 }
 
-/**
- * Sets Drive controller to CheesyDrive
- *
- * @param throttle  Left joystick y-axis value
- * @param turn      Right joystick x-axis value
- * @param isQuickturn Whether quickturn is active
- * @param isHighGear Whether high gear is active
- */
 void Drive::CheesyDrive(double throttle, double turn, bool isQuickTurn,
                         bool isHighGear) {
     this->SetDriveController(m_cheesyDriveController);
@@ -144,37 +130,16 @@ void Drive::CheesyDrive(double throttle, double turn, bool isQuickTurn,
                                           isHighGear);
 }
 
-/**
- * Sets Drive controller to HangerDrive
- *
- * @param throttle  Left joystick y-axis value
- */
 void Drive::HangerDrive(double throttle) {
     this->SetDriveController(m_hangerDriveController);
     m_hangerDriveController->SetJoysticks(throttle);
 }
 
-/**
- * Sets Drive controller to OpenLoopArcadeDrive
- *
- * @param throttle  Left joystick y-axis value
- */
 void Drive::OpenloopArcadeDrive(double throttle, double turn) {
     this->SetDriveController(m_openloopArcadeDriveController);
     m_openloopArcadeDriveController->SetJoysticks(throttle, turn);
 }
 
-/**
- * Sets Drive mode to PIDDrive
- *
- * @param dist        Desired drive distance
- * @param turn        Desired turn angle
- * @param relativity  Calculates relativity of drive distance and current
- *  position
- * @param powerCap    Percentage of drive power; 1.0 = full power
- *
- * @return            the PID Drive contoller
- */
 PIDDriveController *Drive::PIDDrive(double dist, double turn,
                                     RelativeTo relativity, double powerCap) {
     this->SetDriveController(m_pidDriveController);
@@ -183,16 +148,6 @@ PIDDriveController *Drive::PIDDrive(double dist, double turn,
     return m_pidDriveController;
 }
 
-/**
- * Sets Drive mode to PIDTurn
- *
- * @param turn        Desired turn angle
- * @param relativity  Calculates relativity of drive distance and current
- *  position
- * @param powerCap    Percentage of drive power; 1.0 = full power
- *
- * @return            the PID Drive contoller
- */
 PIDDriveController *Drive::PIDTurn(double turn, RelativeTo relativity,
                                    double powerCap) {
     this->SetDriveController(m_pidDriveController);
@@ -205,13 +160,6 @@ double Drive::GetPIDDistError() {
     return m_pidDriveController->GetDistError();
 }
 
-/**
- * Set a drive to use ConstantArcSpline drive controller
- *
- * @param relativity What is that angle metric relative to?
- * @param dist Distance in inches to go
- * @param angle Angle in degrees to go
- */
 ConstantArcSplineDriveController *Drive::ConstantArcSplineDrive(
     RelativeTo relativity, double dist, double angle) {
     this->SetDriveController(m_constantArcSplineDriveController);
@@ -230,25 +178,11 @@ double Drive::GetSplinePercentComplete() {
     return m_splineDriveController->GetSplinePercentComplete();
 }
 
-/**
- * Set a drive to drive straight
- *
- * @param relativity What is that angle metric relative to?
- * @param throttle Forward-backwards-ness to drive with
- * @param angle Angle in degrees to go
- */
 void Drive::StraightDrive(RelativeTo relativity, double dist, double angle) {
     this->SetDriveController(m_straightDriveController);
     m_straightDriveController->SetTarget(relativity, dist, angle, this);
 }
 
-/**
- * Set a drive to use trap profile drive controller
- *
- * @param relativity What is that angle metric relative to?
- * @param dist Distance in inches to go
- * @param angle Angle in degrees to go
- */
 TrapDriveController *Drive::TrapDrive(RelativeTo relativity, double dist,
                                       double angle) {
     this->SetDriveController(m_trapDriveController);
@@ -261,74 +195,36 @@ void Drive::VelocityArcadeDrive(double throttle, double turn) {
     m_velocityArcadeDriveController->SetJoysticks(throttle, turn);
 }
 
-/**
- * Returns Left Drive Distance thorugh encoder translation
- *
- * @return  Left Drive Distance reported in inches
- */
 double Drive::GetLeftDist() const {
     return -m_leftDriveTalonA->GetSelectedSensorPosition(0) *
                DRIVE_DIST_PER_CLICK -
            m_leftPosZero;
 }
 
-/**
- * Returns Right Drive Distance thorugh encoder translation
- *
- * @return  Right Drive Distance reported in inches
- */
 double Drive::GetRightDist() const {
     return m_rightDriveTalonA->GetSelectedSensorPosition(0) *
                DRIVE_DIST_PER_CLICK -
            m_rightPosZero;
 }
 
-/**
- * Returns Left Drive Rate or speed thorugh encoder translation
- *
- * @return  Left Drive Rate or Speed reported in inches Reported in inches per
- *  second; As per manual 17.2.1, GetSpeed reports RPM
- */
 double Drive::GetLeftRate() const {
     return -m_leftDriveTalonA->GetSelectedSensorVelocity(0) *
            DRIVE_IPS_FROM_CPDS;
 }
 
-/**
- * Returns Right Drive Rate or speed thorugh encoder translation
- *
- * @return  Right Drive Rate or Speed reported in inches Reported in inches per
- *  second; As per manual 17.2.1, GetSpeed reports RPM
- */
 double Drive::GetRightRate() const {
     return m_rightDriveTalonA->GetSelectedSensorVelocity(0) *
            DRIVE_IPS_FROM_CPDS;
 }
 
-/**
- * Returns Average Drive Distance thorugh encoder translation
- *
- * @return  Average Drive Distance reported in inches
- */
 double Drive::GetDist() const {
     return (GetLeftDist() + GetRightDist()) / 2.0;
 }
 
-/**
- * Returns Average Drive Rate or speed thorugh encoder translation
- *
- * @return  Average Drive Rate or Speed reported in inches Reported in inches
- *  per second; As per manual 17.2.1, GetSpeed reports RPM
- */
 double Drive::GetRate() const {
     return (GetLeftRate() + GetRightRate()) / 2.0;
 }
 
-/**
- * Returns Average Drive Current thorugh Talon SRX Output
- *
- * @return  Avergage current reported in amperes
- */
 double Drive::GetDriveCurrent() const {
     return (fabs(m_rightDriveTalonA->GetOutputCurrent()) +
             fabs(m_leftDriveTalonA->GetOutputCurrent())) /
@@ -377,13 +273,6 @@ void Drive::SetDriveOutputIPS(double left, double right) {
     }
 }
 
-/**
- * Calculates Drive Output in Position (Inches) and sets it from driver input or
- * closed control loop
- *
- * @param left  desired left Output
- * @param right desired right Output
- */
 void Drive::SetDriveOutputPosInches(double left, double right) {
     m_leftDriveOutput = left;
     m_rightDriveOutput = right;
@@ -401,13 +290,6 @@ void Drive::SetDriveOutputPosInches(double left, double right) {
     }
 }
 
-/**
- * Calculates Drive Output in Percent Output and sets it from driver input or
- * closed control loop
- *
- * @param left  desired left Output
- * @param right desired right Output
- */
 void Drive::SetDriveOutputVBus(double left, double right) {
     m_leftDriveOutput = left;
     m_rightDriveOutput = right;
@@ -468,12 +350,8 @@ void Drive::TaskPeriodic(RobotMode mode) {
     m_angle = m_gyro->GetAngle();
 
     // Austin ADXRS450_Gyro config
-    double currRate = m_gyro->GetRate();
-    if (currRate == 0) {
-    }
-    else {
-        m_angleRate = currRate;
-    }
+    m_angleRate = -1.0 * ((GetRightRate() - GetLeftRate()) / 2.0) /
+                  (DRIVE_WIDTH / 2.0) * Constants::DEG_PER_RAD;
 
     DBStringPrintf(DB_LINE9, "l %2.1lf r %2.1lf g %2.1lf", this->GetLeftDist(),
                    this->GetRightDist(), this->GetAngle());

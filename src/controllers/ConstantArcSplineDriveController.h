@@ -18,31 +18,82 @@ using namespace frc;
 
 namespace frc973 {
 
+/**
+ * Constant Arc Spline Drive contoller.
+ */
 class ConstantArcSplineDriveController : public DriveController {
 public:
+    /**
+     * Construct a Constant Arc Spline Drive controller.
+     * @param state The state provider for handling incoming messages.
+     * @param logger Logger for drive controller.
+     */
     ConstantArcSplineDriveController(DriveStateProvider *state,
                                      LogSpreadsheet *logger);
     virtual ~ConstantArcSplineDriveController();
 
+    /**
+     * Sets target for robot to reach.
+     * @param relativeTo Point relative to the new setpoint.
+     * @param dist Distance to travel.
+     * @param angle Angle to turn.
+     */
     void SetTarget(DriveBase::RelativeTo relativeTo, double dist, double angle);
 
+    /**
+     * Sets the maximum velocity/acceleration.
+     * @param max_vel Maximum velocity.
+     * @param max_acc Maximum acceleration.
+     */
     ConstantArcSplineDriveController *SetMaxVelAccel(double max_vel,
                                                      double max_acc);
+
+    /**
+     * Sets the start/end velocity.
+     * @param start_vel Start velocity.
+     * @param end_vel End velocity.
+     */
     ConstantArcSplineDriveController *SetStartEndVel(double start_vel,
                                                      double end_vel);
 
+    /**
+     * Calculate motor output given the most recent sensor updates.
+     * @param state The state provider for handling incoming messages.
+     * @param out The signal receiver for handling outgoing messages.
+     */
     void CalcDriveOutput(DriveStateProvider *state,
                          DriveControlSignalReceiver *out) override;
 
+    /**
+     * Checks with the controller to see if we are on target.
+     * @return Whether the controller things are done.
+     */
     bool OnTarget() override {
         return m_done;
     }
 
+    /**
+     * Start the drive controller.
+     * @param out The signal receiver for handling outgoing messages.
+     */
     void Start(DriveControlSignalReceiver *out) override;
 
+    /**
+     * Stop the drive controller.
+     * @param out The signal receiver for handling outgoing messages.
+     */
     void Stop(DriveControlSignalReceiver *out) override;
 
+    /**
+     * Return distance from start.
+     * @return Distance from start.
+     */
     double DistFromStart() const;
+
+    /**
+     * Return angle from start.
+     * @return Angle from start.
+     */
     double AngleFromStart() const;
 
 private:

@@ -22,12 +22,17 @@ Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
         , m_driveMode(DriveMode::Cheesy)
         , m_intakeAssembly(intakeAssembly)
         , m_cubeIntakeState(CubeIntakeState::Idle)
+        , m_wristControlMode(WristControlMode::ClosedLoop)
+        , m_wristControlModeDebouncer(new Debouncer(1.0))
+        , m_wristModeSwitchPrevState(false)
         , m_endGameSignalSent(false)
         , m_enableForkDeploy(false)
         , m_hanger(hanger)
         , m_greyLight(greylight)
         , m_endGameSignal(
-              new LightPattern::Flash(END_GAME_RED, NO_COLOR, 50, 15)) {
+              new LightPattern::Flash(END_GAME_RED, NO_COLOR, 50, 15))
+        , m_wristEmergencySignal(new LightPattern::SolidColor({255, 0, 255}))
+        , m_clear(new LightPattern::SolidColor({0, 0, 0})) {
 }
 
 Teleop::~Teleop() {
@@ -40,8 +45,6 @@ void Teleop::TeleopInit() {
     m_intakeAssembly->StopIntake();
     m_hanger->DisengagePTO();
 }
-
-static bool s_intaking = false;
 
 void Teleop::TeleopPeriodic() {
     if (!m_endGameSignalSent && Timer::GetMatchTime() < 40) {
@@ -84,29 +87,65 @@ void Teleop::TeleopPeriodic() {
 
     switch (m_cubeIntakeState) {
         case CubeIntakeState::Idle:
+            if (m_wristControlMode == WristControlMode::OpenLoop) {
+                m_greyLight->SetPixelStateProcessor(m_wristEmergencySignal);
+            }
             break;
         case CubeIntakeState::SwitchIntaking:
             m_intakeAssembly->RunIntake(-1.0);
-            m_intakeAssembly->CloseClaw();
-            if (m_intakeAssembly->GetClaw()->IsCubeIn() or
-                m_operatorJoystick->GetRawButton(DualAction::Back)) {
-                m_cubeIntakeState = CubeIntakeState::Idle;
+            if (m_intakeAssembly->GetClaw()->IsCubeIn()) {
                 m_intakeAssembly->HoldCube();
+                m_intakeAssembly->HardCloseClaw();
                 m_intakeAssembly->Flash();
+                m_intakeModeTimer = GetMsecTime();
+                m_cubeIntakeState = CubeIntakeState::SwitchIntakeDelay;
+            }
+            break;
+        case CubeIntakeState::SwitchIntakeDelay:
+            if (GetMsecTime() - m_intakeModeTimer > 100) {
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::STOW_PRESET);
+                m_cubeIntakeState = CubeIntakeState::Idle;
             }
             break;
-        case CubeIntakeState::VaultIntaking:
+        case CubeIntakeState::ManualIntaking:
             m_intakeAssembly->RunIntake(-1.0);
-            m_intakeAssembly->CloseClaw();
-            if (m_intakeAssembly->GetClaw()->IsCubeIn() or
-                m_operatorJoystick->GetRawButton(DualAction::Back)) {
+            if (m_intakeAssembly->GetClaw()->IsCubeIn()) {
                 m_cubeIntakeState = CubeIntakeState::Idle;
                 m_intakeAssembly->HoldCube();
+                m_intakeAssembly->HardCloseClaw();
                 m_intakeAssembly->Flash();
             }
+            else {
+                m_intakeAssembly->SoftCloseClaw();
+            }
             break;
+    }
+
+    bool wristModeSwitch = m_wristControlModeDebouncer->Update(
+        m_operatorJoystick->GetRawButton(DualAction::Back));
+
+    if (wristModeSwitch and !m_wristModeSwitchPrevState) {
+        if (m_wristControlMode == WristControlMode::ClosedLoop) {
+            m_wristControlMode = WristControlMode::OpenLoop;
+            m_greyLight->SetPixelStateProcessor(m_wristEmergencySignal);
+            m_intakeAssembly->SetOpenLoopWrist(true);
+        }
+        else if (m_wristControlMode == WristControlMode::OpenLoop) {
+            m_wristControlMode = WristControlMode::ClosedLoop;
+            m_intakeAssembly->SetOpenLoopWrist(false);
+            m_intakeAssembly->SetPosManualInput();
+            m_greyLight->SetPixelStateProcessor(m_clear);
+        }
+    }
+
+    m_wristModeSwitchPrevState = wristModeSwitch;
+
+    if (m_wristControlMode == WristControlMode::OpenLoop) {
+        DBStringPrintf(DBStringPos::DB_LINE2, "OPEN LOOP WRIST");
+    }
+    else {
+        DBStringPrintf(DBStringPos::DB_LINE2, "closed loop wrist");
     }
 }
 
@@ -169,8 +208,12 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::RightTrigger:
                 if (pressedP) {
-                    m_intakeAssembly->EjectCube();
-                    // software low gear (in TeleopPeriodic)
+                    if (m_intakeAssembly->GetElevator()->GetPosition() < 5.0) {
+                        m_intakeAssembly->FastEjectCube();
+                    }
+                    else {
+                        m_intakeAssembly->EjectCube();
+                    }
                 }
                 else {
                     m_intakeAssembly->HaltIntake();
@@ -241,6 +284,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
+                    m_intakeAssembly->SoftCloseClaw();
                     m_cubeIntakeState = CubeIntakeState::SwitchIntaking;
                     m_intakeAssembly->GoToIntakePosition(
                         IntakeAssembly::GROUND_PRESET);
@@ -252,9 +296,8 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::LeftTrigger:
                 if (pressedP) {
-                    m_cubeIntakeState = CubeIntakeState::VaultIntaking;
-                    m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::GROUND_PRESET);
+                    m_intakeAssembly->SoftCloseClaw();
+                    m_cubeIntakeState = CubeIntakeState::ManualIntaking;
                 }
                 else {
                     m_intakeAssembly->HoldCube();
@@ -271,6 +314,10 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::RightBumper:
                 if (pressedP) {
+                    m_intakeAssembly->HoldCube();
+                    m_intakeAssembly->HardCloseClaw();
+                    m_intakeModeTimer = GetMsecTime();
+                    m_cubeIntakeState = CubeIntakeState::SwitchIntakeDelay;
                 }
                 else {
                 }
@@ -307,12 +354,13 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::Back:
                 if (pressedP) {
-                    // override banner sensor for switch automated pull
+                    // toggle emergency open-loop mode (hold 0.5 seconds)
                 }
                 break;
             case DualAction::Start:
                 if (pressedP) {
                     m_intakeAssembly->StartZeroPosition();
+                    m_intakeAssembly->OpenClaw();
                 }
                 else {
                     m_intakeAssembly->EndZeroPosition();

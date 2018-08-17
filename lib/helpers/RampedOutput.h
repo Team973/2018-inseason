@@ -23,34 +23,34 @@
 
 namespace frc973 {
 
+/**
+ * Interface for a ramped output.
+ */
 class RampedOutput : public FilterBase {
 public:
     /**
      * Create a RampedOutput object. This object filters a signal by coercing
      * the input value to within range of the old value +/- the ramp rate.
-     *
-     * @param rampRate maximum difference between two outputs (in units/sec)
-     * @param initialOutput (optional) the first value we ramp from
+     * @param rampRate The maximum difference between two outputs (in
+     * units/sec).
+     * @param initialOutput The first value we ramp from (optional).
      */
     RampedOutput(double rampRate, double initialOutput = 0.0);
     virtual ~RampedOutput();
 
     /**
-     * Get the filtered output value given the actual input.  Takes into
-     * account the given input, the previous output, the ramp rate, and the
-     * time since last call.
-     *
-     * @param input The target value that we should try to output
-     *
-     * @return whatever value was closer to the input
+     * Get the filtered output value given the actual input.  Takes into account
+     * the given input, the previous output, the ramp rate, and the time since
+     * last call.
+     * @param input The target value that we should try to output.
+     * @return The value that was closer to the input.
      */
     double Update(double input) override;
 
     /**
-     * Get the previous value returned by this ramp.  Doesn't accoutn for
-     * the time since that value was calculated.
-     *
-     * @return whatever value was last returned by GetValue
+     * Get the previous value returned by this ramp. Doesn't account for the
+     * time since that value was calculated.
+     * @return The value that was last returned by GetValue.
      */
     double GetLast() override {
         return m_prevOutput;
@@ -58,28 +58,27 @@ public:
 
     /**
      * Check whether (with the most recent call of GetValue) we've reached our
-     * target output value
+     * target output value.
+     * @return The status of ramp completion.
      */
-    bool IsRampFinished(void);
+    bool IsRampFinished();
 
     /**
-     * Change the ramp rate
-     *
-     * @param newRampRate new ramp rate (in units/sec)
+     * Change the ramp rate.
+     * @param newRampRate The new ramp rate (in units/sec).
      */
     void SetRampRate(double newRampRate);
 
     /**
-     * Get the ramp rate
-     *
-     * @return rampRate (in units/sec)
+     * Get the ramp rate.
+     * @return The ramp rate (in units/sec).
      */
-    double GetRampRate(void);
+    double GetRampRate();
 
     /**
-     * Override any ramping and just set the damn previous output...
-     * The RampedOutput will ramp subsequent values as if that were the
-     * previous output.
+     * Override any ramping and just set the damn previous output... The
+     * RampedOutput will ramp subsequent values as if that were the previous
+     * output.
      */
     void OverridePrevOutput(double prevOutput);
 
