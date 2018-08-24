@@ -17,8 +17,7 @@ Robot::Robot()
         : CoopMTRobot()
         , JoystickObserver()
         , m_pdp(new PowerDistributionPanel())
-        , m_driverJoystick(
-              new ObservableJoystick(DRIVER_JOYSTICK_PORT, this, this))
+        , m_driverJoystick(new Joystick(DRIVER_JOYSTICK_PORT))
         , m_operatorJoystick(
               new ObservableJoystick(OPERATOR_JOYSTICK_PORT, this, this))
         , m_leftDriveTalonA(new GreyTalonSRX(LEFT_DRIVE_A_CAN_ID))

@@ -28,8 +28,11 @@ public:
     static constexpr Color END_GAME_RED = {255, 0, 0};
     static constexpr Color NO_COLOR = {0, 0, 0};
 
-    Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
-           Drive *drive, IntakeAssembly *intakeAssembly, Hanger *hanger,
+    static constexpr int LEFT_Y_AXIS_CHANNEL = 0;
+    static constexpr int RIGHT_X_AXIS_CHANNEL = 3;
+
+    Teleop(Joystick *driver, ObservableJoystick *codriver, Drive *drive,
+           IntakeAssembly *intakeAssembly, Hanger *hanger,
            GreyLight *greylight);
     virtual ~Teleop();
 
@@ -40,7 +43,7 @@ public:
     void HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP);
 
 private:
-    ObservableJoystick *m_driverJoystick;
+    Joystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
 
     Drive *m_drive;

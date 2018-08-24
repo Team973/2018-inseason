@@ -80,7 +80,7 @@ public:
 private:
     PowerDistributionPanel *m_pdp;
 
-    ObservableJoystick *m_driverJoystick;
+    Joystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
 
     TalonSRX *m_leftDriveTalonA;

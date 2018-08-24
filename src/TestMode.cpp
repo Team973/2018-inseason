@@ -5,9 +5,8 @@ using namespace frc;
 using namespace sample;
 
 namespace frc973 {
-Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-           Drive *drive, IntakeAssembly *intakeAssembly, Hanger *hanger,
-           GreyLight *greylight)
+Test::Test(Joystick *driver, ObservableJoystick *codriver, Drive *drive,
+           IntakeAssembly *intakeAssembly, Hanger *hanger, GreyLight *greylight)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_drive(drive)
@@ -30,7 +29,7 @@ void Test::TestInit() {
 
 void Test::TestPeriodic() {
     double elevatorPosIncInput =
-        -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
+        -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
     double wristPosIncInput = pow(
         -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis), 3);
 
@@ -40,7 +39,7 @@ void Test::TestPeriodic() {
 
     if (m_intakeMode == IntakeMode::manualVoltage) {
         double elevatorManualPower =
-            -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
+            -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
         double wristManualPower =
             -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
 
@@ -54,9 +53,8 @@ void Test::TestPeriodic() {
     else if (m_intakeMode == IntakeMode::motionMagic) {
     }
 
-    double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
-    double x =
-        -m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
+    double y = -m_driverJoystick->GetRawAxis(DualAction::LeftYAxis);
+    double x = -m_driverJoystick->GetRawAxis(DualAction::RightXAxis);
     bool quickturn = m_driverJoystick->GetRawButton(DualAction::RightTrigger);
 
     if (m_driverJoystick->GetRawButton(DualAction::RightBumper)) {

@@ -16,7 +16,7 @@ using namespace frc;
 namespace frc973 {
 class Test {
 public:
-    Test(ObservableJoystick *driver, ObservableJoystick *codriver, Drive *drive,
+    Test(Joystick *driver, ObservableJoystick *codriver, Drive *drive,
          IntakeAssembly *intakeAssembly, Hanger *hanger, GreyLight *greylight);
     virtual ~Test();
 
@@ -48,7 +48,7 @@ private:
         motionMagic
     };
 
-    ObservableJoystick *m_driverJoystick;
+    Joystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
 
     Drive *m_drive;

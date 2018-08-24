@@ -1,11 +1,11 @@
-/*
- * TeleopMode.cpp
- *
- *  Created on: January 7, 2018
- *      Authors: Kyle, Chris
- *
- *  Control map available at: https://goo.gl/MrViHA
- */
+/*m_driverjoystick*/ /*
+                      * TeleopMode.cpp
+                      *
+                      *  Created on: January 7, 2018
+                      *      Authors: Kyle, Chris
+                      *
+                      *  Control map available at: https://goo.gl/MrViHA
+                      */
 #include <cmath>
 #include "src/TeleopMode.h"
 #include "lib/helpers/JoystickHelper.h"
@@ -13,8 +13,8 @@
 using namespace frc;
 
 namespace frc973 {
-Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
-               Drive *drive, IntakeAssembly *intakeAssembly, Hanger *hanger,
+Teleop::Teleop(Joystick *driver, ObservableJoystick *codriver, Drive *drive,
+               IntakeAssembly *intakeAssembly, Hanger *hanger,
                GreyLight *greylight)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
@@ -44,9 +44,16 @@ void Teleop::TeleopInit() {
     m_intakeAssembly->EnableCoastMode();
     m_intakeAssembly->StopIntake();
     m_hanger->DisengagePTO();
+    m_driverJoystick->SetThrottleChannel(LEFT_Y_AXIS_CHANNEL);
+    m_driverJoystick->SetTwistChannel(RIGHT_X_AXIS_CHANNEL);
 }
 
 void Teleop::TeleopPeriodic() {
+    DBStringPrintf(DBStringPos::DB_LINE2, "Left Y %f",
+                   m_driverJoystick->GetThrottle());
+    DBStringPrintf(DBStringPos::DB_LINE3, "Right X %f",
+                   m_driverJoystick->GetTwist());
+
     if (!m_endGameSignalSent && Timer::GetMatchTime() < 40) {
         m_endGameSignalSent = true;
         m_endGameSignal->Reset();
@@ -55,14 +62,13 @@ void Teleop::TeleopPeriodic() {
     /**
      * Driver Joystick
      */
-    double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
-    double x =
-        -m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
+    double y = -m_driverJoystick->GetRawAxis(DualAction::LeftYAxis);
+    double x = -m_driverJoystick->GetRawAxis(DualAction::RightXAxis);
     bool quickturn = m_driverJoystick->GetRawButton(DualAction::RightBumper);
-    /*if (m_driverJoystick->GetRawButton(DualAction::RightTrigger)) {
+    if (m_driverJoystick->GetRawButton(DualAction::RightTrigger)) {
         x /= 3.0;
         y /= 3.0;
-    }*/
+    }
 
     if (m_driveMode == DriveMode::Cheesy) {
         m_drive->CheesyDrive(
@@ -77,7 +83,7 @@ void Teleop::TeleopPeriodic() {
      * Operator Joystick
      */
     double elevatorPosIncInput =
-        -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
+        -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
     double wristPosIncInput = pow(
         -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis), 3);
 
