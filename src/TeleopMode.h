@@ -31,6 +31,8 @@ public:
     static constexpr int LEFT_Y_AXIS_CHANNEL = 0;
     static constexpr int RIGHT_X_AXIS_CHANNEL = 3;
 
+    static constexpr int RIGHT_BUMPER_CHANNEL = 4;
+
     Teleop(Joystick *driver, ObservableJoystick *codriver, Drive *drive,
            IntakeAssembly *intakeAssembly, Hanger *hanger,
            GreyLight *greylight);

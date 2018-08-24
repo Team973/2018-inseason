@@ -49,10 +49,10 @@ void Teleop::TeleopInit() {
 }
 
 void Teleop::TeleopPeriodic() {
-    DBStringPrintf(DBStringPos::DB_LINE2, "Left Y %f",
-                   m_driverJoystick->GetThrottle());
-    DBStringPrintf(DBStringPos::DB_LINE3, "Right X %f",
-                   m_driverJoystick->GetTwist());
+    /*DBStringPrintf(DBStringPos::DB_LINE2, "Left Y %1.3f",
+                   m_driverJoystick->GetRawAxis(0));
+    DBStringPrintf(DBStringPos::DB_LINE3, "Right X %1.3f",
+                   m_driverJoystick->GetRawAxis(3));*/
 
     if (!m_endGameSignalSent && Timer::GetMatchTime() < 40) {
         m_endGameSignalSent = true;
@@ -62,9 +62,9 @@ void Teleop::TeleopPeriodic() {
     /**
      * Driver Joystick
      */
-    double y = -m_driverJoystick->GetRawAxis(DualAction::LeftYAxis);
-    double x = -m_driverJoystick->GetRawAxis(DualAction::RightXAxis);
-    bool quickturn = m_driverJoystick->GetRawButton(DualAction::RightBumper);
+    double y = m_driverJoystick->GetRawAxis(LEFT_Y_AXIS_CHANNEL);
+    double x = m_driverJoystick->GetRawAxis(RIGHT_X_AXIS_CHANNEL);
+    bool quickturn = m_driverJoystick->GetRawButton(RIGHT_BUMPER_CHANNEL);
     if (m_driverJoystick->GetRawButton(DualAction::RightTrigger)) {
         x /= 3.0;
         y /= 3.0;
@@ -147,12 +147,12 @@ void Teleop::TeleopPeriodic() {
 
     m_wristModeSwitchPrevState = wristModeSwitch;
 
-    if (m_wristControlMode == WristControlMode::OpenLoop) {
+    /*if (m_wristControlMode == WristControlMode::OpenLoop) {
         DBStringPrintf(DBStringPos::DB_LINE2, "OPEN LOOP WRIST");
     }
     else {
         DBStringPrintf(DBStringPos::DB_LINE2, "closed loop wrist");
-    }
+    }*/
 }
 
 void Teleop::TeleopStop() {
