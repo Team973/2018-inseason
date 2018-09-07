@@ -64,7 +64,18 @@ void Teleop::TeleopPeriodic() {
      */
     double y = m_driverJoystick->GetRawAxis(LEFT_Y_AXIS_CHANNEL);
     double x = m_driverJoystick->GetRawAxis(RIGHT_X_AXIS_CHANNEL);
-    bool quickturn = m_driverJoystick->GetRawButton(RIGHT_BUMPER_CHANNEL);
+    bool quickturn = m_driverJoystick->GetRawButton(RIGHT_TRIGGER_CHANNEL);
+    if (m_driverJoystick->GetRawButton(LEFT_TRIGGER_CHANNEL)) {
+        m_intakeAssembly->EjectCube();
+    }
+    else {
+        m_intakeAssembly->HaltIntake();
+    }
+    if (m_driverJoystick->GetRawButton(LEFT_BUMPER_CHANNEL)) {
+        m_intakeAssembly->OpenClaw();
+        m_intakeAssembly->HaltIntake();
+    }
+
     if (m_driverJoystick->GetRawButton(DualAction::RightTrigger)) {
         x /= 3.0;
         y /= 3.0;
@@ -276,8 +287,11 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::BtnX:
                 if (pressedP) {
-                    m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::SCALE_LOW_PRESET);
+                    m_driveMode = DriveMode::Hanger;
+                    m_drive->HangerDrive(1.0);
+                }
+                else {
+                    m_drive->HangerDrive(0);
                 }
                 break;
             case DualAction::BtnB:
@@ -338,8 +352,7 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
-                    m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::OVER_BACK_PRESET);
+                    m_enableForkDeploy = true;
                 }
                 /*
                 if (pressedP) {
@@ -350,7 +363,8 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
-                    m_intakeAssembly->SetModeHanging(false);
+                    m_driveMode = DriveMode::Hanger;
+                    m_hanger->EngagePTO();
                 }
                 break;
             case DualAction::DPadRightVirtBtn:

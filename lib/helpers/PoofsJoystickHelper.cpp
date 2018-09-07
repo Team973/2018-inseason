@@ -61,7 +61,7 @@ float ObservableJoystick::GetRawAxisWithDeadband(int axis, bool fSquared,
     return value;
 }
 
-bool ObservableJoystick::GetLXVirtButton() {
+bool ObservableJoystick::GetLXAxis() {
     double pos = this->GetRawAxis(PoofsJoysticks::LeftXAxis);
 
     if (pos > VIRTUAL_JOYSTICK_THRESHOLD) {
@@ -74,7 +74,7 @@ bool ObservableJoystick::GetLXVirtButton() {
     return m_lastLXVal;
 }
 
-bool ObservableJoystick::GetRXVirtButton() {
+bool ObservableJoystick::GetRXAxis() {
     double pos = this->GetRawAxis(PoofsJoysticks::RightXAxis);
 
     if (pos > VIRTUAL_JOYSTICK_THRESHOLD) {
@@ -87,7 +87,7 @@ bool ObservableJoystick::GetRXVirtButton() {
     return m_lastRXVal;
 }
 
-bool ObservableJoystick::GetRYVirtButton() {
+bool ObservableJoystick::GetRYAxis() {
     double pos = -this->GetRawAxis(PoofsJoysticks::RightYAxis);
 
     if (pos > VIRTUAL_JOYSTICK_THRESHOLD) {
@@ -103,10 +103,10 @@ bool ObservableJoystick::GetRYVirtButton() {
 uint32_t ObservableJoystick::GetAllButtons() {
     uint32_t btns = m_ds->GetStickButtons(m_port);
 
-    btns |= GetLXVirtButton() << (PoofsJoysticks::LeftXAxis - 1);
-    btns |= GetLYVirtButton() << (PoofsJoysticks::LeftYAxis - 1);
-    btns |= GetRXVirtButton() << (PoofsJoysticks::RightXAxis - 1);
-    btns |= GetRYVirtButton() << (PoofsJoysticks::RightYAxis - 1);
+    btns |= GetLXAxis() << (PoofsJoysticks::LeftXAxis - 1);
+    btns |= GetLYAxis() << (PoofsJoysticks::LeftYAxis - 1);
+    btns |= GetRXAxis() << (PoofsJoysticks::RightXAxis - 1);
+    btns |= GetRYAxis() << (PoofsJoysticks::RightYAxis - 1);
 
     return btns;
 }

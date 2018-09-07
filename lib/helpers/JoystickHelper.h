@@ -74,19 +74,6 @@ const unsigned int DPadXAxis = 4;
 const unsigned int DPadYAxis = 5;
 }
 
-namespace BU0836A {
-
-const unsigned int LeftYAxis = 0;
-const unsigned int LeftXAxis = 1;
-const unsigned int RightYAxis = 2;
-const unsigned int RightXAxis = 3;
-
-const unsigned int LeftTrigger = 1;
-const unsigned int LeftBumper = 2;
-const unsigned int RightTrigger = 3;
-const unsigned int RightBumper = 4;
-}
-
 class ObservableJoystick;
 
 /**

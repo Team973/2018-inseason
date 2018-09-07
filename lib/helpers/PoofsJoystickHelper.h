@@ -116,31 +116,21 @@ public:
     float GetRawAxisWithDeadband(int axis, bool fSquared = false,
                                  double threshold = DEADBAND_INPUT_THRESHOLD);
 
-    /**
-     * Pretend the Left X Axis is a button.  By default it is not pressed.
-     * If the user pushes it mostly forward (say, more than half way), say
-     * that button is pressed.  If the user pulls it mostly backwards (say,
-     * more than half way), say that button is released.  If it's anywhere
-     * in between, rememember what it last was.
-     *
-     * @return whether the left X virtual button is pressed
-     */
-    bool GetLXVirtButton();
+    bool GetLYAxis();
 
-    /*
-     * Left Y Virtual button
-     */
-    bool GetLYVirtButton();
+    bool GetLXAxis();
 
-    /*
-     * Right X Virtual button
-     */
-    bool GetRXVirtButton();
+    bool GetRYAxis();
 
-    /**
-     * Right Y Virtual button
-     */
-    bool GetRYVirtButton();
+    bool GetRXAxis();
+
+    bool GetLBumper();
+
+    bool GetRBumper();
+
+    bool GetLTrigger();
+
+    bool GetRTrigger();
 
     /**
      * Get a bitstring containing the state of *all* buttons on the joystick.
