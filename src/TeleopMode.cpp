@@ -332,8 +332,8 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadDownVirtBtn:
                 if (pressedP) {
-                    m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::OVER_BACK_PRESET);
+                    m_enableForkDeploy = true;
+                    m_hanger->DeployForks();
                 }
                 /*
                 if (pressedP) {
