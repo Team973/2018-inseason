@@ -169,6 +169,28 @@ void Teleop::TeleopPeriodic() {
 void Teleop::TeleopStop() {
 }
 
+void Teleop::HandlePoofsJoystick(uint32_t port, uint32_t button,
+                                 bool pressedP) {
+    switch (button) {
+        case PoofsJoysticks::LeftTrigger:
+            if (pressedP) {
+            }
+            break;
+        case PoofsJoysticks::RightTrigger:
+            if (pressedP) {
+            }
+            break;
+        case PoofsJoysticks::LeftBumper:
+            if (pressedP) {
+            }
+            break;
+        case PoofsJoysticks::RightBumper:
+            if (pressedP) {
+            }
+            break;
+    }
+}
+
 void Teleop::HandleXboxJoystick(uint32_t port, uint32_t button, bool pressedP) {
     switch (button) {
         case Xbox::BtnY:

@@ -11,6 +11,7 @@
 #include "lib/managers/CoopTask.h"
 #include "WPILib.h"
 #include "lib/logging/LogSpreadsheet.h"
+#include "lib/helpers/JoystickHelper.h"
 
 using namespace frc;
 
@@ -29,7 +30,7 @@ const unsigned int RightTrigger = 3;
 const unsigned int RightBumper = 4;
 }
 
-class ObservableJoystick;
+class PoofsJoystick;
 
 /**
  * This abstract class defines the JoystickObserver object. The object is
@@ -38,27 +39,7 @@ class ObservableJoystick;
  * on the joystick button events.
  */
 
-class JoystickObserver {
-public:
-    JoystickObserver() {
-    }
-    virtual ~JoystickObserver() {
-    }
-
-    /**
-     * This function is provided by the subclass to handle a joystick
-     * button event notification.
-     *
-     * @param port Specifies the joystick port.
-     * @param button Specifies the joystick button
-     * @param newState If true, specifies the button has been pressed,
-     *        if false, specifies the button has been released.
-     */
-    virtual void ObserveJoystickStateChange(uint32_t port, uint32_t button,
-                                            bool newState) = 0;
-};
-
-class ObservableJoystick
+class PoofsJoystick
         : public CoopTask
         , public Joystick {
 public:
@@ -93,16 +74,16 @@ public:
      *        notification callback.
      * @param scheduler Points to the task manager this task will run on
      */
-    ObservableJoystick(uint16_t port, JoystickObserver *observer,
-                       TaskMgr *scheduler, DriverStation *ds = nullptr);
-    ~ObservableJoystick();
+    PoofsJoystick(uint16_t port, JoystickObserver *observer, TaskMgr *scheduler,
+                  DriverStation *ds = nullptr);
+    ~PoofsJoystick();
 
     /**
      * Register this joystick with a logger so that button state can be logged
      * every time the periodic funciton is called.  Only registers with the
      * first call
      */
-    ObservableJoystick *RegisterLog(LogSpreadsheet *logger);
+    PoofsJoystick *RegisterLog(LogSpreadsheet *logger);
 
     /**
      * Get the value of the given axis with deadband.
@@ -116,13 +97,13 @@ public:
     float GetRawAxisWithDeadband(int axis, bool fSquared = false,
                                  double threshold = DEADBAND_INPUT_THRESHOLD);
 
-    bool GetLYAxis();
+    double GetLYAxis();
 
-    bool GetLXAxis();
+    double GetLXAxis();
 
-    bool GetRYAxis();
+    double GetRYAxis();
 
-    bool GetRXAxis();
+    double GetRXAxis();
 
     bool GetLBumper();
 

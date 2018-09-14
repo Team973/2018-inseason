@@ -6,9 +6,8 @@
 
 namespace frc973 {
 
-ObservableJoystick::ObservableJoystick(uint16_t port,
-                                       JoystickObserver *observer,
-                                       TaskMgr *scheduler, DriverStation *ds)
+PoofsJoystick::PoofsJoystick(uint16_t port, JoystickObserver *observer,
+                             TaskMgr *scheduler, DriverStation *ds)
         : Joystick(port)
         , m_port(port)
         , m_observer(observer)
@@ -31,13 +30,13 @@ ObservableJoystick::ObservableJoystick(uint16_t port,
     }
 }
 
-ObservableJoystick::~ObservableJoystick() {
+PoofsJoystick::~PoofsJoystick() {
     if (m_scheduler != nullptr) {
         m_scheduler->UnregisterTask(this);
     }
 }
 
-ObservableJoystick *ObservableJoystick::RegisterLog(LogSpreadsheet *logger) {
+PoofsJoystick *PoofsJoystick::RegisterLog(LogSpreadsheet *logger) {
     if (m_logCell == nullptr) {
         // TODO this memory is never freed
         char *cellTitleBuf = (char *)malloc(32 * sizeof(char));
@@ -50,8 +49,8 @@ ObservableJoystick *ObservableJoystick::RegisterLog(LogSpreadsheet *logger) {
     return this;
 }
 
-float ObservableJoystick::GetRawAxisWithDeadband(int axis, bool fSquared,
-                                                 double threshold) {
+float PoofsJoystick::GetRawAxisWithDeadband(int axis, bool fSquared,
+                                            double threshold) {
     float value = Util::deadband(GetRawAxis(axis), threshold);
 
     if (fSquared) {
@@ -61,62 +60,31 @@ float ObservableJoystick::GetRawAxisWithDeadband(int axis, bool fSquared,
     return value;
 }
 
-bool ObservableJoystick::GetLXAxis() {
+double PoofsJoystick::GetLXAxis() {
     double pos = this->GetRawAxis(PoofsJoysticks::LeftXAxis);
-
-    if (pos > VIRTUAL_JOYSTICK_THRESHOLD) {
-        m_lastLXVal = true;
-    }
-    else if (pos < -VIRTUAL_JOYSTICK_THRESHOLD) {
-        m_lastLXVal = false;
-    }
-
-    return m_lastLXVal;
+    return pos;
 }
 
-bool ObservableJoystick::GetRXAxis() {
+double PoofsJoystick::GetLYAxis() {
+    double pos = this->GetRawAxis(PoofsJoysticks::LeftYAxis);
+    return pos;
+}
+
+double PoofsJoystick::GetRXAxis() {
     double pos = this->GetRawAxis(PoofsJoysticks::RightXAxis);
-
-    if (pos > VIRTUAL_JOYSTICK_THRESHOLD) {
-        m_lastRXVal = true;
-    }
-    else if (pos < -VIRTUAL_JOYSTICK_THRESHOLD) {
-        m_lastRXVal = false;
-    }
-
-    return m_lastRXVal;
+    return pos;
 }
 
-bool ObservableJoystick::GetRYAxis() {
-    double pos = -this->GetRawAxis(PoofsJoysticks::RightYAxis);
-
-    if (pos > VIRTUAL_JOYSTICK_THRESHOLD) {
-        m_lastRYVal = true;
-    }
-    else if (pos < -VIRTUAL_JOYSTICK_THRESHOLD) {
-        m_lastRYVal = false;
-    }
-
-    return m_lastRYVal;
+double PoofsJoystick::GetRYAxis() {
+    double pos = this->GetRawAxis(PoofsJoysticks::RightYAxis);
+    return pos;
 }
-
-uint32_t ObservableJoystick::GetAllButtons() {
-    uint32_t btns = m_ds->GetStickButtons(m_port);
-
-    btns |= GetLXAxis() << (PoofsJoysticks::LeftXAxis - 1);
-    btns |= GetLYAxis() << (PoofsJoysticks::LeftYAxis - 1);
-    btns |= GetRXAxis() << (PoofsJoysticks::RightXAxis - 1);
-    btns |= GetRYAxis() << (PoofsJoysticks::RightYAxis - 1);
-
-    return btns;
-}
-
 /**
  * Careful this code is dense and contains crazy bit-shifty logic.
  *    X&~(X^-X) extracts the least significant set bit from X in mask form
  *    __builtin_ffs(Y) gets the position of the least significant set bit
  */
-void ObservableJoystick::TaskPrePeriodic(RobotMode mode) {
+void PoofsJoystick::TaskPrePeriodic(RobotMode mode) {
     uint32_t currBtn = GetAllButtons();
 
     if (m_observer != nullptr) {
