@@ -12,6 +12,7 @@
 #include <iostream>
 #include "src/info/RobotInfo.h"
 #include "lib/helpers/JoystickHelper.h"
+#include "lib/helpers/XboxJoystickHelper.h"
 #include "src/subsystems/Drive.h"
 #include "src/subsystems/IntakeAssembly.h"
 #include "src/subsystems/Hanger.h"
@@ -46,6 +47,7 @@ public:
     void TeleopStop();
 
     void HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP);
+    void HandleXboxJoystick(uint32_t port, uint32_t button, bool pressedP);
 
 private:
     Joystick *m_driverJoystick;

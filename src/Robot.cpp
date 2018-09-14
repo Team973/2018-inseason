@@ -160,6 +160,7 @@ void Robot::ObserveJoystickStateChange(uint32_t port, uint32_t button,
                                        bool pressedP) {
     if (this->IsOperatorControl()) {
         m_teleop->HandleTeleopButton(port, button, pressedP);
+        m_teleop->HandleXboxJoystick(port, button, pressedP);
     }
     else if (this->IsDisabled()) {
         m_disabled->HandleDisabledButton(port, button, pressedP);

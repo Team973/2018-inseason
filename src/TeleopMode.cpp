@@ -169,6 +169,73 @@ void Teleop::TeleopPeriodic() {
 void Teleop::TeleopStop() {
 }
 
+void Teleop::HandleXboxJoystick(uint32_t port, uint32_t button, bool pressedP) {
+    switch (button) {
+        case Xbox::BtnY:
+            if (pressedP) {
+            }
+            break;
+        case Xbox::BtnA:
+            if (pressedP) {
+            }
+            break;
+        case Xbox::BtnX:
+            if (pressedP) {
+            }
+            break;
+        case Xbox::BtnB:
+            if (pressedP) {
+            }
+            else {
+            }
+            break;
+        case Xbox::LeftBumper:
+            if (pressedP) {
+            }
+            break;
+        case Xbox::LJoystickBtn:
+            if (pressedP) {
+            }
+            break;
+        case Xbox::RJoystickBtn:
+            if (pressedP) {
+            }
+            break;
+        case Xbox::RightBumper:
+            if (pressedP) {
+            }
+            else {
+            }
+            break;
+        case Xbox::DPadUpVirtBtn:
+            if (pressedP) {
+            }
+            break;
+        case Xbox::DPadDownVirtBtn:
+            if (pressedP) {
+            }
+            break;
+        case Xbox::DPadLeftVirtBtn:
+            if (pressedP) {
+            }
+            break;
+        case Xbox::DPadRightVirtBtn:
+            if (pressedP) {
+            }
+            break;
+        case Xbox::Back:
+            if (pressedP) {
+            }
+            break;
+        case Xbox::Start:
+            if (pressedP) {
+            }
+            else {
+            }
+            break;
+    }
+}
+
 void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
     if (port == DRIVER_JOYSTICK_PORT) {
         switch (button) {
