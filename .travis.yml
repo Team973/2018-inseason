@@ -1,16 +1,12 @@
 sudo: required
-
 language: cpp
-
 services:
-  - docker
-
+- docker
 before_install:
- - docker build -t team973/frc-bazel .
-
+- docker build -t team973/frc-bazel .
 script:
- - docker run team973/frc-bazel /bin/sh -c "bazel build //src:robot --cpu=roborio"
- - docker run team973/frc-bazel /bin/sh -c "bazel test //tools/pathtool:test --verbose_failures"
-
+- docker run team973/frc-bazel /bin/sh -c "bazel build //src:robot --cpu=roborio"
+- docker run team973/frc-bazel /bin/sh -c "bazel test //tools/pathtool:test --verbose_failures"
 notifications:
-  slack: greybotsfrc973:dwVtOBBSTIHn2Th9zIUGfpCX
+  slack:
+    secure: NmwBoeVQGs8mNatXUKxo1xH20t8Qv6AF6TLnlQOtwPz4Dvz6jTBgZW+aYFC8XQvP1xbVNDFzZVoI8dNEXNbAgWa9/rFDA514wKKoI2FqItoN8rNwA1/1qZomtuHk1PSUHkbdUKZCFcqDl2Yhw87ai2iO9zT4woJbPBcsQ8TQzImYpIXkqwA9oi6Gexx2gSYpmRodPdDqFTV8pSYgtQjDFA3DkHwZhCv7f7WxXTxl+6LiJrZ35rCKohjqZUbBqXPlGfu10Y+eQjN9M6etoI/MlhhZa1H6OjisFYqOoqtPY8BRMpVVhIKwuZTsAVJYqYemKpjNZq+QB1ID9Oap+DDzqr7ZuFxxsfdBA67yLNVaMyU6IkN/bD7RpdseemFfz7DrL0sRf5m+Tn+ZkpHwWIPMjqvKi3c6XFf8uYjgx9pnx+ICcwPpskUg96SfcyRyyGBO+cELrQvvz6x7xelN2hqk0Xa3jQ3QwN4HdUCIfTvRudKVR1Z3rgHmHZjMxfBUwVlWRYvHHHnQBV8Z2/+lpXf3zA3USR085JldMZLFuudY44NCRCQzAEH5VU3X5hPVz+foOzSqezpmhLAegZuKR29CuB6jWArvpm8h+CpM++0EF1CLGR40wj+NsZUNUrtlCGMHw4/Kka9wbqaQduelRPxxsgk3s2s4wpbkiXPNGcGD6Gs=
