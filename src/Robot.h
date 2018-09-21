@@ -20,7 +20,10 @@
 #include "src/AutonomousMode.h"
 #include "src/TeleopMode.h"
 #include "src/TestMode.h"
-#include "lib/helpers/JoystickHelper.h"
+#include "lib/helpers/JoystickHelperBase.h"
+#include "lib/helpers/DualActionJoystickHelper.h"
+#include "lib/helpers/XboxJoystickHelper.h"
+#include "lib/helpers/PoofsJoystickHelper.h"
 #include "src/subsystems/Elevator.h"
 #include "src/subsystems/Claw.h"
 #include "src/subsystems/Wrist.h"
@@ -28,7 +31,6 @@
 #include "src/subsystems/Drive.h"
 #include "src/subsystems/IntakeAssembly.h"
 #include "lib/logging/LogSpreadsheet.h"
-#include "lib/helpers/JoystickHelper.h"
 #include "lib/helpers/GreyCompressor.h"
 #include "lib/helpers/GreyTalon.h"
 #include "lib/bases/CoopMTRobot.h"
@@ -47,7 +49,7 @@ class Drive;
 
 class Robot
         : public CoopMTRobot
-        , public JoystickObserver {
+        , public JoystickHelperBase {
 public:
     Robot();
     virtual ~Robot();
@@ -80,8 +82,8 @@ public:
 private:
     PowerDistributionPanel *m_pdp;
 
-    Joystick *m_driverJoystick;
-    ObservableJoystick *m_operatorJoystick;
+    PoofsJoystick *m_driverJoystick;
+    XboxJoystick *m_operatorJoystick;
 
     TalonSRX *m_leftDriveTalonA;
     VictorSPX *m_leftDriveVictorB;

@@ -9,7 +9,7 @@
 
 #include <stdint.h>
 #include "lib/managers/CoopTask.h"
-#include "lib/helpers/JoystickHelper.h"
+#include "lib/helpers/JoystickHelperBase.h"
 #include "WPILib.h"
 #include "lib/logging/LogSpreadsheet.h"
 
@@ -18,7 +18,6 @@ using namespace frc;
 namespace frc973 {
 
 namespace Xbox {
-
 const unsigned int BtnX = 3;
 const unsigned int BtnA = 1;
 const unsigned int BtnB = 2;
@@ -44,22 +43,16 @@ const unsigned int LeftTriggerAxis = 2;
 const unsigned int RightTriggerAxis = 3;
 }
 
-/**
- * This abstract class defines the JoystickObserver object. The object is
- * a callback interface. It is not meant to be created as an object.
- * Instead, it should be inherited by a subclass who needs to be notified
- * on the joystick button events.
- */
-
 class XboxJoystick
         : public CoopTask
-        , public Joystick {
+        , public Joystick
+        , public JoystickHelperBase {
 protected:
     Joystick *m_joystick;
     uint32_t m_port;
 
     /* For observer notification */
-    JoystickObserver *m_observer;
+    JoystickHelperBase *m_observer;
     DriverStation *m_ds;
     uint32_t m_prevBtn;
     TaskMgr *m_scheduler;
@@ -73,12 +66,12 @@ public:
      * will observe its state.
      *
      * @param port Specifies the joystick port.
-     * @param notify Points to the JoystickObserver object for button event
+     * @param notify Points to the JoystickHelperBase object for button event
      *        notification callback.
      * @param scheduler Points to the task manager this task will run on
      */
-    XboxJoystick(uint16_t port, JoystickObserver *observer, TaskMgr *scheduler,
-                 DriverStation *ds = nullptr);
+    XboxJoystick(uint16_t port, JoystickHelperBase *observer,
+                 TaskMgr *scheduler, DriverStation *ds = nullptr);
     ~XboxJoystick();
 
     /**
@@ -88,11 +81,9 @@ public:
      */
     XboxJoystick *RegisterLog(LogSpreadsheet *logger);
 
-    /**
-     * Get a bitstring containing the state of *all* buttons on the joystick.
-     * Including any 'virtual' buttons like the 'joystick buttons'
-     */
-    uint32_t GetAllButtons();
+    float GetRawAxisWithDeadband(
+        int axis, bool fSquared = false,
+        double threshold = DEADBAND_INPUT_THRESHOLD) override;
 
     /**
      * This function is called by the TaskMgr to check and process Joystick

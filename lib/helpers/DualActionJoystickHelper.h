@@ -1,7 +1,7 @@
 /*
- * JoystickHelper.h
+ * DualActionJoystickHelper.h
  *
- *  Created on: Oct 14, 2015
+ *  Created on: 9/18/18
  *      Author: Andrew
  */
 
@@ -11,6 +11,7 @@
 #include "lib/managers/CoopTask.h"
 #include "WPILib.h"
 #include "lib/logging/LogSpreadsheet.h"
+#include "lib/helpers/JoystickHelperBase.h"
 
 using namespace frc;
 
@@ -74,52 +75,21 @@ const unsigned int DPadXAxis = 4;
 const unsigned int DPadYAxis = 5;
 }
 
-class ObservableJoystick;
-
-/**
- * This abstract class defines the JoystickObserver object. The object is
- * a callback interface. It is not meant to be created as an object.
- * Instead, it should be inherited by a subclass who needs to be notified
- * on the joystick button events.
- */
-class JoystickObserver {
-public:
-    JoystickObserver() {
-    }
-    virtual ~JoystickObserver() {
-    }
-
-    /**
-     * This function is provided by the subclass to handle a joystick
-     * button event notification.
-     *
-     * @param port Specifies the joystick port.
-     * @param button Specifies the joystick button
-     * @param newState If true, specifies the button has been pressed,
-     *        if false, specifies the button has been released.
-     */
-    virtual void ObserveJoystickStateChange(uint32_t port, uint32_t button,
-                                            bool newState) = 0;
-};
-
 /**
  * This class observes a given joystick and notifies the given callback
  * on any joystick event.  This is particularly useful for catching the
  * *edge* of a button press or release event.  Also lets you use a joystick
  * axis as a button in an easy way.
  */
-class ObservableJoystick
+class DualActionJoystick
         : public CoopTask
-        , public Joystick {
-public:
-    static constexpr double DEADBAND_INPUT_THRESHOLD = 0.05;
-    static constexpr double VIRTUAL_JOYSTICK_THRESHOLD = 0.5;
-
+        , public Joystick
+        , public JoystickHelperBase {
 protected:
     uint32_t m_port;
 
     /* For observer notification */
-    JoystickObserver *m_observer;
+    JoystickHelperBase *m_observer;
     DriverStation *m_ds;
     uint32_t m_prevBtn;
     TaskMgr *m_scheduler;
@@ -135,26 +105,26 @@ protected:
 
 public:
     /**
-     * Create an instance of the ObservableJoystick object.  Requires the
+     * Create an instance of the DualActionJoystick object.  Requires the
      * information to instantiate the underlying WPI-Joystick, as well as
      * references to the scheduler that will run it and the observer that
      * will observe its state.
      *
      * @param port Specifies the joystick port.
-     * @param notify Points to the JoystickObserver object for button event
+     * @param notify Points to the JoystickHelperBase object for button event
      *        notification callback.
      * @param scheduler Points to the task manager this task will run on
      */
-    ObservableJoystick(uint16_t port, JoystickObserver *observer,
+    DualActionJoystick(uint16_t port, JoystickHelperBase *observer,
                        TaskMgr *scheduler, DriverStation *ds = nullptr);
-    ~ObservableJoystick();
+    ~DualActionJoystick();
 
     /**
      * Register this joystick with a logger so that button state can be logged
      * every time the periodic funciton is called.  Only registers with the
      * first call
      */
-    ObservableJoystick *RegisterLog(LogSpreadsheet *logger);
+    DualActionJoystick *RegisterLog(LogSpreadsheet *logger);
 
     /**
      * Get the value of the given axis with deadband.
@@ -165,8 +135,9 @@ public:
      * @param hand Specifies the handedness of the joystick (default to right
      *        hand).
      */
-    float GetRawAxisWithDeadband(int axis, bool fSquared = false,
-                                 double threshold = DEADBAND_INPUT_THRESHOLD);
+    float GetRawAxisWithDeadband(
+        int axis, bool fSquared = false,
+        double threshold = DEADBAND_INPUT_THRESHOLD) override;
 
     /*
      * Check whether the up button on the d pad is pressed

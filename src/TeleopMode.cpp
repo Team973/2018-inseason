@@ -1,19 +1,18 @@
-/*m_driverjoystick*/ /*
-                      * TeleopMode.cpp
-                      *
-                      *  Created on: January 7, 2018
-                      *      Authors: Kyle, Chris
-                      *
-                      *  Control map available at: https://goo.gl/MrViHA
-                      */
+/**
+ * TeleopMode.cpp
+ *
+ *  Created on: January 7, 2018
+ *      Authors: Kyle, Chris
+ *
+ *  Control map available at: https://goo.gl/MrViHA
+ **/
 #include <cmath>
 #include "src/TeleopMode.h"
-#include "lib/helpers/JoystickHelper.h"
 
 using namespace frc;
 
 namespace frc973 {
-Teleop::Teleop(Joystick *driver, ObservableJoystick *codriver, Drive *drive,
+Teleop::Teleop(PoofsJoystick *driver, XboxJoystick *codriver, Drive *drive,
                IntakeAssembly *intakeAssembly, Hanger *hanger,
                GreyLight *greylight)
         : m_driverJoystick(driver)
@@ -171,94 +170,99 @@ void Teleop::TeleopStop() {
 
 void Teleop::HandlePoofsJoystick(uint32_t port, uint32_t button,
                                  bool pressedP) {
-    switch (button) {
-        case PoofsJoysticks::LeftTrigger:
-            if (pressedP) {
-            }
-            break;
-        case PoofsJoysticks::RightTrigger:
-            if (pressedP) {
-            }
-            break;
-        case PoofsJoysticks::LeftBumper:
-            if (pressedP) {
-            }
-            break;
-        case PoofsJoysticks::RightBumper:
-            if (pressedP) {
-            }
-            break;
+    if (port == DRIVER_JOYSTICK_PORT) {
+        switch (button) {
+            case PoofsJoysticks::LeftTrigger:
+                if (pressedP) {
+                }
+                break;
+            case PoofsJoysticks::RightTrigger:
+                if (pressedP) {
+                }
+                break;
+            case PoofsJoysticks::LeftBumper:
+                if (pressedP) {
+                }
+                break;
+            case PoofsJoysticks::RightBumper:
+                if (pressedP) {
+                }
+                break;
+        }
     }
 }
 
 void Teleop::HandleXboxJoystick(uint32_t port, uint32_t button, bool pressedP) {
-    switch (button) {
-        case Xbox::BtnY:
-            if (pressedP) {
-            }
-            break;
-        case Xbox::BtnA:
-            if (pressedP) {
-            }
-            break;
-        case Xbox::BtnX:
-            if (pressedP) {
-            }
-            break;
-        case Xbox::BtnB:
-            if (pressedP) {
-            }
-            else {
-            }
-            break;
-        case Xbox::LeftBumper:
-            if (pressedP) {
-            }
-            break;
-        case Xbox::LJoystickBtn:
-            if (pressedP) {
-            }
-            break;
-        case Xbox::RJoystickBtn:
-            if (pressedP) {
-            }
-            break;
-        case Xbox::RightBumper:
-            if (pressedP) {
-            }
-            else {
-            }
-            break;
-        case Xbox::DPadUpVirtBtn:
-            if (pressedP) {
-            }
-            break;
-        case Xbox::DPadDownVirtBtn:
-            if (pressedP) {
-            }
-            break;
-        case Xbox::DPadLeftVirtBtn:
-            if (pressedP) {
-            }
-            break;
-        case Xbox::DPadRightVirtBtn:
-            if (pressedP) {
-            }
-            break;
-        case Xbox::Back:
-            if (pressedP) {
-            }
-            break;
-        case Xbox::Start:
-            if (pressedP) {
-            }
-            else {
-            }
-            break;
+    if (port == OPERATOR_JOYSTICK_PORT) {
+        switch (button) {
+            case Xbox::BtnY:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::BtnA:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::BtnX:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::BtnB:
+                if (pressedP) {
+                }
+                else {
+                }
+                break;
+            case Xbox::LeftBumper:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::LJoystickBtn:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::RJoystickBtn:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::RightBumper:
+                if (pressedP) {
+                }
+                else {
+                }
+                break;
+            case Xbox::DPadUpVirtBtn:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::DPadDownVirtBtn:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::DPadLeftVirtBtn:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::DPadRightVirtBtn:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::Back:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::Start:
+                if (pressedP) {
+                }
+                else {
+                }
+                break;
+        }
     }
 }
 
-void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
+void Teleop::HandleDualActionJoystick(uint32_t port, uint32_t button,
+                                      bool pressedP) {
     if (port == DRIVER_JOYSTICK_PORT) {
         switch (button) {
             case DualAction::BtnA:

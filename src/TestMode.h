@@ -3,7 +3,9 @@
 #include "WPILib.h"
 #include <iostream>
 #include "src/info/RobotInfo.h"
-#include "lib/helpers/JoystickHelper.h"
+#include "lib/helpers/DualActionJoystickHelper.h"
+#include "lib/helpers/XboxJoystickHelper.h"
+#include "lib/helpers/PoofsJoystickHelper.h"
 #include "lib/util/Util.h"
 #include "src/subsystems/Drive.h"
 #include "src/subsystems/IntakeAssembly.h"
@@ -16,7 +18,7 @@ using namespace frc;
 namespace frc973 {
 class Test {
 public:
-    Test(Joystick *driver, ObservableJoystick *codriver, Drive *drive,
+    Test(PoofsJoystick *driver, XboxJoystick *codriver, Drive *drive,
          IntakeAssembly *intakeAssembly, Hanger *hanger, GreyLight *greylight);
     virtual ~Test();
 
@@ -48,8 +50,8 @@ private:
         motionMagic
     };
 
-    Joystick *m_driverJoystick;
-    ObservableJoystick *m_operatorJoystick;
+    PoofsJoystick *m_driverJoystick;
+    XboxJoystick *m_operatorJoystick;
 
     Drive *m_drive;
     DriveMode m_driveMode;

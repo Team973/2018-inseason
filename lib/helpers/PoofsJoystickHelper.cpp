@@ -6,25 +6,12 @@
 
 namespace frc973 {
 
-PoofsJoystick::PoofsJoystick(uint16_t port, JoystickObserver *observer,
-                             TaskMgr *scheduler, DriverStation *ds)
+PoofsJoystick::PoofsJoystick(uint16_t port, TaskMgr *scheduler)
         : Joystick(port)
         , m_port(port)
-        , m_observer(observer)
-        , m_ds(ds)
         , m_prevBtn(0)
         , m_scheduler(scheduler)
-        , m_logCell(nullptr)
-        , m_lastLXVal(false)
-        , m_lastLYVal(false)
-        , m_lastRXVal(false)
-        , m_lastRYVal(false) {
-    if (m_ds == nullptr) {
-        m_ds = &DriverStation::GetInstance();
-    }
-
-    m_prevBtn = m_ds->GetStickButtons(port);
-
+        , m_logCell(nullptr) {
     if (scheduler != nullptr) {
         scheduler->RegisterTask("PoofsJoystickHelper", this, TASK_PRE_PERIODIC);
     }
@@ -49,35 +36,20 @@ PoofsJoystick *PoofsJoystick::RegisterLog(LogSpreadsheet *logger) {
     return this;
 }
 
-float PoofsJoystick::GetRawAxisWithDeadband(int axis, bool fSquared,
-                                            double threshold) {
-    float value = Util::deadband(GetRawAxis(axis), threshold);
-
-    if (fSquared) {
-        value = Util::signSquare(value);
-    }
-
-    return value;
-}
-
 double PoofsJoystick::GetLXAxis() {
-    double pos = this->GetRawAxis(PoofsJoysticks::LeftXAxis);
-    return pos;
+    return this->GetRawAxis(PoofsJoysticks::LeftXAxis);
 }
 
 double PoofsJoystick::GetLYAxis() {
-    double pos = this->GetRawAxis(PoofsJoysticks::LeftYAxis);
-    return pos;
+    return this->GetRawAxis(PoofsJoysticks::LeftYAxis);
 }
 
 double PoofsJoystick::GetRXAxis() {
-    double pos = this->GetRawAxis(PoofsJoysticks::RightXAxis);
-    return pos;
+    return this->GetRawAxis(PoofsJoysticks::RightXAxis);
 }
 
 double PoofsJoystick::GetRYAxis() {
-    double pos = this->GetRawAxis(PoofsJoysticks::RightYAxis);
-    return pos;
+    return this->GetRawAxis(PoofsJoysticks::RightYAxis);
 }
 /**
  * Careful this code is dense and contains crazy bit-shifty logic.
@@ -85,34 +57,5 @@ double PoofsJoystick::GetRYAxis() {
  *    __builtin_ffs(Y) gets the position of the least significant set bit
  */
 void PoofsJoystick::TaskPrePeriodic(RobotMode mode) {
-    uint32_t currBtn = GetAllButtons();
-
-    if (m_observer != nullptr) {
-        uint32_t changedBtn = m_prevBtn ^ currBtn;
-        uint32_t btnMask, btn;
-
-        while (changedBtn != 0) {
-            /* btnMask contains the least significant set bit in changedBtn */
-            btnMask = changedBtn & ~(changedBtn ^ -changedBtn);
-            /* btn contains the index of the lssb in btnMask... aka the button
-             * number */
-            btn = __builtin_ffs(btnMask);
-            if ((currBtn & btnMask) != 0) {
-                /* Button is pressed */
-                m_observer->ObserveJoystickStateChange(m_port, btn, true);
-            }
-            else {
-                /* Button is released */
-                m_observer->ObserveJoystickStateChange(m_port, btn, false);
-            }
-            /* clear |changedBtn| from the mask so we can get the next lsb */
-            changedBtn &= ~btnMask;
-        }
-    }
-    m_prevBtn = currBtn;
-
-    if (m_logCell) {
-        m_logCell->LogPrintf("%x", currBtn);
-    }
 }
 }

@@ -12,7 +12,9 @@
 #include "lib/managers/CoopTask.h"
 #include "lib/logging/LogSpreadsheet.h"
 #include "src/info/RobotInfo.h"
-#include "lib/helpers/JoystickHelper.h"
+#include "lib/helpers/DualActionJoystickHelper.h"
+#include "lib/helpers/XboxJoystickHelper.h"
+#include "lib/helpers/PoofsJoystickHelper.h"
 #include "lib/util/Util.h"
 
 using namespace frc;

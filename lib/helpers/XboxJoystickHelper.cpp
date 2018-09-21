@@ -6,7 +6,7 @@
 
 namespace frc973 {
 
-XboxJoystick::XboxJoystick(uint16_t port, JoystickObserver *observer,
+XboxJoystick::XboxJoystick(uint16_t port, JoystickHelperBase *observer,
                            TaskMgr *scheduler, DriverStation *ds)
         : Joystick(port)
         , m_port(port)
@@ -22,7 +22,7 @@ XboxJoystick::XboxJoystick(uint16_t port, JoystickObserver *observer,
     m_prevBtn = m_ds->GetStickButtons(port);
 
     if (scheduler != nullptr) {
-        scheduler->RegisterTask("PoofsJoystickHelper", this, TASK_PRE_PERIODIC);
+        scheduler->RegisterTask("XboxJoystickHelper", this, TASK_PRE_PERIODIC);
     }
 }
 
@@ -51,12 +51,5 @@ XboxJoystick *XboxJoystick::RegisterLog(LogSpreadsheet *logger) {
  *    __builtin_ffs(Y) gets the position of the least significant set bit
  */
 void XboxJoystick::TaskPrePeriodic(RobotMode mode) {
-    uint32_t currBtn = GetAllButtons();
-
-    m_prevBtn = currBtn;
-
-    if (m_logCell) {
-        m_logCell->LogPrintf("%x", currBtn);
-    }
 }
 }

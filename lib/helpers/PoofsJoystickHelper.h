@@ -1,8 +1,8 @@
 /*
- * JoystickHelper.h
+ * PoofsJoystickHelper.h
  *
- *  Created on: Oct 14, 2015
- *      Author: Andrew
+ *  Created on: 9/13/18
+ *      Author: Kyle, Chris Mc
  */
 
 #pragma once
@@ -11,7 +11,6 @@
 #include "lib/managers/CoopTask.h"
 #include "WPILib.h"
 #include "lib/logging/LogSpreadsheet.h"
-#include "lib/helpers/JoystickHelper.h"
 
 using namespace frc;
 
@@ -30,37 +29,16 @@ const unsigned int RightTrigger = 3;
 const unsigned int RightBumper = 4;
 }
 
-class PoofsJoystick;
-
-/**
- * This abstract class defines the JoystickObserver object. The object is
- * a callback interface. It is not meant to be created as an object.
- * Instead, it should be inherited by a subclass who needs to be notified
- * on the joystick button events.
- */
-
 class PoofsJoystick
         : public CoopTask
         , public Joystick {
-public:
-    static constexpr double DEADBAND_INPUT_THRESHOLD = 0.05;
-    static constexpr double VIRTUAL_JOYSTICK_THRESHOLD = 0.5;
-
 protected:
     uint32_t m_port;
 
     /* For observer notification */
-    JoystickObserver *m_observer;
-    DriverStation *m_ds;
     uint32_t m_prevBtn;
     TaskMgr *m_scheduler;
     LogCell *m_logCell;
-
-    /* For remembering states of sticky buttons */
-    bool m_lastLXVal;
-    bool m_lastLYVal;
-    bool m_lastRXVal;
-    bool m_lastRYVal;
 
 public:
     /**
@@ -70,12 +48,12 @@ public:
      * will observe its state.
      *
      * @param port Specifies the joystick port.
-     * @param notify Points to the JoystickObserver object for button event
+     * @param notify Points to the JoystickHelperBase object for button event
      *        notification callback.
      * @param scheduler Points to the task manager this task will run on
      */
-    PoofsJoystick(uint16_t port, JoystickObserver *observer, TaskMgr *scheduler,
-                  DriverStation *ds = nullptr);
+    PoofsJoystick(uint16_t port, TaskMgr *scheduler);
+
     ~PoofsJoystick();
 
     /**
@@ -84,18 +62,6 @@ public:
      * first call
      */
     PoofsJoystick *RegisterLog(LogSpreadsheet *logger);
-
-    /**
-     * Get the value of the given axis with deadband.
-     *
-     * @param axis Specifies the axis to get the value of.
-     * @param fSquared Specifies whether the joystick input should be squared.
-     * @param threshold Specifies the deadband threshold.
-     * @param hand Specifies the handedness of the joystick (default to right
-     *        hand).
-     */
-    float GetRawAxisWithDeadband(int axis, bool fSquared = false,
-                                 double threshold = DEADBAND_INPUT_THRESHOLD);
 
     double GetLYAxis();
 
@@ -112,12 +78,6 @@ public:
     bool GetLTrigger();
 
     bool GetRTrigger();
-
-    /**
-     * Get a bitstring containing the state of *all* buttons on the joystick.
-     * Including any 'virtual' buttons like the 'joystick buttons'
-     */
-    uint32_t GetAllButtons();
 
     /**
      * This function is called by the TaskMgr to check and process Joystick

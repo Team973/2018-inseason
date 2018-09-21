@@ -11,7 +11,7 @@
 #include "WPILib.h"
 #include <iostream>
 #include "src/info/RobotInfo.h"
-#include "lib/helpers/JoystickHelper.h"
+#include "lib/helpers/DualActionJoystickHelper.h"
 #include "lib/helpers/XboxJoystickHelper.h"
 #include "lib/helpers/PoofsJoystickHelper.h"
 #include "src/subsystems/Drive.h"
@@ -38,7 +38,7 @@ public:
     static constexpr int LEFT_BUMPER_CHANNEL = 2;
     static constexpr int LEFT_TRIGGER_CHANNEL = 1;
 
-    Teleop(Joystick *driver, ObservableJoystick *codriver, Drive *drive,
+    Teleop(PoofsJoystick *driver, XboxJoystick *codriver, Drive *drive,
            IntakeAssembly *intakeAssembly, Hanger *hanger,
            GreyLight *greylight);
     virtual ~Teleop();
@@ -47,13 +47,14 @@ public:
     void TeleopPeriodic();
     void TeleopStop();
 
-    void HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP);
+    void HandleDualActionJoystick(uint32_t port, uint32_t button,
+                                  bool pressedP);
     void HandleXboxJoystick(uint32_t port, uint32_t button, bool pressedP);
     void HandlePoofsJoystick(uint32_t port, uint32_t button, bool pressedP);
 
 private:
-    Joystick *m_driverJoystick;
-    ObservableJoystick *m_operatorJoystick;
+    PoofsJoystick *m_driverJoystick;
+    XboxJoystick *m_operatorJoystick;
 
     Drive *m_drive;
     enum class DriveMode

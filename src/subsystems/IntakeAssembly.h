@@ -5,7 +5,9 @@
 #include "lib/managers/CoopTask.h"
 #include "lib/logging/LogSpreadsheet.h"
 #include "src/info/RobotInfo.h"
-#include "lib/helpers/JoystickHelper.h"
+#include "lib/helpers/DualActionJoystickHelper.h"
+#include "lib/helpers/XboxJoystickHelper.h"
+#include "lib/helpers/PoofsJoystickHelper.h"
 #include "lib/util/Util.h"
 #include "src/subsystems/Elevator.h"
 #include "src/subsystems/Claw.h"
@@ -63,7 +65,7 @@ public:
     static const IntakePreset HALF_STOW_PRESET;
 
     IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
-                   ObservableJoystick *operatorJoystick, Elevator *elevator,
+                   XboxJoystick *operatorJoystick, Elevator *elevator,
                    Claw *claw, Wrist *wrist, GreyLight *greylight);
     virtual ~IntakeAssembly();
 
@@ -154,7 +156,7 @@ private:
 
     TaskMgr *m_scheduler;
 
-    ObservableJoystick *m_operatorJoystick;
+    XboxJoystick *m_operatorJoystick;
     Elevator *m_elevator;
     Claw *m_claw;
     Wrist *m_wrist;

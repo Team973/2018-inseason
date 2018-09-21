@@ -15,11 +15,11 @@ using namespace ctre;
 namespace frc973 {
 Robot::Robot()
         : CoopMTRobot()
-        , JoystickObserver()
+        , JoystickHelperBase()
         , m_pdp(new PowerDistributionPanel())
-        , m_driverJoystick(new Joystick(DRIVER_JOYSTICK_PORT))
+        , m_driverJoystick(new PoofsJoystick(DRIVER_JOYSTICK_PORT, this))
         , m_operatorJoystick(
-              new ObservableJoystick(OPERATOR_JOYSTICK_PORT, this, this))
+              new XboxJoystick(OPERATOR_JOYSTICK_PORT, this, this))
         , m_leftDriveTalonA(new GreyTalonSRX(LEFT_DRIVE_A_CAN_ID))
         , m_leftDriveVictorB(new VictorSPX(LEFT_DRIVE_B_VICTOR_ID))
         , m_leftDriveVictorC(new VictorSPX(LEFT_DRIVE_C_VICTOR_ID))
@@ -159,7 +159,7 @@ void Robot::AllStateContinuous() {
 void Robot::ObserveJoystickStateChange(uint32_t port, uint32_t button,
                                        bool pressedP) {
     if (this->IsOperatorControl()) {
-        m_teleop->HandleTeleopButton(port, button, pressedP);
+        m_teleop->HandleDualActionJoystick(port, button, pressedP);
         m_teleop->HandleXboxJoystick(port, button, pressedP);
         m_teleop->HandlePoofsJoystick(port, button, pressedP);
     }

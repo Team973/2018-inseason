@@ -3,7 +3,9 @@
 #include "WPILib.h"
 #include <iostream>
 #include "src/info/RobotInfo.h"
-#include "lib/helpers/JoystickHelper.h"
+#include "lib/helpers/DualActionJoystickHelper.h"
+#include "lib/helpers/XboxJoystickHelper.h"
+#include "lib/helpers/PoofsJoystickHelper.h"
 #include "src/Robot.h"
 #include "src/AutonomousMode.h"
 #include "lib/util/WrapDash.h"
@@ -19,7 +21,7 @@ using namespace cs;
 namespace frc973 {
 class Disabled {
 public:
-    Disabled(Joystick *driver, ObservableJoystick *codriver,
+    Disabled(PoofsJoystick *driver, XboxJoystick *codriver,
              IntakeAssembly *intakeAssembly, UsbCamera intakeCamera,
              UsbCamera forkCamera, VideoSink greyCam, GreyLight *greylight);
     virtual ~Disabled();
@@ -36,8 +38,8 @@ public:
     AutoRoutineBase::RobotStartPosition GetStartPosition();
 
 private:
-    Joystick *m_driverJoystick;
-    ObservableJoystick *m_operatorJoystick;
+    PoofsJoystick *m_driverJoystick;
+    XboxJoystick *m_operatorJoystick;
 
     AutoRoutineBase::RobotStartPosition m_startPos;
     UsbCamera m_intakeCamera;
