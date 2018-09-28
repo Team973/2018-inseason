@@ -5,9 +5,8 @@ using namespace frc;
 using namespace sample;
 
 namespace frc973 {
-Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
-           Drive *drive, IntakeAssembly *intakeAssembly, Hanger *hanger,
-           GreyLight *greylight)
+Test::Test(Joystick *driver, ObservableJoystick *codriver, Drive *drive,
+           IntakeAssembly *intakeAssembly, Hanger *hanger, GreyLight *greylight)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_drive(drive)
@@ -26,6 +25,8 @@ void Test::TestInit() {
     m_driveMode = DriveMode::Openloop;
     m_intakeMode = IntakeMode::manualPosition;
     m_hanger->DisengagePTO();
+    m_driverJoystick->SetThrottleChannel(LEFT_Y_AXIS_CHANNEL);
+    m_driverJoystick->SetTwistChannel(RIGHT_X_AXIS_CHANNEL);
 }
 
 void Test::TestPeriodic() {
@@ -54,23 +55,32 @@ void Test::TestPeriodic() {
     else if (m_intakeMode == IntakeMode::motionMagic) {
     }
 
-    double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
-    double x =
-        -m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
-    bool quickturn = m_driverJoystick->GetRawButton(DualAction::RightTrigger);
-
-    if (m_driverJoystick->GetRawButton(DualAction::RightBumper)) {
+    double y = m_driverJoystick->GetRawAxis(LEFT_Y_AXIS_CHANNEL);
+    double x = m_driverJoystick->GetRawAxis(RIGHT_X_AXIS_CHANNEL);
+    bool quickturn = m_driverJoystick->GetRawButton(RIGHT_TRIGGER_CHANNEL);
+    if (m_driverJoystick->GetRawButton(LEFT_TRIGGER_CHANNEL)) {
+        m_intakeAssembly->EjectCube();
     }
-    x /= 3.0;
-    y /= 3.0;
-
-    if (m_driveMode == DriveMode::AssistedArcade) {
-        m_drive->AssistedArcadeDrive(y, x);
+    else {
+        m_intakeAssembly->HaltIntake();
     }
-    else if (m_driveMode == DriveMode::Cheesy) {
+    if (m_driverJoystick->GetRawButton(LEFT_BUMPER_CHANNEL)) {
+        m_intakeAssembly->OpenClaw();
+        m_intakeAssembly->HaltIntake();
+    }
+
+    if (m_driverJoystick->GetRawButton(DualAction::RightTrigger)) {
+        x /= 3.0;
+        y /= 3.0;
+    }
+
+    if (m_driveMode == DriveMode::Cheesy) {
         m_drive->CheesyDrive(
             y, x, quickturn,
             false);  // gear set to false until solenoids get set up
+    }
+    else if (m_driveMode == DriveMode::Hanger) {
+        // m_hanger->SetHangerPower(y);
     }
     else if (m_driveMode == DriveMode::Hanger) {
         m_drive->HangerDrive(-y);

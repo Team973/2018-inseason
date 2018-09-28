@@ -5,12 +5,10 @@ using namespace frc;
 
 namespace frc973 {
 static const Color DISABLED_RED = {255, 0, 0};
-Disabled::Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
-                   IntakeAssembly *intakeAssembly, UsbCamera intakeCamera,
-                   UsbCamera forkCamera, VideoSink greyCam,
-                   GreyLight *greylight)
-        : m_driverJoystick(driver)
-        , m_operatorJoystick(codriver)
+Disabled::Disabled(ObservableJoystick *codriver, IntakeAssembly *intakeAssembly,
+                   UsbCamera intakeCamera, UsbCamera forkCamera,
+                   VideoSink greyCam, GreyLight *greylight)
+        : m_operatorJoystick(codriver)
         , m_startPos(AutoRoutineBase::RobotStartPosition::Center)
         , m_routineMode(AutoRoutineBase::AutoRoutineMode::Sneak)
         , m_intakeCamera(intakeCamera)
@@ -84,7 +82,7 @@ const char *Disabled::RobotStartPosToString(
 
 void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,
                                     bool pressedP) {
-    if (port == DRIVER_JOYSTICK_PORT) {
+    if (port == OPERATOR_JOYSTICK_PORT) {
         switch (button) {
             case DualAction::BtnA:
                 if (pressedP) {

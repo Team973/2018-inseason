@@ -16,7 +16,15 @@ using namespace frc;
 namespace frc973 {
 class Test {
 public:
-    Test(ObservableJoystick *driver, ObservableJoystick *codriver, Drive *drive,
+    static constexpr int LEFT_Y_AXIS_CHANNEL = 0;
+    static constexpr int RIGHT_X_AXIS_CHANNEL = 3;
+
+    static constexpr int RIGHT_BUMPER_CHANNEL = 4;
+    static constexpr int RIGHT_TRIGGER_CHANNEL = 3;
+    static constexpr int LEFT_BUMPER_CHANNEL = 2;
+    static constexpr int LEFT_TRIGGER_CHANNEL = 1;
+
+    Test(Joystick *driver, ObservableJoystick *codriver, Drive *drive,
          IntakeAssembly *intakeAssembly, Hanger *hanger, GreyLight *greylight);
     virtual ~Test();
 
@@ -48,7 +56,7 @@ private:
         motionMagic
     };
 
-    ObservableJoystick *m_driverJoystick;
+    Joystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
 
     Drive *m_drive;

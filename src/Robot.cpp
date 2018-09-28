@@ -17,8 +17,7 @@ Robot::Robot()
         : CoopMTRobot()
         , JoystickObserver()
         , m_pdp(new PowerDistributionPanel())
-        , m_driverJoystick(
-              new ObservableJoystick(DRIVER_JOYSTICK_PORT, this, this))
+        , m_driverJoystick(new Joystick(DRIVER_JOYSTICK_PORT))
         , m_operatorJoystick(
               new ObservableJoystick(OPERATOR_JOYSTICK_PORT, this, this))
         , m_leftDriveTalonA(new GreyTalonSRX(LEFT_DRIVE_A_CAN_ID))
@@ -69,9 +68,9 @@ Robot::Robot()
               new Relay(COMPRESSOR_RELAY, Relay::Direction::kForwardOnly))
         , m_compressor(
               new GreyCompressor(m_airPressureSwitch, m_compressorRelay, this))
-        , m_disabled(new Disabled(m_driverJoystick, m_operatorJoystick,
-                                  m_intakeAssembly, m_intakeCamera,
-                                  m_forkCamera, m_greyCam, m_greylight))
+        , m_disabled(new Disabled(m_operatorJoystick, m_intakeAssembly,
+                                  m_intakeCamera, m_forkCamera, m_greyCam,
+                                  m_greylight))
         , m_autonomous(new Autonomous(m_disabled, m_drive, m_intakeAssembly,
                                       m_gyro, m_greylight))
         , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick, m_drive,

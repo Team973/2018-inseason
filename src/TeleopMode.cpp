@@ -13,8 +13,8 @@
 using namespace frc;
 
 namespace frc973 {
-Teleop::Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
-               Drive *drive, IntakeAssembly *intakeAssembly, Hanger *hanger,
+Teleop::Teleop(Joystick *driver, ObservableJoystick *codriver, Drive *drive,
+               IntakeAssembly *intakeAssembly, Hanger *hanger,
                GreyLight *greylight)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
@@ -44,9 +44,16 @@ void Teleop::TeleopInit() {
     m_intakeAssembly->EnableCoastMode();
     m_intakeAssembly->StopIntake();
     m_hanger->DisengagePTO();
+    m_driverJoystick->SetThrottleChannel(LEFT_Y_AXIS_CHANNEL);
+    m_driverJoystick->SetTwistChannel(RIGHT_X_AXIS_CHANNEL);
 }
 
 void Teleop::TeleopPeriodic() {
+    /*DBStringPrintf(DBStringPos::DB_LINE2, "Left Y %1.3f",
+                   m_driverJoystick->GetRawAxis(0));
+    DBStringPrintf(DBStringPos::DB_LINE3, "Right X %1.3f",
+                   m_driverJoystick->GetRawAxis(3));*/
+
     if (!m_endGameSignalSent && Timer::GetMatchTime() < 40) {
         m_endGameSignalSent = true;
         m_endGameSignal->Reset();
@@ -55,14 +62,24 @@ void Teleop::TeleopPeriodic() {
     /**
      * Driver Joystick
      */
-    double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
-    double x =
-        -m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
-    bool quickturn = m_driverJoystick->GetRawButton(DualAction::RightBumper);
-    /*if (m_driverJoystick->GetRawButton(DualAction::RightTrigger)) {
+    double y = m_driverJoystick->GetRawAxis(LEFT_Y_AXIS_CHANNEL);
+    double x = m_driverJoystick->GetRawAxis(RIGHT_X_AXIS_CHANNEL);
+    bool quickturn = m_driverJoystick->GetRawButton(RIGHT_TRIGGER_CHANNEL);
+    if (m_driverJoystick->GetRawButton(LEFT_TRIGGER_CHANNEL)) {
+        m_intakeAssembly->EjectCube();
+    }
+    else {
+        m_intakeAssembly->HaltIntake();
+    }
+    if (m_driverJoystick->GetRawButton(LEFT_BUMPER_CHANNEL)) {
+        m_intakeAssembly->OpenClaw();
+        m_intakeAssembly->HaltIntake();
+    }
+
+    if (m_driverJoystick->GetRawButton(DualAction::RightTrigger)) {
         x /= 3.0;
         y /= 3.0;
-    }*/
+    }
 
     if (m_driveMode == DriveMode::Cheesy) {
         m_drive->CheesyDrive(
@@ -77,7 +94,7 @@ void Teleop::TeleopPeriodic() {
      * Operator Joystick
      */
     double elevatorPosIncInput =
-        -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
+        -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
     double wristPosIncInput = pow(
         -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis), 3);
 
@@ -141,12 +158,12 @@ void Teleop::TeleopPeriodic() {
 
     m_wristModeSwitchPrevState = wristModeSwitch;
 
-    if (m_wristControlMode == WristControlMode::OpenLoop) {
+    /*if (m_wristControlMode == WristControlMode::OpenLoop) {
         DBStringPrintf(DBStringPos::DB_LINE2, "OPEN LOOP WRIST");
     }
     else {
         DBStringPrintf(DBStringPos::DB_LINE2, "closed loop wrist");
-    }
+    }*/
 }
 
 void Teleop::TeleopStop() {
@@ -270,8 +287,11 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::BtnX:
                 if (pressedP) {
-                    m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::SCALE_LOW_PRESET);
+                    m_driveMode = DriveMode::Hanger;
+                    m_drive->HangerDrive(1.0);
+                }
+                else {
+                    m_drive->HangerDrive(0);
                 }
                 break;
             case DualAction::BtnB:
@@ -344,7 +364,8 @@ void Teleop::HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case DualAction::DPadLeftVirtBtn:
                 if (pressedP) {
-                    m_intakeAssembly->SetModeHanging(false);
+                    m_driveMode = DriveMode::Hanger;
+                    m_hanger->EngagePTO();
                 }
                 break;
             case DualAction::DPadRightVirtBtn:

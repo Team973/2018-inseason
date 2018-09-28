@@ -19,9 +19,9 @@ using namespace cs;
 namespace frc973 {
 class Disabled {
 public:
-    Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
-             IntakeAssembly *intakeAssembly, UsbCamera intakeCamera,
-             UsbCamera forkCamera, VideoSink greyCam, GreyLight *greylight);
+    Disabled(ObservableJoystick *codriver, IntakeAssembly *intakeAssembly,
+             UsbCamera intakeCamera, UsbCamera forkCamera, VideoSink greyCam,
+             GreyLight *greylight);
     virtual ~Disabled();
 
     void DisabledInit();
