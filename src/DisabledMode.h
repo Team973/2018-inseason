@@ -29,8 +29,8 @@ public:
     void DisabledStop();
 
     const char *RobotStartPosToString(
-        AutoRoutineBase::RobotStartPosition position,
-        AutoRoutineBase::AutoRoutineMode mode);
+        AutoRoutineBase::RobotStartPosition position);
+    const char *AutoRoutineModeToString(AutoRoutineBase::AutoRoutineMode mode);
 
     void HandleDisabledButton(uint32_t port, uint32_t button, bool pressedP);
 
