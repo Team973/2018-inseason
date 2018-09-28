@@ -7,11 +7,10 @@
     "wheelbase_width": 25.205,
     "reverse": true,
     "waypoints": [
-      { "x": 0, "y": 0, "angle": 0 },
-      { "x": -130, "y": -12, "angle" : 0},
-      { "x": -200, "y": 50, "angle": 90},
-      { "x": -200, "y": 170, "angle": 90},
-      { "x": -265, "y": 230, "angle": 0}
+      { "x" : 166, "y": 0, "angle" : 0},
+      { "x": 206, "y": 60, "angle": 90},
+      { "x": 206, "y": 170, "angle": 90},
+      { "x": 261, "y": 208, "angle": 0}
     ],
     "visual-y-offset": -250
 }
