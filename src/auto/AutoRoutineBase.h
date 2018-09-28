@@ -21,6 +21,12 @@ public:
         Right
     };
 
+    enum class AutoRoutineMode
+    {
+        Sneak,
+        Scale
+    };
+
     AutoRoutineBase();
     virtual ~AutoRoutineBase();
 

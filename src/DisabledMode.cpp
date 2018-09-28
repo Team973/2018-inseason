@@ -12,15 +12,16 @@ Disabled::Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_startPos(AutoRoutineBase::RobotStartPosition::Center)
+        , m_routineMode(AutoRoutineBase::AutoRoutineMode::Sneak)
         , m_intakeCamera(intakeCamera)
         , m_forkCamera(forkCamera)
         , m_greyCam(greyCam)
         , m_greylight(greylight)
         , m_intakeAssembly(intakeAssembly)
         , m_disabledSignal(new LightPattern::SolidColor(DISABLED_RED))
-        , m_rightSideSignal(
-              new LightPattern::LengthModifier(m_disabledSignal, 12))
         , m_leftSideSignal(
+              new LightPattern::LengthModifier(m_disabledSignal, 12))
+        , m_rightSideSignal(
               new LightPattern::ReverseModifier(m_rightSideSignal)) {
 }
 
@@ -34,7 +35,8 @@ void Disabled::DisabledInit() {
 }
 
 void Disabled::DisabledPeriodic() {
-    DBStringPrintf(DB_LINE1, "Start %s", RobotStartPosToString(m_startPos));
+    DBStringPrintf(DB_LINE1, "Start %s",
+                   RobotStartPosToString(m_startPos, m_routineMode));
 }
 
 void Disabled::DisabledStop() {
@@ -42,16 +44,37 @@ void Disabled::DisabledStop() {
 }
 
 const char *Disabled::RobotStartPosToString(
-    AutoRoutineBase::RobotStartPosition position) {
+    AutoRoutineBase::RobotStartPosition position,
+    AutoRoutineBase::AutoRoutineMode mode) {
     switch (position) {
-        case AutoRoutineBase::RobotStartPosition::Left:
-            return "Left";
-            break;
         case AutoRoutineBase::RobotStartPosition::Center:
             return "Center";
             break;
+        case AutoRoutineBase::RobotStartPosition::Left:
+            switch (mode) {
+                case AutoRoutineBase::AutoRoutineMode::Sneak:
+                    return "LeftSneak";
+                    break;
+                case AutoRoutineBase::AutoRoutineMode::Scale:
+                    return "LeftScale";
+                    break;
+                default:
+                    return "Left";
+                    break;
+            }
+            break;
         case AutoRoutineBase::RobotStartPosition::Right:
-            return "Right";
+            switch (mode) {
+                case AutoRoutineBase::AutoRoutineMode::Sneak:
+                    return "RightSneak";
+                    break;
+                case AutoRoutineBase::AutoRoutineMode::Scale:
+                    return "RightScale";
+                    break;
+                default:
+                    return "Right";
+                    break;
+            }
             break;
         default:
             return "Error!";
@@ -95,14 +118,12 @@ void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,
                 break;
             case DualAction::RightBumper:
                 if (pressedP) {
-                }
-                else {
+                    m_routineMode = AutoRoutineBase::AutoRoutineMode::Sneak;
                 }
                 break;
             case DualAction::RightTrigger:
                 if (pressedP) {
-                }
-                else {
+                    m_routineMode = AutoRoutineBase::AutoRoutineMode::Scale;
                 }
                 break;
             case DualAction::DPadUpVirtBtn:
@@ -139,5 +160,9 @@ void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,
  **/
 AutoRoutineBase::RobotStartPosition Disabled::GetStartPosition() {
     return m_startPos;
+}
+
+AutoRoutineBase::AutoRoutineMode Disabled::GetRoutineMode() {
+    return m_routineMode;
 }
 };

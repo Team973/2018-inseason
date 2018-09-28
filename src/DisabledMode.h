@@ -29,17 +29,20 @@ public:
     void DisabledStop();
 
     const char *RobotStartPosToString(
-        AutoRoutineBase::RobotStartPosition position);
+        AutoRoutineBase::RobotStartPosition position,
+        AutoRoutineBase::AutoRoutineMode mode);
 
     void HandleDisabledButton(uint32_t port, uint32_t button, bool pressedP);
 
     AutoRoutineBase::RobotStartPosition GetStartPosition();
+    AutoRoutineBase::AutoRoutineMode GetRoutineMode();
 
 private:
     ObservableJoystick *m_driverJoystick;
     ObservableJoystick *m_operatorJoystick;
 
     AutoRoutineBase::RobotStartPosition m_startPos;
+    AutoRoutineBase::AutoRoutineMode m_routineMode;
     UsbCamera m_intakeCamera;
     UsbCamera m_forkCamera;
     VideoSink m_greyCam;
@@ -47,7 +50,7 @@ private:
     GreyLight *m_greylight;
     IntakeAssembly *m_intakeAssembly;
     LightPattern::SolidColor *m_disabledSignal;
-    LightPattern::LengthModifier *m_rightSideSignal;
-    LightPattern::ReverseModifier *m_leftSideSignal;
+    LightPattern::LengthModifier *m_leftSideSignal;
+    LightPattern::ReverseModifier *m_rightSideSignal;
 };
 };
