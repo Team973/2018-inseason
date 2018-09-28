@@ -13,7 +13,7 @@ void ForwardAuto::Execute(AutoRoutineBase::AutoDirection direction,
                           std::string scalePos) {
     switch (m_autoState) {
         case 0:
-            m_drive->PIDDrive(-150.0, 0.0, Drive::RelativeTo::Now, 0.8);
+            m_drive->PIDDrive(150.0, 0.0, Drive::RelativeTo::Now, 0.8);
             m_autoState++;
             break;
     }
