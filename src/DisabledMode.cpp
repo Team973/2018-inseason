@@ -33,8 +33,6 @@ void Disabled::DisabledInit() {
 }
 
 void Disabled::DisabledPeriodic() {
-    DBStringPrintf(DB_LINE1, "Start %s",
-                   RobotStartPosToString(m_startPos, m_routineMode));
 }
 
 void Disabled::DisabledStop() {
@@ -49,35 +47,26 @@ const char *Disabled::RobotStartPosToString(
             return "Center";
             break;
         case AutoRoutineBase::RobotStartPosition::Left:
-            switch (mode) {
-                case AutoRoutineBase::AutoRoutineMode::Sneak:
-                    return "LeftSneak";
-                    break;
-                case AutoRoutineBase::AutoRoutineMode::Scale:
-                    return "LeftScale";
-                    break;
-                default:
-                    return "Left";
-                    break;
+            if (mode == AutoRoutineBase::AutoRoutineMode::Sneak) {
+                return "LeftSneak";
+            }
+            else if (mode == AutoRoutineBase::AutoRoutineMode::Scale) {
+                return "LeftScale";
             }
             break;
         case AutoRoutineBase::RobotStartPosition::Right:
-            switch (mode) {
-                case AutoRoutineBase::AutoRoutineMode::Sneak:
-                    return "RightSneak";
-                    break;
-                case AutoRoutineBase::AutoRoutineMode::Scale:
-                    return "RightScale";
-                    break;
-                default:
-                    return "Right";
-                    break;
+            if (mode == AutoRoutineBase::AutoRoutineMode::Sneak) {
+                return "RightSneak";
+            }
+            else if (mode == AutoRoutineBase::AutoRoutineMode::Scale) {
+                return "RightScale";
             }
             break;
         default:
             return "Error!";
             break;
     }
+    return "Error!";
 }
 
 void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,
@@ -117,17 +106,26 @@ void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,
             case DualAction::RightBumper:
                 if (pressedP) {
                     m_routineMode = AutoRoutineBase::AutoRoutineMode::Sneak;
+                    DBStringPrintf(
+                        DB_LINE1, "Start %s",
+                        RobotStartPosToString(m_startPos, m_routineMode));
                 }
                 break;
             case DualAction::RightTrigger:
                 if (pressedP) {
                     m_routineMode = AutoRoutineBase::AutoRoutineMode::Scale;
+                    DBStringPrintf(
+                        DB_LINE1, "Start %s",
+                        RobotStartPosToString(m_startPos, m_routineMode));
                 }
                 break;
             case DualAction::DPadUpVirtBtn:
                 if (pressedP) {
                     m_startPos = AutoRoutineBase::RobotStartPosition::Center;
                     m_greylight->SetPixelStateProcessor(m_disabledSignal);
+                    DBStringPrintf(
+                        DB_LINE1, "Start %s",
+                        RobotStartPosToString(m_startPos, m_routineMode));
                 }
                 break;
             case DualAction::DPadDownVirtBtn:
@@ -138,12 +136,18 @@ void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,
                 if (pressedP) {
                     m_startPos = AutoRoutineBase::RobotStartPosition::Left;
                     m_greylight->SetPixelStateProcessor(m_leftSideSignal);
+                    DBStringPrintf(
+                        DB_LINE1, "Start %s",
+                        RobotStartPosToString(m_startPos, m_routineMode));
                 }
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
                     m_startPos = AutoRoutineBase::RobotStartPosition::Right;
                     m_greylight->SetPixelStateProcessor(m_rightSideSignal);
+                    DBStringPrintf(
+                        DB_LINE1, "Start %s",
+                        RobotStartPosToString(m_startPos, m_routineMode));
                 }
                 break;
             default:
