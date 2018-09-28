@@ -85,23 +85,23 @@ void Autonomous::AutonomousInit() {
                 case AutoRoutineBase::AutoRoutineMode::Sneak:
                     switch (GetSwitchScalePosition(m_scoringLocations)) {
                         case SwitchScalePosition::LL:
-                            m_scaleAuto->Reset();
-                            m_routine = m_scaleAuto;
+                            m_sneakScale->Reset();
+                            m_routine = m_sneakScale;
                             m_direction = AutoRoutineBase::AutoDirection::Left;
                             break;
                         case SwitchScalePosition::LR:
-                            m_scaleOpposite->Reset();
-                            m_routine = m_scaleOpposite;
+                            m_sideSwitch->Reset();
+                            m_routine = m_sideSwitch;
                             m_direction = AutoRoutineBase::AutoDirection::Right;
                             break;
                         case SwitchScalePosition::RL:
-                            m_scaleAuto->Reset();
-                            m_routine = m_scaleAuto;
+                            m_sneakScale->Reset();
+                            m_routine = m_sneakScale;
                             m_direction = AutoRoutineBase::AutoDirection::Left;
                             break;
                         case SwitchScalePosition::RR:
-                            m_scaleOpposite->Reset();
-                            m_routine = m_scaleOpposite;
+                            m_forwardAuto->Reset();
+                            m_routine = m_forwardAuto;
                             m_direction = AutoRoutineBase::AutoDirection::Right;
                             break;
                         case SwitchScalePosition::NOT_YET_RECEIVED:
@@ -116,8 +116,8 @@ void Autonomous::AutonomousInit() {
                 case AutoRoutineBase::AutoRoutineMode::Scale:
                     switch (GetSwitchScalePosition(m_scoringLocations)) {
                         case SwitchScalePosition::LL:
-                            m_scaleAuto->Reset();
-                            m_routine = m_scaleAuto;
+                            m_sneakScale->Reset();
+                            m_routine = m_sneakScale;
                             m_direction = AutoRoutineBase::AutoDirection::Left;
                             break;
                         case SwitchScalePosition::LR:
@@ -126,8 +126,8 @@ void Autonomous::AutonomousInit() {
                             m_direction = AutoRoutineBase::AutoDirection::Right;
                             break;
                         case SwitchScalePosition::RL:
-                            m_scaleAuto->Reset();
-                            m_routine = m_scaleAuto;
+                            m_sneakScale->Reset();
+                            m_routine = m_sneakScale;
                             m_direction = AutoRoutineBase::AutoDirection::Left;
                             break;
                         case SwitchScalePosition::RR:
@@ -151,23 +151,23 @@ void Autonomous::AutonomousInit() {
                 case AutoRoutineBase::AutoRoutineMode::Sneak:
                     switch (GetSwitchScalePosition(m_scoringLocations)) {
                         case SwitchScalePosition::LL:
-                            m_scaleAuto->Reset();
-                            m_routine = m_scaleAuto;
+                            m_forwardAuto->Reset();
+                            m_routine = m_forwardAuto;
                             m_direction = AutoRoutineBase::AutoDirection::Left;
                             break;
                         case SwitchScalePosition::LR:
-                            m_scaleOpposite->Reset();
-                            m_routine = m_scaleOpposite;
+                            m_sneakScale->Reset();
+                            m_routine = m_sneakScale;
                             m_direction = AutoRoutineBase::AutoDirection::Right;
                             break;
                         case SwitchScalePosition::RL:
-                            m_scaleAuto->Reset();
-                            m_routine = m_scaleAuto;
-                            m_direction = AutoRoutineBase::AutoDirection::Left;
+                            m_sideSwitch->Reset();
+                            m_routine = m_sideSwitch;
+                            m_direction = AutoRoutineBase::AutoDirection::Right;
                             break;
                         case SwitchScalePosition::RR:
-                            m_scaleOpposite->Reset();
-                            m_routine = m_scaleOpposite;
+                            m_sneakScale->Reset();
+                            m_routine = m_sneakScale;
                             m_direction = AutoRoutineBase::AutoDirection::Right;
                             break;
                         case SwitchScalePosition::NOT_YET_RECEIVED:
@@ -182,23 +182,23 @@ void Autonomous::AutonomousInit() {
                 case AutoRoutineBase::AutoRoutineMode::Scale:
                     switch (GetSwitchScalePosition(m_scoringLocations)) {
                         case SwitchScalePosition::LL:
-                            m_scaleAuto->Reset();
-                            m_routine = m_scaleAuto;
+                            m_scaleOpposite->Reset();
+                            m_routine = m_scaleOpposite;
                             m_direction = AutoRoutineBase::AutoDirection::Left;
                             break;
                         case SwitchScalePosition::LR:
-                            m_scaleOpposite->Reset();
-                            m_routine = m_scaleOpposite;
+                            m_sneakScale->Reset();
+                            m_routine = m_sneakScale;
                             m_direction = AutoRoutineBase::AutoDirection::Right;
                             break;
                         case SwitchScalePosition::RL:
-                            m_scaleAuto->Reset();
-                            m_routine = m_scaleAuto;
+                            m_scaleOpposite->Reset();
+                            m_routine = m_scaleOpposite;
                             m_direction = AutoRoutineBase::AutoDirection::Left;
                             break;
                         case SwitchScalePosition::RR:
-                            m_scaleOpposite->Reset();
-                            m_routine = m_scaleOpposite;
+                            m_sneakScale->Reset();
+                            m_routine = m_sneakScale;
                             m_direction = AutoRoutineBase::AutoDirection::Right;
                             break;
                         case SwitchScalePosition::NOT_YET_RECEIVED:
@@ -219,7 +219,6 @@ void Autonomous::AutonomousInit() {
 
 void Autonomous::AutonomousPeriodic() {
     m_routine->Execute(m_direction, m_scalePos);
-    // m_sneakScale->Execute(m_direction, m_scalePos);
     // Match time to display in dashboard
     SmartDashboard::PutNumber("misc/timer",
                               DriverStation::GetInstance().GetMatchTime());
