@@ -20,7 +20,7 @@ Disabled::Disabled(ObservableJoystick *codriver, IntakeAssembly *intakeAssembly,
         , m_leftSideSignal(
               new LightPattern::LengthModifier(m_disabledSignal, 12))
         , m_rightSideSignal(
-              new LightPattern::ReverseModifier(m_rightSideSignal)) {
+              new LightPattern::ReverseModifier(m_leftSideSignal)) {
 }
 
 Disabled::~Disabled() {
