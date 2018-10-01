@@ -39,14 +39,13 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction,
     std::cout << "Scale Auto" << std::endl;
     switch (m_autoState) {
         case 0:
-            m_drive->PIDDrive(166.0, 0.0, Drive::RelativeTo::Now, 0.9)
+            m_drive->PIDDrive(175.0, 0.0, Drive::RelativeTo::Now, 0.9)
                 ->SetVMax(180.0, 360.0);
-            m_intakeAssembly->GoToIntakePosition(IntakeAssembly::GROUND_PRESET);
             m_autoTimer = GetMsecTime();
             m_autoState++;
             break;
         case 1:
-            if (m_drive->GetSplinePercentComplete() > 1.0) {
+            if (GetMsecTime() - m_autoTimer > 2000) {
                 if (direction == AutoRoutineBase::AutoDirection::Right) {
                     m_drive->SplineDrive(
                         &left_scale_opposite::left_scale_opposite,
@@ -63,21 +62,20 @@ void ScaleOpposite::Execute(AutoRoutineBase::AutoDirection direction,
         case 2:
             if (GetMsecTime() - m_autoTimer > 6000) {
                 m_intakeAssembly->GoToIntakePosition(
-                    IntakeAssembly::SCALE_HIGH_PRESET);
+                    IntakeAssembly::SCALE_LOW_PRESET);
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
             break;
         case 3:
-            if (m_drive->GetSplinePercentComplete() > 0.85 ||
-                m_drive->OnTarget()) {
-                m_intakeAssembly->EjectCube();
+            if (GetMsecTime() - m_autoTimer > 2000) {
+                m_intakeAssembly->FastEjectCube();
                 m_autoState++;
             }
             break;
         case 4:
             if (m_drive->GetSplinePercentComplete() > 1.0) {
-                m_drive->PIDDrive(-50.0, 0.0, Drive::RelativeTo::Now, 0.8);
+                m_drive->PIDDrive(-30.0, 0.0, Drive::RelativeTo::Now, 0.8);
                 m_autoState++;
             }
             break;

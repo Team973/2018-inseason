@@ -30,6 +30,7 @@ Robot::Robot()
         , m_logger(new LogSpreadsheet(this))
         , m_matchIdentifier(new LogCell("Match Identifier", 64))
         , m_gameSpecificMessage(new LogCell("GameSpecificMessage", 10))
+        , m_pressureLog(new LogCell("Pressure", 10))
         , m_forkCamera(UsbCamera("USB Camera 0", 0))
         , m_intakeCamera(UsbCamera("USB Camera 1", 1))
         , m_cameraServer(CameraServer::GetInstance())
@@ -64,6 +65,8 @@ Robot::Robot()
                               m_forkDeploy, m_forkliftTalon, m_intakeCamera,
                               m_forkCamera, m_greyCam, m_greylight))
         , m_airPressureSwitch(new DigitalInput(PRESSURE_DIN_ID))
+        , m_pressureSensor(new AnalogInput(PRESSURE_ANALOG_ID))
+        , m_pressureSensorFilter(new MovingAverageFilter(0.0, 0.0))
         , m_compressorRelay(
               new Relay(COMPRESSOR_RELAY, Relay::Direction::kForwardOnly))
         , m_compressor(
@@ -154,6 +157,10 @@ void Robot::AllStateContinuous() {
         DriverStation::GetInstance().GetReplayNumber());
     m_gameSpecificMessage->LogText(
         DriverStation::GetInstance().GetGameSpecificMessage().c_str());
+    DBStringPrintf(
+        DBStringPos::DB_LINE6, "Pressure %3.0lf",
+        m_pressureSensorFilter->Update(m_pressureSensor->GetVoltage() * 45.0));
+    m_pressureLog->LogDouble(m_pressureSensor->GetVoltage() * 45.0);
 }
 
 void Robot::ObserveJoystickStateChange(uint32_t port, uint32_t button,

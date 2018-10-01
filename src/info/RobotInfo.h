@@ -85,6 +85,7 @@ static const int PCM_CAN_ID = 17;
 
 // Digital Inputs
 static const int PRESSURE_DIN_ID = 1;
+static const int PRESSURE_ANALOG_ID = 0;
 
 // Relays
 static const int COMPRESSOR_RELAY = 0;

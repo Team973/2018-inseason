@@ -32,6 +32,7 @@
 #include "lib/helpers/GreyCompressor.h"
 #include "lib/helpers/GreyTalon.h"
 #include "lib/bases/CoopMTRobot.h"
+#include "lib/filters/MovingAverageFilter.h"
 #include "ctre/Phoenix.h"
 #include "lib/helpers/GreyTalon.h"
 #include "lib/helpers/GreyLight.h"
@@ -95,6 +96,7 @@ private:
     LogSpreadsheet *m_logger;
     LogCell *m_matchIdentifier;
     LogCell *m_gameSpecificMessage;
+    LogCell *m_pressureLog;
 
     UsbCamera m_forkCamera;
     UsbCamera m_intakeCamera;
@@ -122,6 +124,8 @@ private:
     Hanger *m_hanger;
 
     DigitalInput *m_airPressureSwitch;
+    AnalogInput *m_pressureSensor;
+    MovingAverageFilter *m_pressureSensorFilter;
     Relay *m_compressorRelay;
     GreyCompressor *m_compressor;
     Disabled *m_disabled;

@@ -119,7 +119,7 @@ void Teleop::TeleopPeriodic() {
             }
             break;
         case CubeIntakeState::SwitchIntakeDelay:
-            if (GetMsecTime() - m_intakeModeTimer > 100) {
+            if (GetMsecTime() - m_intakeModeTimer > 250) {
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::STOW_PRESET);
                 m_cubeIntakeState = CubeIntakeState::Idle;

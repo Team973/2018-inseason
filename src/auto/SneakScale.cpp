@@ -40,7 +40,7 @@ void SneakScale::Execute(AutoRoutineBase::AutoDirection direction,
             break;
         case 2:
             if (m_drive->GetSplinePercentComplete() > 1.0 ||
-                GetMsecTime() - m_autoTimer > 4000) {
+                GetMsecTime() - m_autoTimer > 3500) {
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::IntakePreset(Elevator::SCALE_HIGH,
                                                  Wrist::EXTENDED));
@@ -49,11 +49,11 @@ void SneakScale::Execute(AutoRoutineBase::AutoDirection direction,
             }
             break;
         case 3:
-            if (GetMsecTime() - m_autoTimer > 500) {
+            if (GetMsecTime() - m_autoTimer > 250) {
                 m_intakeAssembly->EjectCube();
             }
             if (GetMsecTime() - m_autoTimer > 1000) {
-                m_drive->PIDDrive(-24.0, 0.0, Drive::RelativeTo::Now, 0.5);
+                m_drive->PIDDrive(-36.0, 0.0, Drive::RelativeTo::Now, 0.5);
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }
@@ -63,7 +63,7 @@ void SneakScale::Execute(AutoRoutineBase::AutoDirection direction,
                 m_intakeAssembly->StopIntake();
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::IntakePreset(Elevator::GROUND,
-                                                 Wrist::STOW));
+                                                 Wrist::EXTENDED));
                 m_autoTimer = GetMsecTime();
                 m_autoState++;
             }

@@ -5,12 +5,12 @@
     "max_accel": 60.0,
     "max_jerk": 80.0,
     "wheelbase_width": 25.205,
-    "reverse": true,
+    "reverse": false,
     "waypoints": [
-      { "x" : 166, "y": 0, "angle" : 0},
-      { "x": 206, "y": 60, "angle": 90},
-      { "x": 206, "y": 170, "angle": 90},
-      { "x": 261, "y": 208, "angle": 0}
+      { "x" : 0, "y": 0, "angle" : 0},
+      { "x": 40, "y": 60, "angle": 90},
+      { "x": 40, "y": 150, "angle": 90},
+      { "x": 80, "y": 170, "angle": 0}
     ],
     "visual-y-offset": -250
 }
