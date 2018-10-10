@@ -33,7 +33,10 @@ public:
     const char *RobotStartPosToString(
         AutoRoutineBase::RobotStartPosition position);
 
-    void HandleDisabledButton(uint32_t port, uint32_t button, bool pressedP);
+    void HandleXboxJoystick(uint32_t port, uint32_t button, bool pressedP);
+    void HandlePoofsJoystick(uint32_t port, uint32_t button, bool pressedP);
+    void HandleDualActionJoystick(uint32_t port, uint32_t button,
+                                  bool pressedP);
 
     AutoRoutineBase::RobotStartPosition GetStartPosition();
 

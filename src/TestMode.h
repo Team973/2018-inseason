@@ -27,7 +27,10 @@ public:
     void TestPeriodic();
     void TestStop();
 
-    void HandleTestButton(uint32_t port, uint32_t button, bool pressedP);
+    void HandlePoofsJoystick(uint32_t port, uint32_t button, bool pressedP);
+    void HandleXboxJoystick(uint32_t port, uint32_t button, bool pressedP);
+    void HandleDualActionJoystick(uint32_t port, uint32_t button,
+                                  bool pressedP);
 
 private:
     enum class DriveMode

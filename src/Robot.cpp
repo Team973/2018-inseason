@@ -165,10 +165,10 @@ void Robot::ObservePoofsJoystickStateChange(uint32_t port, uint32_t button,
         m_teleop->HandlePoofsJoystick(port, button, pressedP);
     }
     else if (this->IsDisabled()) {
-        m_disabled->HandleDisabledButton(port, button, pressedP);
+        m_disabled->HandlePoofsJoystick(port, button, pressedP);
     }
     else if (this->IsTest()) {
-        m_test->HandleTestButton(port, button, pressedP);
+        m_test->HandlePoofsJoystick(port, button, pressedP);
     }
 }
 
@@ -178,10 +178,10 @@ void Robot::ObserveXboxJoystickStateChange(uint32_t port, uint32_t button,
         m_teleop->HandleXboxJoystick(port, button, pressedP);
     }
     else if (this->IsDisabled()) {
-        m_disabled->HandleDisabledButton(port, button, pressedP);
+        m_disabled->HandleXboxJoystick(port, button, pressedP);
     }
     else if (this->IsTest()) {
-        m_test->HandleTestButton(port, button, pressedP);
+        m_test->HandleXboxJoystick(port, button, pressedP);
     }
 }
 
@@ -191,10 +191,10 @@ void Robot::ObserveDualActionJoystickStateChange(uint32_t port, uint32_t button,
         m_teleop->HandleDualActionJoystick(port, button, pressedP);
     }
     else if (this->IsDisabled()) {
-        m_disabled->HandleDisabledButton(port, button, pressedP);
+        m_disabled->HandleDualActionJoystick(port, button, pressedP);
     }
     else if (this->IsTest()) {
-        m_test->HandleTestButton(port, button, pressedP);
+        m_test->HandleDualActionJoystick(port, button, pressedP);
     }
 }
 }
