@@ -5,8 +5,9 @@ using namespace frc;
 using namespace sample;
 
 namespace frc973 {
-Test::Test(PoofsJoystick *driver, XboxJoystick *codriver, Drive *drive,
-           IntakeAssembly *intakeAssembly, Hanger *hanger, GreyLight *greylight)
+Test::Test(ObservablePoofsJoystick *driver, ObservableXboxJoystick *codriver,
+           Drive *drive, IntakeAssembly *intakeAssembly, Hanger *hanger,
+           GreyLight *greylight)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_drive(drive)

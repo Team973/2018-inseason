@@ -8,7 +8,7 @@ using namespace frc;
 
 namespace frc973 {
 IntakeAssembly::IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
-                               XboxJoystick *operatorJoystick,
+                               ObservableXboxJoystick *operatorJoystick,
                                Elevator *elevator, Claw *claw, Wrist *wrist,
                                GreyLight *greylight)
         : m_scheduler(scheduler)

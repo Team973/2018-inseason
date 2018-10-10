@@ -9,7 +9,6 @@
 
 #include <stdint.h>
 #include "lib/managers/CoopTask.h"
-#include "lib/helpers/JoystickHelperBase.h"
 #include "WPILib.h"
 #include "lib/logging/LogSpreadsheet.h"
 
@@ -43,53 +42,106 @@ const unsigned int LeftTriggerAxis = 2;
 const unsigned int RightTriggerAxis = 3;
 }
 
-class XboxJoystick
+class ObservableXboxJoystick;
+
+class XboxJoystickObserver {
+public:
+    XboxJoystickObserver() {
+    }
+    virtual ~XboxJoystickObserver() {
+    }
+    virtual void ObserveXboxJoystickStateChange(uint32_t port, uint32_t button,
+                                                bool newState) = 0;
+};
+
+class ObservableXboxJoystick
         : public CoopTask
-        , public Joystick
-        , public JoystickHelperBase {
+        , public Joystick {
+public:
+    static constexpr double DEADBAND_INPUT_THRESHOLD =
+        0.05; /**< The deadband threshold on the joysticks. */
+    static constexpr double VIRTUAL_JOYSTICK_THRESHOLD =
+        0.5; /**< The virtual joystick threshold. */
+
 protected:
-    Joystick *m_joystick;
-    uint32_t m_port;
+    uint32_t m_port; /**< The port the joystick is plugged into. */
 
     /* For observer notification */
-    JoystickHelperBase *m_observer;
-    DriverStation *m_ds;
-    uint32_t m_prevBtn;
-    TaskMgr *m_scheduler;
-    LogCell *m_logCell;
+    XboxJoystickObserver
+        *m_observer;      /**< The class to notify whenever a change in
+             the joystick occurs. */
+    DriverStation *m_ds;  /**< The DriverStation operating on.*/
+    uint32_t m_prevBtn;   /**< The previous button.*/
+    TaskMgr *m_scheduler; /**< The task manager object.*/
+    LogCell *m_logCell;   /**< The logger.*/
+
+    /* For remembering states of sticky buttons */
+    bool m_lastLXVal; /**< The last left joystick's x axis value */
+    bool m_lastLYVal; /**< The last left joystick's y axis value */
+    bool m_lastRXVal; /**< The last right joystick's x axis value */
+    bool m_lastRYVal; /**< The last right joystick's y axis value */
 
 public:
     /**
-     * Create an instance of the XboxJoystick object.  Requires the
-     * information to instantiate the underlying WPI-Joystick, as well as
+     * Create an instance of the ObservableXboxJoystickJoystick object. Requires
+     * the information to instantiate the underlying WPI-Joystick, as well as
      * references to the scheduler that will run it and the observer that
      * will observe its state.
-     *
-     * @param port Specifies the joystick port.
-     * @param notify Points to the JoystickHelperBase object for button event
-     *        notification callback.
-     * @param scheduler Points to the task manager this task will run on
+     * @param port The joystick port.
+     * @param observer The JoystickObserver object for button event notification
+     * callback.
+     * @param scheduler The task manager this task will run on.
+     * @param ds The driver station.
      */
-    XboxJoystick(uint16_t port, JoystickHelperBase *observer,
-                 TaskMgr *scheduler, DriverStation *ds = nullptr);
-    ~XboxJoystick();
+    ObservableXboxJoystick(uint16_t port, XboxJoystickObserver *observer,
+                           TaskMgr *scheduler, DriverStation *ds = nullptr);
+    ~ObservableXboxJoystick();
 
     /**
      * Register this joystick with a logger so that button state can be logged
-     * every time the periodic funciton is called.  Only registers with the
-     * first call
+     * every time the periodic funciton is called. Only registers with the
+     * first call.
+     * @param logger The spreadsheet to log to.
      */
-    XboxJoystick *RegisterLog(LogSpreadsheet *logger);
+    ObservableXboxJoystick *RegisterLog(LogSpreadsheet *logger);
 
-    float GetRawAxisWithDeadband(
-        int axis, bool fSquared = false,
-        double threshold = DEADBAND_INPUT_THRESHOLD) override;
+    /**
+     * Get the value of the given axis with deadband.
+     * @param axis Specifies the axis to get the value of.
+     * @param fSquared Specifies whether the joystick input should be squared.
+     * @param threshold Specifies the deadband threshold.
+     */
+    float GetRawAxisWithDeadband(int axis, bool fSquared = false,
+                                 double threshold = DEADBAND_INPUT_THRESHOLD);
+
+    bool GetDPadUpVirtButton(); /**< Check whether the up button on the d pad is
+                       pressed. */
+    bool GetDPadDownVirtButton();  /**< Check whether the down button on the d
+                          pad is pressed. */
+    bool GetDPadLeftVirtButton();  /**< Check whether the left button on the d
+                          pad is pressed. */
+    bool GetDPadRightVirtButton(); /**< Check whether the right button on the d
+                          pad is pressed. */
+
+    /**
+     * Pretend the Left X Axis is a button.  By default it is not pressed.
+     * If the user pushes it mostly forward (say, more than half way), say
+     * that button is pressed.  If the user pulls it mostly backwards (say,
+     * more than half way), say that button is released.  If it's anywhere
+     * in between, rememember what it last was.
+     */
+
+    /**
+     * Get a bitstring containing the state of *all* buttons on the joystick.
+     * Including any 'virtual' buttons like the 'joystick buttons'.
+     * @return The bitstring of all buttons.
+     */
+    uint32_t GetAllButtons();
 
     /**
      * This function is called by the TaskMgr to check and process Joystick
      * button events.
-     *
-     * @param mode Specifies the CoopTask callback types.
+     * @param mode The current operating mode of the robot.
      */
     void TaskPrePeriodic(RobotMode mode) override;
 };

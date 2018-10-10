@@ -20,7 +20,6 @@
 #include "src/AutonomousMode.h"
 #include "src/TeleopMode.h"
 #include "src/TestMode.h"
-#include "lib/helpers/JoystickHelperBase.h"
 #include "lib/helpers/DualActionJoystickHelper.h"
 #include "lib/helpers/XboxJoystickHelper.h"
 #include "lib/helpers/PoofsJoystickHelper.h"
@@ -49,7 +48,9 @@ class Drive;
 
 class Robot
         : public CoopMTRobot
-        , public JoystickHelperBase {
+        , public DualActionJoystickObserver
+        , public XboxJoystickObserver
+        , PoofsJoystickObserver {
 public:
     Robot();
     virtual ~Robot();
@@ -74,16 +75,20 @@ public:
 
     void AllStateContinuous() override;
 
-    void ObserveJoystickStateChange(uint32_t port, uint32_t button,
-                                    bool pressedP) override;
+    void ObservePoofsJoystickStateChange(uint32_t port, uint32_t button,
+                                         bool pressedP) override;
+    void ObserveDualActionJoystickStateChange(uint32_t port, uint32_t button,
+                                              bool pressedP) override;
+    void ObserveXboxJoystickStateChange(uint32_t port, uint32_t button,
+                                        bool pressedP) override;
 
     static const int NUM_LED = 26;
 
 private:
     PowerDistributionPanel *m_pdp;
 
-    PoofsJoystick *m_driverJoystick;
-    XboxJoystick *m_operatorJoystick;
+    ObservablePoofsJoystick *m_driverJoystick;
+    ObservableXboxJoystick *m_operatorJoystick;
 
     TalonSRX *m_leftDriveTalonA;
     VictorSPX *m_leftDriveVictorB;

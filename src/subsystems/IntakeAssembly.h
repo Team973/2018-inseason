@@ -65,7 +65,7 @@ public:
     static const IntakePreset HALF_STOW_PRESET;
 
     IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
-                   XboxJoystick *operatorJoystick, Elevator *elevator,
+                   ObservableXboxJoystick *operatorJoystick, Elevator *elevator,
                    Claw *claw, Wrist *wrist, GreyLight *greylight);
     virtual ~IntakeAssembly();
 
@@ -156,7 +156,7 @@ private:
 
     TaskMgr *m_scheduler;
 
-    XboxJoystick *m_operatorJoystick;
+    ObservableXboxJoystick *m_operatorJoystick;
     Elevator *m_elevator;
     Claw *m_claw;
     Wrist *m_wrist;

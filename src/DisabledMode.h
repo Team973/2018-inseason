@@ -21,7 +21,7 @@ using namespace cs;
 namespace frc973 {
 class Disabled {
 public:
-    Disabled(PoofsJoystick *driver, XboxJoystick *codriver,
+    Disabled(ObservablePoofsJoystick *driver, ObservableXboxJoystick *codriver,
              IntakeAssembly *intakeAssembly, UsbCamera intakeCamera,
              UsbCamera forkCamera, VideoSink greyCam, GreyLight *greylight);
     virtual ~Disabled();
@@ -38,8 +38,8 @@ public:
     AutoRoutineBase::RobotStartPosition GetStartPosition();
 
 private:
-    PoofsJoystick *m_driverJoystick;
-    XboxJoystick *m_operatorJoystick;
+    ObservablePoofsJoystick *m_driverJoystick;
+    ObservableXboxJoystick *m_operatorJoystick;
 
     AutoRoutineBase::RobotStartPosition m_startPos;
     UsbCamera m_intakeCamera;

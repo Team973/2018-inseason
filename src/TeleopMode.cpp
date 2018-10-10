@@ -12,7 +12,8 @@
 using namespace frc;
 
 namespace frc973 {
-Teleop::Teleop(PoofsJoystick *driver, XboxJoystick *codriver, Drive *drive,
+Teleop::Teleop(ObservablePoofsJoystick *driver,
+               ObservableXboxJoystick *codriver, Drive *drive,
                IntakeAssembly *intakeAssembly, Hanger *hanger,
                GreyLight *greylight)
         : m_driverJoystick(driver)

@@ -18,8 +18,9 @@ using namespace frc;
 namespace frc973 {
 class Test {
 public:
-    Test(PoofsJoystick *driver, XboxJoystick *codriver, Drive *drive,
-         IntakeAssembly *intakeAssembly, Hanger *hanger, GreyLight *greylight);
+    Test(ObservablePoofsJoystick *driver, ObservableXboxJoystick *codriver,
+         Drive *drive, IntakeAssembly *intakeAssembly, Hanger *hanger,
+         GreyLight *greylight);
     virtual ~Test();
 
     void TestInit();
@@ -50,8 +51,8 @@ private:
         motionMagic
     };
 
-    PoofsJoystick *m_driverJoystick;
-    XboxJoystick *m_operatorJoystick;
+    ObservablePoofsJoystick *m_driverJoystick;
+    ObservableXboxJoystick *m_operatorJoystick;
 
     Drive *m_drive;
     DriveMode m_driveMode;

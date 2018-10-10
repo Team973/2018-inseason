@@ -38,8 +38,8 @@ public:
     static constexpr int LEFT_BUMPER_CHANNEL = 2;
     static constexpr int LEFT_TRIGGER_CHANNEL = 1;
 
-    Teleop(PoofsJoystick *driver, XboxJoystick *codriver, Drive *drive,
-           IntakeAssembly *intakeAssembly, Hanger *hanger,
+    Teleop(ObservablePoofsJoystick *driver, ObservableXboxJoystick *codriver,
+           Drive *drive, IntakeAssembly *intakeAssembly, Hanger *hanger,
            GreyLight *greylight);
     virtual ~Teleop();
 
@@ -53,8 +53,8 @@ public:
     void HandlePoofsJoystick(uint32_t port, uint32_t button, bool pressedP);
 
 private:
-    PoofsJoystick *m_driverJoystick;
-    XboxJoystick *m_operatorJoystick;
+    ObservablePoofsJoystick *m_driverJoystick;
+    ObservableXboxJoystick *m_operatorJoystick;
 
     Drive *m_drive;
     enum class DriveMode
