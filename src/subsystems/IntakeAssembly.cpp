@@ -290,11 +290,11 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             m_elevator->SetPower(0.0);
             break;
         case ControlMode::ManualPosition: {
-            double elevatorInput = -m_operatorJoystick->GetRawAxisWithDeadband(
-                DualAction::LeftYAxis);
-            double wristInc = pow(-m_operatorJoystick->GetRawAxisWithDeadband(
-                                      DualAction::RightXAxis),
-                                  3);
+            double elevatorInput =
+                -m_operatorJoystick->GetRawAxisWithDeadband(Xbox::LeftYAxis);
+            double wristInc = pow(
+                -m_operatorJoystick->GetRawAxisWithDeadband(Xbox::RightXAxis),
+                3);
             double wristPosGoal = m_interimPositionGoal.wristPosition;
 
             if (wristInc < 0.0) {

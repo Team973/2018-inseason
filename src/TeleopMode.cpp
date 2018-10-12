@@ -62,19 +62,10 @@ void Teleop::TeleopPeriodic() {
     /**
      * Driver Joystick
      */
-    double y = m_driverJoystick->GetRawAxis(LEFT_Y_AXIS_CHANNEL);
-    double x = m_driverJoystick->GetRawAxis(RIGHT_X_AXIS_CHANNEL);
+    double y = m_driverJoystick->GetRawAxis(PoofsJoysticks::LeftYAxis);
+    double x = m_driverJoystick->GetRawAxis(PoofsJoysticks::RightXAxis);
+
     bool quickturn = m_driverJoystick->GetRawButton(RIGHT_TRIGGER_CHANNEL);
-    if (m_driverJoystick->GetRawButton(LEFT_TRIGGER_CHANNEL)) {
-        m_intakeAssembly->EjectCube();
-    }
-    else {
-        m_intakeAssembly->HaltIntake();
-    }
-    if (m_driverJoystick->GetRawButton(LEFT_BUMPER_CHANNEL)) {
-        m_intakeAssembly->OpenClaw();
-        m_intakeAssembly->HaltIntake();
-    }
 
     if (m_driverJoystick->GetRawButton(DualAction::RightTrigger)) {
         x /= 3.0;
@@ -115,6 +106,10 @@ void Teleop::TeleopPeriodic() {
                 m_intakeAssembly->HardCloseClaw();
                 m_intakeAssembly->Flash();
                 m_intakeModeTimer = GetMsecTime();
+                m_operatorJoystick->SetRumble(
+                    GenericHID::RumbleType::kLeftRumble, 1);
+                m_operatorJoystick->SetRumble(
+                    GenericHID::RumbleType::kRightRumble, 1);
                 m_cubeIntakeState = CubeIntakeState::SwitchIntakeDelay;
             }
             break;
@@ -122,13 +117,28 @@ void Teleop::TeleopPeriodic() {
             if (GetMsecTime() - m_intakeModeTimer > 100) {
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::STOW_PRESET);
+                m_intakeModeTimer = GetMsecTime();
+                m_cubeIntakeState = CubeIntakeState::StopRumble;
+            }
+            break;
+        case CubeIntakeState::StopRumble:
+            if (GetMsecTime() - m_intakeModeTimer > 500) {
+                m_operatorJoystick->SetRumble(
+                    GenericHID::RumbleType::kLeftRumble, 0);
+                m_operatorJoystick->SetRumble(
+                    GenericHID::RumbleType::kRightRumble, 0);
                 m_cubeIntakeState = CubeIntakeState::Idle;
             }
             break;
         case CubeIntakeState::ManualIntaking:
             m_intakeAssembly->RunIntake(-1.0);
             if (m_intakeAssembly->GetClaw()->IsCubeIn()) {
-                m_cubeIntakeState = CubeIntakeState::Idle;
+                m_operatorJoystick->SetRumble(
+                    GenericHID::RumbleType::kLeftRumble, 1);
+                m_operatorJoystick->SetRumble(
+                    GenericHID::RumbleType::kRightRumble, 1);
+                m_cubeIntakeState = CubeIntakeState::StopRumble;
+                m_intakeModeTimer = GetMsecTime();
                 m_intakeAssembly->HoldCube();
                 m_intakeAssembly->HardCloseClaw();
                 m_intakeAssembly->Flash();
@@ -140,7 +150,7 @@ void Teleop::TeleopPeriodic() {
     }
 
     bool wristModeSwitch = m_wristControlModeDebouncer->Update(
-        m_operatorJoystick->GetRawButton(DualAction::Back));
+        m_operatorJoystick->GetRawButton(Xbox::Back));
 
     if (wristModeSwitch and !m_wristModeSwitchPrevState) {
         if (m_wristControlMode == WristControlMode::ClosedLoop) {
@@ -175,6 +185,10 @@ void Teleop::HandlePoofsJoystick(uint32_t port, uint32_t button,
         switch (button) {
             case PoofsJoysticks::LeftTrigger:
                 if (pressedP) {
+                    m_intakeAssembly->EjectCube();
+                }
+                else {
+                    m_intakeAssembly->HaltIntake();
                 }
                 break;
             case PoofsJoysticks::RightTrigger:
@@ -183,6 +197,8 @@ void Teleop::HandlePoofsJoystick(uint32_t port, uint32_t button,
                 break;
             case PoofsJoysticks::LeftBumper:
                 if (pressedP) {
+                    m_intakeAssembly->OpenClaw();
+                    m_intakeAssembly->HaltIntake();
                 }
                 break;
             case PoofsJoysticks::RightBumper:
@@ -198,24 +214,41 @@ void Teleop::HandleXboxJoystick(uint32_t port, uint32_t button, bool pressedP) {
         switch (button) {
             case Xbox::BtnY:
                 if (pressedP) {
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::SCALE_HIGH_PRESET);
                 }
                 break;
             case Xbox::BtnA:
                 if (pressedP) {
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::GROUND_PRESET);
                 }
                 break;
             case Xbox::BtnX:
                 if (pressedP) {
+                    m_driveMode = DriveMode::Hanger;
+                    m_drive->HangerDrive(1.0);
+                }
+                else {
+                    m_drive->HangerDrive(0);
                 }
                 break;
             case Xbox::BtnB:
                 if (pressedP) {
-                }
-                else {
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::LOW_GOAL_PRESET);
                 }
                 break;
             case Xbox::LeftBumper:
                 if (pressedP) {
+                    m_intakeAssembly->SoftCloseClaw();
+                    m_cubeIntakeState = CubeIntakeState::SwitchIntaking;
+                    m_intakeAssembly->GoToIntakePosition(
+                        IntakeAssembly::GROUND_PRESET);
+                }
+                else {
+                    m_intakeAssembly->HoldCube();
+                    m_cubeIntakeState = CubeIntakeState::Idle;
                 }
                 break;
             case Xbox::LJoystickBtn:
@@ -228,24 +261,38 @@ void Teleop::HandleXboxJoystick(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case Xbox::RightBumper:
                 if (pressedP) {
+                    m_intakeAssembly->SoftCloseClaw();
+                    m_cubeIntakeState = CubeIntakeState::ManualIntaking;
                 }
                 else {
+                    m_intakeAssembly->HoldCube();
+                    m_cubeIntakeState = CubeIntakeState::Idle;
                 }
                 break;
             case Xbox::DPadUpVirtBtn:
                 if (pressedP) {
+                    m_hanger->SetForkliftPower(-1.0);
+                }
+                else {
+                    m_hanger->SetForkliftPower(0);
                 }
                 break;
             case Xbox::DPadDownVirtBtn:
                 if (pressedP) {
+                    if (m_enableForkDeploy || Timer::GetMatchTime() < 29) {
+                        m_hanger->DeployForks();
+                    }
                 }
                 break;
             case Xbox::DPadLeftVirtBtn:
                 if (pressedP) {
+                    m_driveMode = DriveMode::Hanger;
+                    m_hanger->EngagePTO();
                 }
                 break;
             case Xbox::DPadRightVirtBtn:
                 if (pressedP) {
+                    m_intakeAssembly->SetModeHanging(true);
                 }
                 break;
             case Xbox::Back:
@@ -254,8 +301,11 @@ void Teleop::HandleXboxJoystick(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case Xbox::Start:
                 if (pressedP) {
+                    m_intakeAssembly->StartZeroPosition();
+                    m_intakeAssembly->OpenClaw();
                 }
                 else {
+                    m_intakeAssembly->EndZeroPosition();
                 }
                 break;
         }
@@ -268,7 +318,6 @@ void Teleop::HandleDualActionJoystick(uint32_t port, uint32_t button,
         switch (button) {
             case DualAction::BtnA:
                 if (pressedP) {
-                    m_enableForkDeploy = true;
                 }
                 break;
             case DualAction::LJoystickBtn:
@@ -289,9 +338,6 @@ void Teleop::HandleDualActionJoystick(uint32_t port, uint32_t button,
                 break;
             case DualAction::BtnY:
                 if (pressedP) {
-                    if (m_enableForkDeploy || Timer::GetMatchTime() < 29) {
-                        m_hanger->DeployForks();
-                    }
                 }
                 break;
             case DualAction::LeftBumper:
@@ -369,23 +415,14 @@ void Teleop::HandleDualActionJoystick(uint32_t port, uint32_t button,
         switch (button) {
             case DualAction::BtnY:
                 if (pressedP) {
-                    m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::SCALE_HIGH_PRESET);
                 }
                 break;
             case DualAction::BtnA:
                 if (pressedP) {
-                    m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::GROUND_PRESET);
                 }
                 break;
             case DualAction::BtnX:
                 if (pressedP) {
-                    m_driveMode = DriveMode::Hanger;
-                    m_drive->HangerDrive(1.0);
-                }
-                else {
-                    m_drive->HangerDrive(0);
                 }
                 break;
             case DualAction::BtnB:
@@ -398,10 +435,6 @@ void Teleop::HandleDualActionJoystick(uint32_t port, uint32_t button,
                 break;
             case DualAction::LeftBumper:
                 if (pressedP) {
-                    m_intakeAssembly->SoftCloseClaw();
-                    m_cubeIntakeState = CubeIntakeState::SwitchIntaking;
-                    m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::GROUND_PRESET);
                 }
                 else {
                     m_intakeAssembly->HoldCube();
@@ -464,7 +497,6 @@ void Teleop::HandleDualActionJoystick(uint32_t port, uint32_t button,
                 break;
             case DualAction::DPadRightVirtBtn:
                 if (pressedP) {
-                    m_intakeAssembly->SetModeHanging(true);
                 }
                 break;
             case DualAction::Back:

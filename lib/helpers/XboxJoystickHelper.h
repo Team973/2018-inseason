@@ -56,7 +56,7 @@ public:
 
 class ObservableXboxJoystick
         : public CoopTask
-        , public Joystick {
+        , public XboxController {
 public:
     static constexpr double DEADBAND_INPUT_THRESHOLD =
         0.05; /**< The deadband threshold on the joysticks. */

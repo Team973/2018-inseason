@@ -10,7 +10,7 @@ ObservableXboxJoystick::ObservableXboxJoystick(uint16_t port,
                                                XboxJoystickObserver *observer,
                                                TaskMgr *scheduler,
                                                DriverStation *ds)
-        : Joystick(port)
+        : XboxController(port)
         , m_port(port)
         , m_observer(observer)
         , m_ds(ds)

@@ -70,6 +70,7 @@ private:
         Idle,
         SwitchIntaking,
         ManualIntaking,
+        StopRumble,
         SwitchIntakeDelay
     };
     CubeIntakeState m_cubeIntakeState;
