@@ -8,7 +8,7 @@ using namespace frc;
 
 namespace frc973 {
 IntakeAssembly::IntakeAssembly(TaskMgr *scheduler, LogSpreadsheet *logger,
-                               ObservableJoystick *operatorJoystick,
+                               ObservableXboxJoystick *operatorJoystick,
                                Elevator *elevator, Claw *claw, Wrist *wrist,
                                GreyLight *greylight)
         : m_scheduler(scheduler)
@@ -291,10 +291,10 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             break;
         case ControlMode::ManualPosition: {
             double elevatorInput =
-                -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
-            double wristInc = pow(-m_operatorJoystick->GetRawAxisWithDeadband(
-                                      DualAction::RightXAxis),
-                                  3);
+                -m_operatorJoystick->GetRawAxisWithDeadband(Xbox::LeftYAxis);
+            double wristInc = pow(
+                -m_operatorJoystick->GetRawAxisWithDeadband(Xbox::RightXAxis),
+                3);
             double wristPosGoal = m_interimPositionGoal.wristPosition;
 
             if (wristInc < 0.0) {
@@ -346,8 +346,8 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             }
             break;
         case ControlMode::HangingManual: {
-            double elevatorInput =
-                -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
+            double elevatorInput = -m_operatorJoystick->GetRawAxisWithDeadband(
+                DualAction::LeftYAxis);
             m_wrist->m_wristMotor->ConfigContinuousCurrentLimit(5, 0);
             if (GetElevatorPosition() > 34.0) {
                 m_wrist->SetPosition(HANGING_PRESET.wristPosition);
@@ -361,8 +361,8 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
                                  Elevator::ELEVATOR_FEED_FORWARD);
         } break;
         case ControlMode::ManualVoltage: {
-            double elevatorInput =
-                -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
+            double elevatorInput = -m_operatorJoystick->GetRawAxisWithDeadband(
+                DualAction::LeftYAxis);
             m_wrist->m_wristMotor->ConfigContinuousCurrentLimit(10, 0);
             double wristInput = pow(-m_operatorJoystick->GetRawAxisWithDeadband(
                                         DualAction::RightXAxis),

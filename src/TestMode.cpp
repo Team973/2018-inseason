@@ -5,7 +5,7 @@ using namespace frc;
 using namespace sample;
 
 namespace frc973 {
-Test::Test(ObservableJoystick *driver, ObservableJoystick *codriver,
+Test::Test(ObservablePoofsJoystick *driver, ObservableXboxJoystick *codriver,
            Drive *drive, IntakeAssembly *intakeAssembly, Hanger *hanger,
            GreyLight *greylight)
         : m_driverJoystick(driver)
@@ -30,7 +30,7 @@ void Test::TestInit() {
 
 void Test::TestPeriodic() {
     double elevatorPosIncInput =
-        -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
+        -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
     double wristPosIncInput = pow(
         -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis), 3);
 
@@ -40,7 +40,7 @@ void Test::TestPeriodic() {
 
     if (m_intakeMode == IntakeMode::manualVoltage) {
         double elevatorManualPower =
-            -m_operatorJoystick->GetRawAxis(DualAction::LeftYAxis);
+            -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
         double wristManualPower =
             -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
 
@@ -54,9 +54,8 @@ void Test::TestPeriodic() {
     else if (m_intakeMode == IntakeMode::motionMagic) {
     }
 
-    double y = -m_driverJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
-    double x =
-        -m_driverJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis);
+    double y = -m_driverJoystick->GetRawAxis(DualAction::LeftYAxis);
+    double x = -m_driverJoystick->GetRawAxis(DualAction::RightXAxis);
     bool quickturn = m_driverJoystick->GetRawButton(DualAction::RightTrigger);
 
     if (m_driverJoystick->GetRawButton(DualAction::RightBumper)) {
@@ -88,189 +87,171 @@ void Test::TestPeriodic() {
 void Test::TestStop() {
 }
 
-void Test::HandleTestButton(uint32_t port, uint32_t button, bool pressedP) {
+void Test::HandlePoofsJoystick(uint32_t port, uint32_t button, bool pressedP) {
     if (port == DRIVER_JOYSTICK_PORT) {
         switch (button) {
-            case DualAction::DPadUpVirtBtn:
+            case PoofsJoysticks::LeftTrigger:
                 if (pressedP) {
                 }
                 break;
-            case DualAction::DPadDownVirtBtn:
-                if (pressedP) {
-                    m_hanger->DisengagePTO();
-                }
-                break;
-            case DualAction::DPadRightVirtBtn:
+            case PoofsJoysticks::RightTrigger:
                 if (pressedP) {
                 }
                 break;
-            case DualAction::DPadLeftVirtBtn:
-                if (pressedP) {
-                    m_driveMode = DriveMode::Hanger;
-                    m_hanger->EngagePTO();
-                }
-                break;
-            case DualAction::RightTrigger:
+            case PoofsJoysticks::LeftBumper:
                 if (pressedP) {
                 }
-                else {
-                }
                 break;
-            case DualAction::RightBumper:
-                if (pressedP) {
-                    m_driveMode = DriveMode::Spline;
-                    m_drive->SplineDrive(&sample::sample,
-                                         Drive::RelativeTo::Now);
-                }
-                else {
-                }
-                break;
-            case DualAction::LeftBumper:
-                if (pressedP) {
-                    m_intakeMode = IntakeMode::motionMagic;
-                    m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::SCALE_MID_PRESET);
-                }
-                break;
-            case DualAction::LeftTrigger:
-                if (pressedP) {
-                    m_intakeMode = IntakeMode::motionMagic;
-                    m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::SCALE_HIGH_PRESET);
-                }
-                break;
-            case DualAction::BtnA:
-                if (pressedP) {
-                    m_driveMode = DriveMode::Velocity;
-                }
-                break;
-            case DualAction::BtnB:
-                if (pressedP) {
-                    m_driveMode = DriveMode::Openloop;
-                }
-                break;
-            case DualAction::BtnX:
-                if (pressedP) {
-                    m_driveMode = DriveMode::AssistedArcade;
-                }
-                break;
-            case DualAction::BtnY:
-                if (pressedP) {
-                    m_driveMode = DriveMode::Cheesy;
-                }
-                break;
-            case DualAction::Start:
-                if (pressedP) {
-                    m_driveMode = DriveMode::PID;
-                    m_drive->PIDDrive(24, 0, Drive::RelativeTo::Now, 0.8);
-                }
-                break;
-            case DualAction::Back:
+            case PoofsJoysticks::RightBumper:
                 if (pressedP) {
                 }
                 break;
         }
     }
-    else if (port == OPERATOR_JOYSTICK_PORT) {
+}
+
+void Test::HandleXboxJoystick(uint32_t port, uint32_t button, bool pressedP) {
+    if (port == OPERATOR_JOYSTICK_PORT) {
         switch (button) {
-            case DualAction::DPadUpVirtBtn:
+            case Xbox::BtnY:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::motionMagic;
-                    m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::STOW_PRESET);
                 }
                 break;
-            case DualAction::DPadDownVirtBtn:
+            case Xbox::BtnA:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::motionMagic;
-                    m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::LOW_GOAL_PRESET);
                 }
                 break;
-            case DualAction::DPadRightVirtBtn:
+            case Xbox::BtnX:
                 if (pressedP) {
-                    m_intakeMode = IntakeMode::motionMagic;
-                    m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::SCALE_MID_PRESET);
                 }
                 break;
-            case DualAction::DPadLeftVirtBtn:
-                if (pressedP) {
-                    m_intakeMode = IntakeMode::motionMagic;
-                    m_intakeAssembly->GoToIntakePosition(
-                        IntakeAssembly::VAULT_PRESET);
-                }
-                break;
-            case DualAction::RightTrigger:
+            case Xbox::BtnB:
                 if (pressedP) {
                 }
                 else {
                 }
                 break;
-            case DualAction::RightBumper:
+            case Xbox::LeftBumper:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::LJoystickBtn:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::RJoystickBtn:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::RightBumper:
                 if (pressedP) {
                 }
                 else {
                 }
                 break;
-            case DualAction::LeftBumper:
+            case Xbox::DPadUpVirtBtn:
                 if (pressedP) {
-                    m_intakeAssembly->RunIntake(-1.0);
-                    m_intakeAssembly->SoftCloseClaw();
-                }
-                else {
-                    m_intakeAssembly->StopIntake();
                 }
                 break;
-            case DualAction::LeftTrigger:
+            case Xbox::DPadDownVirtBtn:
                 if (pressedP) {
-                    m_intakeAssembly->EjectCube();
-                }
-                else {
-                    m_intakeAssembly->StopIntake();
                 }
                 break;
-            case DualAction::BtnA:
+            case Xbox::DPadLeftVirtBtn:
                 if (pressedP) {
-                }
-                else {
                 }
                 break;
-            case DualAction::BtnB:
+            case Xbox::DPadRightVirtBtn:
                 if (pressedP) {
-                }
-                else {
                 }
                 break;
-            case DualAction::BtnX:
+            case Xbox::Back:
                 if (pressedP) {
-                }
-                else {
                 }
                 break;
-            case DualAction::BtnY:
+            case Xbox::Start:
                 if (pressedP) {
                 }
                 else {
-                }
-                break;
-            case DualAction::Start:
-                if (pressedP) {
-                    m_hanger->SetForkliftPower(0.5);
-                }
-                else {
-                    m_hanger->SetForkliftPower(0);
-                }
-                break;
-            case DualAction::Back:
-                if (pressedP) {
-                    m_hanger->SetForkliftPower(-0.5);
-                }
-                else {
-                    m_hanger->SetForkliftPower(0);
                 }
                 break;
         }
-    };
+    }
+}
+
+void Test::HandleDualActionJoystick(uint32_t port, uint32_t button,
+                                    bool pressedP) {
+    switch (button) {
+        case DualAction::BtnA:
+            if (pressedP) {
+            }
+            break;
+        case DualAction::LJoystickBtn:
+            if (pressedP) {
+            }
+            else {
+            }
+            break;
+        case DualAction::BtnB:
+            if (pressedP) {
+            }
+            else {
+            }
+            break;
+        case DualAction::BtnX:
+            if (pressedP) {
+            }
+            break;
+        case DualAction::BtnY:
+            if (pressedP) {
+            }
+            break;
+        case DualAction::LeftBumper:
+            if (pressedP) {
+            }
+            else {
+            }
+            break;
+        case DualAction::LeftTrigger:
+            if (pressedP) {
+            }
+            else {
+            }
+            break;
+        case DualAction::RightBumper:
+            if (pressedP) {
+            }
+            else {
+            }
+            break;
+        case DualAction::RightTrigger:
+            if (pressedP) {
+            }
+            break;
+        case DualAction::DPadUpVirtBtn:
+            if (pressedP) {
+            }
+            break;
+        case DualAction::DPadDownVirtBtn:
+            if (pressedP) {
+            }
+            break;
+        case DualAction::DPadLeftVirtBtn:
+            if (pressedP) {
+            }
+            break;
+        case DualAction::DPadRightVirtBtn:
+            if (pressedP) {
+            }
+            break;
+        case DualAction::Start:
+            if (pressedP) {
+            }
+            break;
+        case DualAction::Back:
+            if (pressedP) {
+            }
+            break;
+    }
 }
 }

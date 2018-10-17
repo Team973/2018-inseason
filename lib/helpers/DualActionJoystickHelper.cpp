@@ -1,14 +1,14 @@
-#include "lib/helpers/JoystickHelper.h"
 #include "lib/managers/TaskMgr.h"
+#include "lib/helpers/DualActionJoystickHelper.h"
 #include "lib/util/Util.h"
 #include <string>
 #include <stdlib.h>
 
 namespace frc973 {
 
-ObservableJoystick::ObservableJoystick(uint16_t port,
-                                       JoystickObserver *observer,
-                                       TaskMgr *scheduler, DriverStation *ds)
+ObservableDualActionJoystick::ObservableDualActionJoystick(
+    uint16_t port, DualActionJoystickObserver *observer, TaskMgr *scheduler,
+    DriverStation *ds)
         : Joystick(port)
         , m_port(port)
         , m_observer(observer)
@@ -33,13 +33,14 @@ ObservableJoystick::ObservableJoystick(uint16_t port,
     }
 }
 
-ObservableJoystick::~ObservableJoystick() {
+ObservableDualActionJoystick::~ObservableDualActionJoystick() {
     if (m_scheduler != nullptr) {
         m_scheduler->UnregisterTask(this);
     }
 }
 
-ObservableJoystick *ObservableJoystick::RegisterLog(LogSpreadsheet *logger) {
+ObservableDualActionJoystick *ObservableDualActionJoystick::RegisterLog(
+    LogSpreadsheet *logger) {
     if (m_logCell == nullptr) {
         // TODO this memory is never freed
         char *cellTitleBuf = (char *)malloc(32 * sizeof(char));
@@ -52,8 +53,9 @@ ObservableJoystick *ObservableJoystick::RegisterLog(LogSpreadsheet *logger) {
     return this;
 }
 
-float ObservableJoystick::GetRawAxisWithDeadband(int axis, bool fSquared,
-                                                 double threshold) {
+float ObservableDualActionJoystick::GetRawAxisWithDeadband(int axis,
+                                                           bool fSquared,
+                                                           double threshold) {
     float value = Util::deadband(GetRawAxis(axis), threshold);
 
     if (fSquared) {
@@ -63,27 +65,27 @@ float ObservableJoystick::GetRawAxisWithDeadband(int axis, bool fSquared,
     return value;
 }
 
-bool ObservableJoystick::GetDPadUpVirtButton() {
+bool ObservableDualActionJoystick::GetDPadUpVirtButton() {
     int pov = GetPOV();
     return pov == 0 || pov == 315 || pov == 45;
 }
 
-bool ObservableJoystick::GetDPadDownVirtButton() {
+bool ObservableDualActionJoystick::GetDPadDownVirtButton() {
     int pov = GetPOV();
     return pov == 180 || pov == 225 || pov == 135;
 }
 
-bool ObservableJoystick::GetDPadLeftVirtButton() {
+bool ObservableDualActionJoystick::GetDPadLeftVirtButton() {
     int pov = GetPOV();
     return pov == 270 || pov == 315 || pov == 225;
 }
 
-bool ObservableJoystick::GetDPadRightVirtButton() {
+bool ObservableDualActionJoystick::GetDPadRightVirtButton() {
     int pov = GetPOV();
     return pov == 90 || pov == 135 || pov == 45;
 }
 
-bool ObservableJoystick::GetLXVirtButton() {
+bool ObservableDualActionJoystick::GetLXVirtButton() {
     double pos = this->GetRawAxis(DualAction::LeftXAxis);
 
     if (pos > VIRTUAL_JOYSTICK_THRESHOLD) {
@@ -96,7 +98,7 @@ bool ObservableJoystick::GetLXVirtButton() {
     return m_lastLXVal;
 }
 
-bool ObservableJoystick::GetLYVirtButton() {
+bool ObservableDualActionJoystick::GetLYVirtButton() {
     double pos = -this->GetRawAxis(DualAction::LeftYAxis);
 
     if (pos > VIRTUAL_JOYSTICK_THRESHOLD) {
@@ -109,7 +111,7 @@ bool ObservableJoystick::GetLYVirtButton() {
     return m_lastLYVal;
 }
 
-bool ObservableJoystick::GetRXVirtButton() {
+bool ObservableDualActionJoystick::GetRXVirtButton() {
     double pos = this->GetRawAxis(DualAction::RightXAxis);
 
     if (pos > VIRTUAL_JOYSTICK_THRESHOLD) {
@@ -122,7 +124,7 @@ bool ObservableJoystick::GetRXVirtButton() {
     return m_lastRXVal;
 }
 
-bool ObservableJoystick::GetRYVirtButton() {
+bool ObservableDualActionJoystick::GetRYVirtButton() {
     double pos = -this->GetRawAxis(DualAction::RightYAxis);
 
     if (pos > VIRTUAL_JOYSTICK_THRESHOLD) {
@@ -135,7 +137,7 @@ bool ObservableJoystick::GetRYVirtButton() {
     return m_lastRYVal;
 }
 
-bool ObservableJoystick::GetDXVirtButton() {
+bool ObservableDualActionJoystick::GetDXVirtButton() {
     if (this->GetDPadRightVirtButton()) {
         m_lastDXVal = true;
     }
@@ -146,7 +148,7 @@ bool ObservableJoystick::GetDXVirtButton() {
     return m_lastDXVal;
 }
 
-bool ObservableJoystick::GetDYVirtButton() {
+bool ObservableDualActionJoystick::GetDYVirtButton() {
     if (this->GetDPadUpVirtButton()) {
         m_lastDYVal = true;
     }
@@ -157,7 +159,7 @@ bool ObservableJoystick::GetDYVirtButton() {
     return m_lastDYVal;
 }
 
-uint32_t ObservableJoystick::GetAllButtons() {
+uint32_t ObservableDualActionJoystick::GetAllButtons() {
     uint32_t btns = m_ds->GetStickButtons(m_port);
 
     btns |= GetLXVirtButton() << (DualAction::LXAxisVirtButton - 1);
@@ -179,7 +181,7 @@ uint32_t ObservableJoystick::GetAllButtons() {
  *    X&~(X^-X) extracts the least significant set bit from X in mask form
  *    __builtin_ffs(Y) gets the position of the least significant set bit
  */
-void ObservableJoystick::TaskPrePeriodic(RobotMode mode) {
+void ObservableDualActionJoystick::TaskPrePeriodic(RobotMode mode) {
     uint32_t currBtn = GetAllButtons();
 
     if (m_observer != nullptr) {
@@ -194,11 +196,13 @@ void ObservableJoystick::TaskPrePeriodic(RobotMode mode) {
             btn = __builtin_ffs(btnMask);
             if ((currBtn & btnMask) != 0) {
                 /* Button is pressed */
-                m_observer->ObserveJoystickStateChange(m_port, btn, true);
+                m_observer->ObserveDualActionJoystickStateChange(m_port, btn,
+                                                                 true);
             }
             else {
                 /* Button is released */
-                m_observer->ObserveJoystickStateChange(m_port, btn, false);
+                m_observer->ObserveDualActionJoystickStateChange(m_port, btn,
+                                                                 false);
             }
             /* clear |changedBtn| from the mask so we can get the next lsb */
             changedBtn &= ~btnMask;

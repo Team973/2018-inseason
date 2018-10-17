@@ -3,7 +3,9 @@
 #include "WPILib.h"
 #include <iostream>
 #include "src/info/RobotInfo.h"
-#include "lib/helpers/JoystickHelper.h"
+#include "lib/helpers/DualActionJoystickHelper.h"
+#include "lib/helpers/XboxJoystickHelper.h"
+#include "lib/helpers/PoofsJoystickHelper.h"
 #include "lib/util/Util.h"
 #include "src/subsystems/Drive.h"
 #include "src/subsystems/IntakeAssembly.h"
@@ -29,8 +31,9 @@ public:
      * @param hanger The hanger subsystem.
      * @param greylight The GreyLight system.
      */
-    Test(ObservableJoystick *driver, ObservableJoystick *codriver, Drive *drive,
-         IntakeAssembly *intakeAssembly, Hanger *hanger, GreyLight *greylight);
+    Test(ObservablePoofsJoystick *driver, ObservableXboxJoystick *codriver,
+         Drive *drive, IntakeAssembly *intakeAssembly, Hanger *hanger,
+         GreyLight *greylight);
     virtual ~Test();
 
     /**
@@ -54,7 +57,10 @@ public:
      * @param button The button.
      * @param pressedP The button's new status.
      */
-    void HandleTestButton(uint32_t port, uint32_t button, bool pressedP);
+    void HandlePoofsJoystick(uint32_t port, uint32_t button, bool pressedP);
+    void HandleXboxJoystick(uint32_t port, uint32_t button, bool pressedP);
+    void HandleDualActionJoystick(uint32_t port, uint32_t button,
+                                  bool pressedP);
 
 private:
     enum class DriveMode
@@ -78,8 +84,8 @@ private:
         motionMagic
     };
 
-    ObservableJoystick *m_driverJoystick;
-    ObservableJoystick *m_operatorJoystick;
+    ObservablePoofsJoystick *m_driverJoystick;
+    ObservableXboxJoystick *m_operatorJoystick;
 
     Drive *m_drive;
     DriveMode m_driveMode;

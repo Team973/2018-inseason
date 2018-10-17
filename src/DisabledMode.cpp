@@ -5,7 +5,8 @@ using namespace frc;
 
 namespace frc973 {
 static const Color DISABLED_RED = {255, 0, 0};
-Disabled::Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
+Disabled::Disabled(ObservablePoofsJoystick *driver,
+                   ObservableXboxJoystick *codriver,
                    IntakeAssembly *intakeAssembly, UsbCamera intakeCamera,
                    UsbCamera forkCamera, VideoSink greyCam,
                    GreyLight *greylight)
@@ -59,77 +60,173 @@ const char *Disabled::RobotStartPosToString(
     }
 }
 
-void Disabled::HandleDisabledButton(uint32_t port, uint32_t button,
-                                    bool pressedP) {
+void Disabled::HandlePoofsJoystick(uint32_t port, uint32_t button,
+                                   bool pressedP) {
     if (port == DRIVER_JOYSTICK_PORT) {
         switch (button) {
-            case DualAction::BtnA:
+            case PoofsJoysticks::LeftTrigger:
                 if (pressedP) {
                 }
                 break;
-            case DualAction::BtnB:
+            case PoofsJoysticks::RightTrigger:
                 if (pressedP) {
                 }
                 break;
-            case DualAction::BtnX:
+            case PoofsJoysticks::LeftBumper:
                 if (pressedP) {
                 }
                 break;
-            case DualAction::BtnY:
+            case PoofsJoysticks::RightBumper:
                 if (pressedP) {
                 }
-                break;
-            case DualAction::LeftBumper:
-                if (pressedP) {
-                    m_greyCam.SetSource(m_forkCamera);
-                }
-                else {
-                }
-                break;
-            case DualAction::LeftTrigger:
-                if (pressedP) {
-                    m_greyCam.SetSource(m_intakeCamera);
-                }
-                else {
-                }
-                break;
-            case DualAction::RightBumper:
-                if (pressedP) {
-                }
-                else {
-                }
-                break;
-            case DualAction::RightTrigger:
-                if (pressedP) {
-                }
-                else {
-                }
-                break;
-            case DualAction::DPadUpVirtBtn:
-                if (pressedP) {
-                    m_startPos = AutoRoutineBase::RobotStartPosition::Center;
-                    m_greylight->SetPixelStateProcessor(m_disabledSignal);
-                }
-                break;
-            case DualAction::DPadDownVirtBtn:
-                if (pressedP) {
-                }
-                break;
-            case DualAction::DPadLeftVirtBtn:
-                if (pressedP) {
-                    m_startPos = AutoRoutineBase::RobotStartPosition::Left;
-                    m_greylight->SetPixelStateProcessor(m_leftSideSignal);
-                }
-                break;
-            case DualAction::DPadRightVirtBtn:
-                if (pressedP) {
-                    m_startPos = AutoRoutineBase::RobotStartPosition::Right;
-                    m_greylight->SetPixelStateProcessor(m_rightSideSignal);
-                }
-                break;
-            default:
                 break;
         }
+    }
+}
+
+void Disabled::HandleXboxJoystick(uint32_t port, uint32_t button,
+                                  bool pressedP) {
+    if (port == OPERATOR_JOYSTICK_PORT) {
+        switch (button) {
+            case Xbox::BtnY:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::BtnA:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::BtnX:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::BtnB:
+                if (pressedP) {
+                }
+                else {
+                }
+                break;
+            case Xbox::LeftBumper:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::LJoystickBtn:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::RJoystickBtn:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::RightBumper:
+                if (pressedP) {
+                }
+                else {
+                }
+                break;
+            case Xbox::DPadUpVirtBtn:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::DPadDownVirtBtn:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::DPadLeftVirtBtn:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::DPadRightVirtBtn:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::Back:
+                if (pressedP) {
+                }
+                break;
+            case Xbox::Start:
+                if (pressedP) {
+                }
+                else {
+                }
+                break;
+        }
+    }
+}
+
+void Disabled::HandleDualActionJoystick(uint32_t port, uint32_t button,
+                                        bool pressedP) {
+    switch (button) {
+        case DualAction::BtnA:
+            if (pressedP) {
+            }
+            break;
+        case DualAction::LJoystickBtn:
+            if (pressedP) {
+            }
+            else {
+            }
+            break;
+        case DualAction::BtnB:
+            if (pressedP) {
+            }
+            else {
+            }
+            break;
+        case DualAction::BtnX:
+            if (pressedP) {
+            }
+            break;
+        case DualAction::BtnY:
+            if (pressedP) {
+            }
+            break;
+        case DualAction::LeftBumper:
+            if (pressedP) {
+            }
+            else {
+            }
+            break;
+        case DualAction::LeftTrigger:
+            if (pressedP) {
+            }
+            else {
+            }
+            break;
+        case DualAction::RightBumper:
+            if (pressedP) {
+            }
+            else {
+            }
+            break;
+        case DualAction::RightTrigger:
+            if (pressedP) {
+            }
+            break;
+        case DualAction::DPadUpVirtBtn:
+            if (pressedP) {
+            }
+            break;
+        case DualAction::DPadDownVirtBtn:
+            if (pressedP) {
+            }
+            break;
+        case DualAction::DPadLeftVirtBtn:
+            if (pressedP) {
+            }
+            break;
+        case DualAction::DPadRightVirtBtn:
+            if (pressedP) {
+            }
+            break;
+        case DualAction::Start:
+            if (pressedP) {
+            }
+            break;
+        case DualAction::Back:
+            if (pressedP) {
+            }
+            break;
     }
 }
 

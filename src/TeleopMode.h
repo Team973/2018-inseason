@@ -11,7 +11,9 @@
 #include "WPILib.h"
 #include <iostream>
 #include "src/info/RobotInfo.h"
-#include "lib/helpers/JoystickHelper.h"
+#include "lib/helpers/DualActionJoystickHelper.h"
+#include "lib/helpers/XboxJoystickHelper.h"
+#include "lib/helpers/PoofsJoystickHelper.h"
 #include "src/subsystems/Drive.h"
 #include "src/subsystems/IntakeAssembly.h"
 #include "src/subsystems/Hanger.h"
@@ -42,7 +44,7 @@ public:
      * @param hanger The hanger subsystem.
      * @param greylight The GreyLight system.
      */
-    Teleop(ObservableJoystick *driver, ObservableJoystick *codriver,
+    Teleop(ObservablePoofsJoystick *driver, ObservableXboxJoystick *codriver,
            Drive *drive, IntakeAssembly *intakeAssembly, Hanger *hanger,
            GreyLight *greylight);
     virtual ~Teleop();
@@ -68,11 +70,14 @@ public:
      * @param button The button.
      * @param pressedP The button's new status.
      */
-    void HandleTeleopButton(uint32_t port, uint32_t button, bool pressedP);
+    void HandleDualActionJoystick(uint32_t port, uint32_t button,
+                                  bool pressedP);
+    void HandleXboxJoystick(uint32_t port, uint32_t button, bool pressedP);
+    void HandlePoofsJoystick(uint32_t port, uint32_t button, bool pressedP);
 
 private:
-    ObservableJoystick *m_driverJoystick;
-    ObservableJoystick *m_operatorJoystick;
+    ObservablePoofsJoystick *m_driverJoystick;
+    ObservableXboxJoystick *m_operatorJoystick;
 
     Drive *m_drive;
     enum class DriveMode
@@ -88,6 +93,7 @@ private:
         Idle,
         SwitchIntaking,
         ManualIntaking,
+        StopRumble,
         SwitchIntakeDelay
     };
     CubeIntakeState m_cubeIntakeState;

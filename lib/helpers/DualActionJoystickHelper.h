@@ -1,7 +1,7 @@
 /*
- * JoystickHelper.h
+ * DualActionJoystickHelper.h
  *
- *  Created on: Oct 14, 2015
+ *  Created on: 9/18/18
  *      Author: Andrew
  */
 
@@ -78,19 +78,13 @@ const unsigned int DPadXAxis = 4;  /**< DPad X Axis */
 const unsigned int DPadYAxis = 5;  /**< DPad Y Axis */
 }
 
-class ObservableJoystick;
+class ObservableDualActionJoystick;
 
-/**
- * This abstract class defines the JoystickObserver object. The object is
- * a callback interface. It is not meant to be created as an object.
- * Instead, it should be inherited by a subclass who needs to be notified
- * on the joystick button events.
- */
-class JoystickObserver {
+class DualActionJoystickObserver {
 public:
-    JoystickObserver() {
+    DualActionJoystickObserver() {
     }
-    virtual ~JoystickObserver() {
+    virtual ~DualActionJoystickObserver() {
     }
 
     /**
@@ -101,8 +95,9 @@ public:
      * @param newState If true, specifies the button has been pressed, if false,
      * specifies the button has been released.
      */
-    virtual void ObserveJoystickStateChange(uint32_t port, uint32_t button,
-                                            bool newState) = 0;
+    virtual void ObserveDualActionJoystickStateChange(uint32_t port,
+                                                      uint32_t button,
+                                                      bool newState) = 0;
 };
 
 /**
@@ -111,7 +106,7 @@ public:
  * *edge* of a button press or release event.  Also lets you use a joystick
  * axis as a button in an easy way.
  */
-class ObservableJoystick
+class ObservableDualActionJoystick
         : public CoopTask
         , public Joystick {
 public:
@@ -124,12 +119,13 @@ protected:
     uint32_t m_port; /**< The port the joystick is plugged into. */
 
     /* For observer notification */
-    JoystickObserver *m_observer; /**< The class to notify whenever a change in
-                                     the joystick occurs. */
-    DriverStation *m_ds;          /**< The DriverStation operating on.*/
-    uint32_t m_prevBtn;           /**< The previous button.*/
-    TaskMgr *m_scheduler;         /**< The task manager object.*/
-    LogCell *m_logCell;           /**< The logger.*/
+    DualActionJoystickObserver
+        *m_observer;      /**< The class to notify whenever a change in
+       the joystick occurs. */
+    DriverStation *m_ds;  /**< The DriverStation operating on.*/
+    uint32_t m_prevBtn;   /**< The previous button.*/
+    TaskMgr *m_scheduler; /**< The task manager object.*/
+    LogCell *m_logCell;   /**< The logger.*/
 
     /* For remembering states of sticky buttons */
     bool m_lastLXVal; /**< The last left joystick's x axis value */
@@ -141,8 +137,8 @@ protected:
 
 public:
     /**
-     * Create an instance of the ObservableJoystick object. Requires the
-     * information to instantiate the underlying WPI-Joystick, as well as
+     * Create an instance of the ObservableDualActionJoystick object. Requires
+     * the information to instantiate the underlying WPI-Joystick, as well as
      * references to the scheduler that will run it and the observer that
      * will observe its state.
      * @param port The joystick port.
@@ -151,9 +147,11 @@ public:
      * @param scheduler The task manager this task will run on.
      * @param ds The driver station.
      */
-    ObservableJoystick(uint16_t port, JoystickObserver *observer,
-                       TaskMgr *scheduler, DriverStation *ds = nullptr);
-    ~ObservableJoystick();
+    ObservableDualActionJoystick(uint16_t port,
+                                 DualActionJoystickObserver *observer,
+                                 TaskMgr *scheduler,
+                                 DriverStation *ds = nullptr);
+    ~ObservableDualActionJoystick();
 
     /**
      * Register this joystick with a logger so that button state can be logged
@@ -161,7 +159,7 @@ public:
      * first call.
      * @param logger The spreadsheet to log to.
      */
-    ObservableJoystick *RegisterLog(LogSpreadsheet *logger);
+    ObservableDualActionJoystick *RegisterLog(LogSpreadsheet *logger);
 
     /**
      * Get the value of the given axis with deadband.
@@ -173,13 +171,13 @@ public:
                                  double threshold = DEADBAND_INPUT_THRESHOLD);
 
     bool GetDPadUpVirtButton(); /**< Check whether the up button on the d pad is
-                                   pressed. */
+                       pressed. */
     bool GetDPadDownVirtButton();  /**< Check whether the down button on the d
-                                      pad is pressed. */
+                          pad is pressed. */
     bool GetDPadLeftVirtButton();  /**< Check whether the left button on the d
-                                      pad is pressed. */
+                          pad is pressed. */
     bool GetDPadRightVirtButton(); /**< Check whether the right button on the d
-                                      pad is pressed. */
+                          pad is pressed. */
 
     /**
      * Pretend the Left X Axis is a button.  By default it is not pressed.

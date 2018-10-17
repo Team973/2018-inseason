@@ -20,7 +20,9 @@
 #include "src/AutonomousMode.h"
 #include "src/TeleopMode.h"
 #include "src/TestMode.h"
-#include "lib/helpers/JoystickHelper.h"
+#include "lib/helpers/DualActionJoystickHelper.h"
+#include "lib/helpers/XboxJoystickHelper.h"
+#include "lib/helpers/PoofsJoystickHelper.h"
 #include "src/subsystems/Elevator.h"
 #include "src/subsystems/Claw.h"
 #include "src/subsystems/Wrist.h"
@@ -28,7 +30,6 @@
 #include "src/subsystems/Drive.h"
 #include "src/subsystems/IntakeAssembly.h"
 #include "lib/logging/LogSpreadsheet.h"
-#include "lib/helpers/JoystickHelper.h"
 #include "lib/helpers/GreyCompressor.h"
 #include "lib/helpers/GreyTalon.h"
 #include "lib/bases/CoopMTRobot.h"
@@ -50,7 +51,9 @@ class Drive;
  */
 class Robot
         : public CoopMTRobot
-        , public JoystickObserver {
+        , public DualActionJoystickObserver
+        , public XboxJoystickObserver
+        , PoofsJoystickObserver {
 public:
     Robot();
     virtual ~Robot();
@@ -75,16 +78,20 @@ public:
 
     void AllStateContinuous() override;
 
-    void ObserveJoystickStateChange(uint32_t port, uint32_t button,
-                                    bool pressedP) override;
+    void ObservePoofsJoystickStateChange(uint32_t port, uint32_t button,
+                                         bool pressedP) override;
+    void ObserveDualActionJoystickStateChange(uint32_t port, uint32_t button,
+                                              bool pressedP) override;
+    void ObserveXboxJoystickStateChange(uint32_t port, uint32_t button,
+                                        bool pressedP) override;
 
     static const int NUM_LED = 26; /**< The number of LEDs. */
 
 private:
     PowerDistributionPanel *m_pdp;
 
-    ObservableJoystick *m_driverJoystick;
-    ObservableJoystick *m_operatorJoystick;
+    ObservablePoofsJoystick *m_driverJoystick;
+    ObservableXboxJoystick *m_operatorJoystick;
 
     TalonSRX *m_leftDriveTalonA;
     VictorSPX *m_leftDriveVictorB;

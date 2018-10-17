@@ -15,12 +15,14 @@ using namespace ctre;
 namespace frc973 {
 Robot::Robot()
         : CoopMTRobot()
-        , JoystickObserver()
+        , DualActionJoystickObserver()
+        , XboxJoystickObserver()
+        , PoofsJoystickObserver()
         , m_pdp(new PowerDistributionPanel())
         , m_driverJoystick(
-              new ObservableJoystick(DRIVER_JOYSTICK_PORT, this, this))
+              new ObservablePoofsJoystick(DRIVER_JOYSTICK_PORT, this, this))
         , m_operatorJoystick(
-              new ObservableJoystick(OPERATOR_JOYSTICK_PORT, this, this))
+              new ObservableXboxJoystick(OPERATOR_JOYSTICK_PORT, this, this))
         , m_leftDriveTalonA(new GreyTalonSRX(LEFT_DRIVE_A_CAN_ID))
         , m_leftDriveVictorB(new VictorSPX(LEFT_DRIVE_B_VICTOR_ID))
         , m_leftDriveVictorC(new VictorSPX(LEFT_DRIVE_C_VICTOR_ID))
@@ -157,16 +159,42 @@ void Robot::AllStateContinuous() {
         DriverStation::GetInstance().GetGameSpecificMessage().c_str());
 }
 
-void Robot::ObserveJoystickStateChange(uint32_t port, uint32_t button,
-                                       bool pressedP) {
+void Robot::ObservePoofsJoystickStateChange(uint32_t port, uint32_t button,
+                                            bool pressedP) {
     if (this->IsOperatorControl()) {
-        m_teleop->HandleTeleopButton(port, button, pressedP);
+        m_teleop->HandlePoofsJoystick(port, button, pressedP);
     }
     else if (this->IsDisabled()) {
-        m_disabled->HandleDisabledButton(port, button, pressedP);
+        m_disabled->HandlePoofsJoystick(port, button, pressedP);
     }
     else if (this->IsTest()) {
-        m_test->HandleTestButton(port, button, pressedP);
+        m_test->HandlePoofsJoystick(port, button, pressedP);
+    }
+}
+
+void Robot::ObserveXboxJoystickStateChange(uint32_t port, uint32_t button,
+                                           bool pressedP) {
+    if (this->IsOperatorControl()) {
+        m_teleop->HandleXboxJoystick(port, button, pressedP);
+    }
+    else if (this->IsDisabled()) {
+        m_disabled->HandleXboxJoystick(port, button, pressedP);
+    }
+    else if (this->IsTest()) {
+        m_test->HandleXboxJoystick(port, button, pressedP);
+    }
+}
+
+void Robot::ObserveDualActionJoystickStateChange(uint32_t port, uint32_t button,
+                                                 bool pressedP) {
+    if (this->IsOperatorControl()) {
+        m_teleop->HandleDualActionJoystick(port, button, pressedP);
+    }
+    else if (this->IsDisabled()) {
+        m_disabled->HandleDualActionJoystick(port, button, pressedP);
+    }
+    else if (this->IsTest()) {
+        m_test->HandleDualActionJoystick(port, button, pressedP);
     }
 }
 }

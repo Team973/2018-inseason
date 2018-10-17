@@ -3,7 +3,9 @@
 #include "WPILib.h"
 #include <iostream>
 #include "src/info/RobotInfo.h"
-#include "lib/helpers/JoystickHelper.h"
+#include "lib/helpers/DualActionJoystickHelper.h"
+#include "lib/helpers/XboxJoystickHelper.h"
+#include "lib/helpers/PoofsJoystickHelper.h"
 #include "src/Robot.h"
 #include "src/AutonomousMode.h"
 #include "lib/util/WrapDash.h"
@@ -33,7 +35,7 @@ public:
      * @param greyCam The camera server.
      * @param greylight The GreyLight system.
      */
-    Disabled(ObservableJoystick *driver, ObservableJoystick *codriver,
+    Disabled(ObservablePoofsJoystick *driver, ObservableXboxJoystick *codriver,
              IntakeAssembly *intakeAssembly, UsbCamera intakeCamera,
              UsbCamera forkCamera, VideoSink greyCam, GreyLight *greylight);
     virtual ~Disabled();
@@ -66,7 +68,10 @@ public:
      * @param button The button.
      * @param pressedP The button's new status.
      */
-    void HandleDisabledButton(uint32_t port, uint32_t button, bool pressedP);
+    void HandleXboxJoystick(uint32_t port, uint32_t button, bool pressedP);
+    void HandlePoofsJoystick(uint32_t port, uint32_t button, bool pressedP);
+    void HandleDualActionJoystick(uint32_t port, uint32_t button,
+                                  bool pressedP);
 
     /**
      * Gets the robot's start position.
@@ -75,8 +80,8 @@ public:
     AutoRoutineBase::RobotStartPosition GetStartPosition();
 
 private:
-    ObservableJoystick *m_driverJoystick;
-    ObservableJoystick *m_operatorJoystick;
+    ObservablePoofsJoystick *m_driverJoystick;
+    ObservableXboxJoystick *m_operatorJoystick;
 
     AutoRoutineBase::RobotStartPosition m_startPos;
     UsbCamera m_intakeCamera;
