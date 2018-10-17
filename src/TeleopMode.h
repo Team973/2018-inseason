@@ -25,28 +25,51 @@
 using namespace frc;
 
 namespace frc973 {
+
+/**
+ * Controls the teleop mode.
+ */
 class Teleop {
 public:
-    static constexpr Color END_GAME_RED = {255, 0, 0};
-    static constexpr Color NO_COLOR = {0, 0, 0};
+    static constexpr Color END_GAME_RED = {
+        255, 0, 0}; /**< Display red during end game. */
+    static constexpr Color NO_COLOR = {0, 0, 0}; /**< Turn off the LED strip. */
 
-    static constexpr int LEFT_Y_AXIS_CHANNEL = 0;
-    static constexpr int RIGHT_X_AXIS_CHANNEL = 3;
-
-    static constexpr int RIGHT_BUMPER_CHANNEL = 4;
-    static constexpr int RIGHT_TRIGGER_CHANNEL = 3;
-    static constexpr int LEFT_BUMPER_CHANNEL = 2;
-    static constexpr int LEFT_TRIGGER_CHANNEL = 1;
-
+    /**
+     * Constuct a teleop mode.
+     * @param driver The driver's joystick.
+     * @param codriver The co-driver's joystick.
+     * @param drive The drive subsystem.
+     * @param intakeAssembly The intakeAssembly subsystem.
+     * @param hanger The hanger subsystem.
+     * @param greylight The GreyLight system.
+     */
     Teleop(ObservablePoofsJoystick *driver, ObservableXboxJoystick *codriver,
            Drive *drive, IntakeAssembly *intakeAssembly, Hanger *hanger,
            GreyLight *greylight);
     virtual ~Teleop();
 
+    /**
+     * Start of teleop.
+     */
     void TeleopInit();
+
+    /**
+     * Loop of teleop.
+     */
     void TeleopPeriodic();
+
+    /**
+     * Stop of teleop.
+     */
     void TeleopStop();
 
+    /**
+     * Button handler for the teleop mode.
+     * @param port The port the joystick is connected to.
+     * @param button The button.
+     * @param pressedP The button's new status.
+     */
     void HandleDualActionJoystick(uint32_t port, uint32_t button,
                                   bool pressedP);
     void HandleXboxJoystick(uint32_t port, uint32_t button, bool pressedP);

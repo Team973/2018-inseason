@@ -61,12 +61,6 @@ protected:
     TaskMgr *m_scheduler; /**< The task manager object.*/
     LogCell *m_logCell;   /**< The logger.*/
 
-    /* For remembering states of sticky buttons */
-    bool m_lastLTrigger; /**< The last left joystick's x axis value */
-    bool m_lastLBumper;  /**< The last left joystick's y axis value */
-    bool m_lastRTrigger; /**< The last right joystick's x axis value */
-    bool m_lastRBumper;  /**< The last right joystick's y axis value */
-
 public:
     /**
      * Create an instance of the ObservablePoofsJoystick object. Requires the

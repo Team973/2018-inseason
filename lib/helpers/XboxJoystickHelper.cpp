@@ -16,11 +16,7 @@ ObservableXboxJoystick::ObservableXboxJoystick(uint16_t port,
         , m_ds(ds)
         , m_prevBtn(0)
         , m_scheduler(scheduler)
-        , m_logCell(nullptr)
-        , m_lastLXVal(false)
-        , m_lastLYVal(false)
-        , m_lastRXVal(false)
-        , m_lastRYVal(false) {
+        , m_logCell(nullptr) {
     if (m_ds == nullptr) {
         m_ds = &DriverStation::GetInstance();
     }

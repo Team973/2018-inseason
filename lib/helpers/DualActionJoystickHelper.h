@@ -16,62 +16,66 @@ using namespace frc;
 
 namespace frc973 {
 
-/*
+/**
  * Button mapping for the DualAction joystick
  */
 namespace DualAction {
-/*
+
+/**
  * Standard buttons... shouldn't need any explanation
  */
-const unsigned int BtnX = 1;
-const unsigned int BtnA = 2;
-const unsigned int BtnB = 3;
-const unsigned int BtnY = 4;
-const unsigned int LeftBumper = 5;
-const unsigned int RightBumper = 6;
-const unsigned int LeftTrigger = 7;
-const unsigned int RightTrigger = 8;
-const unsigned int Back = 9;
-const unsigned int Start = 10;
 
-/*
+const unsigned int BtnX = 1;         /**< Button X */
+const unsigned int BtnA = 2;         /**< Button A */
+const unsigned int BtnB = 3;         /**< Button B */
+const unsigned int BtnY = 4;         /**< Button Y */
+const unsigned int LeftBumper = 5;   /**< Left Bumper */
+const unsigned int RightBumper = 6;  /**< Right Bumper */
+const unsigned int LeftTrigger = 7;  /**< Left Trigger */
+const unsigned int RightTrigger = 8; /**< Right Trigger */
+const unsigned int Back = 9;         /**< Back Button */
+const unsigned int Start = 10;       /**< Start Button */
+
+/**
  * When you push down on the left and right joystick, that registers
  * as a button press
  */
-const unsigned int LJoystickBtn = 11;
-const unsigned int RJoystickBtn = 12;
 
-const unsigned int DPadUpVirtBtn = 22;
-const unsigned int DPadDownVirtBtn = 23;
-const unsigned int DPadLeftVirtBtn = 24;
-const unsigned int DPadRightVirtBtn = 25;
+const unsigned int LJoystickBtn = 11; /**< Left Joystick Button */
+const unsigned int RJoystickBtn = 12; /**< Right Joystick Button */
 
-/*
+const unsigned int DPadUpVirtBtn = 22;    /**< DPad Up Virtual Button */
+const unsigned int DPadDownVirtBtn = 23;  /**< DPad Down Virtual Button */
+const unsigned int DPadLeftVirtBtn = 24;  /**< DPad Left Virtual Button */
+const unsigned int DPadRightVirtBtn = 25; /**< DPad Right Virtual Button */
+
+/**
  * The following are 'virtual' buttons, one for each joystick axis.
- *  * Virtual buttons default to zero.
- *  * When you push the associated joystick axis above 0.5, it registers
- *  	as pressed
- *  * When you pull the associated joystick axis below -0.5, it registers
- *  	as released
+ *  - Virtual buttons default to zero.
+ *  - When you push the associated joystick axis above 0.5, it registers as
+ * pressed
+ *  - When you pull the associated joystick axis below -0.5, it registers as
+ * released
  */
-const unsigned int LXAxisVirtButton = 26;
-const unsigned int LYAxisVirtButton = 27;
-const unsigned int RXAxisVirtButton = 28;
-const unsigned int RYAxisVirtButton = 29;
-const unsigned int DXAxisVirtButton = 30;
-const unsigned int DYAxisVirtButton = 31;
 
-/*
+const unsigned int LXAxisVirtButton = 26; /**< Left X Axis Virtual Button */
+const unsigned int LYAxisVirtButton = 27; /**< Left Y Axis Virtual Button */
+const unsigned int RXAxisVirtButton = 28; /**< Right X Axis Virtual Button */
+const unsigned int RYAxisVirtButton = 29; /**< Right Y Axis Virtual Button */
+const unsigned int DXAxisVirtButton = 30; /**< DPad X Axis Virtual Button */
+const unsigned int DYAxisVirtButton = 31; /**< DPad Y Axis Virtual Button */
+
+/**
  * Not buttons but the numbers for each axis... can be used with
- * joystick.GetRawAxis
- * DPad axis only return 0.0, -1.0, and 1.0
+ * joystick.GetRawAxis. DPad axis only return 0.0, -1.0, and 1.0.
  */
-const unsigned int LeftXAxis = 0;
-const unsigned int LeftYAxis = 1;
-const unsigned int RightXAxis = 2;
-const unsigned int RightYAxis = 3;
-const unsigned int DPadXAxis = 4;
-const unsigned int DPadYAxis = 5;
+
+const unsigned int LeftXAxis = 0;  /**< Left X Axis */
+const unsigned int LeftYAxis = 1;  /**< Left Y Axis */
+const unsigned int RightXAxis = 2; /**< Right X Axis */
+const unsigned int RightYAxis = 3; /**< Right Y Axis */
+const unsigned int DPadXAxis = 4;  /**< DPad X Axis */
+const unsigned int DPadYAxis = 5;  /**< DPad Y Axis */
 }
 
 class ObservableDualActionJoystick;
@@ -83,6 +87,14 @@ public:
     virtual ~DualActionJoystickObserver() {
     }
 
+    /**
+     * This function is overriden by the subclass to handle a joystick button
+     * event notification.
+     * @param port The joystick port.
+     * @param button The joystick button.
+     * @param newState If true, specifies the button has been pressed, if false,
+     * specifies the button has been released.
+     */
     virtual void ObserveDualActionJoystickStateChange(uint32_t port,
                                                       uint32_t button,
                                                       bool newState) = 0;

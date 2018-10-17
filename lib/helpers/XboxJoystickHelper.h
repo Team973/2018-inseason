@@ -75,12 +75,6 @@ protected:
     TaskMgr *m_scheduler; /**< The task manager object.*/
     LogCell *m_logCell;   /**< The logger.*/
 
-    /* For remembering states of sticky buttons */
-    bool m_lastLXVal; /**< The last left joystick's x axis value */
-    bool m_lastLYVal; /**< The last left joystick's y axis value */
-    bool m_lastRXVal; /**< The last right joystick's x axis value */
-    bool m_lastRYVal; /**< The last right joystick's y axis value */
-
 public:
     /**
      * Create an instance of the ObservableXboxJoystickJoystick object. Requires

@@ -21,24 +21,26 @@ namespace frc973 {
 class AsynchLogCellListener;
 
 /**
- * AsynchLogCell works like a LogCell except that it takes a reference
- * to a listener whom it will notify when it's content is requested.
+ * AsynchLogCell works like a LogCell except that it takes a reference to a
+ * listener whom it will notify when it's content is requested.
  */
 class AsynchLogCell : public LogCell {
 public:
     /**
-     * Construct an AsynchLogCell, given the name of the column to log,
-     * and the listener to notify when content is requested.
-     *
-     * When GetContent is called, listener->NofityAsynchLogCellListener(this)
-     * gets called to generate the content to return.
+     * Construct an AsynchLogCell. When GetContent is called,
+     * listener->NofityAsynchLogCellListener(this) gets called to generate the
+     * content to return.
+     * @param name The name of the column to log.
+     * @param listener The listener to notify when content is requested.
+     * @param size The cell size.
      */
     AsynchLogCell(char *name, AsynchLogCellListener *listener,
                   unsigned int size = DEFAULT_MAX_LOG_CELL_SIZE);
 
     /**
-     * Call listener->NotifyAsynchLogCellListener(this) to get the
-     * contents to be logged and return those contents.
+     * Call listener->NotifyAsynchLogCellListener(this) to get the contents to
+     * be logged and return those contents.
+     * @return The contents to be logged.
      */
     virtual const char *GetContent();
 
@@ -47,11 +49,10 @@ private:
 };
 
 /**
- * AsynchLogCellListener is an interface describing a class that is capable
- * of responding to AsynchLogCell notifications.  The listener should, given
- * a reference to the cell creating the notification, call cell->LogText
- * (or something like) that to fill the given cell with whatever content
- * is needed.
+ * AsynchLogCellListener is an interface describing a class that is capable of
+ * responding to AsynchLogCell notifications.  The listener should, given a
+ * reference to the cell creating the notification, call cell->LogText (or
+ * something like) that to fill the given cell with whatever content is needed.
  */
 class AsynchLogCellListener {
 public:
@@ -60,8 +61,7 @@ public:
 
     /**
      * Handle an AsynchLogCell's request for data
-     *
-     * @param cell requesting data
+     * @param cell The cell requesting data.
      */
     virtual void NotifyAsynchLogCellListener(AsynchLogCell *cell) = 0;
 };

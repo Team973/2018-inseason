@@ -46,6 +46,9 @@ class Disabled;
 class Autonomous;
 class Drive;
 
+/**
+ * Defines the robot.
+ */
 class Robot
         : public CoopMTRobot
         , public DualActionJoystickObserver
@@ -82,7 +85,7 @@ public:
     void ObserveXboxJoystickStateChange(uint32_t port, uint32_t button,
                                         bool pressedP) override;
 
-    static const int NUM_LED = 26;
+    static const int NUM_LED = 26; /**< The number of LEDs. */
 
 private:
     PowerDistributionPanel *m_pdp;

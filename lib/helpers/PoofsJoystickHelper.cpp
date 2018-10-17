@@ -15,11 +15,7 @@ ObservablePoofsJoystick::ObservablePoofsJoystick(
         , m_ds(ds)
         , m_prevBtn(0)
         , m_scheduler(scheduler)
-        , m_logCell(nullptr)
-        , m_lastLTrigger(false)
-        , m_lastLBumper(false)
-        , m_lastRTrigger(false)
-        , m_lastRBumper(false) {
+        , m_logCell(nullptr) {
     if (m_ds == nullptr) {
         m_ds = &DriverStation::GetInstance();
     }
@@ -63,47 +59,19 @@ float ObservablePoofsJoystick::GetRawAxisWithDeadband(int axis, bool fSquared,
 }
 
 bool ObservablePoofsJoystick::GetLTrigger() {
-    if (this->GetRawButton(PoofsJoysticks::LeftTrigger)) {
-        m_lastLTrigger = true;
-    }
-    else {
-        m_lastLTrigger = false;
-    }
-
-    return m_lastLTrigger;
+    return this->GetRawButton(PoofsJoysticks::LeftTrigger);
 }
 
 bool ObservablePoofsJoystick::GetLBumper() {
-    if (this->GetRawButton(PoofsJoysticks::LeftBumper)) {
-        m_lastLBumper = true;
-    }
-    else {
-        m_lastLBumper = false;
-    }
-
-    return m_lastLBumper;
+    return this->GetRawButton(PoofsJoysticks::LeftBumper);
 }
 
 bool ObservablePoofsJoystick::GetRTrigger() {
-    if (this->GetRawButton(PoofsJoysticks::RightTrigger)) {
-        m_lastRTrigger = true;
-    }
-    else {
-        m_lastRTrigger = false;
-    }
-
-    return m_lastRTrigger;
+    return this->GetRawButton(PoofsJoysticks::RightTrigger);
 }
 
 bool ObservablePoofsJoystick::GetRBumper() {
-    if (this->GetRawButton(PoofsJoysticks::RightBumper)) {
-        m_lastRBumper = true;
-    }
-    else {
-        m_lastRBumper = false;
-    }
-
-    return m_lastRBumper;
+    return this->GetRawButton(PoofsJoysticks::RightBumper);
 }
 
 uint32_t ObservablePoofsJoystick::GetAllButtons() {

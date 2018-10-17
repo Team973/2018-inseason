@@ -44,8 +44,6 @@ void Teleop::TeleopInit() {
     m_intakeAssembly->EnableCoastMode();
     m_intakeAssembly->StopIntake();
     m_hanger->DisengagePTO();
-    m_driverJoystick->SetThrottleChannel(LEFT_Y_AXIS_CHANNEL);
-    m_driverJoystick->SetTwistChannel(RIGHT_X_AXIS_CHANNEL);
 }
 
 void Teleop::TeleopPeriodic() {
@@ -65,7 +63,8 @@ void Teleop::TeleopPeriodic() {
     double y = m_driverJoystick->GetRawAxis(PoofsJoysticks::LeftYAxis);
     double x = m_driverJoystick->GetRawAxis(PoofsJoysticks::RightXAxis);
 
-    bool quickturn = m_driverJoystick->GetRawButton(RIGHT_TRIGGER_CHANNEL);
+    bool quickturn =
+        m_driverJoystick->GetRawButton(PoofsJoysticks::RightTrigger);
 
     if (m_driverJoystick->GetRawButton(DualAction::RightTrigger)) {
         x /= 3.0;

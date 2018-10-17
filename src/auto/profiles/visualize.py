@@ -12,7 +12,10 @@ Invoke with the following command:
 import sys
 import tools.pathtool.libvisualize
 
+## The json file.
 jsonFile = sys.argv[1]
+
+## The cdll file.
 cdllFile = sys.argv[2]
 
 tools.pathtool.libvisualize.visualize_path(jsonFile, cdllFile)
