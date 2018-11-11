@@ -61,6 +61,7 @@ public:
      */
     const char *RobotStartPosToString(
         AutoRoutineBase::RobotStartPosition position);
+    const char *AutoRoutineModeToString(AutoRoutineBase::AutoRoutineMode mode);
 
     /**
      * Button handler for the disabled mode.
@@ -78,12 +79,14 @@ public:
      * @return The robot's start position.
      */
     AutoRoutineBase::RobotStartPosition GetStartPosition();
+    AutoRoutineBase::AutoRoutineMode GetRoutineMode();
 
 private:
     ObservablePoofsJoystick *m_driverJoystick;
     ObservableXboxJoystick *m_operatorJoystick;
 
     AutoRoutineBase::RobotStartPosition m_startPos;
+    AutoRoutineBase::AutoRoutineMode m_routineMode;
     UsbCamera m_intakeCamera;
     UsbCamera m_forkCamera;
     VideoSink m_greyCam;

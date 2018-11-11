@@ -358,7 +358,7 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
             m_claw->OpenClaw();
             m_claw->StopIntake();
             m_elevator->SetPower(elevatorInput +
-                                 Elevator::ELEVATOR_FEED_FORWARD);
+                                 (0.5 * Elevator::ELEVATOR_FEED_FORWARD));
         } break;
         case ControlMode::ManualVoltage: {
             double elevatorInput = -m_operatorJoystick->GetRawAxisWithDeadband(

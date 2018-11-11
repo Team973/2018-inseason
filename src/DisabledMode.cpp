@@ -13,6 +13,7 @@ Disabled::Disabled(ObservablePoofsJoystick *driver,
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_startPos(AutoRoutineBase::RobotStartPosition::Center)
+        , m_routineMode(AutoRoutineBase::AutoRoutineMode::Sneak)
         , m_intakeCamera(intakeCamera)
         , m_forkCamera(forkCamera)
         , m_greyCam(greyCam)
@@ -35,7 +36,8 @@ void Disabled::DisabledInit() {
 }
 
 void Disabled::DisabledPeriodic() {
-    DBStringPrintf(DB_LINE1, "Start %s", RobotStartPosToString(m_startPos));
+    DBStringPrintf(DB_LINE1, "Start %s %s", RobotStartPosToString(m_startPos),
+                   AutoRoutineModeToString(m_routineMode));
 }
 
 void Disabled::DisabledStop() {
@@ -53,6 +55,21 @@ const char *Disabled::RobotStartPosToString(
             break;
         case AutoRoutineBase::RobotStartPosition::Right:
             return "Right";
+            break;
+        default:
+            return "Error!";
+            break;
+    }
+}
+
+const char *Disabled::AutoRoutineModeToString(
+    AutoRoutineBase::AutoRoutineMode mode) {
+    switch (mode) {
+        case AutoRoutineBase::AutoRoutineMode::Sneak:
+            return "Sneak";
+            break;
+        case AutoRoutineBase::AutoRoutineMode::Scale:
+            return "Scale";
             break;
         default:
             return "Error!";
@@ -108,6 +125,7 @@ void Disabled::HandleXboxJoystick(uint32_t port, uint32_t button,
                 break;
             case Xbox::LeftBumper:
                 if (pressedP) {
+                    m_routineMode = AutoRoutineBase::AutoRoutineMode::Sneak;
                 }
                 break;
             case Xbox::LJoystickBtn:
@@ -120,12 +138,15 @@ void Disabled::HandleXboxJoystick(uint32_t port, uint32_t button,
                 break;
             case Xbox::RightBumper:
                 if (pressedP) {
+                    m_routineMode = AutoRoutineBase::AutoRoutineMode::Scale;
                 }
                 else {
                 }
                 break;
             case Xbox::DPadUpVirtBtn:
                 if (pressedP) {
+                    m_startPos = AutoRoutineBase::RobotStartPosition::Center;
+                    m_greylight->SetPixelStateProcessor(m_disabledSignal);
                 }
                 break;
             case Xbox::DPadDownVirtBtn:
@@ -134,10 +155,14 @@ void Disabled::HandleXboxJoystick(uint32_t port, uint32_t button,
                 break;
             case Xbox::DPadLeftVirtBtn:
                 if (pressedP) {
+                    m_startPos = AutoRoutineBase::RobotStartPosition::Left;
+                    m_greylight->SetPixelStateProcessor(m_leftSideSignal);
                 }
                 break;
             case Xbox::DPadRightVirtBtn:
                 if (pressedP) {
+                    m_startPos = AutoRoutineBase::RobotStartPosition::Right;
+                    m_greylight->SetPixelStateProcessor(m_rightSideSignal);
                 }
                 break;
             case Xbox::Back:
@@ -236,5 +261,9 @@ void Disabled::HandleDualActionJoystick(uint32_t port, uint32_t button,
  **/
 AutoRoutineBase::RobotStartPosition Disabled::GetStartPosition() {
     return m_startPos;
+}
+
+AutoRoutineBase::AutoRoutineMode Disabled::GetRoutineMode() {
+    return m_routineMode;
 }
 };

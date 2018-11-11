@@ -84,12 +84,17 @@ void Teleop::TeleopPeriodic() {
      * Operator Joystick
      */
     double elevatorPosIncInput =
-        -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::LeftYAxis);
-    double wristPosIncInput = pow(
-        -m_operatorJoystick->GetRawAxisWithDeadband(DualAction::RightXAxis), 3);
+        -m_operatorJoystick->GetRawAxisWithDeadband(Xbox::LeftYAxis);
+    double wristPosIncInput =
+        pow(-m_operatorJoystick->GetRawAxisWithDeadband(Xbox::RightXAxis), 3);
 
     if (fabs(elevatorPosIncInput) > 0.25 || fabs(wristPosIncInput) > 0.25) {
         m_intakeAssembly->SetPosManualInput();
+    }
+
+    if (fabs(m_operatorJoystick->GetRawAxisWithDeadband(
+            Xbox::LeftTriggerAxis)) > 0.4) {
+        m_intakeAssembly->GoToIntakePosition(IntakeAssembly::STOW_PRESET);
     }
 
     switch (m_cubeIntakeState) {
@@ -117,7 +122,11 @@ void Teleop::TeleopPeriodic() {
                 m_intakeAssembly->GoToIntakePosition(
                     IntakeAssembly::STOW_PRESET);
                 m_intakeModeTimer = GetMsecTime();
-                m_cubeIntakeState = CubeIntakeState::StopRumble;
+                m_operatorJoystick->SetRumble(
+                    GenericHID::RumbleType::kLeftRumble, 0);
+                m_operatorJoystick->SetRumble(
+                    GenericHID::RumbleType::kRightRumble, 0);
+                m_cubeIntakeState = CubeIntakeState::Idle;
             }
             break;
         case CubeIntakeState::StopRumble:
@@ -126,7 +135,7 @@ void Teleop::TeleopPeriodic() {
                     GenericHID::RumbleType::kLeftRumble, 0);
                 m_operatorJoystick->SetRumble(
                     GenericHID::RumbleType::kRightRumble, 0);
-                m_cubeIntakeState = CubeIntakeState::Idle;
+                // m_cubeIntakeState = CubeIntakeState::Idle;
             }
             break;
         case CubeIntakeState::ManualIntaking:
@@ -285,13 +294,13 @@ void Teleop::HandleXboxJoystick(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case Xbox::DPadLeftVirtBtn:
                 if (pressedP) {
-                    m_driveMode = DriveMode::Hanger;
-                    m_hanger->EngagePTO();
+                    m_intakeAssembly->SetModeHanging(true);
                 }
                 break;
             case Xbox::DPadRightVirtBtn:
                 if (pressedP) {
-                    m_intakeAssembly->SetModeHanging(true);
+                    m_driveMode = DriveMode::Hanger;
+                    m_hanger->EngagePTO();
                 }
                 break;
             case Xbox::Back:

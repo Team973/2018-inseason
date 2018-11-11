@@ -25,55 +25,25 @@ using namespace frc;
 namespace frc973 {
 class Disabled;
 
-/**
- * Controls the autonomous mode.
- */
 class Autonomous {
 public:
-    /**
-     * Definitions of the switch and scale positions. Recieved at the start of
-     * the match.
-     */
     enum class SwitchScalePosition
     {
-        LL,              /**< Switch left, Scale left. */
-        LR,              /**< Switch left, Scale right. */
-        RR,              /**< Switch right, Scale right. */
-        RL,              /**< Switch right, Scale left. */
-        NOT_YET_RECEIVED /**< The FMS hasn't sent the positions yet. */
+        LL,
+        LR,
+        RR,
+        RL,
+        NOT_YET_RECEIVED
     };
 
-    /**
-     * Constuct an auutonomous mode.
-     * @param disabled The disabled mode.
-     * @param drive The drive subsystem.
-     * @param intakeAssembly The intakeAssembly subsystem.
-     * @param gyro The gyro.
-     * @param greylight The GreyLight system.
-     */
     Autonomous(Disabled *disabled, Drive *drive, IntakeAssembly *intakeAssembly,
                ADXRS450_Gyro *gyro, GreyLight *greylight);
     virtual ~Autonomous();
 
-    /**
-     * Start of autonomous.
-     */
     void AutonomousInit();
-
-    /**
-     * Loop of autonomous.
-     */
     void AutonomousPeriodic();
-
-    /**
-     * Stop of autonomous.
-     */
     void AutonomousStop();
 
-    /**
-     * Get the Switch and Scale position.
-     * @return The switch and scale position.
-     */
     SwitchScalePosition GetSwitchScalePosition(std::string message);
 
 private:
