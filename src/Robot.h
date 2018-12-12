@@ -33,6 +33,7 @@
 #include "lib/helpers/GreyCompressor.h"
 #include "lib/helpers/GreyTalon.h"
 #include "lib/bases/CoopMTRobot.h"
+#include "lib/sensors/Limelight.h"
 #include "ctre/Phoenix.h"
 #include "lib/helpers/GreyTalon.h"
 #include "lib/helpers/GreyLight.h"
@@ -90,7 +91,7 @@ public:
 private:
     PowerDistributionPanel *m_pdp;
 
-    ObservablePoofsJoystick *m_driverJoystick;
+    ObservableDualActionJoystick *m_driverJoystick;
     ObservableXboxJoystick *m_operatorJoystick;
 
     TalonSRX *m_leftDriveTalonA;
@@ -101,6 +102,7 @@ private:
     VictorSPX *m_rightDriveVictorC;
 
     ADXRS450_Gyro *m_gyro;
+    Limelight *m_limelight;
 
     LogSpreadsheet *m_logger;
     LogCell *m_matchIdentifier;

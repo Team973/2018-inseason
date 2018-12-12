@@ -5,7 +5,7 @@ using namespace frc;
 
 namespace frc973 {
 static const Color DISABLED_RED = {255, 0, 0};
-Disabled::Disabled(ObservablePoofsJoystick *driver,
+Disabled::Disabled(ObservableDualActionJoystick *driver,
                    ObservableXboxJoystick *codriver,
                    IntakeAssembly *intakeAssembly, UsbCamera intakeCamera,
                    UsbCamera forkCamera, VideoSink greyCam,

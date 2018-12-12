@@ -35,9 +35,10 @@ public:
      * @param greyCam The camera server.
      * @param greylight The GreyLight system.
      */
-    Disabled(ObservablePoofsJoystick *driver, ObservableXboxJoystick *codriver,
-             IntakeAssembly *intakeAssembly, UsbCamera intakeCamera,
-             UsbCamera forkCamera, VideoSink greyCam, GreyLight *greylight);
+    Disabled(ObservableDualActionJoystick *driver,
+             ObservableXboxJoystick *codriver, IntakeAssembly *intakeAssembly,
+             UsbCamera intakeCamera, UsbCamera forkCamera, VideoSink greyCam,
+             GreyLight *greylight);
     virtual ~Disabled();
 
     /**
@@ -82,7 +83,7 @@ public:
     AutoRoutineBase::AutoRoutineMode GetRoutineMode();
 
 private:
-    ObservablePoofsJoystick *m_driverJoystick;
+    ObservableDualActionJoystick *m_driverJoystick;
     ObservableXboxJoystick *m_operatorJoystick;
 
     AutoRoutineBase::RobotStartPosition m_startPos;

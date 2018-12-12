@@ -31,7 +31,7 @@ public:
      * @param hanger The hanger subsystem.
      * @param greylight The GreyLight system.
      */
-    Test(ObservablePoofsJoystick *driver, ObservableXboxJoystick *codriver,
+    Test(ObservableDualActionJoystick *driver, ObservableXboxJoystick *codriver,
          Drive *drive, IntakeAssembly *intakeAssembly, Hanger *hanger,
          GreyLight *greylight);
     virtual ~Test();
@@ -74,17 +74,19 @@ private:
         Spline,
         Straight,
         Trap,
-        Velocity
+        Velocity,
+        Limelight
     };
 
     enum class IntakeMode
     {
         manualPosition,
         manualVoltage,
-        motionMagic
+        motionMagic,
+        limelight
     };
 
-    ObservablePoofsJoystick *m_driverJoystick;
+    ObservableDualActionJoystick *m_driverJoystick;
     ObservableXboxJoystick *m_operatorJoystick;
 
     Drive *m_drive;

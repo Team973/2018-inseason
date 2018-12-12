@@ -29,6 +29,8 @@ class SplineDriveController;
 class StraightDriveController;
 class TrapDriveController;
 class VelocityArcadeDriveController;
+class LimelightDriveController;
+class Limelight;
 class LogSpreadsheet;
 
 /**
@@ -65,7 +67,8 @@ public:
     Drive(TaskMgr *scheduler, LogSpreadsheet *logger, TalonSRX *leftDriveTalonA,
           VictorSPX *leftDriveVictorB, VictorSPX *leftDriveVictorC,
           TalonSRX *rightDriveTalonA, VictorSPX *rightDriveVictorB,
-          VictorSPX *rightDriveVictorC, ADXRS450_Gyro *gyro);
+          VictorSPX *rightDriveVictorC, ADXRS450_Gyro *gyro,
+          Limelight *limelight);
     virtual ~Drive();
 
     /**
@@ -199,6 +202,8 @@ public:
         return m_trapDriveController;
     }
 
+    LimelightDriveController *LimelightDrive();
+
     /**
      * Set drive to use the velocity arcade drive controller.
      * @param throttle Forward/backwards amount.
@@ -323,6 +328,7 @@ private:
 
     ADXRS450_Gyro *m_gyro;
     double m_gyroZero;
+    Limelight *m_limelight;
 
     AssistedArcadeDriveController *m_assistedArcadeDriveController;
     CheesyDriveController *m_cheesyDriveController;
@@ -334,6 +340,7 @@ private:
     StraightDriveController *m_straightDriveController;
     TrapDriveController *m_trapDriveController;
     VelocityArcadeDriveController *m_velocityArcadeDriveController;
+    LimelightDriveController *m_limelightDriveController;
 
     double m_angle;
     double m_angleRate;

@@ -7,12 +7,14 @@ using namespace frc;
 
 namespace frc973 {
 Elevator::Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
-                   TalonSRX *elevatorMotor)
+                   TalonSRX *elevatorMotor, Limelight *limelight)
         : m_scheduler(scheduler)
         , m_elevatorMotor(elevatorMotor)
         , m_position(0.0)
         , m_zeroingTime(0)
-        , m_elevatorState(ElevatorState::manualVoltage) {
+        , m_elevatorState(ElevatorState::manualVoltage)
+        , m_limelightVerticalController(
+              new LimelightVerticalController(limelight, elevatorMotor)) {
     this->m_scheduler->RegisterTask("Elevator", this, TASK_PERIODIC);
 
     m_elevatorMotor->ConfigSelectedFeedbackSensor(
@@ -61,6 +63,10 @@ void Elevator::SetPosition(double position) {
     m_elevatorMotor->Set(ControlMode::MotionMagic, position_clicks);
 }
 
+void Elevator::EnableLimelightControl() {
+    m_elevatorState = ElevatorState::limelight;
+}
+
 float Elevator::GetPosition() const {
     return ELEVATOR_INCHES_PER_CLICK *
            ((float)m_elevatorMotor->GetSelectedSensorPosition(0));
@@ -83,11 +89,13 @@ void Elevator::TaskPeriodic(RobotMode mode) {
     SmartDashboard::PutNumber("elevator/encoders/encoder", GetPosition());
     SmartDashboard::PutNumber("elevator/outputs/current",
                               m_elevatorMotor->GetOutputCurrent());
-    DBStringPrintf(DBStringPos::DB_LINE0, "e %f", GetPosition());
     switch (m_elevatorState) {
         case manualVoltage:
             break;
         case motionMagic:
+            break;
+        case limelight:
+            m_limelightVerticalController->CalcOutput();
             break;
         default:
             break;

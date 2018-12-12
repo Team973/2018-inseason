@@ -19,8 +19,8 @@ Robot::Robot()
         , XboxJoystickObserver()
         , PoofsJoystickObserver()
         , m_pdp(new PowerDistributionPanel())
-        , m_driverJoystick(
-              new ObservablePoofsJoystick(DRIVER_JOYSTICK_PORT, this, this))
+        , m_driverJoystick(new ObservableDualActionJoystick(
+              DRIVER_JOYSTICK_PORT, this, this))
         , m_operatorJoystick(
               new ObservableXboxJoystick(OPERATOR_JOYSTICK_PORT, this, this))
         , m_leftDriveTalonA(new GreyTalonSRX(LEFT_DRIVE_A_CAN_ID))
@@ -30,6 +30,7 @@ Robot::Robot()
         , m_rightDriveVictorB(new VictorSPX(RIGHT_DRIVE_B_VICTOR_ID))
         , m_rightDriveVictorC(new VictorSPX(RIGHT_DRIVE_C_VICTOR_ID))
         , m_gyro(new ADXRS450_Gyro())
+        , m_limelight(new Limelight())
         , m_logger(new LogSpreadsheet(this))
         , m_matchIdentifier(new LogCell("Match Identifier", 64))
         , m_gameSpecificMessage(new LogCell("GameSpecificMessage", 10))
@@ -51,7 +52,7 @@ Robot::Robot()
         , m_forkDeploy(new Solenoid(PCM_CAN_ID, FORK_DEPLOY_PCM_ID))
         , m_forkliftTalon(new GreyTalonSRX(FORKLIFT_TALON_CAN_ID))
         , m_greylight(new GreyLight(NUM_LED))
-        , m_elevator(new Elevator(this, m_logger, m_elevatorMotor))
+        , m_elevator(new Elevator(this, m_logger, m_elevatorMotor, m_limelight))
         , m_claw(new Claw(this, m_logger, m_rightCubeSensor, m_leftCubeSensor,
                           m_leftRoller, m_rightRoller, m_cubeClamp,
                           m_cubeSpring))
@@ -62,7 +63,7 @@ Robot::Robot()
         , m_drive(new Drive(this, m_logger, m_leftDriveTalonA,
                             m_leftDriveVictorB, m_leftDriveVictorC,
                             m_rightDriveTalonA, m_rightDriveVictorB,
-                            m_rightDriveVictorC, m_gyro))
+                            m_rightDriveVictorC, m_gyro, m_limelight))
         , m_hanger(new Hanger(this, m_logger, m_drive, m_elevator, m_hangerPTO,
                               m_forkDeploy, m_forkliftTalon, m_intakeCamera,
                               m_forkCamera, m_greyCam, m_greylight))
@@ -149,6 +150,8 @@ void Robot::TestStop() {
 void Robot::AllStateContinuous() {
     // NetworkTable Battery Voltage
     SmartDashboard::PutNumber("misc/pdp/batteryvoltage", m_pdp->GetVoltage());
+    DBStringPrintf(DB_LINE0, "tx: %2.1lf ty: %2.1lf", m_limelight->GetXOffset(),
+                   m_limelight->GetYOffset());
 
     m_matchIdentifier->LogPrintf(
         "%s_%s%dm%d", DriverStation::GetInstance().GetEventName().c_str(),

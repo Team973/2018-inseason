@@ -15,6 +15,7 @@ cc_library(
         "//lib/helpers:helpers",
         "//lib/profiles:profiles",
         "//lib/util:util",
+        "//lib/sensors:sensors",
         "//lib/trajectories:trajectories",
         "//src/info:info",
     ],

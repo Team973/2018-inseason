@@ -19,6 +19,7 @@ cc_binary(
         "//lib/helpers:helpers",
         "//lib/trajectories:trajectories",
         "//src/auto:auto",
+        "//lib/sensors:sensors",
         "//src/controllers:controllers",
         "//src/info:info",
         "//src/subsystems:subsystems",

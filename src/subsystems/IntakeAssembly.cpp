@@ -148,6 +148,11 @@ void IntakeAssembly::SetModeHanging(bool hanging) {
     }
 }
 
+void IntakeAssembly::EnableElevatorLimelightControl() {
+    m_controlMode = ControlMode::Limelight;
+    m_elevator->EnableLimelightControl();
+}
+
 void IntakeAssembly::RunIntake(double power) {
     m_claw->RunIntake(power);
 }
@@ -416,6 +421,8 @@ void IntakeAssembly::TaskPeriodic(RobotMode mode) {
         case ControlMode::Zeroing:
             m_elevator->SetPower(-0.1);
             m_wrist->SetPower(0.2);
+            break;
+        case ControlMode::Limelight:
             break;
     }
 }

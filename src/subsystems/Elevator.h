@@ -15,6 +15,8 @@
 #include "lib/helpers/DualActionJoystickHelper.h"
 #include "lib/helpers/XboxJoystickHelper.h"
 #include "lib/helpers/PoofsJoystickHelper.h"
+#include "lib/sensors/Limelight.h"
+#include "src/controllers/LimelightVerticalController.h"
 #include "lib/util/Util.h"
 
 using namespace frc;
@@ -34,7 +36,8 @@ public:
     enum ElevatorState
     {
         manualVoltage, /**< Control the motors with manual voltage. */
-        motionMagic /**< Control the motors using position w/ Motion Magic. */
+        motionMagic, /**< Control the motors using position w/ Motion Magic. */
+        limelight
     };
 
     static constexpr double GROUND = 0.0;      /**< Ground preset. */
@@ -59,7 +62,7 @@ public:
      * @param elevatorMotor The elevator Talon.
      */
     Elevator(TaskMgr *scheduler, LogSpreadsheet *logger,
-             TalonSRX *elevatorMotor);
+             TalonSRX *elevatorMotor, Limelight *limelight);
     virtual ~Elevator();
 
     /**
@@ -73,6 +76,8 @@ public:
      * @param power The power being sent to the motor from -1.0 to 1.0
      */
     void SetPower(double power);
+
+    void EnableLimelightControl();
 
     /**
      * Get the current position.
@@ -110,6 +115,7 @@ private:
     double m_position;
     uint32_t m_zeroingTime;
     ElevatorState m_elevatorState;
+    LimelightVerticalController *m_limelightVerticalController;
     LogCell *m_positionCell;
 };
 }

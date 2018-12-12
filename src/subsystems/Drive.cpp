@@ -18,9 +18,11 @@
 #include "src/controllers/SplineDriveController.h"
 #include "src/controllers/TrapDriveController.h"
 #include "src/controllers/VelocityArcadeDriveController.h"
+#include "src/controllers/LimelightDriveController.h"
 #include "src/info/RobotInfo.h"
 #include "src/subsystems/Drive.h"
 #include "lib/util/Util.h"
+#include "lib/sensors/Limelight.h"
 #include "lib/util/WrapDash.h"
 #include "lib/logging/LogSpreadsheet.h"
 #include "lib/trajectories/structs.h"
@@ -34,7 +36,7 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
              TalonSRX *leftDriveTalonA, VictorSPX *leftDriveVictorB,
              VictorSPX *leftDriveVictorC, TalonSRX *rightDriveTalonA,
              VictorSPX *rightDriveVictorB, VictorSPX *rightDriveVictorC,
-             ADXRS450_Gyro *gyro)
+             ADXRS450_Gyro *gyro, Limelight *limelight)
         : DriveBase(scheduler, this, this, nullptr)
         , m_logger(logger)
         , m_leftDriveTalonA(leftDriveTalonA)
@@ -54,6 +56,7 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
         , m_rightPosZero(0.0)
         , m_gyro(gyro)
         , m_gyroZero(0.0)
+        , m_limelight(limelight)
         , m_assistedArcadeDriveController(new AssistedArcadeDriveController())
         , m_cheesyDriveController(new CheesyDriveController())
         , m_hangerDriveController(new HangerDriveController())
@@ -65,6 +68,7 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
         , m_straightDriveController(new StraightDriveController())
         , m_trapDriveController(new TrapDriveController(this, logger))
         , m_velocityArcadeDriveController(new VelocityArcadeDriveController())
+        , m_limelightDriveController(new LimelightDriveController(limelight))
         , m_angle()
         , m_angleRate()
         , m_angleLog(new LogCell("Angle"))
@@ -190,6 +194,11 @@ TrapDriveController *Drive::TrapDrive(RelativeTo relativity, double dist,
     return m_trapDriveController;
 }
 
+LimelightDriveController *Drive::LimelightDrive() {
+    this->SetDriveController(m_limelightDriveController);
+    return m_limelightDriveController;
+}
+
 void Drive::VelocityArcadeDrive(double throttle, double turn) {
     this->SetDriveController(m_velocityArcadeDriveController);
     m_velocityArcadeDriveController->SetJoysticks(throttle, turn);
@@ -260,15 +269,18 @@ void Drive::SetDriveOutputIPS(double left, double right) {
     m_leftDriveOutput = left;
     m_rightDriveOutput = right;
 
-    m_leftDriveOutput /= DRIVE_IPS_FROM_CPDS;
-    m_rightDriveOutput /= DRIVE_IPS_FROM_CPDS;
+    // m_leftDriveOutput /= DRIVE_IPS_FROM_CPDS;
+    // m_rightDriveOutput /= DRIVE_IPS_FROM_CPDS;
+
+    DBStringPrintf(DB_LINE2, "ld %3.1lf rd %3.1lf", m_leftDriveOutput,
+                   m_rightDriveOutput);
 
     if (std::isnan(m_leftDriveOutput) || std::isnan(m_rightDriveOutput)) {
         m_leftDriveTalonA->Set(ControlMode::Velocity, 0.0);
         m_rightDriveTalonA->Set(ControlMode::Velocity, 0.0);
     }
     else {
-        m_leftDriveTalonA->Set(ControlMode::Velocity, -m_leftDriveOutput);
+        m_leftDriveTalonA->Set(ControlMode::Velocity, m_leftDriveOutput);
         m_rightDriveTalonA->Set(ControlMode::Velocity, m_rightDriveOutput);
     }
 }

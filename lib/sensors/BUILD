@@ -8,6 +8,7 @@ cc_library(
         "*.h",
     ]),
     deps = [
+        "//lib/util:util",
         "//third_party/wpilibsuite:wpilib",
         "//third_party/ctre:ctre",
     ],

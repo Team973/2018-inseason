@@ -44,8 +44,9 @@ public:
      * @param hanger The hanger subsystem.
      * @param greylight The GreyLight system.
      */
-    Teleop(ObservablePoofsJoystick *driver, ObservableXboxJoystick *codriver,
-           Drive *drive, IntakeAssembly *intakeAssembly, Hanger *hanger,
+    Teleop(ObservableDualActionJoystick *driver,
+           ObservableXboxJoystick *codriver, Drive *drive,
+           IntakeAssembly *intakeAssembly, Hanger *hanger,
            GreyLight *greylight);
     virtual ~Teleop();
 
@@ -76,14 +77,15 @@ public:
     void HandlePoofsJoystick(uint32_t port, uint32_t button, bool pressedP);
 
 private:
-    ObservablePoofsJoystick *m_driverJoystick;
+    ObservableDualActionJoystick *m_driverJoystick;
     ObservableXboxJoystick *m_operatorJoystick;
 
     Drive *m_drive;
     enum class DriveMode
     {
         Cheesy,
-        Hanger
+        Hanger,
+        Limelight
     };
     DriveMode m_driveMode;
 

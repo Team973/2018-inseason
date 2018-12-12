@@ -133,6 +133,8 @@ public:
      */
     void SetModeHanging(bool hanging);
 
+    void EnableElevatorLimelightControl();
+
     /**
      * Run the intake at a certain power.
      * @param input The power to input between -1.0 and 1.0.
@@ -249,7 +251,8 @@ private:
         OverBackPosition,
         PreHanging,
         HangingAuto,
-        HangingManual
+        HangingManual,
+        Limelight
     };
 
     TaskMgr *m_scheduler;

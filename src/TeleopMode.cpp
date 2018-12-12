@@ -12,7 +12,7 @@
 using namespace frc;
 
 namespace frc973 {
-Teleop::Teleop(ObservablePoofsJoystick *driver,
+Teleop::Teleop(ObservableDualActionJoystick *driver,
                ObservableXboxJoystick *codriver, Drive *drive,
                IntakeAssembly *intakeAssembly, Hanger *hanger,
                GreyLight *greylight)
@@ -60,11 +60,10 @@ void Teleop::TeleopPeriodic() {
     /**
      * Driver Joystick
      */
-    double y = m_driverJoystick->GetRawAxis(PoofsJoysticks::LeftYAxis);
-    double x = m_driverJoystick->GetRawAxis(PoofsJoysticks::RightXAxis);
+    double y = m_driverJoystick->GetRawAxis(DualAction::LeftYAxis);
+    double x = m_driverJoystick->GetRawAxis(DualAction::RightXAxis);
 
-    bool quickturn =
-        m_driverJoystick->GetRawButton(PoofsJoysticks::RightTrigger);
+    bool quickturn = m_driverJoystick->GetRawButton(DualAction::RightBumper);
 
     if (m_driverJoystick->GetRawButton(DualAction::RightTrigger)) {
         x /= 3.0;
@@ -78,6 +77,9 @@ void Teleop::TeleopPeriodic() {
     }
     else if (m_driveMode == DriveMode::Hanger) {
         // m_hanger->SetHangerPower(y);
+    }
+    else if (m_driveMode == DriveMode::Limelight) {
+        m_drive->LimelightDrive();
     }
 
     /**
@@ -305,6 +307,10 @@ void Teleop::HandleXboxJoystick(uint32_t port, uint32_t button, bool pressedP) {
                 break;
             case Xbox::Back:
                 if (pressedP) {
+                    m_driveMode = DriveMode::Limelight;
+                }
+                else {
+                    m_driveMode = DriveMode::Cheesy;
                 }
                 break;
             case Xbox::Start:

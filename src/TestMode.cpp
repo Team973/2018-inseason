@@ -5,9 +5,9 @@ using namespace frc;
 using namespace sample;
 
 namespace frc973 {
-Test::Test(ObservablePoofsJoystick *driver, ObservableXboxJoystick *codriver,
-           Drive *drive, IntakeAssembly *intakeAssembly, Hanger *hanger,
-           GreyLight *greylight)
+Test::Test(ObservableDualActionJoystick *driver,
+           ObservableXboxJoystick *codriver, Drive *drive,
+           IntakeAssembly *intakeAssembly, Hanger *hanger, GreyLight *greylight)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_drive(drive)
@@ -53,6 +53,8 @@ void Test::TestPeriodic() {
     }
     else if (m_intakeMode == IntakeMode::motionMagic) {
     }
+    else if (m_intakeMode == IntakeMode::limelight) {
+    }
 
     double y = -m_driverJoystick->GetRawAxis(DualAction::LeftYAxis);
     double x = -m_driverJoystick->GetRawAxis(DualAction::RightXAxis);
@@ -81,6 +83,8 @@ void Test::TestPeriodic() {
         m_drive->VelocityArcadeDrive(y, x);
     }
     else if (m_driveMode == DriveMode::Spline) {
+    }
+    else if (m_driveMode == DriveMode::Limelight) {
     }
 }
 
@@ -115,10 +119,21 @@ void Test::HandleXboxJoystick(uint32_t port, uint32_t button, bool pressedP) {
         switch (button) {
             case Xbox::BtnY:
                 if (pressedP) {
+                    m_intakeMode = IntakeMode::limelight;
+                    m_intakeAssembly->EnableElevatorLimelightControl();
+                    // m_intakeAssembly->GetWrist()->SetPosition(90.0);
+                }
+                else {
+                    m_intakeMode = IntakeMode::manualVoltage;
                 }
                 break;
             case Xbox::BtnA:
                 if (pressedP) {
+                    m_driveMode = DriveMode::Limelight;
+                    m_drive->LimelightDrive();
+                }
+                else {
+                    m_driveMode = DriveMode::Cheesy;
                 }
                 break;
             case Xbox::BtnX:
