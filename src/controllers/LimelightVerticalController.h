@@ -25,7 +25,7 @@ public:
         return m_onTarget;
     };
 
-    static constexpr double VELOCITY_MULTIPLIER = 50.0;
+    static constexpr double VELOCITY_MULTIPLIER = 200.0;
 
 private:
     bool m_onTarget;
