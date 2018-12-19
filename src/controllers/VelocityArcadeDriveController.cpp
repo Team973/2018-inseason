@@ -38,8 +38,8 @@ void VelocityArcadeDriveController::SetJoysticks(double throttle, double turn) {
     turn = Util::bound(turn, -1.0, 1.0);
 
     m_leftOutput =
-        (throttle - turn) * 144.0;  // 37522 = full throttle ticks per second
-    m_rightOutput = (throttle + turn) * 144.0;
+        (throttle - turn) * 1000.0;  // 37522 = full throttle ticks per second
+    m_rightOutput = (throttle + turn) * 1000.0;
     // printf("left %lf  right %lf\n", m_leftOutput, m_rightOutput);
 }
 }

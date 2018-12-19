@@ -60,8 +60,8 @@ void Teleop::TeleopPeriodic() {
     /**
      * Driver Joystick
      */
-    double y = m_driverJoystick->GetRawAxis(DualAction::LeftYAxis);
-    double x = m_driverJoystick->GetRawAxis(DualAction::RightXAxis);
+    double y = -m_driverJoystick->GetRawAxis(DualAction::LeftYAxis);
+    double x = -m_driverJoystick->GetRawAxis(DualAction::RightXAxis);
 
     bool quickturn = m_driverJoystick->GetRawButton(DualAction::RightBumper);
 
@@ -74,6 +74,9 @@ void Teleop::TeleopPeriodic() {
         m_drive->CheesyDrive(
             y, x, quickturn,
             false);  // gear set to false until solenoids get set up
+    }
+    else if (m_driveMode == DriveMode::VelocityArcadeDrive) {
+        m_drive->VelocityArcadeDrive(y, x);
     }
     else if (m_driveMode == DriveMode::Hanger) {
         // m_hanger->SetHangerPower(y);
@@ -332,6 +335,7 @@ void Teleop::HandleDualActionJoystick(uint32_t port, uint32_t button,
         switch (button) {
             case DualAction::BtnA:
                 if (pressedP) {
+                    m_driveMode = DriveMode::VelocityArcadeDrive;
                 }
                 break;
             case DualAction::LJoystickBtn:

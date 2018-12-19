@@ -37,8 +37,7 @@ void LimelightDriveController::CalcDriveOutput(
     DBStringPrintf(DBStringPos::DB_LINE6, "ls: %3.1lf, rs: %3.1lf",
                    m_leftSetpoint, m_rightSetpoint);
 
-    out->SetDriveOutputIPS(Util::bound(m_leftSetpoint, -10, 10),
-                           Util::bound(m_rightSetpoint, -10, 10));
+    out->SetDriveOutputIPS(-m_leftSetpoint * 500.0, -m_rightSetpoint * 500.0);
 
     if (fabs(offset) < 5.0 && fabs(state->GetAngularRate()) < 1.0) {
         m_onTarget = true;

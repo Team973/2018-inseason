@@ -84,6 +84,7 @@ private:
     enum class DriveMode
     {
         Cheesy,
+        VelocityArcadeDrive,
         Hanger,
         Limelight
     };
