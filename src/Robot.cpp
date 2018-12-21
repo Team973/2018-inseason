@@ -80,7 +80,8 @@ Robot::Robot()
         , m_teleop(new Teleop(m_driverJoystick, m_operatorJoystick, m_drive,
                               m_intakeAssembly, m_hanger, m_greylight))
         , m_test(new Test(m_driverJoystick, m_operatorJoystick, m_drive,
-                          m_intakeAssembly, m_hanger, m_greylight)) {
+                          m_intakeAssembly, m_hanger, m_greylight,
+                          m_leftDriveTalonA, m_rightDriveTalonA)) {
     std::cout << "Constructed a Robot!" << std::endl;
 }
 

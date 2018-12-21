@@ -9,7 +9,7 @@ LimelightDriveController::LimelightDriveController(Limelight *limelight)
         , m_leftSetpoint(0.0)
         , m_rightSetpoint(0.0)
         , m_limelight(limelight)
-        , m_pid(new PID(0.5, 0.0, 0.0)) {
+        , m_pid(new PID(0.5, 0, 0)) {
 }
 
 LimelightDriveController::~LimelightDriveController() {

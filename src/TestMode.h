@@ -33,7 +33,7 @@ public:
      */
     Test(ObservableDualActionJoystick *driver, ObservableXboxJoystick *codriver,
          Drive *drive, IntakeAssembly *intakeAssembly, Hanger *hanger,
-         GreyLight *greylight);
+         GreyLight *greylight, TalonSRX *leftDriveTalonA, TalonSRX *rightDriveTalonA);
     virtual ~Test();
 
     /**
@@ -97,5 +97,8 @@ private:
 
     GreyLight *m_greylight;
     LightPattern::Flash *m_flashSignal;
+
+    TalonSRX *m_leftDriveTalonA;
+    TalonSRX *m_rightDriveTalonA;
 };
 }

@@ -79,6 +79,8 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
         , m_rightDistRateLog(new LogCell("Right Encoder Rate"))
         , m_currentLog(new LogCell("Drive current")) {
     this->m_scheduler->RegisterTask("Drive", this, TASK_PERIODIC);
+
+    //Standard Talon Config
     m_leftDriveTalonA->SetNeutralMode(Coast);
     m_leftDriveTalonA->ConfigSelectedFeedbackSensor(QuadEncoder, 0, 10);
     m_leftDriveTalonA->SetSensorPhase(false);
@@ -86,8 +88,8 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_leftDriveTalonA->SelectProfileSlot(0, 0);
     m_leftDriveTalonA->Config_kP(0, 0.4, 10);
     m_leftDriveTalonA->Config_kI(0, 0, 10);
-    m_leftDriveTalonA->Config_kD(0, 0, 10);    // 0.7
-    m_leftDriveTalonA->Config_kF(0, 0.1, 10);  // 0.2
+    m_leftDriveTalonA->Config_kD(0, 0, 10);    //0.7
+    m_leftDriveTalonA->Config_kF(0, 0.1, 10);  //0.2
 
     m_leftDriveVictorB->Follow(*m_leftDriveTalonA);
     m_leftDriveVictorB->SetInverted(false);
@@ -102,14 +104,27 @@ Drive::Drive(TaskMgr *scheduler, LogSpreadsheet *logger,
     m_rightDriveTalonA->SelectProfileSlot(0, 0);
     m_rightDriveTalonA->Config_kP(0, 0.4, 10);
     m_rightDriveTalonA->Config_kI(0, 0, 10);
-    m_rightDriveTalonA->Config_kD(0, 0, 10);    // 0.7
-    m_rightDriveTalonA->Config_kF(0, 0.1, 10);  // 0.2
+    m_rightDriveTalonA->Config_kD(0, 0, 10);    //0.7
+    m_rightDriveTalonA->Config_kF(0, 0.1, 10);  //0.2
 
     m_rightDriveVictorB->Follow(*m_rightDriveTalonA);
     m_rightDriveVictorB->SetInverted(false);
 
     m_rightDriveVictorC->Follow(*m_rightDriveTalonA);
     m_rightDriveVictorC->SetInverted(false);
+
+    //Limelight Talon Config, Set to Profile 1,1
+    m_leftDriveTalonA->ConfigSelectedFeedbackSensor(QuadEncoder, 1, 10);
+    m_leftDriveTalonA->Config_kP(1, 0.2, 10);
+    m_leftDriveTalonA->Config_kI(1, 0, 10);
+    m_leftDriveTalonA->Config_kD(1, 0, 10);    //0.7
+    m_leftDriveTalonA->Config_kF(1, 0.1, 10);  //0.2
+
+    m_rightDriveTalonA->ConfigSelectedFeedbackSensor(QuadEncoder, 1, 10);
+    m_rightDriveTalonA->Config_kP(1, 0.2, 10);
+    m_rightDriveTalonA->Config_kI(1, 0, 10);
+    m_rightDriveTalonA->Config_kD(1, 0, 10);    //0.7
+    m_rightDriveTalonA->Config_kF(1, 0.1, 10);  //0.2
 
     logger->RegisterCell(m_angleLog);
     logger->RegisterCell(m_angularRateLog);

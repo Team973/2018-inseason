@@ -7,7 +7,8 @@ using namespace sample;
 namespace frc973 {
 Test::Test(ObservableDualActionJoystick *driver,
            ObservableXboxJoystick *codriver, Drive *drive,
-           IntakeAssembly *intakeAssembly, Hanger *hanger, GreyLight *greylight)
+           IntakeAssembly *intakeAssembly, Hanger *hanger, GreyLight *greylight,
+           TalonSRX *leftDriveTalonA, TalonSRX *rightDriveTalonA)
         : m_driverJoystick(driver)
         , m_operatorJoystick(codriver)
         , m_drive(drive)
@@ -15,7 +16,9 @@ Test::Test(ObservableDualActionJoystick *driver,
         , m_hanger(hanger)
         , m_greylight(greylight)
         , m_flashSignal(
-              new LightPattern::Flash({0, 255, 0}, {0, 0, 0}, 50, 50)) {
+              new LightPattern::Flash({0, 255, 0}, {0, 0, 0}, 50, 50))
+        , m_leftDriveTalonA(leftDriveTalonA)
+        , m_rightDriveTalonA(rightDriveTalonA) {
 }
 
 Test::~Test() {
@@ -131,9 +134,15 @@ void Test::HandleXboxJoystick(uint32_t port, uint32_t button, bool pressedP) {
                 if (pressedP) {
                     m_driveMode = DriveMode::Limelight;
                     m_drive->LimelightDrive();
+
+                    m_leftDriveTalonA->SelectProfileSlot(1, 1);
+                    m_rightDriveTalonA->SelectProfileSlot(1, 1);
                 }
                 else {
                     m_driveMode = DriveMode::Cheesy;
+
+                    m_leftDriveTalonA->SelectProfileSlot(0, 0);
+                    m_rightDriveTalonA->SelectProfileSlot(0, 0);
                 }
                 break;
             case Xbox::BtnX:
