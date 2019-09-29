@@ -1,20 +1,26 @@
 # GreyDash
+
 Forked from [FRC Dashboard](https://github.com/FRCDashboard/FRCDashboard), GreyDash is a custom HTML/CSS/JS based dashboard for interacting with the robot.
 
+![](greydash.gif)
+
 ## Usage
+
 This section will go over the usage of GreyDash.
 
 ### Installing dependencies
-Install [Yarn](https://yarnpkg.com/en/docs/install), then cd to the GreyDash directory. Then, run `yarn install` to install dependencies. The main dependencies are listed in package.json.
+
+1. Follow the [installation guide for pynetworktables2js](https://pynetworktables2js.readthedocs.io/en/stable/#installation).
+2. Familiarize yourself with the [usage of pynetworktables2js](https://pynetworktables2js.readthedocs.io/en/stable/#usage).
+3. Follow instructions for starting the dashboard below.
 
 ### Starting
-To start, run `yarn start`.
 
-### Building
-To package for OSes, run `yarn dist` or `yarn pack`.
+To start, first connect to the robot and open a driver station. Then, run `python3 -m pynetworktables2js --team=TEAM` where TEAM is the team number of the robot. You can also run `npm start` but you will need to change the team in the package.json, so this method is not reccomended.
 
 ### Linting
-Please lint your JavaScript files. Easiest way is to run `yarn lint --fix`.
+Please lint your JavaScript files--the easiest way is to run `npm lint`. This will fix most problems with your code, or let you know of ones it can't fix itself. You may ignore some undefined variables.
 
-## Connecting to the Robot
-A dialog will pop up with the option to connect to the robot. Make sure you're on the robot's network and the robot address is correct, then click "Connect". If you cant connect, try pinging the robot.
+### Adding NetworkTables items
+
+View [the dashboard guide](https://github.com/Team973/greybots-skeleton/blob/master/docs/DashboardGuide.md) in the docs folder.

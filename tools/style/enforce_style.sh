@@ -1,7 +1,7 @@
 #!/bin/bash
 # Enforces the style on all .cpp and .h files in the src directory
 
-ls WORKSPACE > /dev/null
+ls build.gradle > /dev/null
 if [ $? -ne 0 ]
 then
     echo "Must be run from workspace directory"
@@ -15,5 +15,5 @@ case "${UnameOut}" in
     *)        FormatCmd="clang-format -style-file"
 esac
 
-FormattableFiles=$(find src lib | egrep "\.(h|cpp)$" | paste -s -)
+FormattableFiles=$(find src/main/cpp/src src/main/cpp/lib | egrep "\.(h|cpp)$" | paste -s -)
 $FormatCmd -i $FormattableFiles

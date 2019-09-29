@@ -1,12 +1,8 @@
-sudo: required
-language: cpp
-services:
-- docker
-before_install:
-- docker build -t team973/frc-bazel .
+language: java
+install:
+- "./gradlew installRoboRioToolchain"
 script:
-- docker run team973/frc-bazel /bin/sh -c "bazel build //src:robot --cpu=roborio"
-- docker run team973/frc-bazel /bin/sh -c "bazel test //tools/pathtool:test --verbose_failures"
+- "./gradlew build"
 notifications:
   slack:
-    secure: NmwBoeVQGs8mNatXUKxo1xH20t8Qv6AF6TLnlQOtwPz4Dvz6jTBgZW+aYFC8XQvP1xbVNDFzZVoI8dNEXNbAgWa9/rFDA514wKKoI2FqItoN8rNwA1/1qZomtuHk1PSUHkbdUKZCFcqDl2Yhw87ai2iO9zT4woJbPBcsQ8TQzImYpIXkqwA9oi6Gexx2gSYpmRodPdDqFTV8pSYgtQjDFA3DkHwZhCv7f7WxXTxl+6LiJrZ35rCKohjqZUbBqXPlGfu10Y+eQjN9M6etoI/MlhhZa1H6OjisFYqOoqtPY8BRMpVVhIKwuZTsAVJYqYemKpjNZq+QB1ID9Oap+DDzqr7ZuFxxsfdBA67yLNVaMyU6IkN/bD7RpdseemFfz7DrL0sRf5m+Tn+ZkpHwWIPMjqvKi3c6XFf8uYjgx9pnx+ICcwPpskUg96SfcyRyyGBO+cELrQvvz6x7xelN2hqk0Xa3jQ3QwN4HdUCIfTvRudKVR1Z3rgHmHZjMxfBUwVlWRYvHHHnQBV8Z2/+lpXf3zA3USR085JldMZLFuudY44NCRCQzAEH5VU3X5hPVz+foOzSqezpmhLAegZuKR29CuB6jWArvpm8h+CpM++0EF1CLGR40wj+NsZUNUrtlCGMHw4/Kka9wbqaQduelRPxxsgk3s2s4wpbkiXPNGcGD6Gs=
+    secure: bW1p1FJBZeWC14CjneCSChOrg1FMs9/Mh4Gkzv2GcToCy6WBLX0Ly4apv4ohfGNgq4kHK0yYMlaxs0zBQU7eec6SgVr+HaBhX7fOTPCnHoyhwmEoqOJm8epK22U2yu6QecRFhazyl8vOGgSmtMgn/K7piepvopCPg6FGKyiUsPdxzy7IAmVHNjXGEUcqbMdNCXYAuiHIp+PwT811FRZHCheixCEenzNuOfZVSjsV6d1URZB+y1ZgifjoILEbzDmR1oU4gS+8Yieq0j3kmAQ+TLwnpKzuLnn7whGrV4voTeXu2WkgZ0SkDqpA01E5u9AZTZHWmLfsdHrfx4k9fjKHKdo0/Y8aEK9Ma9m4rcDOsjKTJaS39u9nk8G/1MUqqqzwhXhEd63Y0bbwS4vihFxQXiyuq3GwRJ5VR0PXYqMoQSyiT5JCz6fsNgvaXZnROVEi5sWQU9TLkO5KiRscrHmNtRUcv0NHVFq3qYn7Sk7h0Mo080ooNyK3+2UUE/orlHY+PjkMy/HntF+E69HNmB+f2WtXvEv1aDRa3s7eHv1QJcJgJ/OLSixVJn2A+z4NMEBFPyEOCQqERh6lwTN2GXNLJikLYbKs8uN1DxGXGxrJbTOpFh2BJKWZD53t+KHHXOCo7MRVdSohnOyucv2kocORjQ9glwD64Bq9NAi1tbiyP+A=
